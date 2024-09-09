@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Calculadora de Haber</title>
-  </head>
-  <body>
-    <h1>Calculadora de Haber</h1>
-    <form>
-      <label for="Nombre">Nombre: </label>
-      <input id="Nombre"type="text" name="Nombre" placeholder="Nombre">
-      <label for="Apellido">Apellido: </label>
-      <input type="text" name="Apellido" placeholder="Apellido">
-      <label for="Fecha_de_Primer_Percibido">Selecciona fecha del primer Percibido:</label>
-      <input id= "Fecha_de_Primer_Percibido" type="date" name="Fecha_de_Primer_Percibido" placeholder="Fecha de Primer Percibido">
-      <label for="Fecha_de_Ultimo_Percibido">Selecciona fecha del último Percibido: </label>
-      <input type="date" name="Fecha_de_Ultimo_Percibido" placeholder="Fecha de Ultimo Percibido">
-      <label for="Haber">Monto inicial: </label>
-      <input type="number" name="Haber" placeholder="Haber">
+    <style
+        #titulo_calculadora {
+        font-size: 40px;
+        font-family: Roboto;
+        font-weight: normal;
+        }
+        #columna_de_datos div {
+            margin-bottom: 10px; /* Espacio entre los elementos */
+        }
+    </style>
+</head>
+<body>
+    <img src="static/logoestudio.jpg" height="360">
+    <h1 id= "titulo_calculadora">Calculadora de Haber</h1>
+    <form id="columna_de_datos">
+        <div>
+            <label for="Nombre">Nombre: </label>
+            <input id="Nombre" type="text" name="Nombre" placeholder="Nombre">
+        </div>
+        <div>
+            <label for="Apellido">Apellido: </label>
+            <input id="Apellido" type="text" name="Apellido" placeholder="Apellido">
+        </div>
+        <div>
+            <label for="Fecha_de_Primer_Percibido">Selecciona fecha del primer Percibido:</label>
+            <input id="Fecha_de_Primer_Percibido" type="date" name="Fecha_de_Primer_Percibido">
+        </div>
+        <div>
+            <label for="Fecha_de_Ultimo_Percibido">Selecciona fecha del último Percibido:</label>
+            <input id="Fecha_de_Ultimo_Percibido" type="date" name="Fecha_de_Ultimo_Percibido">
+        </div>
+        <div>
+            <label for="Haber">Monto inicial: </label>
+            <input id="Haber" type="number" name="Haber" placeholder="Haber">
+        </div>
+        <button type="submit">Calcular</button>
     </form>
-  </body>
+</body>
 </html>
