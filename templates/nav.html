@@ -18,11 +18,13 @@
             width: 100%;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
             z-index: 1000; /* Asegura que esté sobre otros elementos */
+            display: flex; /* Utiliza flexbox para la disposición de los elementos */
+            justify-content: flex-start; /* Alinea los elementos a la izquierda */
+            align-items: center; /* Centra verticalmente los elementos */
         }
         .navbar nav {
-            display: flex;
-            justify-content: flex-start; /* Alinea los enlaces a la izquierda */
-            flex-wrap: wrap; /* Permite que los enlaces se envuelvan en pantallas más pequeñas */
+            display: flex; /* Utiliza flexbox para los enlaces */
+            flex-wrap: nowrap; /* Evita el envolvimiento en pantallas grandes */
         }
         .navbar a {
             margin: 0 15px;
@@ -31,7 +33,6 @@
             padding: 10px 15px; /* Espaciado interno para mejorar el área clicable */
             border-radius: 5px; /* Bordes redondeados */
             transition: background-color 0.3s, color 0.3s;
-            display: block; /* Hace que el enlace sea un bloque para facilitar el clic */
         }
         .navbar a:hover {
             background-color: #FFD700; /* Color dorado de fondo cuando pasas el mouse */
@@ -41,9 +42,13 @@
         @media (max-width: 768px) {
             .navbar {
                 padding: 10px; /* Reduce el espaciado interno en pantallas pequeñas */
+                overflow-x: auto; /* Permite el desplazamiento horizontal si es necesario */
+            }
+            .navbar nav {
+                flex-direction: row; /* Mantiene los enlaces en una sola fila */
             }
             .navbar a {
-                margin: 5px 0; /* Espaciado vertical entre los enlaces en pantallas pequeñas */
+                margin: 0 10px; /* Reduce el espaciado horizontal entre los enlaces */
             }
         }
     </style>
