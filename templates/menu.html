@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecciona una Opción</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9; /* Opción de color de fondo suave */
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4B0082;
+            margin: 20px 0; /* Margen ajustado para espacio */
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 450px;
+        }
+        button {
+            border: 2px solid #4B0082;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: white;
+            color: #4B0082;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            width: 100%;
+            text-align: center; /* Asegura el texto centrado */
+        }
+        button:hover {
+            background-color: #4B0082;
+            color: white;
+        }
+        a {
+            text-decoration: none;
+        }
+        .image-container {
+            margin-bottom: 20px; /* Espacio entre la imagen y el título */
+        }
+        .image {
+            width: 500px;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="image-container">
+        <img src="static/logoestudio.jpg" alt="Descripción de la imagen" class="image"/>
+    </div>
+    <h1>Selecciona una Opción</h1>
+    <div class="button-container">
+        <a href="/calculadora_percibido">
+            <button>
+                Calculadora de Percibido
+            </button>
+        </a>
+        <a href="URL_CALCULADORA_HONORARIOS">
+            <button>
+                Calculadora de Honorarios
+            </button>
+        </a>
+        <a href="URL_GENERADOR_DEMANDAS">
+            <button>
+                Generador de Demandas
+            </button>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
