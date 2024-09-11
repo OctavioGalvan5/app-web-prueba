@@ -1,24 +1,50 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navigation Component</title>
     <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
         .navbar {
-            background-color: #4B0082;
-            padding: 15px;
-            text-align: center;
+            background-color: #4B0082; /* Color de fondo de la barra de navegación */
+            padding: 10px 20px; /* Espaciado interno */
+            position: fixed; /* Fija la barra en la parte superior */
+            top: 0;
+            left: 0;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+            z-index: 1000; /* Asegura que esté sobre otros elementos */
+        }
+        .navbar nav {
+            display: flex;
+            justify-content: center; /* Centra los enlaces horizontalmente */
+            flex-wrap: wrap; /* Permite que los enlaces se envuelvan en pantallas más pequeñas */
         }
         .navbar a {
             margin: 0 15px;
             color: white;
             text-decoration: none;
-            transition: color 0.3s;
+            padding: 10px 15px; /* Espaciado interno para mejorar el área clicable */
+            border-radius: 5px; /* Bordes redondeados */
+            transition: background-color 0.3s, color 0.3s;
+            display: block; /* Hace que el enlace sea un bloque para facilitar el clic */
         }
         .navbar a:hover {
-            color: #FFD700; /* Color dorado cuando pasas el mouse */
+            background-color: #FFD700; /* Color dorado de fondo cuando pasas el mouse */
+            color: #4B0082; /* Color del texto al pasar el mouse */
+        }
+        /* Estilos para pantallas pequeñas */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px; /* Reduce el espaciado interno en pantallas pequeñas */
+            }
+            .navbar a {
+                margin: 5px 0; /* Espaciado vertical entre los enlaces en pantallas pequeñas */
+            }
         }
     </style>
 </head>
@@ -34,3 +60,4 @@
 
 </body>
 </html>
+
