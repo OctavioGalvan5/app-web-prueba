@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selecciona una Opción</title>
+    <title>Pagina Calculadora</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9; /* Opción de color de fondo suave */
+            background-color: #E6E6FA; /* Color lila pastel claro */
         }
         .container {
             display: flex;
@@ -62,30 +62,34 @@
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="image-container">
-        <img src="static/logoestudio.jpg" alt="Descripción de la imagen" class="image"/>
+    <!-- Inclusión del navegador -->
+    {% include 'nav.html' %}
+    <div class="container">
+        <div class="image-container">
+            <img src="static/logoestudio.jpg" alt="Descripción de la imagen" class="image"/>
+        </div>
+        <h1>Selecciona una Opción</h1>
+        <div class="button-container">
+            <a href="/calculadora_percibido">
+                <button>
+                    Calculadora de Percibido
+                </button>
+            </a>
+            <a href="URL_CALCULADORA_HONORARIOS">
+                <button>
+                    Calculadora de Honorarios
+                </button>
+            </a>
+            <a href="URL_GENERADOR_DEMANDAS">
+                <button>
+                    Generador de Demandas
+                </button>
+            </a>
+        </div>
     </div>
-    <h1>Selecciona una Opción</h1>
-    <div class="button-container">
-        <a href="/calculadora_percibido">
-            <button>
-                Calculadora de Percibido
-            </button>
-        </a>
-        <a href="URL_CALCULADORA_HONORARIOS">
-            <button>
-                Calculadora de Honorarios
-            </button>
-        </a>
-        <a href="URL_GENERADOR_DEMANDAS">
-            <button>
-                Generador de Demandas
-            </button>
-        </a>
-    </div>
-</div>
-
+    <!-- Inclusión del pie de página -->
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
 </body>
 </html>
