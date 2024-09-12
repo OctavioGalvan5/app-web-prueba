@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Component</title>
+    <title>Footer Responsivo</title>
     <style>
         .footer {
             background-color: #f8f9fa;
@@ -12,14 +11,39 @@
             text-align: center;
             position: relative;
         }
+
         .footer a {
             margin: 0 15px;
             color: #007bff;
             text-decoration: none;
+            transition: color 0.3s;
         }
+
+        .footer a:hover {
+            color: #0056b3; /* Cambia de color cuando pasas el mouse */
+        }
+
         .footer p {
             color: #6c757d;
             font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Estilos para pantallas pequeñas */
+        @media (max-width: 768px) {
+            .footer {
+                text-align: center; /* Asegura que el contenido esté centrado en pantallas pequeñas */
+            }
+
+            .footer div {
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Alinea los enlaces al centro */
+            }
+
+            .footer a {
+                margin: 5px 0; /* Reduce el espaciado vertical entre los enlaces */
+            }
         }
     </style>
 </head>
@@ -27,7 +51,7 @@
 
     <div class="footer">
         <div style="margin-bottom: 10px;">
-            <a href="#">Home</a>
+            <a href="/">Inicio</a>
             <a href="#">Contáctanos</a>
             <a href="#">Más acerca de nosotros</a>
         </div>
