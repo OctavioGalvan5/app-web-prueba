@@ -12,6 +12,12 @@
             position: relative;
         }
 
+        .footer div {
+            display: flex;
+            justify-content: center; /* Alinea los enlaces horizontalmente */
+            flex-wrap: wrap; /* Permite que los enlaces se reorganicen si es necesario */
+        }
+
         .footer a {
             margin: 0 15px;
             color: #007bff;
@@ -32,17 +38,16 @@
         /* Estilos para pantallas pequeñas */
         @media (max-width: 768px) {
             .footer {
-                text-align: center; /* Asegura que el contenido esté centrado en pantallas pequeñas */
+                padding: 10px;
             }
 
             .footer div {
-                display: flex;
-                flex-direction: column;
-                align-items: center; /* Alinea los enlaces al centro */
+                flex-wrap: nowrap; /* Evita que los enlaces se rompan en varias líneas */
+                overflow-x: auto; /* Agrega desplazamiento horizontal si hay muchos enlaces */
             }
 
             .footer a {
-                margin: 5px 0; /* Reduce el espaciado vertical entre los enlaces */
+                margin: 0 10px; /* Ajusta el espacio entre los enlaces */
             }
         }
     </style>
@@ -50,7 +55,7 @@
 <body>
 
     <div class="footer">
-        <div style="margin-bottom: 10px;">
+        <div>
             <a href="/">Inicio</a>
             <a href="#">Contáctanos</a>
             <a href="#">Más acerca de nosotros</a>
