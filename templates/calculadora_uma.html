@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Liquidación</title>
+    <style>
+        /* CSS styles here... */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #4B0082;
+            padding: 10px 20px;
+            text-align: left;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .navbar a {
+            margin: 0 15px;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            display: block;
+        }
+        .navbar a:hover {
+            background-color: #FFD700;
+            color: #4B0082;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 80px;
+            padding: 0 20px;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4B0082;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-container {
+            border: 2px solid #4B0082;
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-sizing: border-box;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #4B0082;
+        }
+        .form-group input {
+            border: none;
+            border-radius: 15px;
+            padding: 8px;
+            outline: none;
+        }
+        .form-group input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .form-group input::-webkit-inner-spin-button,
+        .form-group input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .periodo-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .submit-button {
+            border: none;
+            border-radius: 15px;
+            padding: 10px;
+            background-color: #4B0082;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px;
+            }
+            .navbar a {
+                margin: 5px 0;
+            }
+            .container {
+                margin-top: 60px;
+            }
+            .form-container {
+                width: 100%;
+                padding: 15px;
+            }
+            .title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'nav.html' %}
+    </div>
+    <div class="container">
+        <h1 class="title">Formulario de Liquidación</h1>
+        <form class="form-container">
+            <div class="form-group">
+                <label for="autos">Autos:</label>
+                <input type="text" id="autos" placeholder="Ingrese los autos" required />
+            </div>
+            <div class="form-group">
+                <label for="expediente">Expediente:</label>
+                <input type="text" id="expediente" placeholder="Ingrese el expediente" required />
+            </div>
+            <div class="form-group periodo-container">
+                <div style="flex-grow: 1;">
+                    <label for="periodoDesde">Periodo Liquidado Desde:</label>
+                    <input type="date" id="periodoDesde" required />
+                </div>
+                <div style="flex-grow: 1;">
+                    <label for="periodoHasta">Periodo Liquidado Hasta:</label>
+                    <input type="date" id="periodoHasta" required />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="fechaCierre">Fecha de Cierre de Liquidación:</label>
+                <input type="date" id="fechaCierre" required />
+            </div>
+            <div class="form-group">
+                <label for="fechaRegulacion">Fecha de Regulación:</label>
+                <input type="date" id="fechaRegulacion" required />
+            </div>
+            <div class="form-group">
+                <label for="fechaAprobacion">Fecha de Aprobación de Sentencia de Liquidación:</label>
+                <input type="date" id="fechaAprobacion" required />
+            </div>
+            <div class="form-group">
+                <label for="montoAprobado">Monto Aprobado:</label>
+                <input type="number" id="montoAprobado" placeholder="Ingrese el monto aprobado" required />
+            </div>
+            <div class="form-group">
+                <label for="montoActualizado">Monto Aprobado Actualizado (con Tasa Pasiva):</label>
+                <input type="number" id="montoActualizado" placeholder="Ingrese el monto actualizado" required />
+            </div>
+            <button type="submit" class="submit-button">Enviar</button>
+        </form>
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>

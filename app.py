@@ -10,5 +10,9 @@ def hello_world():
 def Calculadora_Percibido():
     return render_template('prueba.html')
 
+@app.route('/calculadora_uma')
+def calculadora_uma():
+    return render_template('/calculadora_uma.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
