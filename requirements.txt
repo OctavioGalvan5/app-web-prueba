@@ -2,3 +2,4 @@ Flask
 Gunicorn
 sqlalchemy
 pymysql
+xhtml2pdf

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Liquidación</title>
     <style>
-        /* CSS styles here... */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -124,46 +123,46 @@
     </div>
     <div class="container">
         <h1 class="title">Formulario de Liquidación</h1>
-        <form class="form-container">
+        <form class="form-container" action="/generar_pdf" method="post">
             <div class="form-group">
                 <label for="autos">Autos:</label>
-                <input type="text" id="autos" placeholder="Ingrese los autos" required />
+                <input type="text" id="autos" name="Autos" placeholder="Ingrese los autos" required />
             </div>
             <div class="form-group">
                 <label for="expediente">Expediente:</label>
-                <input type="text" id="expediente" placeholder="Ingrese el expediente" required />
+                <input type="text" id="expediente" name="Expediente" placeholder="Ingrese el expediente" required />
             </div>
             <div class="form-group periodo-container">
                 <div style="flex-grow: 1;">
                     <label for="periodoDesde">Periodo Liquidado Desde:</label>
-                    <input type="date" id="periodoDesde" required />
+                    <input type="date" id="periodoDesde" name="PeriodoDesde"required />
                 </div>
                 <div style="flex-grow: 1;">
                     <label for="periodoHasta">Periodo Liquidado Hasta:</label>
-                    <input type="date" id="periodoHasta" required />
+                    <input type="date" id="periodoHasta" name="PeriodoHasta" required />
                 </div>
             </div>
             <div class="form-group">
                 <label for="fechaCierre">Fecha de Cierre de Liquidación:</label>
-                <input type="date" id="fechaCierre" required />
+                <input type="date" id="fechaCierre" name="Fecha_de_Cierre_de_Liquidacion" required />
             </div>
             <div class="form-group">
                 <label for="fechaRegulacion">Fecha de Regulación:</label>
-                <input type="date" id="fechaRegulacion" required />
+                <input type="date" id="fechaRegulacion" name="Fecha_de_Regulacion" required />
             </div>
             <div class="form-group">
                 <label for="fechaAprobacion">Fecha de Aprobación de Sentencia de Liquidación:</label>
-                <input type="date" id="fechaAprobacion" required />
+                <input type="date" id="fechaAprobacion" name="Fecha_Aprobacion_Sentencia"required />
             </div>
             <div class="form-group">
                 <label for="montoAprobado">Monto Aprobado:</label>
-                <input type="number" id="montoAprobado" placeholder="Ingrese el monto aprobado" required />
+                <input type="number" id="montoAprobado" name="Monto_Aprobado"placeholder="Ingrese el monto aprobado" required />
             </div>
             <div class="form-group">
                 <label for="montoActualizado">Monto Aprobado Actualizado (con Tasa Pasiva):</label>
-                <input type="number" id="montoActualizado" placeholder="Ingrese el monto actualizado" required />
+                <input type="number" id="montoActualizado" name="Monto_Aprobado_Actualizado"placeholder="Ingrese el monto actualizado" required />
             </div>
-            <button type="submit" class="submit-button">Enviar</button>
+            <button type="submit" class="submit-button"> generar pdf </button>
         </form>
     </div>
     {% include 'footer.html' %}
