@@ -147,24 +147,41 @@
                 <input type="date" id="fechaCierre" name="Fecha_de_Cierre_de_Liquidacion" required />
             </div>
             <div class="form-group">
-                <label for="fechaRegulacion">Fecha de Regulación:</label>
-                <input type="date" id="fechaRegulacion" name="Fecha_de_Regulacion" required />
-            </div>
-            <div class="form-group">
                 <label for="fechaAprobacion">Fecha de Aprobación de Sentencia de Liquidación:</label>
                 <input type="date" id="fechaAprobacion" name="Fecha_Aprobacion_Sentencia"required />
             </div>
             <div class="form-group">
+                <label for="fechaRegulacion">Fecha de Regulación:</label>
+                <input type="date" id="fechaRegulacion" name="Fecha_de_Regulacion" required />
+            </div>
+            <div class="form-group">
                 <label for="montoAprobado">Monto Aprobado:</label>
-                <input type="number" id="montoAprobado" name="Monto_Aprobado"placeholder="Ingrese el monto aprobado" required />
+                <div style="display: flex; align-items: center;">
+                    <span style="margin-right: 5px;">$</span>
+                    <input type="text" id="montoAprobado" name="Monto_Aprobado" 
+                           placeholder="Ingrese el monto aprobado" 
+                           pattern="^\d+(\.\d{2})$" 
+                           title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                           required />
+                </div>
             </div>
             <div class="form-group">
                 <label for="montoActualizado">Monto Aprobado Actualizado (con Tasa Pasiva):</label>
-                <input type="number" id="montoActualizado" name="Monto_Aprobado_Actualizado"placeholder="Ingrese el monto actualizado" required />
+                <div style="display: flex; align-items: center;">
+                    <span style="margin-right: 5px;">$</span>
+                    <input type="text" id="montoActualizado" name="Monto_Aprobado_Actualizado" 
+                           placeholder="Ingrese el monto actualizado" 
+                           pattern="^\d+(\.\d{2})$" 
+                           title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                           required />
+                </div>
             </div>
-            <button type="submit" class="submit-button"> generar pdf </button>
+            <button type="submit" class="submit-button"> Generar pdf </button>
+            </div>
         </form>
     </div>
     {% include 'footer.html' %}
 </body>
 </html>
+
+            
