@@ -11,6 +11,7 @@ flask = "^3.0.3"
 sqlalchemy = "^2.0.34"
 xhtml2pdf = "^0.2.16"
 babel = "^2.16.0"
+docx = "^0.2.4"
 
 
 [build-system]

@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, send_file
 from xhtml2pdf import pisa
 from io import BytesIO
 from database import obtener_acordada, obtener_valor_uma
 from calculos import calcular_porcentajes, formatear_dinero, transformar_fecha, calcular_porcentajes_ley_21839
+from docxtpl import DocxTemplate
 
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
+def Index():
     return render_template('menu.html')
 
 @app.route('/calculadora_percibido')
@@ -125,5 +126,34 @@ def generar_pdf():
 
     return response
 
+@app.route('/formulario_demandas', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        # Obtener los datos del formulario
+        nombre = request.form['nombre']
+        edad = request.form['edad']
+        # Llama a la función para crear el documento Word
+        return crear_documento(nombre, edad)
+
+    return render_template('formulario.html')
+
+def crear_documento(nombre, edad):
+    # Cargar el archivo .docx de plantilla
+    doc = DocxTemplate('datos/plantilla.docx')
+
+    # Crear el contexto con las variables
+    contexto = {
+        'nombre': nombre,
+        'edad': edad,
+    }
+
+    # Renderizar el documento con el contexto
+    doc.render(contexto)
+
+    # Guardar el documento editado
+    doc.save('datos/documento_editado.docx')
+
+    # Devolver el archivo editado al usuario
+    return send_file('datos/documento_editado.docx', as_attachment=True)
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
