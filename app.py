@@ -18,11 +18,7 @@ def Calculadora_Percibido():
 def calculadora_uma():
     return render_template('/calculadora_uma.html')
 
-@app.route('/resultado_uma')
-def resultado_calculadora_uma():
-    return render_template('resultado_calculadora_uma.html')
-
-@app.route('/generar_pdf', methods=['POST'])
+@app.route('/resultado_uma', methods=['POST'])
 def generar_pdf():
     autos = request.form.get('Autos')
     expediente = request.form.get('Expediente')
