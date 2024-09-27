@@ -6,44 +6,100 @@
     <title>Resultado {{autos}} {{expediente}} </title>
     <style>
         @page {
-            size: a4;
+            size: A4;
+            margin: 1cm;
             background-image: url('static/logoestudio.jpg');
             background-repeat: no-repeat;
-            background-object-position: 120 300px;
-            background-height:  500px;
+            background-object-position: 130 300px;
+            background-height: 500px;
             background-width: 500px;
-            margin: 1.9cm; /* Ajusta el margen para evitar que la imagen y el contenido se superpongan */
-            background-opacity: 0.25; /* Opacidad de la imagen */
+            background-opacity: 0.25;
+        }
+        body {
+            font-size: 13px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            page-break-inside: avoid;
         }
         td {
             border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-            word-wrap: break-word; /* Permite que el texto se divida en varias líneas */
-            white-space: normal;   /* Permite que el texto se ajuste a varias líneas */
-        }
-        
-        .wide-column {
-            width: 25%; /* Ajusta el ancho de la celda */
+            padding: 4px;
+            text-align: left;
+            word-wrap: break-word;
+            white-space: normal;
         }
         .negrita {
             font-weight: bold;
         }
         .font-large {
-            font-size: 13px; /* Ajusta el tamaño según lo que necesites */
+            font-size: 13px;
         }
-        
+        /* Estilos del primer cuadro */
+        .custom-table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ccc;
+            font-family: Arial, sans-serif;
+            margin-bottom: 10px;
+            page-break-inside: avoid;
+        }
+        .custom-table td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+        .custom-table .narrow-column {
+            width: 30%; /* Mantén un ancho fijo en la primera columna si lo deseas */
+        }
+        .custom-table .wide-column {
+            /* Elimina el ancho para que la columna se ajuste al contenido automáticamente */
+        }
+        .header-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .regular-cell {
+            background-color: #f9f9f9;
+        }
+        .first-column-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Primer cuadro (tabla superior) -->
+    <table class="custom-table">
+        <tr>
+            <td  class="header-cell narrow-column">Autos</td>
+            <td class="header-cell wide-column">{{autos}}</td>
+        </tr>
+        <tr>
+            <td class="header-cell narrow-column regular-cell">Expediente</td>
+            <td class="regular-cell wide-column">{{expediente}}</td>
+        </tr>
+        <tr>
+            <td  class="header-cell narrow-column">Periodo liquidado</td>
+            <td class="header-cell wide-column">Desde {{periodo_desde}} hasta {{periodo_hasta}}</td>
+        </tr>
+        <tr>
+            <td class="header-cell narrow-column regular-cell">Monto Aprobado</td>
+            <td class="regular-cell wide-column">{{monto_aprobado}}</td>
+        </tr>
+        <tr>
+            <td class="header-cell narrow-column">Monto aprobado actualizado con tasa pasiva al {{fecha_de_regulacion}}</td>
+            <td class="header-cell wide-column">{{monto_aprobado_actualizado}}</td>
+        </tr>
+    </table>
+
+    <!-- Segunda tabla (la que ya tenías) -->
     <table>
         <tbody>
-            <tr class="font-large">
-                <td rowspan="2" class="negrita">Según la fecha que se tome</td>
+            <tr class="font-large first-column-cell">
+                <td rowspan="2" class="negrita first-column-cell">Según la fecha que se tome</td>
                 <td class="negrita">Fecha de cierre</td>
                 <td class="negrita">Fecha de aprobación de sentencia</td>
                 <td class="negrita">Fecha de regulación</td>
@@ -56,74 +112,74 @@
                 <td>{{ fecha_de_regulacion }}</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">Norma</td>
+                <td class="negrita first-column-cell">Norma</td>
                 <td>{{Acordada_fecha_de_cierre_de_liquidacion}}</td>
                 <td>{{Acordada_fecha_aprobacion_sentencia}}</td>
                 <td>{{Acordada_fecha_de_regulacion}}</td>
                 <td>{{Acordada_fecha_de_regulacion}}</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">Valor UMA</td>
+                <td class="negrita first-column-cell">Valor UMA</td>
                 <td>{{UMA_fecha_de_cierre_de_liquidacion}}</td>
                 <td>{{UMA_fecha_aprobacion_sentencia}}</td>
                 <td>{{UMA_fecha_de_regulacion}}</td>
                 <td>{{UMA_fecha_de_regulacion}}</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">Cantidad UMA</td>
+                <td class="negrita first-column-cell">Cantidad UMA</td>
                 <td>{{cantidadFCL}}</td>
                 <td>{{cantidadAS}}</td>
                 <td>{{cantidadR}}</td>
                 <td>{{cantidadTP}}</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">Escala del art 21 de la ley 27.423</td>
+                <td class="negrita first-column-cell">Escala del art 21 de la ley 27.423</td>
                 <td>{{porcentajesFCL}}</td>
                 <td>{{porcentajesAS}}</td>
                 <td>{{porcentajesR}}</td>
                 <td>{{porcentajesTP}}</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">Minimo en Uma</td>
+                <td class="negrita first-column-cell">Mínimo en UMA</td>
                 <td>{{minimoFCL}}</td>
                 <td>{{minimoAS}}</td>
                 <td>{{minimoR}}</td>
                 <td>{{minimoTP}}</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">40% por ser apoderado Art 20</td>
+                <td class="negrita first-column-cell">40% por ser apoderado Art 20</td>
                 <td>{{apoderadoFCL}}</td>
                 <td>{{apoderadoAS}}</td>
                 <td>{{apoderadoR}}</td>
                 <td>{{apoderadoTP}}</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">Reducción del 10% sino hubo excepciones Art 29</td>
+                <td class="negrita first-column-cell">Reducción del 10% si no hubo excepciones Art 29</td>
                 <td>{{reduccionFCL}}</td>
                 <td>{{reduccionAS}}</td>
                 <td>{{reduccionR}}</td>
                 <td>{{reduccionTP}}</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">1 sola etapa la ejecucion 50% Art 34</td>
+                <td class="negrita first-column-cell">1 sola etapa la ejecución 50% Art 34</td>
                 <td>{{ejecucionFCL}}</td>
                 <td>{{ejecucionAS}}</td>
                 <td>{{ejecucionR}}</td>
                 <td>{{ejecucionTP}}</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">Art 58 inc B </td>
-                <td colspan="4" class="negrita">Minimo 6 UMA </td>
+                <td class="negrita first-column-cell">Art 58 inc B</td>
+                <td colspan="4" class="negrita">Mínimo 6 UMA</td>
             </tr>
             <tr class="font-large">
-                <td class="negrita">Incidencia 25%</td>
+                <td class="negrita first-column-cell">Incidencia 25%</td>
                 <td>{{incidenciaFCL}}</td>
                 <td>{{incidenciaAS}}</td>
                 <td>{{incidenciaR}}</td>
                 <td>{{incidenciaTP}}</td>
             </tr>
-           
         </tbody>
     </table>
+
 </body>
 </html>

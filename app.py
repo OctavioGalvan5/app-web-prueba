@@ -55,8 +55,8 @@ def generar_pdf():
     rendered = render_template('resultado_calculadora_uma.html', 
                                autos=autos, 
                                expediente=expediente, 
-                               periodo_desde=periodo_desde, 
-                               periodo_hasta=periodo_hasta, 
+                               periodo_desde=transformar_fecha(periodo_desde), 
+                               periodo_hasta=transformar_fecha(periodo_hasta), 
                                #
                                fecha_de_cierre_de_liquidacion = transformar_fecha(fecha_de_cierre_de_liquidacion),
                                Acordada_fecha_de_cierre_de_liquidacion = Acordada_fecha_de_cierre_de_liquidacion,

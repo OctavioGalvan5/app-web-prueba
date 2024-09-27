@@ -1,4 +1,4 @@
-modules = ["python-with-prybar-3.10", "python-3.8", "python-3.10", "python-3.11", "python-3.12"]
+modules = ["web", "python-3.8"]
 run = "python app.py"
 [nix]
 channel = "stable-24_05"
