@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, make_response
 from xhtml2pdf import pisa
 from io import BytesIO
 from database import obtener_acordada, obtener_valor_uma
-from calculos import calcular_porcentajes, formatear_dinero, transformar_fecha
+from calculos import calcular_porcentajes, formatear_dinero, transformar_fecha, calcular_porcentajes_ley_21839
 
 app = Flask(__name__)
 
@@ -49,59 +49,72 @@ def generar_pdf():
     porcentajesR, cantidadR, minimoR, apoderadoR, reduccionR,ejecucionR, incidenciaR = calcular_porcentajes(monto_aprobado, UMA_fecha_de_regulacion)
     ### TASA PASIVA ###
     porcentajesTP, cantidadTP, minimoTP, apoderadoTP, reduccionTP, ejecucionTP, incidenciaTP = calcular_porcentajes(monto_aprobado_actualizado, UMA_fecha_de_regulacion)
-    
-                                                                                                    
+
+    ### ley 21.839 ###
+    porcentaje_aplicable, apoderada, sin_excepciones, criterio = calcular_porcentajes_ley_21839(monto_aprobado)     
+    porcentaje_aplicableTP, apoderadaTP, sin_excepcionesTP, criterioTP = calcular_porcentajes_ley_21839(monto_aprobado_actualizado)     
+
     # Renderiza el HTML a partir de la plantilla
-    rendered = render_template('resultado_calculadora_uma.html', 
-                               autos=autos, 
-                               expediente=expediente, 
-                               periodo_desde=transformar_fecha(periodo_desde), 
-                               periodo_hasta=transformar_fecha(periodo_hasta), 
-                               #
-                               fecha_de_cierre_de_liquidacion = transformar_fecha(fecha_de_cierre_de_liquidacion),
-                               Acordada_fecha_de_cierre_de_liquidacion = Acordada_fecha_de_cierre_de_liquidacion,
-                               UMA_fecha_de_cierre_de_liquidacion = formatear_dinero(UMA_fecha_de_cierre_de_liquidacion),
-                               porcentajesFCL = porcentajesFCL,
-                               cantidadFCL = cantidadFCL,
-                               minimoFCL = minimoFCL,
-                               apoderadoFCL = apoderadoFCL,
-                               reduccionFCL = reduccionFCL,
-                               ejecucionFCL = ejecucionFCL,
-                               incidenciaFCL = incidenciaFCL,
-                               #
-                               fecha_de_regulacion = transformar_fecha(fecha_de_regulacion),
-                               Acordada_fecha_de_regulacion = Acordada_fecha_de_regulacion,
-                               UMA_fecha_de_regulacion = formatear_dinero(UMA_fecha_de_regulacion),
-                               porcentajesR = porcentajesR,
-                               cantidadR = cantidadR,
-                               minimoR = minimoR,
-                               apoderadoR = apoderadoR,
-                               reduccionR = reduccionR,
-                               ejecucionR = ejecucionR,
-                               incidenciaR = incidenciaR,
-                               #
-                               fecha_aprobacion_sentencia=transformar_fecha(fecha_aprobacion_sentencia),
-                               Acordada_fecha_aprobacion_sentencia = Acordada_fecha_aprobacion_sentencia,
-                               UMA_fecha_aprobacion_sentencia = formatear_dinero(UMA_fecha_aprobacion_sentencia),
-                               porcentajesAS = porcentajesAS,
-                               cantidadAS = cantidadAS,
-                               minimoAS = minimoAS,
-                               apoderadoAS = apoderadoAS,
-                               reduccionAS = reduccionAS,
-                               ejecucionAS = ejecucionAS,
-                               incidenciaAS = incidenciaAS,
-                               #
-                               porcentajesTP = porcentajesTP,
-                               cantidadTP = cantidadTP,
-                               minimoTP = minimoTP,
-                               apoderadoTP = apoderadoTP,
-                               reduccionTP = reduccionTP,
-                               ejecucionTP = ejecucionTP,
-                               incidenciaTP = incidenciaTP,
-                               #
-                               monto_aprobado=formatear_dinero(monto_aprobado),
-                               monto_aprobado_actualizado=formatear_dinero(monto_aprobado_actualizado)
-                              )
+    rendered = render_template(
+        'resultado_calculadora_uma.html',
+        autos=autos,
+        expediente=expediente,
+        periodo_desde=transformar_fecha(periodo_desde),
+        periodo_hasta=transformar_fecha(periodo_hasta),
+        #
+        fecha_de_cierre_de_liquidacion=transformar_fecha(fecha_de_cierre_de_liquidacion),
+        Acordada_fecha_de_cierre_de_liquidacion=Acordada_fecha_de_cierre_de_liquidacion,
+        UMA_fecha_de_cierre_de_liquidacion=formatear_dinero(UMA_fecha_de_cierre_de_liquidacion),
+        porcentajesFCL=porcentajesFCL,
+        cantidadFCL=cantidadFCL,
+        minimoFCL=minimoFCL,
+        apoderadoFCL=apoderadoFCL,
+        reduccionFCL=reduccionFCL,
+        ejecucionFCL=ejecucionFCL,
+        incidenciaFCL=incidenciaFCL,
+        #
+        fecha_de_regulacion=transformar_fecha(fecha_de_regulacion),
+        Acordada_fecha_de_regulacion=Acordada_fecha_de_regulacion,
+        UMA_fecha_de_regulacion=formatear_dinero(UMA_fecha_de_regulacion),
+        porcentajesR=porcentajesR,
+        cantidadR=cantidadR,
+        minimoR=minimoR,
+        apoderadoR=apoderadoR,
+        reduccionR=reduccionR,
+        ejecucionR=ejecucionR,
+        incidenciaR=incidenciaR,
+        #
+        fecha_aprobacion_sentencia=transformar_fecha(fecha_aprobacion_sentencia),
+        Acordada_fecha_aprobacion_sentencia=Acordada_fecha_aprobacion_sentencia,
+        UMA_fecha_aprobacion_sentencia=formatear_dinero(UMA_fecha_aprobacion_sentencia),
+        porcentajesAS=porcentajesAS,
+        cantidadAS=cantidadAS,
+        minimoAS=minimoAS,
+        apoderadoAS=apoderadoAS,
+        reduccionAS=reduccionAS,
+        ejecucionAS=ejecucionAS,
+        incidenciaAS=incidenciaAS,
+        #
+        porcentajesTP=porcentajesTP,
+        cantidadTP=cantidadTP,
+        minimoTP=minimoTP,
+        apoderadoTP=apoderadoTP,
+        reduccionTP=reduccionTP,
+        ejecucionTP=ejecucionTP,
+        incidenciaTP=incidenciaTP,
+        #
+        monto_aprobado=formatear_dinero(monto_aprobado),
+        monto_aprobado_actualizado=formatear_dinero(monto_aprobado_actualizado),
+        #
+        porcentaje_aplicable=formatear_dinero(porcentaje_aplicable),
+        apoderada=formatear_dinero(apoderada),
+        sin_excepciones=formatear_dinero(sin_excepciones),
+        criterio=formatear_dinero(criterio),
+        porcentaje_aplicableTP=formatear_dinero(porcentaje_aplicableTP),
+        apoderadaTP=formatear_dinero(apoderadaTP),
+        sin_excepcionesTP=formatear_dinero(sin_excepcionesTP),
+        criterioTP=formatear_dinero(criterioTP)
+    )
 
     # Convierte el HTML a PDF usando xhtml2pdf
     pdf_buffer = BytesIO()

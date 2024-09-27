@@ -67,6 +67,9 @@
             background-color: #f0f0f0;
             font-weight: bold;
         }
+        .page-break {
+            page-break-before: always; /* Salto de página antes de esta tabla */
+        }
     </style>
 </head>
 <body>
@@ -180,6 +183,54 @@
             </tr>
         </tbody>
     </table>
+
+    <!-- Nueva tabla en una nueva página -->
+    <div class="page-break"></div>
+    <table>
+        <thead>
+            <tr>
+                <td rowspan="2" colspan="2" class="header-cell" style="text-align: center;">Ley 21.839</td>
+                <td class="header-cell">Base regulatoria al cierre de la liquidacion</td>
+                <td class="header-cell">Base regulatoria a la regulación</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="regular-cell">{{monto_aprobado}}</td>
+                <td class="regular-cell">{{monto_aprobado_actualizado}}</td>
+            </tr>
+            <tr>
+                <td class="regular-cell">Porcentaje aplicable</td>
+                <td class="regular-cell">13%</td>
+                <td class="regular-cell">{{porcentaje_aplicable}}</td>
+                <td class="regular-cell">{{porcentaje_aplicableTP}}</td>
+            </tr>
+            <tr>
+                <td class="regular-cell">Apoderada</td>
+                <td class="regular-cell">30%</td>
+                <td class="regular-cell">{{apoderada}}</td>
+                <td class="regular-cell">{{apoderadaTP}}</td>
+            </tr>
+            <tr>
+                <td class="regular-cell">Sin excepciones</td>
+                <td class="regular-cell">-30%</td>
+                <td class="regular-cell">{{sin_excepciones}}</td>
+                <td class="regular-cell">{{sin_excepcionesTP}}</td>
+            </tr>
+            <tr>
+                <td class="regular-cell">"Citerio jurisprudencial" </td>
+                <td class="regular-cell">Dividir en dos</td>
+                <td class="regular-cell">{{criterio}}</td>
+                <td class="regular-cell">{{criterioTP}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><strong>ARTÍCULO 22.- </strong> <em>En los juicios por cobro de sumas de dinero, a los fines de la regulación de honorarios de los profesionales intervinientes, la cuantía del asunto será el monto de la demanda o reconvención; si hubiera sentencia será el de la liquidación que resulte de la misma, actualizado por intereses si correspondiere.</em></p>
+    <p><strong>ARTÍCULO 24.- </strong> <em> A los efectos de la regulación de honorarios, se tendrán en cuenta los intereses que deban calcularse sobre el monto de condena. Los intereses fijados en la sentencia deberán siempre integrar la base regulatoria, bajo pena de nulidad.</em></p>
+    <p><strong>ARTÍCULO 29.- </strong> <em> Para la regulación de honorarios, los procesos, según su naturaleza, se considerarán divididos en etapas.g) Los incidentes se dividirán en dos (2) etapas; la primera se compone del planteo que lo origine, sea verbal o escrito, y la segunda, del desarrollo hasta su conclusión.</em></p>
+    <p><strong>ARTÍCULO 41.- </strong> <em>En el procedimiento de ejecución de sentencias recaídas en procesos de conocimiento, las regulaciones de honorarios se practicarán aplicando la mitad de la escala del artículo 21. No habiendo excepciones, los honorarios se reducirán en un diez por ciento (10%) del que correspondiere regular. Las actuaciones posteriores a la ejecución propiamente dicha se regularán en un cuarenta por ciento (40%) de la escala del citado artículo.</em></p>
+    <p><strong>ARTÍCULO 52.- </strong> <em>Aun sin petición del interesado, al dictarse sentencia se regularán los honorarios respectivos de los abogados y procuradores de las partes y de los auxiliares de Justicia. A los efectos de la regulación se tendrán en cuenta los intereses, los frutos y los accesorios, que integrarán la base regulatoria según lo establecido en los artículos 22, 23 y 24.</em></p>
+    <p><strong>ARTÍCULO 58.- </strong> <em>El mínimo establecido para regular honorarios de juicios susceptibles de apreciación pecuniaria que no estuviesen previstos en otros artículos será el siguiente: b) en los ejecutivos , de seis (6) UMA</em></p>
 
 </body>
 </html>

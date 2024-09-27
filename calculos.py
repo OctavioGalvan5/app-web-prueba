@@ -41,4 +41,11 @@ def transformar_fecha(fecha):
   fecha_formateada = fecha_objeto.strftime("%d/%m/%Y")
   return fecha_formateada
                                       
+def calcular_porcentajes_ley_21839(monto):
+  porcentaje_aplicable= calcular_porcentaje(13,monto)
+  apoderada = sumar_porcentaje(30,porcentaje_aplicable)
+  sin_excepciones = restar_porcentaje(30,apoderada)
+  criterio_jurisprudencial = sin_excepciones/2
+
+  return porcentaje_aplicable, apoderada, sin_excepciones, criterio_jurisprudencial
   
