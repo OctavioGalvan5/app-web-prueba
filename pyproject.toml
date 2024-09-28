@@ -12,6 +12,7 @@ sqlalchemy = "^2.0.34"
 xhtml2pdf = "^0.2.16"
 babel = "^2.16.0"
 docx = "^0.2.4"
+docxtpl = "^0.18.0"
 
 
 [build-system]

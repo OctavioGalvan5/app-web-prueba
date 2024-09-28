@@ -10,51 +10,106 @@
             font-family: Arial, sans-serif;
         }
         .navbar {
-            background-color: #4B0082; /* Color de fondo de la barra de navegación */
-            padding: 10px 20px; /* Espaciado interno */
-            position: fixed; /* Fija la barra en la parte superior */
+            background-color: #4B0082;
+            padding: 10px 20px;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
-            z-index: 1000; /* Asegura que esté sobre otros elementos */
-            display: flex; /* Utiliza flexbox para la disposición de los elementos */
-            justify-content: flex-start; /* Alinea los elementos a la izquierda */
-            align-items: center; /* Centra verticalmente los elementos */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
         }
         .navbar nav {
-            display: flex; /* Utiliza flexbox para los enlaces */
-            flex-wrap: nowrap; /* Evita el envolvimiento en pantallas grandes */
+            display: flex;
+            flex-wrap: nowrap;
         }
         .navbar a {
             margin: 0 15px;
             color: white;
             text-decoration: none;
-            padding: 10px 15px; /* Espaciado interno para mejorar el área clicable */
-            border-radius: 5px; /* Bordes redondeados */
+            padding: 10px 15px;
+            border-radius: 5px;
             transition: background-color 0.3s, color 0.3s;
         }
         .navbar a:hover {
-            background-color: #FFD700; /* Color dorado de fondo cuando pasas el mouse */
-            color: #4B0082; /* Color del texto al pasar el mouse */
+            background-color: #FFD700;
+            color: #4B0082;
         }
+
+        /* Menú lateral oculto */
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #4B0082;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+        .sidenav a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidenav a:hover {
+            background-color: #FFD700;
+            color: #4B0082;
+        }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
         /* Estilos para pantallas pequeñas */
         @media (max-width: 768px) {
             .navbar {
-                padding: 10px; /* Reduce el espaciado interno en pantallas pequeñas */
-                overflow-x: auto; /* Permite el desplazamiento horizontal si es necesario */
+                display: none; /* Oculta la barra de navegación en pantallas pequeñas */
             }
-            .navbar nav {
-                flex-direction: row; /* Mantiene los enlaces en una sola fila */
+            .sidenav {
+                width: 0; /* El menú lateral está oculto inicialmente */
             }
-            .navbar a {
-                margin: 0 10px; /* Reduce el espaciado horizontal entre los enlaces */
+            .open-btn {
+                display: block; /* Botón para abrir el menú en móviles */
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                font-size: 24px;
+                color: white;
+                background-color: #4B0082;
+                padding: 10px 15px;
+                cursor: pointer;
+                z-index: 1001;
+                border: none;
+                border-radius: 5px;
             }
         }
     </style>
 </head>
 <body>
 
+<!-- Botón para abrir el menú en dispositivos móviles -->
+<span class="open-btn" onclick="openNav()">☰ Menú</span>
+
+<!-- Barra de navegación lateral -->
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="/">Inicio</a>
+    <a href="#">Contáctanos</a>
+    <a href="#">Más acerca de nosotros</a>
+</div>
+
+<!-- Barra de navegación visible en pantallas grandes -->
 <div class="navbar">
     <nav>
         <a href="/">Inicio</a>
@@ -62,6 +117,17 @@
         <a href="#">Más acerca de nosotros</a>
     </nav>
 </div>
+
+<script>
+    /* Funciones para abrir y cerrar el menú lateral en móviles */
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+</script>
 
 </body>
 </html>
