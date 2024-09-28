@@ -42,13 +42,13 @@
         /* Menú lateral oculto */
         .sidenav {
             height: 100%;
-            width: 0;
+            width: 250px; /* Ancho fijo para evitar reacomodamiento */
             position: fixed;
             top: 0;
-            left: 0;
+            left: -250px; /* Mueve el menú fuera de la pantalla inicialmente */
             background-color: #4B0082;
             overflow-x: hidden;
-            transition: 0.5s;
+            transition: left 0.5s; /* Cambia de width a left para un movimiento más suave */
             padding-top: 60px;
         }
         .sidenav a {
@@ -77,7 +77,7 @@
                 display: none; /* Oculta la barra de navegación en pantallas pequeñas */
             }
             .sidenav {
-                width: 0; /* El menú lateral está oculto inicialmente */
+                left: -250px; /* Menú oculto inicialmente */
             }
             .open-btn {
                 display: block; /* Botón para abrir el menú en móviles */
@@ -99,7 +99,7 @@
 <body>
 
 <!-- Botón para abrir el menú en dispositivos móviles -->
-<span class="open-btn" onclick="openNav()">☰ Menú</span>
+<span class="open-btn" onclick="openNav()">☰</span>
 
 <!-- Barra de navegación lateral -->
 <div id="mySidenav" class="sidenav">
@@ -121,11 +121,11 @@
 <script>
     /* Funciones para abrir y cerrar el menú lateral en móviles */
     function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("mySidenav").style.left = "0"; // Muestra el menú desplazando a la izquierda
     }
 
     function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("mySidenav").style.left = "-250px"; // Oculta el menú desplazando fuera de la vista
     }
 </script>
 
