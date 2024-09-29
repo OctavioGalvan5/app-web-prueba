@@ -1,4 +1,4 @@
-from database import obtener_porcentajes, obtener_porcentaje_minimo
+from models.database import obtener_porcentajes, obtener_porcentaje_minimo
 from babel.numbers import format_currency
 from datetime import datetime
 
