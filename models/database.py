@@ -91,6 +91,3 @@ def obtener_porcentaje_minimo(valor_ingresado):
                 # Devolver el elemento 3 de la fila
                 return row[4]  # Asumiendo que la columna 3 es el tercer elemento
     return None  # Si no se encuentra ningún rango que contenga el valor ingresado
-
-ejemplo = obtener_porcentaje_minimo(444.49)
-print(ejemplo)
