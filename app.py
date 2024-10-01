@@ -12,11 +12,13 @@ from models.entities.User import User
 
 # Importar la conexión a la base de datos
 
+
 app = Flask(__name__)
+app.config[' SECRET_KEY'] = 'b1f9c8f4a86b4e209c3457d0a6e3a4b2' # Añade esta línea
+
 
 csrf = CSRFProtect()
 login_manager_app = LoginManager(app)
-login_manager_app.login_view = 'login'  # Ruta de login
 
 @login_manager_app.user_loader
 def load_user(id):
