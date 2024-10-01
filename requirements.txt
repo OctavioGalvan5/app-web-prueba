@@ -5,3 +5,5 @@ pymysql
 xhtml2pdf
 babel
 docxtpl
+flask_login
+Flask-WTF

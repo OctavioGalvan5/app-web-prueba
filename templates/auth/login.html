@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Login</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #E6E6FA; /* Color lila pastel claro */
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4B0082;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .form-container {
+            border: 2px solid #4B0082;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 400px; /* Limita el ancho en pantallas grandes */
+        }
+        input {
+            border: 2px solid #4B0082;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 16px; /* Ajustado para móviles */
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            border: 2px solid #4B0082;
+            border-radius: 10px;
+            padding: 12px;
+            background-color: white;
+            color: #4B0082;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px; /* Ajustado para móviles */
+            transition: background-color 0.3s;
+            width: 100%;
+            text-align: center;
+        }
+        button:hover {
+            background-color: #4B0082;
+            color: white;
+        }
+        .no-login {
+            margin-top: 15px; /* Espacio entre el botón y el rectángulo */
+        }
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    {% include 'nav.html' %}
+    <div class="container">
+        <h1>Iniciar Sesión</h1>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert" id="alert">
+                <button class="close-btn" onclick="closeAlert()">✖</button>
+                <strong>{{ messages[0] }}</strong>
+                <p>Por favor, verifica tus credenciales e inténtalo de nuevo.</p>
+            </div>
+        {% endif %}
+        {% endwith %}
+        <div class="form-container">
+            <form orm action="/login" method="POST">
+            <div class="input-container">
+                <input type="text" placeholder="Usuario" name="username" required />
+                <input type="password" placeholder="Contraseña" name="password"required />
+                <button type="submit">Ingresar</button>
+            </div>
+        </div>
+        <div class="no-login">
+            <a href="#"><button type="button">Continuar sin iniciar sesion</button></a>
+        </div>
+        </form>
+    </div>
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
+    <script>
+        function closeAlert() {
+            document.getElementById('alert').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

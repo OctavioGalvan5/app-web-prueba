@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de Movilidad</title>
+    <style>
+        #titulo_calculadora {
+            font-size: 40px;
+            font-family: Roboto, sans-serif;
+            font-weight: normal;
+            text-align: center;
+        }
+
+        #formulario {
+            display: inline-block;
+            padding: 20px;
+            border: 2px solid #ccc; /* Color del borde del rectángulo */
+            border-radius: 10px; /* Bordes redondeados */
+            background-color: #f5f5f5; /* Color de fondo del rectángulo */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra alrededor del rectángulo */
+        }
+
+        #formulario div {
+            margin-bottom: 15px; /* Espacio entre los elementos */
+        }
+
+        label {
+            display: inline-block;
+            width: 200px; /* Ancho para alinear las etiquetas */
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        input {
+            padding: 5px;
+            width: 250px; /* Ancho de los campos de entrada */
+        }
+    </style>
+</head>
+<body style="text-align: center;">
+    <div>
+        <img id="logoestudio" src="static/logoestudio.jpg" height="200">
+    </div>
+    <h1 id="titulo_calculadora">Calculadora Movilidad</h1>
+    <div id="formulario">
+        <form>
+            <div>
+                <label for="Nombre">Nombre: </label>
+                <input id="Nombre" type="text" name="Nombre" placeholder="Nombre">
+            </div>
+            <div>
+                <label for="Apellido">Apellido: </label>
+                <input id="Apellido" type="text" name="Apellido" placeholder="Apellido">
+            </div>
+            <div>
+                <label for="Fecha_de_Primer_Percibido">Fecha del primer Percibido:</label>
+                <input id="Fecha_de_Primer_Percibido" type="date" name="Fecha_de_Primer_Percibido">
+            </div>
+            <div>
+                <label for="Fecha_de_Ultimo_Percibido">Fecha del último Percibido:</label>
+                <input id="Fecha_de_Ultimo_Percibido" type="date" name="Fecha_de_Ultimo_Percibido">
+            </div>
+            <div>
+                <label for="Haber">Monto inicial: </label>
+                <input id="Haber" type="number" name="Haber" placeholder="Haber">
+            </div>
+            <button type="submit">Calcular</button>
+        </form>
+    </div>
+</body>
+</html>

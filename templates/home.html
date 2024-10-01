@@ -1,70 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Calculadora de Haber</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina Calculadora</title>
     <style>
-        #titulo_calculadora {
-            font-size: 40px;
-            font-family: Roboto, sans-serif;
-            font-weight: normal;
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #E6E6FA; /* Color lila pastel claro */
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            padding: 20px; /* Añadido para evitar que el contenido toque los bordes en móviles */
+        }
+        h1 {
+            font-size: 24px; /* Ajustado para móviles */
+            font-weight: bold;
+            color: #4B0082;
+            margin: 15px 0; /* Margen ajustado para espacio */
+            text-align: center; /* Centrado del texto para móviles */
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 450px; /* Limita el ancho en pantallas grandes */
+        }
+        button {
+            border: 2px solid #4B0082;
+            border-radius: 10px;
+            padding: 12px;
+            background-color: white;
+            color: #4B0082;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px; /* Ajustado para móviles */
+            transition: background-color 0.3s;
+            width: 100%;
             text-align: center;
         }
-
-        #formulario {
-            display: inline-block;
-            padding: 20px;
-            border: 2px solid #ccc; /* Color del borde del rectángulo */
-            border-radius: 10px; /* Bordes redondeados */
-            background-color: #f5f5f5; /* Color de fondo del rectángulo */
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra alrededor del rectángulo */
+        button:hover {
+            background-color: #4B0082;
+            color: white;
         }
-
-        #formulario div {
-            margin-bottom: 15px; /* Espacio entre los elementos */
+        a {
+            text-decoration: none;
         }
-
-        label {
-            display: inline-block;
-            width: 200px; /* Ancho para alinear las etiquetas */
-            text-align: right;
-            margin-right: 10px;
+        .image-container {
+            margin-bottom: 15px; /* Espacio entre la imagen y el título */
+            text-align: center; /* Centrado de la imagen en móviles */
         }
-
-        input {
-            padding: 5px;
-            width: 250px; /* Ancho de los campos de entrada */
+        .image {
+            width: 100%;
+            max-width: 300px; /* Limita el tamaño de la imagen en pantallas grandes */
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 30px;
         }
     </style>
 </head>
-<body style="text-align: center;">
-    <div>
-        <img id="logoestudio" src="static/logoestudio.jpg" height="200">
+<body>
+    <!-- Inclusión del navegador -->
+    {% include 'nav.html' %}
+    <div class="container">
+        <div class="image-container">
+            <img src="static/logoestudio.jpg" alt="Descripción de la imagen" class="image"/>
+        </div>
+        <h1>Selecciona una Opción</h1>
+        <div class="button-container">
+            <a href="/calculadora_movilidad">
+                <button>
+                    Calculadora de Movilidad
+                </button>
+            </a>
+            <a href="/calculadora_uma">
+                <button>
+                    Calculadora de UMA
+                </button>
+            </a>
+            <a href="URL_GENERADOR_DEMANDAS">
+                <button>
+                    Generador de Demandas
+                </button>
+            </a>
+        </div>
     </div>
-    <h1 id="titulo_calculadora">Calculadora de Haber</h1>
-    <div id="formulario">
-        <form>
-            <div>
-                <label for="Nombre">Nombre: </label>
-                <input id="Nombre" type="text" name="Nombre" placeholder="Nombre">
-            </div>
-            <div>
-                <label for="Apellido">Apellido: </label>
-                <input id="Apellido" type="text" name="Apellido" placeholder="Apellido">
-            </div>
-            <div>
-                <label for="Fecha_de_Primer_Percibido">Fecha del primer Percibido:</label>
-                <input id="Fecha_de_Primer_Percibido" type="date" name="Fecha_de_Primer_Percibido">
-            </div>
-            <div>
-                <label for="Fecha_de_Ultimo_Percibido">Fecha del último Percibido:</label>
-                <input id="Fecha_de_Ultimo_Percibido" type="date" name="Fecha_de_Ultimo_Percibido">
-            </div>
-            <div>
-                <label for="Haber">Monto inicial: </label>
-                <input id="Haber" type="number" name="Haber" placeholder="Haber">
-            </div>
-            <button type="submit">Calcular</button>
-        </form>
-    </div>
+    <!-- Inclusión del pie de página -->
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
 </body>
 </html>

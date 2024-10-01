@@ -1,16 +1,59 @@
-from flask import Flask, render_template, request, make_response, send_file
+from flask import Flask, render_template, request, make_response, send_file, redirect, url_for, flash
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_wtf.csrf import CSRFProtect
 from docxtpl import DocxTemplate
+from config import config
+#Models
 from models.generador_pdf import PDFGenerator
+from models.ModelUser import ModelUser
+
+# Entities
+from models.entities.User import User
+
+# Importar la conexión a la base de datos
 
 app = Flask(__name__)
 
-@app.route('/')
-def Index():
-    return render_template('menu.html')
+csrf = CSRFProtect()
+login_manager_app = LoginManager(app)
+login_manager_app.login_view = 'login'  # Ruta de login
 
-@app.route('/calculadora_percibido')
+@login_manager_app.user_loader
+def load_user(id):
+    return ModelUser.get_by_id(id)
+
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user = User(0, request.form['username'], request.form['password'])
+        logged_user = ModelUser.login(user)
+        if logged_user is not None and logged_user.password:  # Verifica que la contraseña sea correcta
+            login_user(logged_user)
+            return redirect(url_for('home'))
+        else:
+            flash("Usuario o contraseña incorrectos")
+            return render_template('auth/login.html')
+    else:
+        return render_template('auth/login.html')
+
+
+@app.route('/home')
+@login_required
+def home():
+    if current_user.is_authenticated:
+        print(f'Usuario autenticado: {current_user.username}')  # Esto imprimirá el nombre de usuario en la consola
+        return render_template('home.html')
+    else:
+        print('El usuario no está autenticado')  # Esto imprimirá si el usuario no está autenticado
+        return redirect(url_for('login'))  # Redirige a la página de login si no está autenticado
+
+@app.route('/calculadora_movilidad')
 def Calculadora_Percibido():
-    return render_template('prueba.html')
+    return render_template('calculadora_movilidad.html')
 
 @app.route('/calculadora_uma')
 def calculadora_uma():
@@ -43,7 +86,7 @@ def generar_pdf_route():
     return response
 
 @app.route('/formulario_demandas', methods=['GET', 'POST'])
-def index():
+def formulario_demandas():
     if request.method == 'POST':
         # Obtener los datos del formulario
         nombre = request.form['nombre']
@@ -71,5 +114,16 @@ def crear_documento(nombre, edad):
 
     # Devolver el archivo editado al usuario
     return send_file('datos/documento_editado.docx', as_attachment=True)
+
+def status_401(error):
+    return redirect(url_for('login'))
+
+
+def status_404(error):
+    return "<h1>Página no encontrada</h1>", 404
+    
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+     app.config.from_object(config['development'])
+     app.register_error_handler(401, status_401)
+     app.register_error_handler(404, status_404)
+     app.run()
