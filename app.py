@@ -14,7 +14,8 @@ from models.entities.User import User
 
 
 app = Flask(__name__)
-app.config[' SECRET_KEY'] = 'b1f9c8f4a86b4e209c3457d0a6e3a4b2' # Añade esta línea
+
+app.secret_key = '3e5f7eaf0f9c4bcfa25c0a6e16d19743' 
 
 
 csrf = CSRFProtect()
@@ -88,6 +89,7 @@ def generar_pdf_route():
     return response
 
 @app.route('/formulario_demandas', methods=['GET', 'POST'])
+@login_required
 def formulario_demandas():
     if request.method == 'POST':
         # Obtener los datos del formulario
@@ -125,7 +127,7 @@ def status_404(error):
     return "<h1>Página no encontrada</h1>", 404
     
 if __name__ == '__main__':
-     app.config.from_object(config['development'])
-     app.register_error_handler(401, status_401)
-     app.register_error_handler(404, status_404)
-     app.run()
+    app.config.from_object(config['development'])
+    app.register_error_handler(401, status_401)
+    app.register_error_handler(404, status_404)
+    app.run()
