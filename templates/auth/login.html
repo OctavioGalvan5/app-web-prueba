@@ -70,18 +70,26 @@
         a {
             text-decoration: none;
         }
+        .alert {
+            border: 1px solid #ffcc00; /* Color del borde de la alerta */
+            border-radius: 5px;
+            background-color: #fff3cd; /* Fondo claro */
+            color: #856404; /* Color del texto de la alerta */
+            padding: 15px;
+            margin-bottom: 20px; /* Espacio entre la alerta y el formulario */
+            width: 100%; /* Ajusta el ancho de la alerta */
+            max-width: 400px; /* Limita el ancho en pantallas grandes */
+        }
     </style>
 </head>
 <body>
-    {% include 'nav.html' %}
+    {% include 'navs/nav_pre_login.html' %}
     <div class="container">
         <h1>Iniciar Sesión</h1>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <div class="alert" id="alert">
-                <button class="close-btn" onclick="closeAlert()">✖</button>
-                <strong>{{ messages[0] }}</strong>
-                <p>Por favor, verifica tus credenciales e inténtalo de nuevo.</p>
+            <div class="alert">
+                <strong>Error:</strong> {{ messages[0] }}
             </div>
         {% endif %}
         {% endwith %}
@@ -99,12 +107,7 @@
         </div>
     </div>
     <footer>
-        {% include 'footer.html' %}
+        {% include 'footers/footer_pre_login.html' %}
     </footer>
-    <script>
-        function closeAlert() {
-            document.getElementById('alert').style.display = 'none';
-        }
-    </script>
 </body>
 </html>

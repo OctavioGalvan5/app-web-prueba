@@ -94,20 +94,20 @@ def formulario_demandas():
     if request.method == 'POST':
         # Obtener los datos del formulario
         nombre = request.form['nombre']
-        edad = request.form['edad']
+        fecha = request.form['fecha']
         # Llama a la función para crear el documento Word
-        return crear_documento(nombre, edad)
+        return crear_documento(nombre, fecha)
 
-    return render_template('formulario.html')
+    return render_template('formulario_demanda.html')
 
-def crear_documento(nombre, edad):
+def crear_documento(nombre, fecha):
     # Cargar el archivo .docx de plantilla
     doc = DocxTemplate('datos/plantilla.docx')
 
     # Crear el contexto con las variables
     contexto = {
         'nombre': nombre,
-        'edad': edad,
+        'fecha': fecha,
     }
 
     # Renderizar el documento con el contexto
