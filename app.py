@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, make_response, send_file, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
+from models.session_validation import validate_session_token  # Importar la validación de sesión
 from docxtpl import DocxTemplate
 from config import config
-from functools import wraps
 #Models
 from models.generador_pdf import PDFGenerator
 from models.ModelUser import ModelUser
@@ -44,34 +44,27 @@ def login():
     else:
         return render_template('auth/login.html')
 
-
-def validate_session_token(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if current_user.is_authenticated:
-            user = ModelUser.get_by_id(current_user.id)
-            if user.session_token != current_user.session_token:
-                logout_user()
-                flash("Tu sesión ha sido invalidada porque otra persona inició sesión con tu cuenta.")
-                return redirect(url_for('login'))
-        return func(*args, **kwargs)
-    return wrapper
+@app.before_request
+def check_session_token():
+    if current_user.is_authenticated:
+        validate_session_token(lambda: None)()
 
 @app.route('/home')
 @login_required
-@validate_session_token
 def home():
     if current_user.is_authenticated:
         print(f'Usuario autenticado: {current_user.username}')  # Esto imprimirá el nombre de usuario en la consola
         return render_template('home.html')
     else:
-        return redirect(url_for('login'))
-        
+        print('El usuario no está autenticado')  # Esto imprimirá si el usuario no está autenticado
+        return redirect(url_for('login'))  # Redirige a la página de login si no está autenticado
+
 @app.route('/calculadora_movilidad')
 def Calculadora_Percibido():
     return render_template('calculadora_movilidad.html')
 
 @app.route('/calculadora_uma')
+@login_required
 def calculadora_uma():
     return render_template('/calculadora_uma.html')
 
