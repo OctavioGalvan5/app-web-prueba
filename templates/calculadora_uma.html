@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -48,6 +47,39 @@
             color: #4B0082;
             margin-bottom: 20px;
             text-align: center;
+        }
+        .flash-messages {
+            margin: 15px 0;
+            width: 100%;
+            max-width: 500px; /* Limitar el ancho */
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            position: relative; /* Para posicionar el botón de cierre */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+        }
+        .alert.error {
+            background-color: #ffcccc; /* Color de fondo más llamativo para errores */
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        }
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: inherit; /* Usar el color del texto del mensaje */
+            font-size: 18px;
         }
         .form-container {
             border: 2px solid #4B0082;
@@ -120,9 +152,20 @@
 </head>
 <body>
     {% include 'navs/nav.html' %}
-    </div>
     <div class="container">
         <h1 class="title">Formulario de Liquidación</h1>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert {{ category }}">
+                            <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         <form class="form-container" action='/resultado_uma' method="post">
             <div class="form-group">
                 <label for="autos">Autos:</label>
@@ -135,7 +178,7 @@
             <div class="form-group periodo-container">
                 <div style="flex-grow: 1;">
                     <label for="periodoDesde">Periodo Liquidado Desde:</label>
-                    <input type="date" id="periodoDesde" name="PeriodoDesde"required />
+                    <input type="date" id="periodoDesde" name="PeriodoDesde" required />
                 </div>
                 <div style="flex-grow: 1;">
                     <label for="periodoHasta">Periodo Liquidado Hasta:</label>
@@ -148,7 +191,7 @@
             </div>
             <div class="form-group">
                 <label for="fechaAprobacion">Fecha de Aprobación de Sentencia de Liquidación:</label>
-                <input type="date" id="fechaAprobacion" name="Fecha_Aprobacion_Sentencia"required />
+                <input type="date" id="fechaAprobacion" name="Fecha_Aprobacion_Sentencia" required />
             </div>
             <div class="form-group">
                 <label for="fechaRegulacion">Fecha de Regulación:</label>
@@ -176,12 +219,9 @@
                            required />
                 </div>
             </div>
-            <button type="submit" class="submit-button"> Generar pdf </button>
-            </div>
+            <button type="submit" class="submit-button">Generar pdf</button>
         </form>
     </div>
     {% include 'footers/footer.html' %}
 </body>
 </html>
-
-            

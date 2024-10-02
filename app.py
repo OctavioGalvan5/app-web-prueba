@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response, send_file, redirect, url_for, flash
+from flask import Flask, render_template, request, make_response, send_file, redirect, url_for, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
 from docxtpl import DocxTemplate
@@ -44,6 +44,12 @@ def login():
         return render_template('auth/login.html')
 
 
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)  # Elimina el ID de usuario de la sesión
+    return redirect(url_for('login'))  # Redirige a la página de inicio (ajusta según sea necesario)
+
+
 @app.route('/home')
 @login_required
 def home():
@@ -55,16 +61,24 @@ def home():
         return redirect(url_for('login'))  # Redirige a la página de login si no está autenticado
 
 @app.route('/calculadora_movilidad')
+@login_required
 def Calculadora_Percibido():
     return render_template('calculadora_movilidad.html')
 
 @app.route('/calculadora_uma')
+@login_required
 def calculadora_uma():
     return render_template('/calculadora_uma.html')
 
-
 @app.route('/resultado_uma', methods=['POST'])
+@login_required
 def generar_pdf_route():
+    # Verificar si el usuario tiene suficientes créditos
+    if current_user.credito <= 0:
+        flash("No tienes suficientes créditos para realizar esta operación.")
+        return redirect(url_for('calculadora_uma'))
+
+    # Obtener los datos del formulario
     autos = request.form.get('Autos')
     expediente = request.form.get('Expediente')
     periodo_desde = request.form.get('PeriodoDesde')
@@ -75,6 +89,14 @@ def generar_pdf_route():
     monto_aprobado = request.form.get('Monto_Aprobado')
     monto_aprobado_actualizado = request.form.get('Monto_Aprobado_Actualizado')
 
+    # Descontar 1 crédito al usuario
+    current_user.credito -= 1
+    ModelUser.update_credito(current_user.id, current_user.credito)  # Actualiza el crédito en la base de datos
+
+    # Vuelve a cargar la información del usuario para reflejar el cambio en current_user
+    login_user(ModelUser.get_by_id(current_user.id))  # Esto actualizará la información del usuario en Flask-Login
+
+    # Generar el PDF
     pdf_generator = PDFGenerator(
         autos, expediente, periodo_desde, periodo_hasta,
         fecha_de_cierre_de_liquidacion, fecha_de_regulacion, 
@@ -83,10 +105,13 @@ def generar_pdf_route():
 
     pdf = pdf_generator.generar_pdf()
 
+    # Devolver el PDF al navegador
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'inline; filename=resultado.pdf'
     return response
+
+
 
 @app.route('/formulario_demandas', methods=['GET', 'POST'])
 @login_required
