@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, make_response, send_file, redirect, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
-from models.session_validation import validate_session_token  # Importar la validación de sesión
 from docxtpl import DocxTemplate
 from config import config
 #Models
@@ -44,14 +43,9 @@ def login():
     else:
         return render_template('auth/login.html')
 
-@app.before_request
-def check_session_token():
-    if current_user.is_authenticated:
-        validate_session_token(lambda: None)()
 
 @app.route('/home')
 @login_required
-@validate_session_token
 def home():
     if current_user.is_authenticated:
         print(f'Usuario autenticado: {current_user.username}')  # Esto imprimirá el nombre de usuario en la consola
@@ -65,8 +59,6 @@ def Calculadora_Percibido():
     return render_template('calculadora_movilidad.html')
 
 @app.route('/calculadora_uma')
-@login_required
-@validate_session_token
 def calculadora_uma():
     return render_template('/calculadora_uma.html')
 
@@ -133,7 +125,7 @@ def status_401(error):
 
 def status_404(error):
     return "<h1>Página no encontrada</h1>", 404
-    
+
 if __name__ == '__main__':
     app.config.from_object(config['development'])
     app.register_error_handler(401, status_401)
