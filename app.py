@@ -51,6 +51,7 @@ def check_session_token():
 
 @app.route('/home')
 @login_required
+@validate_session_token
 def home():
     if current_user.is_authenticated:
         print(f'Usuario autenticado: {current_user.username}')  # Esto imprimirá el nombre de usuario en la consola
@@ -65,6 +66,7 @@ def Calculadora_Percibido():
 
 @app.route('/calculadora_uma')
 @login_required
+@validate_session_token
 def calculadora_uma():
     return render_template('/calculadora_uma.html')
 
