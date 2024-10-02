@@ -2,18 +2,91 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario</title>
+    <style>
+        .form-container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .form-title {
+            text-align: center;
+            color: purple;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            color: purple;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .checkbox-label {
+            color: purple;
+        }
+        .submit-button {
+            width: 100%;
+            padding: 10px;
+            background-color: purple;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Completa el formulario</h1>
-    <form method="post">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
-        <br>
-        <label for="edad">Fecha:</label>
-        <input type="text" id="fecha" name="fecha" required>
-        <br>
-        <button type="submit">Enviar</button>
+
+    <form class="form-container" onsubmit="return false;">
+        <h2 class="form-title">Formulario</h2>
+
+        <div class="form-group" style="display: flex; justify-content: space-between;">
+            <div style="width: 48%;">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div style="width: 48%;">
+                <label for="expediente">Expediente</label>
+                <input type="text" id="expediente" name="expediente" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="sala">Sala 1</label>
+            <input type="text" id="sala" name="sala" required>
+        </div>
+
+        <div class="form-group">
+            <label class="checkbox-label">
+                <input type="checkbox" id="sentencia" name="sentencia" onclick="toggleFechaInput()">
+                Tiene sentencia de segunda instancia
+            </label>
+        </div>
+
+        <div id="fechaDiv" class="form-group" style="display: none;">
+            <label for="fechaSentencia">Fecha de sentencia de segunda</label>
+            <input type="date" id="fechaSentencia" name="fechaSentencia">
+        </div>
+
+        <button type="submit" class="submit-button">Enviar</button>
     </form>
+
+    <script>
+        function toggleFechaInput() {
+            const checkbox = document.getElementById('sentencia');
+            const fechaDiv = document.getElementById('fechaDiv');
+            fechaDiv.style.display = checkbox.checked ? 'block' : 'none';
+        }
+    </script>
 </body>
 </html>
