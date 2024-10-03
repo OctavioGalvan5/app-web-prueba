@@ -1,3 +1,7 @@
+import os
+import tempfile
+from docx import Document
+from docx.shared import Inches
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, make_response, send_file, redirect, url_for, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -119,21 +123,38 @@ def formulario_demandas():
         # Obtener los datos del formulario
         nombre = request.form['nombre']
         dni = request.form['DNI']
-        fecha_adquisicion_derecho= request.form['fecha_adquisicion_derecho']
+        fecha_adquisicion_derecho = request.form['fecha_adquisicion_derecho']
         garcia_vidal = 'garciaVidal' in request.form  # Si está marcado
         domicilio = request.form['domicilio']
         localidad = request.form['localidad']
         fecha_reajuste = request.form['fechaReajuste']
         expediente_reajuste = request.form['expedienteReajuste']
 
+        # Manejo de la imagen
+        imagen = request.files['imageUpload']  # Obtiene la imagen del formulario
+
+        # Crear un archivo temporal para la imagen
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
+            temp_file.write(imagen.read())
+            temp_file_path = temp_file.name  # Guarda la ruta del archivo temporal
+
         # Llama a la función para crear el documento Word
-        return crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste)
+        response = crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste, temp_file_path)
+
+        # Eliminar el archivo temporal después de usarlo
+        try:
+            os.remove(temp_file_path)
+        except FileNotFoundError:
+            print(f"El archivo {temp_file_path} no se encontró y no pudo ser eliminado.")
+
+        return response
 
     return render_template('formulario_demanda.html')
 
-def crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste):
+
+def crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste, ruta_imagen):
     # Convertir fecha_adquisicion_derecho a un objeto de fecha
-    fecha_adquisicion_derecho = datetime.strptime(fecha_adquisicion_derecho, '%Y-%m-%d')  # Asegúrate de que el formato coincida con el de tu entrada
+    fecha_adquisicion_derecho = datetime.strptime(fecha_adquisicion_derecho, '%Y-%m-%d')
 
     # Inicializar fecha_escrito con la fecha de adquisición
     fecha_escrito = fecha_adquisicion_derecho
@@ -157,7 +178,7 @@ def crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domici
     contexto = {
         'nombre': nombre,
         'dni': dni,
-        'fecha_adquisicion_derecho': fecha_adquisicion_derecho,  # Usar objeto de fecha directamente
+        'fecha_adquisicion_derecho': fecha_adquisicion_derecho,
         'garcia_vidal': garcia_vidal,
         'domicilio': domicilio,
         'localidad': localidad,
@@ -168,11 +189,29 @@ def crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domici
     # Renderizar el documento con el contexto
     doc.render(contexto)
 
-    # Guardar el documento editado
-    doc.save('datos/documento_editado.docx')
+    # Guardar el documento editado temporalmente
+    temp_doc_path = 'datos/documento_temporal.docx'
+    doc.save(temp_doc_path)  # Guarda temporalmente antes de agregar la imagen
+
+    # Abrir el documento para agregar la imagen
+    doc = Document(temp_doc_path)
+
+    # Encontrar el marcador 'Imagen_aqui' en los párrafos y reemplazarlo por la imagen
+    for paragraph in doc.paragraphs:
+        if 'Imagen_aqui' in paragraph.text:
+            # Reemplazar el texto del marcador por un espacio vacío
+            paragraph.text = paragraph.text.replace('Imagen_aqui', '')
+            # Insertar la imagen justo después del párrafo donde se encontraba 'Imagen_aqui'
+            run = paragraph.add_run()  # Crear un nuevo run en el párrafo
+            run.add_picture(ruta_imagen, width=Inches(5))  # Cambiar el tamaño de la imagen según sea necesario
+            break
+
+    # Guardar el documento final editado
+    final_path = 'datos/documento_editado.docx'
+    doc.save(final_path)
 
     # Devolver el archivo editado al usuario
-    return send_file('datos/documento_editado.docx', as_attachment=True)
+    return send_file(final_path, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)
