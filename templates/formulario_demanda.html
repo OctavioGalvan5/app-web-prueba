@@ -5,88 +5,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario</title>
     <style>
-        .form-container {
-            max-width: 400px;
-            margin: auto;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
             padding: 20px;
-            background-color: #e0e0e0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .form-title {
-            text-align: center;
-            color: purple;
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
         }
         .form-group {
             margin-bottom: 15px;
         }
-        .form-group label {
-            display: block;
-            color: purple;
+        .form-inline {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
-        .form-group input[type="text"],
-        .form-group input[type="date"] {
-            width: 100%;
-            padding: 8px;
+        label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"],
+        select {
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .checkbox-label {
-            color: purple;
+        input[type="date"] {
+            width: 150px;
         }
-        .submit-button {
-            width: 100%;
-            padding: 10px;
-            background-color: purple;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        #nombre, #DNI, #domicilio {
+            width: calc(60% - 10px);
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: -10px;
+        }
+        .domicilio-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: calc(60% - 10px);
+        }
+        .localidad-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 35%;
+        }
+        .localidad-group label {
+            margin-right: 10px;
+        }
+        .fecha-reajuste-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: calc(60% - 10px);
+            margin-top: 10px;
+        }
+        .expediente-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 35%;
+            margin-top: 10px;
+        }
+        select {
+            width: auto;
+            min-width: 150px;
+            max-width: 100%;
+        }
+        h2 {
+            text-align: left; /* Alinear a la izquierda */
+            margin-bottom: 20px;
+            color: purple; /* Color morado */
+        }
+        h3 {
+            margin-top: 10px; /* Espacio encima del título */
+            text-align: left; /* Alinear a la izquierda */
+            font-size: 24px; /* Tamaño de fuente más grande */
+            font-weight: bold; /* Hacer el texto en negrita */
+            color: purple; /* Color morado */
         }
     </style>
 </head>
 <body>
 
-    <form class="form-container" onsubmit="return false;">
-        <h2 class="form-title">Formulario</h2>
+<div class="container">
 
-        <div class="form-group" style="display: flex; justify-content: space-between;">
-            <div style="width: 48%;">
-                <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" name="nombre" required>
-            </div>
-            <div style="width: 48%;">
-                <label for="expediente">Expediente</label>
-                <input type="text" id="expediente" name="expediente" required>
-            </div>
+    <h2>Datos del Cliente</h2>
+
+    <!-- Nombre y DNI -->
+    <div class="form-group form-inline">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
         </div>
-
-        <div class="form-group">
-            <label for="sala">Sala 1</label>
-            <input type="text" id="sala" name="sala" required>
+        <div>
+            <label for="DNI">DNI:</label>
+            <input type="text" id="DNI" name="DNI" required>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="checkbox-label">
-                <input type="checkbox" id="sentencia" name="sentencia" onclick="toggleFechaInput()">
-                Tiene sentencia de segunda instancia
-            </label>
+    <!-- Fecha de adquisición del derecho y checkbox -->
+    <div class="form-group form-inline">
+        <div>
+            <label for="fecha">Fecha de adquisición del derecho:</label>
+            <input type="date" id="fecha" name="fecha" required>
         </div>
-
-        <div id="fechaDiv" class="form-group" style="display: none;">
-            <label for="fechaSentencia">Fecha de sentencia de segunda</label>
-            <input type="date" id="fechaSentencia" name="fechaSentencia">
+        <div class="checkbox-group">
+            <input type="checkbox" id="garciaVidal" name="garciaVidal">
+            <label for="garciaVidal">Tiene García Vidal</label>
         </div>
+    </div>
 
-        <button type="submit" class="submit-button">Enviar</button>
-    </form>
+    <!-- Domicilio y Localidad -->
+    <div class="form-group form-inline">
+        <div class="domicilio-group">
+            <label for="domicilio">Domicilio:</label>
+            <input type="text" id="domicilio" name="domicilio" required>
+        </div>
+        <div class="localidad-group">
+            <label for="localidad">Localidad:</label>
+            <select id="localidad" name="localidad">
+                <option value="Salta">Salta</option>
+                <option value="Oran">Oran</option>
+                <option value="Tartagal">Tartagal</option>
+                <option value="Cafayate">Cafayate</option>
+            </select>
+        </div>
+    </div>
 
-    <script>
-        function toggleFechaInput() {
-            const checkbox = document.getElementById('sentencia');
-            const fechaDiv = document.getElementById('fechaDiv');
-            fechaDiv.style.display = checkbox.checked ? 'block' : 'none';
-        }
-    </script>
+    <!-- Título de Beneficio -->
+    <h3>Beneficio</h3>
+
+    <!-- Fecha de solicitud de reajuste y expediente -->
+    <div class="form-group form-inline">
+        <div class="fecha-reajuste-group">
+            <label for="fechaReajuste">Fecha de solicitud de reajuste:</label>
+            <input type="date" id="fechaReajuste" name="fechaReajuste" required>
+        </div>
+        <div class="expediente-group">
+            <label for="expedienteReajuste">Expediente reajuste:</label>
+            <input type="text" id="expedienteReajuste" name="expedienteReajuste" required>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
