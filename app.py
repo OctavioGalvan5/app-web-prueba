@@ -129,6 +129,7 @@ def formulario_demandas():
         localidad = request.form['localidad']
         fecha_reajuste = request.form['fechaReajuste']
         expediente_reajuste = request.form['expedienteReajuste']
+        Beneficio = request.form['Beneficio']
 
         # Manejo de la imagen
         imagen = request.files['imageUpload']  # Obtiene la imagen del formulario

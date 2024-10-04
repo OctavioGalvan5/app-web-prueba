@@ -112,7 +112,7 @@
             <h2>Componentes Demanda</h2>
 
             <div class="form-group form-inline">
-                <label><input type="checkbox" name="opcion1"> Error Material</label>
+                <label><input type="checkbox" name="opcion_error_material"> Error Material</label>
                 <label><input type="checkbox" name="opcion2"> Suma no Remunerativas</label>
                 <label><input type="checkbox" name="opcion3"> Reajuste PBU</label>
                 <label><input type="checkbox" name="opcion4"> Tasa de complementación</label>
@@ -129,6 +129,15 @@
             </div>
 
             <h2>Datos del Cliente</h2>
+            <div class="form-group">
+                <label for="genero">Género:</label>
+                <select id="genero" name="genero" style="width: 50%;">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                </select>
+            </div>
+
+
 
             <!-- Nombre y DNI -->
             <div class="form-group form-inline">
@@ -144,15 +153,16 @@
 
             <!-- Fecha de adquisición del derecho y checkbox -->
             <div class="form-group form-inline">
-                <div>
+                <div style="flex: 1;">
                     <label for="fecha">Fecha de adquisición del derecho:</label>
                     <input type="date" id="fecha" name="fecha_adquisicion_derecho" required>
                 </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="garciaVidal" name="garciaVidal">
+                <div class="checkbox-group" style="flex: 1; display: flex; align-items: center;">
+                    <input type="checkbox" id="garciaVidal" name="garciaVidal" style="margin-right: 10px;">
                     <label for="garciaVidal">Tiene García Vidal</label>
                 </div>
             </div>
+
 
             <!-- Domicilio y Localidad -->
             <div class="form-group form-inline">
@@ -186,14 +196,28 @@
                 </div>
                 
                 <div>
-                    <label for="expedienteReajuste">Numero de Beneficio:</label>
-                    <input type="text" id="expedienteReajuste" name="expedienteReajuste" required>
+                    <label for="Beneficio">Numero de Beneficio:</label>
+                    <input type="text" id="Beneficio" name="Beneficio" required>
                 </div>
             </div>
 
             <!-- Zona de Arrastre para Imágenes -->
             <div id="dropZone">Arrastra y suelta una imagen aquí o haz clic para seleccionar</div>
             <input type="file" id="imageUpload" name="imageUpload" accept="image/*" style="display: none;">
+
+            <div id="errorMaterialSection" style="display: none; margin-top: 20px;">
+                <h3>Error Material</h3>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Input 1:</label>
+                        <input type="text" id="errorInput1" name="errorInput1">
+                    </div>
+                    <div>
+                        <label for="errorInput2">Input 2:</label>
+                        <input type="text" id="errorInput2" name="errorInput2">
+                    </div>
+                </div>
+            </div>
 
             <div class="button-container">
                 <button type="submit" class="button">Generar Demanda</button>
@@ -202,6 +226,17 @@
     </div>
 
     <script>
+        const errorMaterialCheckbox = document.querySelector('input[name="opcion_error_material"]');
+        const errorMaterialSection = document.getElementById('errorMaterialSection');
+
+        errorMaterialCheckbox.addEventListener('change', () => {
+            if (errorMaterialCheckbox.checked) {
+                errorMaterialSection.style.display = 'block'; // Mostrar el contenedor
+            } else {
+                errorMaterialSection.style.display = 'none'; // Ocultar el contenedor
+            }
+        });
+
         const dropZone = document.getElementById('dropZone');
         const imageUpload = document.getElementById('imageUpload');
 
