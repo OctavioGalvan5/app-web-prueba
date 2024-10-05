@@ -5,85 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Login</title>
     <style>
-        body {
+        body, html {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #E6E6FA; /* Color lila pastel claro */
-        }
-        .container {
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #E6E6FA, #9370DB);
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
         }
         h1 {
-            font-size: 24px;
-            font-weight: bold;
-            color: #4B0082;
-            margin: 15px 0;
-            text-align: center;
-        }
-        .form-container {
-            border: 2px solid #4B0082;
-            border-radius: 10px;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: #6A0DAD;
+            margin-bottom: 30px;
+            font-size: 28px;
         }
         .input-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            max-width: 400px; /* Limita el ancho en pantallas grandes */
+            margin-bottom: 20px;
         }
         input {
-            border: 2px solid #4B0082;
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 16px; /* Ajustado para móviles */
             width: 100%;
-            box-sizing: border-box;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #E6E6FA;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        input:focus {
+            border-color: #6A0DAD;
+            outline: none;
         }
         button {
-            border: 2px solid #4B0082;
-            border-radius: 10px;
-            padding: 12px;
-            background-color: white;
-            color: #4B0082;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 16px; /* Ajustado para móviles */
-            transition: background-color 0.3s;
             width: 100%;
-            text-align: center;
+            padding: 12px;
+            background-color: #6A0DAD;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
         button:hover {
             background-color: #4B0082;
-            color: white;
-        }
-        .no-login {
-            margin-top: 15px; /* Espacio entre el botón y el rectángulo */
-        }
-        a {
-            text-decoration: none;
+            transform: translateY(-2px);
         }
         .alert {
-            border: 1px solid #ffcc00; /* Color del borde de la alerta */
-            border-radius: 5px;
-            background-color: #fff3cd; /* Fondo claro */
-            color: #856404; /* Color del texto de la alerta */
+            background-color: #FFF3CD;
+            border: 1px solid #FFEEBA;
+            color: #856404;
             padding: 15px;
-            margin-bottom: 20px; /* Espacio entre la alerta y el formulario */
-            width: 100%; /* Ajusta el ancho de la alerta */
-            max-width: 400px; /* Limita el ancho en pantallas grandes */
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .no-login {
+            margin-top: 20px;
+        }
+        .no-login button {
+            background-color: transparent;
+            color: #6A0DAD;
+            border: 2px solid #6A0DAD;
+        }
+        .no-login button:hover {
+            background-color: #6A0DAD;
+            color: white;
         }
     </style>
 </head>
 <body>
-    {% include 'navs/nav_pre_login.html' %}
     <div class="container">
         <h1>Iniciar Sesión</h1>
         {% with messages = get_flashed_messages() %}
@@ -93,21 +93,16 @@
             </div>
         {% endif %}
         {% endwith %}
-        <div class="form-container">
-            <form class="form" action="/login" method="POST">
-                <div class="input-container">
-                    <input type="text" placeholder="Usuario" name="username" required />
-                    <input type="password" placeholder="Contraseña" name="password" required />
-                    <button type="submit">Ingresar</button>
-                </div>
-            </form>
-        </div>
+        <form class="form" action="/login" method="POST">
+            <div class="input-container">
+                <input type="text" placeholder="Usuario" name="username" required />
+                <input type="password" placeholder="Contraseña" name="password" required />
+            </div>
+            <button type="submit">Ingresar</button>
+        </form>
         <div class="no-login">
-            <a href="#"><button hidden="button">Continuar sin iniciar sesión</button></a>
+            <a href="#"><button>Continuar sin iniciar sesión</button></a>
         </div>
     </div>
-    <footer>
-        {% include 'footers/footer_pre_login.html' %}
-    </footer>
 </body>
 </html>

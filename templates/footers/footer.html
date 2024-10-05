@@ -5,63 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Footer Responsivo</title>
     <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
         .footer {
-            background-color: #f8f9fa;
-            padding: 20px;
+            background-color: #6A0DAD;
+            color: white;
+            padding: 30px 20px;
             text-align: center;
             position: relative;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
         }
-
-        .footer div {
+        .footer-content {
             display: flex;
-            justify-content: center; /* Alinea los enlaces horizontalmente */
-            flex-wrap: wrap; /* Permite que los enlaces se reorganicen si es necesario */
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
+        .footer-section {
+            margin: 10px;
+            flex: 1;
+            min-width: 200px;
+        }
+        .footer h3 {
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-links li {
+            margin-bottom: 10px;
+        }
         .footer a {
-            margin: 0 15px;
-            color: #007bff;
+            color: white;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color 0.3s ease;
         }
-
         .footer a:hover {
-            color: #0056b3; /* Cambia de color cuando pasas el mouse */
+            color: #FFD700;
         }
-
-        .footer p {
-            color: #6c757d;
-            font-size: 14px;
-            margin-top: 10px;
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
         }
-
-        /* Estilos para pantallas pequeñas */
+        .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            color: #6A0DAD;
+            text-align: center;
+            line-height: 40px;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        .social-icons a:hover {
+            background-color: #FFD700;
+            transform: translateY(-3px);
+        }
+        .footer-bottom {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
         @media (max-width: 768px) {
-            .footer {
-                padding: 10px;
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
             }
-
-            .footer div {
-                flex-wrap: nowrap; /* Evita que los enlaces se rompan en varias líneas */
-                overflow-x: auto; /* Agrega desplazamiento horizontal si hay muchos enlaces */
-            }
-
-            .footer a {
-                margin: 0 10px; /* Ajusta el espacio entre los enlaces */
+            .footer-section {
+                margin: 20px 0;
             }
         }
     </style>
 </head>
 <body>
-
-    <div class="footer">
-        <div>
-            <a href="/home">Inicio</a>
-            <a href="#">Contáctanos</a>
-            <a href="#">Más acerca de nosotros</a>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="/home">Inicio</a></li>
+                    <li><a href="#">Contáctanos</a></li>
+                    <li><a href="#">Más acerca de nosotros</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p>Email: info@miempresa.com</p>
+                <p>Teléfono: +1 234 567 890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Síguenos</h3>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook">f</a>
+                    <a href="#" aria-label="Twitter">t</a>
+                    <a href="#" aria-label="Instagram">i</a>
+                    <a href="#" aria-label="LinkedIn">in</a>
+                </div>
+            </div>
         </div>
-        <p>© 2023 Mi Empresa. Todos los derechos reservados.</p>
-    </div>
-
+        <div class="footer-bottom">
+            <p>&copy; 2023 Mi Empresa. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 </body>
 </html>

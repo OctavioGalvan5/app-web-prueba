@@ -20,7 +20,7 @@
             margin: auto;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 35px;
             width: 100%;
         }
         .form-inline {
@@ -76,14 +76,14 @@
         .button:hover {
             background-color: #9c27b0;
         }
-        #dropZone {
+        .dropZone {
             border: 2px dashed #ccc;
             padding: 20px;
             text-align: center;
             cursor: pointer;
             margin-top: 20px; /* Espacio entre el botón y la zona de arrastre */
         }
-        #dropZone.hover {
+        .dropZone.hover {
             border-color: #00f;
         }
 
@@ -102,31 +102,30 @@
         }
     </style>
 </head>
-<body>
+    <body>
 
     {% include 'navs/nav.html' %}
 
     <div class="container">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" action="/formulario_demandas">
 
             <h2>Componentes Demanda</h2>
 
             <div class="form-group form-inline">
                 <label><input type="checkbox" name="opcion_error_material"> Error Material</label>
-                <label><input type="checkbox" name="opcion2"> Suma no Remunerativas</label>
-                <label><input type="checkbox" name="opcion3"> Reajuste PBU</label>
-                <label><input type="checkbox" name="opcion4"> Tasa de complementación</label>
-                <label><input type="checkbox" name="opcion5"> Integralidad del haber: actualización de remuneraciones</label>
-                <label><input type="checkbox" name="opcion6"> Movilidad del tope del haber máximo</label>
-                <label><input type="checkbox" name="opcion7"> Inaplicabilidad tope Art 14 de la Res 06.09</label>
-                <label><input type="checkbox" name="opcion8"> Movilidad del haber jubilatorio</label>
-                <label><input type="checkbox" name="opcion9"> Inaplicabilidad de impuesto a las ganancias</label>
-                <label><input type="checkbox" name="opcion9"> Inaplicabilidad tope Art. 9 y 25 de la ley 24.241</label>
-                <label><input type="checkbox" name="opcion9"> Inco articulo 3 ley 27.426 y 4 de la ley 27.609</label>
-                <label><input type="checkbox" name="opcion9"> Inco articulo 3 ley 27.426</label>
-
-
+                <label><input type="checkbox" name="opcion_sumas_remunerativas"> Suma no Remunerativas</label>
+                <label><input type="checkbox" name="opcion_reajuste_pbu"> Reajuste PBU</label>
+                <label><input type="checkbox" name="opcion_tasa_complementacion"> Tasa de complementación</label>
+                <label><input type="checkbox" name="opcion_integralidad_haber_actualizacion_remuneraciones"> Integralidad del haber:                                                                                                 actualización de remuneraciones</label>
+                <label><input type="checkbox" name="opcion_movilidad_tope_haber_maximo"> Movilidad del tope del haber máximo</label>
+                <label><input type="checkbox" name="opcion_inaplicabilidad_tope_art_14_res_06_09"> Inaplicabilidad tope Art 14 de la                                                                                                                         Res 06.09</label>
+                <label><input type="checkbox" name="opcion_movilidad_haber_jubilatorio"> Movilidad del haber jubilatorio</label>
+                <label><input type="checkbox" name="opcion_inaplicabilidad_impuesto_ganancias"> Inaplicabilidad de impuesto a las                                                                                                                         ganancias</label>
+                <label><input type="checkbox" name="opcion_inaplicabilidad_tope_ley_24241"> Inaplicabilidad tope Art. 9 y 25 de la ley                                                                                                                           24.241</label>
+                <label><input type="checkbox" name="opcion_inco_articulo_3_ley_27426_y_4_ley_27609"> Inco articulo 3 ley 27.426 y 4 de                                                                                                                     la ley 27.609</label>
+                <label><input type="checkbox" name="opcion_inco_articulo_3_ley_27426"> Inco articulo 3 ley 27.426</label>
             </div>
+
 
             <h2>Datos del Cliente</h2>
             <div class="form-group">
@@ -134,10 +133,9 @@
                 <select id="genero" name="genero" style="width: 50%;">
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
+
                 </select>
             </div>
-
-
 
             <!-- Nombre y DNI -->
             <div class="form-group form-inline">
@@ -201,9 +199,115 @@
                 </div>
             </div>
 
+            <div class="form-group form-inline">
+                <label for="fechas">Períodos de remuneraciones tomados del:</label>
+                <div style="display: flex; gap: 10px;">
+                     <input type="date" id="fecha_inicio_remuneraciones" name="fecha_inicio_remuneraciones" required>
+                    <span>al</span>
+                    <input type="date" id="fecha_fin_remuneraciones" name="fecha_fin_remuneraciones" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <div>
+                    <label for="fechaReajuste">Fecha de Cese:</label>
+                    <input type="date" id="fechaCese" name="fechaCese" style="width: 50%;" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <label for="fechas">Ultima Remuneracion en Actividad:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="Ultima_Remuneracion_Actividad" name="Ultima_Remuneracion_Actividad" required
+                    <span>al</span>
+                    <input type="date" id="fecha_Ultima_Remuneracion_Actividad" name="fecha_Ultima_Remuneracion_Actividad" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <div>
+                    <label for="Ultima_remuneracion_actualizada_Anses">Ultima remuneracion Actualizada por Anses:</label>
+                    <input type="text" id="Ultima_remuneracion_actualizada_Anses" name="Ultima_remuneracion_actualizada_Anses" style="width: 50%;" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <div>
+                    <label for="fecha_alta_primer_haber">Fecha de alta de primer haber:</label>
+                    <input type="date" id="fecha_alta_primer_haber" name="fecha_alta_primer_haber" required>
+                </div>
+                <div>
+                    <label for="Monto_primer_haber">Monto Primer haber jubilatorio:</label>
+                    <input type="text" id="Monto_primer_haber" name="Monto_primer_haber" required>
+                </div>
+
+                <div>
+                    <label for="Taza_de_reemplazo"> Taza de reemplazo:</label>
+                    <input type="text" id="Taza_de_reemplazo" name="Taza_de_reemplazo" required>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <div>
+                    <label for="Ultima_remuneracion_actualizada_Anses">Servicios:</label>
+                      <label><input type="checkbox" name="Servicios_Autonomos"> Autonomos</label>
+                      <label><input type="checkbox" name="Servicios_Dependencia"> Dependencia</label>
+                </div>
+            </div>
+
+            <!-- Zona de Autonomos-->
+
+            <div id="ServiciosAutonomosSection" style="display: none; margin-top: 20px;">
+                <h3>Servicios Autonomos</h3>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Input 1:</label>
+                        <input type="text" id="errorInput1" name="errorInput1">
+                    </div>
+                    <div>
+                        <label for="errorInput2">Input 2:</label>
+                        <input type="text" id="errorInput2" name="errorInput2">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zona de Dependencia-->
+            <div id="ServiciosDependenciaSection" style="display: none; margin-top: 20px;">
+                <h3>Servicios en Dependencia</h3>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="cargo_desempleado">Cargo desempleado:</label>
+                        <input type="text" id="cargo_desempleado" name="cargo_desempleado">
+                    </div>
+                    <div>
+                        <label for="empleador">Empleador:</label>
+                        <input type="text" id="empleador" name="empleador">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <label for="fechas">Ultimo haber percibido:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="Ultimo_haber" name="Ultimo_haber" required
+                    <span>al</span>
+                    <input type="date" id="fecha_Ultimo_haber" name="fecha_Ultimo_haber" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <div>
+                    <label for="fechaReajuste">Fecha de inicio del Reclamo administrativo interruptivo de la prescripción:</label>
+                    <input type="date" id="fecha_reclamo" name="fecha_reclamo" style="width: 50%;" required>
+                </div>
+            </div>
+                    
+
             <!-- Zona de Arrastre para Imágenes -->
-            <div id="dropZone">Arrastra y suelta una imagen aquí o haz clic para seleccionar</div>
-            <input type="file" id="imageUpload" name="imageUpload" accept="image/*" style="display: none;">
+            <div  hidden class="dropZone dropZone.hover" id="dropZone">Arrastra y suelta una imagen aquí o haz clic para seleccionar</div>
+            <input hidden type="file" id="imageUpload" name="imageUpload" accept="image/*" style="display: none;">
+
+            <!-- Zona de Error material -->
 
             <div id="errorMaterialSection" style="display: none; margin-top: 20px;">
                 <h3>Error Material</h3>
@@ -219,60 +323,163 @@
                 </div>
             </div>
 
+            <!-- Zona de Sumas No remunerativas -->
+            <div id="SumasnoRemunerativasSection" style="display: none; margin-top: 20px;">
+                <h3>Sumas no Remunerativas</h3>
+
+                <div class="form-group">
+                    <div>
+                        <label for="Ultima_remuneracion_actualizada_Anses">Se posee recibos:</label>
+                        <label><input type="checkbox" name="Recibos_Si"> Si</label>
+                        <label><input type="checkbox" name="Recibos_No"> No</label>
+                    </div>
+                </div>
+
+                <div id="Recibos_SiSection" style="display: none; margin-top: 20px;">
+                    <div class="form-group form-inline">
+                        <div>
+                            <label for="Cargo_Desempeñado">Cargo Desempeñado:</label>
+                            <input type="text" id="Cargo_Desempeñado" name="Cargo_Desempeñado">
+                        </div>
+                        <div>
+                            <label for="Lugar_Desempeñado">Lugar:</label>
+                            <input type="text" id="Lugar_Desempeñado" name="Lugar_Desempeñado">
+                        </div>
+                        <div>
+                            <label for="Años_antiguedad">Años de Antiguedad:</label>
+                            <input type="text" id="Años_antiguedad" name="Años_antiguedad">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Recibos_NoSection" style="display: none; margin-top: 20px;">
+                    <div class="form-group form-inline">
+                        <div>
+                            <label for="Librar_oficio_a">Se libre oficio a:</label>
+                            <input type="text" id="Librar_oficio_a" name="Librar_oficio_a">
+                        </div>
+                        <div class="form-group form-inline">
+                            <label for="fechas">Periodo de recibos solicitados:</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="date" id="inicio_periodo_sumas" name="inicio_periodo_sumas" >
+                                <span>al</span>
+                                <input type="date" id="fin_periodo_sumas" name="fin_periodo_sumas" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group form-inline">
+                    <div class="dropZone dropZone.hover" id="dropZoneSumas">Arrastre imagen de cuadro de codigos y conceptos</div>
+                    <input type="file" id="imageUploadSumas" name="imageUploadSumas" accept="image/*" style="display: none;">
+                </div>
+            </div>
+
             <div class="button-container">
                 <button type="submit" class="button">Generar Demanda</button>
             </div>
         </form>
-    </div>
-
     <script>
-        const errorMaterialCheckbox = document.querySelector('input[name="opcion_error_material"]');
-        const errorMaterialSection = document.getElementById('errorMaterialSection');
+                // Función para manejar la visibilidad de las secciones
+                function toggleSection(checkbox, sectionId) {
+                    const section = document.getElementById(sectionId);
+                    section.style.display = checkbox.checked ? 'block' : 'none'; // Mostrar u ocultar según el estado del checkbox
+                }
 
-        errorMaterialCheckbox.addEventListener('change', () => {
-            if (errorMaterialCheckbox.checked) {
-                errorMaterialSection.style.display = 'block'; // Mostrar el contenedor
-            } else {
-                errorMaterialSection.style.display = 'none'; // Ocultar el contenedor
-            }
+                // Inicialización de los checkboxes y secciones
+                document.addEventListener('DOMContentLoaded', () => {
+                    const serviciosAutonomosCheckbox = document.querySelector('input[name="Servicios_Autonomos"]');
+                    const serviciosDependenciaCheckbox = document.querySelector('input[name="Servicios_Dependencia"]');
+                    //sumas no remunerativas
+                    const sumasremunerativasCheckbox = document.querySelector('input[name="opcion_sumas_remunerativas"]');
+                    const Recibos_SiCheckbox = document.querySelector('input[name="Recibos_Si"]');
+                    const Recibos_NoCheckbox = document.querySelector('input[name="Recibos_No"]');
+                    //error material
+                    const errorMaterialCheckbox = document.querySelector('input[name="opcion_error_material"]');
+
+                    // Eventos para checkboxes existentes
+                    if (serviciosAutonomosCheckbox) {
+                        serviciosAutonomosCheckbox.addEventListener('change', () => {
+                            toggleSection(serviciosAutonomosCheckbox, 'ServiciosAutonomosSection');
+                        });
+                    }
+
+                    if (serviciosDependenciaCheckbox) {
+                        serviciosDependenciaCheckbox.addEventListener('change', () => {
+                            toggleSection(serviciosDependenciaCheckbox, 'ServiciosDependenciaSection');
+                        });
+                    }
+
+                    // SUMAS NO REMUNERATIVAS
+                    if (sumasremunerativasCheckbox) {
+                        sumasremunerativasCheckbox.addEventListener('change', () => {
+                            toggleSection(sumasremunerativasCheckbox, 'SumasnoRemunerativasSection');
+                        });
+                    }
+
+                    if (Recibos_SiCheckbox) {
+                        Recibos_SiCheckbox.addEventListener('change', () => {
+                            toggleSection(Recibos_SiCheckbox, 'Recibos_SiSection');
+                        });
+                    }
+
+                    if (Recibos_NoCheckbox) {
+                        Recibos_NoCheckbox.addEventListener('change', () => {
+                            toggleSection(Recibos_NoCheckbox, 'Recibos_NoSection');
+                        });
+                    }
+
+
+                    // ERROR MATERIAL
+                    if (errorMaterialCheckbox) {
+                        errorMaterialCheckbox.addEventListener('change', () => {
+                            toggleSection(errorMaterialCheckbox, 'errorMaterialSection');
+                        });
+                    }
         });
 
-        const dropZone = document.getElementById('dropZone');
-        const imageUpload = document.getElementById('imageUpload');
 
-        // Muestra el selector de archivos al hacer clic en la zona de arrastre
-        dropZone.addEventListener('click', () => {
-            imageUpload.click();
-        });
+        function setupDragAndDrop(dropZoneId, imageUploadId) {
+            const dropZone = document.getElementById(dropZoneId);
+            const imageUpload = document.getElementById(imageUploadId);
 
-        // Manejo de eventos de arrastre
-        dropZone.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            dropZone.classList.add('hover');
-        });
+            // Muestra el selector de archivos al hacer clic en la zona de arrastre
+            dropZone.addEventListener('click', () => {
+                imageUpload.click();
+            });
 
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('hover');
-        });
+            // Manejo de eventos de arrastre
+            dropZone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                dropZone.classList.add('hover');
+            });
 
-        dropZone.addEventListener('drop', (event) => {
-            event.preventDefault();
-            dropZone.classList.remove('hover');
-            const files = event.dataTransfer.files;
-            if (files.length > 0) {
-                imageUpload.files = files;  // Asigna los archivos al input
-                dropZone.textContent = files[0].name; // Muestra el nombre del archivo
-            }
-        });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('hover');
+            });
 
-        // Asigna el archivo seleccionado al drop zone
-        imageUpload.addEventListener('change', () => {
-            if (imageUpload.files.length > 0) {
-                dropZone.textContent = imageUpload.files[0].name; // Muestra el nombre del archivo
-            }
-        });
+            dropZone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('hover');
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    imageUpload.files = files;  // Asigna los archivos al input
+                    dropZone.textContent = files[0].name; // Muestra el nombre del archivo
+                }
+            });
+
+            // Asigna el archivo seleccionado al drop zone
+            imageUpload.addEventListener('change', () => {
+                if (imageUpload.files.length > 0) {
+                    dropZone.textContent = imageUpload.files[0].name; // Muestra el nombre del archivo
+                }
+            });
+        }
+
+        // Configurar múltiples zonas de arrastre
+        setupDragAndDrop('dropZone', 'imageUpload');
+        setupDragAndDrop('dropZone2', 'imageUpload2');
+        
     </script>
-
-    {% include 'footers/footer.html' %}
-</body>
+    </body>
 </html>

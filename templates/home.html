@@ -3,99 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina Calculadora</title>
+    <title>Calculadora Legal - Inicio</title>
     <style>
-        body {
+        :root {
+            --primary-color: #3a0ca3;
+            --secondary-color: #f72585;
+            --background-color: #f0f0f0;
+            --text-color: #333;
+            --card-background: #ffffff;
+        }
+
+        body, html {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #E6E6FA; /* Color lila pastel claro */
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
         }
+
         .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            padding: 20px; /* Añadido para evitar que el contenido toque los bordes en móviles */
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-        h1 {
-            font-size: 24px; /* Ajustado para móviles */
-            font-weight: bold;
-            color: #4B0082;
-            margin: 15px 0; /* Margen ajustado para espacio */
-            text-align: center; /* Centrado del texto para móviles */
-        }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            max-width: 450px; /* Limita el ancho en pantallas grandes */
-        }
-        button {
-            border: 2px solid #4B0082;
-            border-radius: 10px;
-            padding: 12px;
-            background-color: white;
-            color: #4B0082;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 16px; /* Ajustado para móviles */
-            transition: background-color 0.3s;
-            width: 100%;
-            text-align: center;
-        }
-        button:hover {
-            background-color: #4B0082;
+
+        header {
+            background-color: var(--primary-color);
             color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        a {
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .service-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .service-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
             text-decoration: none;
+            transition: background-color 0.3s ease;
         }
-        .image-container {
-            margin-bottom: 15px; /* Espacio entre la imagen y el título */
-            text-align: center; /* Centrado de la imagen en móviles */
+
+        .btn:hover {
+            background-color: #d90b5a;
         }
-        .image {
-            width: 100%;
-            max-width: 300px; /* Limita el tamaño de la imagen en pantallas grandes */
-            height: auto;
-            margin-bottom: 10px;
-            border-radius: 30px;
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Inclusión del navegador -->
     {% include 'navs/nav.html' %}
-    <div class="container">
-        <div class="image-container">
-            <img src="static/logoestudio.jpg" alt="Descripción de la imagen" class="image"/>
-        </div>
-        <h1>Bienvenido {{ current_user.fullname }}</h1>
 
-        <h1>Beneficios</h1>
-        <div class="button-container">
-            <a href="/calculadora_movilidad">
-                <button>
-                    Calculadora de Movilidad
-                </button>
-            </a>
-            <a href="/calculadora_uma">
-                <button>
-                    Calculadora de UMA
-                </button>
-            </a>
-            <a href="/formulario_demandas">
-                <button>
-                    Generador de Demandas
-                </button>
-            </a>
-        </div>
-    </div>
-    <!-- Inclusión del pie de página -->
-    <footer>
-        {% include 'footers/footer.html' %}
-    </footer>
+    <main class="container">
+        <section class="welcome-section">
+            <p class="subtitle">Tu asistente legal inteligente</p>
+        </section>
+
+        <section class="services">
+            <div class="service-card">
+                <div class="service-icon">📊</div>
+                <h2 class="service-title">Calculadora de Movilidad</h2>
+                <p class="service-description">Calcula fácilmente los costos de movilidad para tus casos legales.</p>
+                <a href="/calculadora_movilidad" class="btn">Calcular</a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">💼</div>
+                <h2 class="service-title">Calculadora de UMA</h2>
+                <p class="service-description">Determina rápidamente los valores de la Unidad de Medida y Actualización.</p>
+                <a href="/calculadora_uma" class="btn">Calcular</a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📝</div>
+                <h2 class="service-title">Generador de Demandas</h2>
+                <p class="service-description">Crea demandas profesionales con nuestro generador automatizado.</p>
+                <a href="/formulario_demandas" class="btn">Generar</a>
+            </div>
+        </section>
+    </main>
+
+    {% include 'footers/footer.html' %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const cards = document.querySelectorAll('.service-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-10px)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
 </body>
 </html>

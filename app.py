@@ -121,39 +121,86 @@ def generar_pdf_route():
 def formulario_demandas():
     if request.method == 'POST':
         # Obtener los datos del formulario
-        nombre = request.form['nombre']
-        dni = request.form['DNI']
-        fecha_adquisicion_derecho = request.form['fecha_adquisicion_derecho']
-        garcia_vidal = 'garciaVidal' in request.form  # Si está marcado
-        domicilio = request.form['domicilio']
-        localidad = request.form['localidad']
-        fecha_reajuste = request.form['fechaReajuste']
-        expediente_reajuste = request.form['expedienteReajuste']
-        Beneficio = request.form['Beneficio']
 
+        # Casillas de verificación
+        opcion_error_material = 'opcion_error_material' in request.form
+        opcion_sumas_remunerativas = 'opcion_sumas_remunerativas' in request.form
+        opcion_reajuste_pbu = 'opcion_reajuste_pbu' in request.form
+        opcion_tasa_complementacion = 'opcion_tasa_complementacion' in request.form
+        opcion_integralidad_haber_actualizacion_remuneraciones = 'opcion_integralidad_haber_actualizacion_remuneraciones' in                    request.form
+        opcion_movilidad_tope_haber_maximo = 'opcion_movilidad_tope_haber_maximo' in request.form
+        opcion_inaplicabilidad_tope_art_14_res_06_09 = 'opcion_inaplicabilidad_tope_art_14_res_06_09' in request.form
+        opcion_movilidad_haber_jubilatorio = 'opcion_movilidad_haber_jubilatorio' in request.form
+        opcion_inaplicabilidad_impuesto_ganancias = 'opcion_inaplicabilidad_impuesto_ganancias' in request.form
+        opcion_inaplicabilidad_tope_ley_24241 = 'opcion_inaplicabilidad_tope_ley_24241' in request.form
+        opcion_inco_articulo_3_ley_27426_y_4_ley_27609 = 'opcion_inco_articulo_3_ley_27426_y_4_ley_27609' in request.form
+        opcion_inco_articulo_3_ley_27426 = 'opcion_inco_articulo_3_ley_27426' in request.form
+
+        # Datos del cliente
+        genero = request.form.get('genero')
+        nombre = request.form.get('nombre')
+        dni = request.form.get('DNI')
+        fecha_adquisicion_derecho = request.form.get('fecha_adquisicion_derecho')
+        garcia_vidal = 'garciaVidal' in request.form
+        domicilio = request.form.get('domicilio')
+        localidad = request.form.get('localidad')
+
+        # Beneficio
+        fecha_reajuste = request.form.get('fechaReajuste')
+        expediente_reajuste = request.form.get('expedienteReajuste')
+        beneficio = request.form.get('Beneficio')
+        fecha_inicio_remuneraciones = request.form.get('fecha_inicio_remuneraciones')
+        fecha_fin_remuneraciones = request.form.get('fecha_fin_remuneraciones')
+        fecha_cese = request.form.get('fechaCese')
+        # ver
+        ultima_remuneracion_actividad = request.form.get('Ultima_Remuneracion_Actividad')
+        fecha_ultima_remuneracion_actividad = request.form.get('fecha_Ultima_Remuneracion_Actividad')
+        ultima_remuneracion_actualizada_anses = request.form.get('Ultima_remuneracion_actualizada_Anses')
+        # ver
+        fecha_alta_primer_haber = request.form.get('fecha_alta_primer_haber')
+        monto_primer_haber = request.form.get('Monto_primer_haber')
+        taza_de_reemplazo = request.form.get('Taza_de_reemplazo')
+
+        # Servicios
+        servicios_autonomos = 'Servicios_Autonomos' in request.form
+        servicios_dependencia = 'Servicios_Dependencia' in request.form
+
+        # Datos de Servicios Autónomos (si aplica)
+        autonomo_input1 = request.form.get('errorInput1') if servicios_autonomos else None
+        autonomo_input2 = request.form.get('errorInput2') if servicios_autonomos else None
+
+        # Datos de Servicios en Dependencia (si aplica)
+        cargo_desempleado = request.form.get('cargo_desempleado') if servicios_dependencia else None
+        empleador = request.form.get('empleador') if servicios_dependencia else None
+
+        # Otros datos adicionales
+        ultimo_haber = request.form.get('Ultimo_haber')
+        fecha_ultimo_haber = request.form.get('fecha_Ultimo_haber')
+        fecha_reclamo = request.form.get('fecha_reclamo')
         # Manejo de la imagen
-        imagen = request.files['imageUpload']  # Obtiene la imagen del formulario
+        #imagen = request.files['imageUpload']  # Obtiene la imagen del formulario
 
         # Crear un archivo temporal para la imagen
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
-            temp_file.write(imagen.read())
-            temp_file_path = temp_file.name  # Guarda la ruta del archivo temporal
+        #with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
+            #temp_file.write(imagen.read())
+            #temp_file_path = temp_file.name  # Guarda la ruta del archivo temporal
+            #temp_file_path es la variable que debo ingresar a crear_documento
 
         # Llama a la función para crear el documento Word
-        response = crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste, temp_file_path)
+        response = crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste)
 
         # Eliminar el archivo temporal después de usarlo
-        try:
-            os.remove(temp_file_path)
-        except FileNotFoundError:
-            print(f"El archivo {temp_file_path} no se encontró y no pudo ser eliminado.")
+        #try:
+            #os.remove(temp_file_path)
+        #except FileNotFoundError:
+            #print(f"El archivo {temp_file_path} no se encontró y no pudo ser eliminado.")
 
         return response
 
     return render_template('formulario_demanda.html')
 
 
-def crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste, ruta_imagen):
+def crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste):
     # Convertir fecha_adquisicion_derecho a un objeto de fecha
     fecha_adquisicion_derecho = datetime.strptime(fecha_adquisicion_derecho, '%Y-%m-%d')
 
@@ -198,14 +245,14 @@ def crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domici
     doc = Document(temp_doc_path)
 
     # Encontrar el marcador 'Imagen_aqui' en los párrafos y reemplazarlo por la imagen
-    for paragraph in doc.paragraphs:
-        if 'Imagen_aqui' in paragraph.text:
+    #for paragraph in doc.paragraphs:
+        #if 'Imagen_aqui' in paragraph.text:
             # Reemplazar el texto del marcador por un espacio vacío
-            paragraph.text = paragraph.text.replace('Imagen_aqui', '')
+           # paragraph.text = paragraph.text.replace('Imagen_aqui', '')
             # Insertar la imagen justo después del párrafo donde se encontraba 'Imagen_aqui'
-            run = paragraph.add_run()  # Crear un nuevo run en el párrafo
-            run.add_picture(ruta_imagen, width=Inches(5))  # Cambiar el tamaño de la imagen según sea necesario
-            break
+            #run = paragraph.add_run()  # Crear un nuevo run en el párrafo
+            #run.add_picture(ruta_imagen, width=Inches(5))  # Cambiar el tamaño de la imagen según sea necesario
+           # break
 
     # Guardar el documento final editado
     final_path = 'datos/documento_editado.docx'
