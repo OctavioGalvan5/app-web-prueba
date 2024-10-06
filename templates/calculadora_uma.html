@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,72 +6,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Liquidación</title>
     <style>
-        body {
+        body, html {
             margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .navbar {
-            background-color: #4B0082;
-            padding: 10px 20px;
-            text-align: left;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-        .navbar a {
-            margin: 0 15px;
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-            display: block;
-        }
-        .navbar a:hover {
-            background-color: #FFD700;
-            color: #4B0082;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #E6E6FA, #9370DB);
+            min-height: 100vh;
         }
         .container {
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
-            margin-top: 80px;
-            padding: 0 20px;
+            align-items: center;
+            padding: 80px 20px 40px;
+            max-width: 800px;
+            margin: 0 auto;
         }
         .title {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
             color: #4B0082;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         .flash-messages {
-            margin: 15px 0;
             width: 100%;
-            max-width: 500px; /* Limitar el ancho */
+            max-width: 500px;
+            margin-bottom: 20px;
         }
         .alert {
             padding: 15px;
             border-radius: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-weight: bold;
-            position: relative; /* Para posicionar el botón de cierre */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .alert.error {
-            background-color: #ffcccc; /* Color de fondo más llamativo para errores */
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+            background-color: #FFD2D2;
+            color: #D8000C;
+            border: 1px solid #D8000C;
         }
         .alert.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background-color: #DFF2BF;
+            color: #4F8A10;
+            border: 1px solid #4F8A10;
         }
         .close {
             position: absolute;
@@ -78,74 +63,94 @@
             right: 10px;
             cursor: pointer;
             font-weight: bold;
-            color: inherit; /* Usar el color del texto del mensaje */
+            color: inherit;
             font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+        .close:hover {
+            transform: scale(1.2);
         }
         .form-container {
-            border: 2px solid #4B0082;
-            border-radius: 15px;
-            padding: 20px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
             width: 100%;
             max-width: 500px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
             box-sizing: border-box;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
         .form-group label {
             font-weight: bold;
-            color: #4B0082;
+            color: #6A0DAD;
+            font-size: 14px;
         }
         .form-group input {
-            border: none;
-            border-radius: 15px;
-            padding: 8px;
+            border: 2px solid #E6E6FA;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-group input:focus {
+            border-color: #6A0DAD;
             outline: none;
+            box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.1);
         }
-        .form-group input[type="number"] {
-            -moz-appearance: textfield;
-        }
-        .form-group input::-webkit-inner-spin-button,
-        .form-group input::-webkit-outer-spin-button {
+        .form-group input[type="date"] {
+            appearance: none;
             -webkit-appearance: none;
-            margin: 0;
+            background-color: white;
+            padding-right: 30px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236A0DAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
         }
         .periodo-container {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
+            gap: 15px;
+        }
+        .periodo-container > div {
+            flex: 1;
         }
         .submit-button {
-            border: none;
-            border-radius: 15px;
-            padding: 10px;
-            background-color: #4B0082;
+            background-color: #6A0DAD;
             color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 10px;
-            }
-            .navbar a {
-                margin: 5px 0;
-            }
+        .submit-button:hover {
+            background-color: #4B0082;
+            transform: translateY(-2px);
+        }
+        .submit-button:active {
+            transform: translateY(0);
+        }
+        @media (max-width: 600px) {
             .container {
-                margin-top: 60px;
-            }
-            .form-container {
-                width: 100%;
-                padding: 15px;
+                padding: 60px 15px 30px;
             }
             .title {
-                font-size: 20px;
+                font-size: 24px;
+            }
+            .form-container {
+                padding: 20px;
+            }
+            .periodo-container {
+                flex-direction: column;
             }
         }
     </style>
@@ -175,12 +180,12 @@
                 <label for="expediente">Expediente:</label>
                 <input type="text" id="expediente" name="Expediente" placeholder="Ingrese el expediente" required />
             </div>
-            <div class="form-group periodo-container">
-                <div style="flex-grow: 1;">
+            <div class="periodo-container">
+                <div class="form-group">
                     <label for="periodoDesde">Periodo Liquidado Desde:</label>
                     <input type="date" id="periodoDesde" name="PeriodoDesde" required />
                 </div>
-                <div style="flex-grow: 1;">
+                <div class="form-group">
                     <label for="periodoHasta">Periodo Liquidado Hasta:</label>
                     <input type="date" id="periodoHasta" name="PeriodoHasta" required />
                 </div>
@@ -199,29 +204,52 @@
             </div>
             <div class="form-group">
                 <label for="montoAprobado">Monto Aprobado:</label>
-                <div style="display: flex; align-items: center;">
-                    <span style="margin-right: 5px;">$</span>
+                <div style="position: relative;">
+                    <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">$</span>
                     <input type="text" id="montoAprobado" name="Monto_Aprobado" 
                            placeholder="Ingrese el monto aprobado" 
-                           pattern="^\d+(\.\d{2})$" 
+                           pattern="^\d+(\.\d{2})?$" 
                            title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                           style="padding-left: 25px;"
                            required />
                 </div>
             </div>
             <div class="form-group">
                 <label for="montoActualizado">Monto Aprobado Actualizado (con Tasa Pasiva):</label>
-                <div style="display: flex; align-items: center;">
-                    <span style="margin-right: 5px;">$</span>
+                <div style="position: relative;">
+                    <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">$</span>
                     <input type="text" id="montoActualizado" name="Monto_Aprobado_Actualizado" 
                            placeholder="Ingrese el monto actualizado" 
-                           pattern="^\d+(\.\d{2})$" 
+                           pattern="^\d+(\.\d{2})?$" 
                            title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                           style="padding-left: 25px;"
                            required />
                 </div>
             </div>
-            <button type="submit" class="submit-button">Generar pdf</button>
+            <button type="submit" class="submit-button">Generar PDF</button>
         </form>
     </div>
     {% include 'footers/footer.html' %}
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.style.transform = 'scale(1.02)';
+                });
+                input.addEventListener('blur', () => {
+                    input.style.transform = 'scale(1)';
+                });
+            });
+
+            const submitButton = document.querySelector('.submit-button');
+            submitButton.addEventListener('mouseover', () => {
+                submitButton.style.transform = 'translateY(-2px)';
+            });
+            submitButton.addEventListener('mouseout', () => {
+                submitButton.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
 </body>
 </html>
