@@ -120,89 +120,134 @@ def generar_pdf_route():
 @login_required
 def formulario_demandas():
     if request.method == 'POST':
-        # Obtener los datos del formulario
+        # Diccionario para almacenar todos los datos del formulario
+        datos_formulario = {
+            # Casillas de verificación
+            'casillas_verificacion': {
+                'opcion_error_material': 'opcion_error_material' in request.form,
+                'opcion_sumas_remunerativas': 'opcion_sumas_remunerativas' in request.form,
+                'opcion_reajuste_pbu': 'opcion_reajuste_pbu' in request.form,
+                'opcion_tasa_complementacion': 'opcion_tasa_complementacion' in request.form,
+                'opcion_integralidad_haber_actualizacion_remuneraciones': 'opcion_integralidad_haber_actualizacion_remuneraciones' in request.form,
+                'opcion_movilidad_tope_haber_maximo': 'opcion_movilidad_tope_haber_maximo' in request.form,
+                'opcion_inaplicabilidad_tope_art_14_res_06_09': 'opcion_inaplicabilidad_tope_art_14_res_06_09' in request.form,
+                'opcion_movilidad_haber_jubilatorio': 'opcion_movilidad_haber_jubilatorio' in request.form,
+                'opcion_inaplicabilidad_impuesto_ganancias': 'opcion_inaplicabilidad_impuesto_ganancias' in request.form,
+                'opcion_inaplicabilidad_tope_ley_24241': 'opcion_inaplicabilidad_tope_ley_24241' in request.form,
+                'opcion_inco_articulo_3_ley_27426_y_4_ley_27609': 'opcion_inco_articulo_3_ley_27426_y_4_ley_27609' in request.form,
+                'opcion_inco_articulo_3_ley_27426': 'opcion_inco_articulo_3_ley_27426' in request.form,
+            },
+            # Datos del cliente
+            'datos_cliente': {
+                'genero': request.form.get('genero'),
+                'nombre': request.form.get('nombre'),
+                'dni': request.form.get('DNI'),
+                'fecha_adquisicion_derecho': request.form.get('fecha_adquisicion_derecho'),
+                'garcia_vidal': 'garciaVidal' in request.form,
+                'domicilio': request.form.get('domicilio'),
+                'localidad': request.form.get('localidad'),
+            },
+            # Beneficio
+            'beneficio': {
+                'fecha_reajuste': request.form.get('fechaReajuste'),
+                'expediente_reajuste': request.form.get('expedienteReajuste'),
+                'beneficio': request.form.get('Beneficio'),
+                'fecha_inicio_remuneraciones': request.form.get('fecha_inicio_remuneraciones'),
+                'fecha_fin_remuneraciones': request.form.get('fecha_fin_remuneraciones'),
+                'fecha_cese': request.form.get('fechaCese'),
+                'ultima_remuneracion_actividad': request.form.get('Ultima_Remuneracion_Actividad'),
+                'fecha_ultima_remuneracion_actividad': request.form.get('fecha_Ultima_Remuneracion_Actividad'),
+                'ultima_remuneracion_actualizada_anses': request.form.get('Ultima_remuneracion_actualizada_Anses'),
+                'fecha_alta_primer_haber': request.form.get('fecha_alta_primer_haber'),
+                'monto_primer_haber': request.form.get('Monto_primer_haber'),
+                'taza_de_reemplazo': request.form.get('Taza_de_reemplazo'),
+            },
+            # Servicios
+            'servicios': {
+                'servicios_autonomos': 'Servicios_Autonomos' in request.form,
+                'servicios_dependencia': 'Servicios_Dependencia' in request.form,
+            },
+            # Datos de Servicios Autónomos (si aplica)
+            'servicios_autonomos': {
+                'autonomo_input1': request.form.get('Autonomos1') if 'Servicios_Autonomos' in request.form else None,
+                'autonomo_input2': request.form.get('Autonomos2') if 'Servicios_Autonomos' in request.form else None,
+            },
+            # Datos de Servicios en Dependencia (si aplica)
+            'servicios_dependencia': {
+                'cargo_desempleado': request.form.get('cargo_desempleado') if 'Servicios_Dependencia' in request.form else None,
+                'empleador': request.form.get('empleador') if 'Servicios_Dependencia' in request.form else None,
+            },
+            # Otros datos adicionales
+            'otros_datos_adicionales': {
+                'ultimo_haber': request.form.get('Ultimo_haber'),
+                'fecha_ultimo_haber': request.form.get('fecha_Ultimo_haber'),
+                'fecha_reclamo': request.form.get('fecha_reclamo'),
+            },
+            # Zona de Error Material
+            "error_material": {
+                "errorInput1": request.form.get('errorInput1', ''),  # Valor del input 1 recibido del formulario
+                "errorInput2": request.form.get('errorInput2', '')   # Valor del input 2 recibido del formulario
+            },
 
-        # Casillas de verificación
-        opcion_error_material = 'opcion_error_material' in request.form
-        opcion_sumas_remunerativas = 'opcion_sumas_remunerativas' in request.form
-        opcion_reajuste_pbu = 'opcion_reajuste_pbu' in request.form
-        opcion_tasa_complementacion = 'opcion_tasa_complementacion' in request.form
-        opcion_integralidad_haber_actualizacion_remuneraciones = 'opcion_integralidad_haber_actualizacion_remuneraciones' in                    request.form
-        opcion_movilidad_tope_haber_maximo = 'opcion_movilidad_tope_haber_maximo' in request.form
-        opcion_inaplicabilidad_tope_art_14_res_06_09 = 'opcion_inaplicabilidad_tope_art_14_res_06_09' in request.form
-        opcion_movilidad_haber_jubilatorio = 'opcion_movilidad_haber_jubilatorio' in request.form
-        opcion_inaplicabilidad_impuesto_ganancias = 'opcion_inaplicabilidad_impuesto_ganancias' in request.form
-        opcion_inaplicabilidad_tope_ley_24241 = 'opcion_inaplicabilidad_tope_ley_24241' in request.form
-        opcion_inco_articulo_3_ley_27426_y_4_ley_27609 = 'opcion_inco_articulo_3_ley_27426_y_4_ley_27609' in request.form
-        opcion_inco_articulo_3_ley_27426 = 'opcion_inco_articulo_3_ley_27426' in request.form
+            # Zona de Sumas No Remunerativas
+            "sumas_no_remunerativas": {
+                "recibos": {
+                    "Recibos_Si": 'Recibos_Si' in request.form,  # Si el checkbox está marcado
+                    "Recibos_No": 'Recibos_No' in request.form   # Si el checkbox está marcado
+                },
 
-        # Datos del cliente
-        genero = request.form.get('genero')
-        nombre = request.form.get('nombre')
-        dni = request.form.get('DNI')
-        fecha_adquisicion_derecho = request.form.get('fecha_adquisicion_derecho')
-        garcia_vidal = 'garciaVidal' in request.form
-        domicilio = request.form.get('domicilio')
-        localidad = request.form.get('localidad')
+                "recibos_si": {
+                    "Cargo_Desempeñado": request.form.get('Cargo_Desempeñado', ''),  # Cargo desempeñado
+                    "Lugar_Desempeñado": request.form.get('Lugar_Desempeñado', ''),  # Lugar donde se desempeñó
+                    "Años_antiguedad": request.form.get('Años_antiguedad', '')       # Años de antigüedad
+                },
 
-        # Beneficio
-        fecha_reajuste = request.form.get('fechaReajuste')
-        expediente_reajuste = request.form.get('expedienteReajuste')
-        beneficio = request.form.get('Beneficio')
-        fecha_inicio_remuneraciones = request.form.get('fecha_inicio_remuneraciones')
-        fecha_fin_remuneraciones = request.form.get('fecha_fin_remuneraciones')
-        fecha_cese = request.form.get('fechaCese')
-        # ver
-        ultima_remuneracion_actividad = request.form.get('Ultima_Remuneracion_Actividad')
-        fecha_ultima_remuneracion_actividad = request.form.get('fecha_Ultima_Remuneracion_Actividad')
-        ultima_remuneracion_actualizada_anses = request.form.get('Ultima_remuneracion_actualizada_Anses')
-        # ver
-        fecha_alta_primer_haber = request.form.get('fecha_alta_primer_haber')
-        monto_primer_haber = request.form.get('Monto_primer_haber')
-        taza_de_reemplazo = request.form.get('Taza_de_reemplazo')
+                "recibos_no": {
+                    "Librar_oficio_a": request.form.get('Librar_oficio_a', ''),  # Destino del oficio
+                    "inicio_periodo_sumas": request.form.get('inicio_periodo_sumas', ''),  # Fecha de inicio
+                    "fin_periodo_sumas": request.form.get('fin_periodo_sumas', '')         # Fecha de fin
+                },
+                "Imagen": {
+                    "Imagen": request.form.get('imageUploadSumas', ''),  # Destino del oficio
+                },
 
-        # Servicios
-        servicios_autonomos = 'Servicios_Autonomos' in request.form
-        servicios_dependencia = 'Servicios_Dependencia' in request.form
-
-        # Datos de Servicios Autónomos (si aplica)
-        autonomo_input1 = request.form.get('errorInput1') if servicios_autonomos else None
-        autonomo_input2 = request.form.get('errorInput2') if servicios_autonomos else None
-
-        # Datos de Servicios en Dependencia (si aplica)
-        cargo_desempleado = request.form.get('cargo_desempleado') if servicios_dependencia else None
-        empleador = request.form.get('empleador') if servicios_dependencia else None
-
-        # Otros datos adicionales
-        ultimo_haber = request.form.get('Ultimo_haber')
-        fecha_ultimo_haber = request.form.get('fecha_Ultimo_haber')
-        fecha_reclamo = request.form.get('fecha_reclamo')
-        # Manejo de la imagen
-        #imagen = request.files['imageUpload']  # Obtiene la imagen del formulario
-
-        # Crear un archivo temporal para la imagen
-        #with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
-            #temp_file.write(imagen.read())
-            #temp_file_path = temp_file.name  # Guarda la ruta del archivo temporal
+            # Manejo de la imagen
+            'imagenes': []  # Lista para almacenar las rutas de las imágenes subidas
+        }
+        }
+        #NECESITO ALMACENAR TODAS LAS RUTAS EN UN VECTOR, LUEGO USANDO UN METODO CREARE ARCHIVOS TEMPORALES Y USANDO OTRA FUNCION LOS INSERTARE EN EL WORD
+        #for paragraph in doc.paragraphs:
+        #if 'Imagen_aqui' in paragraph.text:
+            # Reemplazar el texto del marcador por un espacio vacío
+           # paragraph.text = paragraph.text.replace('Imagen_aqui', '')
+            # Insertar la imagen justo después del párrafo donde se encontraba 'Imagen_aqui'
+            #run = paragraph.add_run()  # Crear un nuevo run en el párrafo
+            #run.add_picture(ruta_imagen, width=Inches(5))  # Cambiar el tamaño de la imagen según sea necesario
+           # break
+        #Crear un archivo temporal para la imagen
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
+            temp_file.write(imagen.read())
+            temp_file_path = temp_file.name  # Guarda la ruta del archivo temporal
             #temp_file_path es la variable que debo ingresar a crear_documento
 
         # Llama a la función para crear el documento Word
-        response = crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste)
+        response = crear_documento(datos_formulario)
 
         # Eliminar el archivo temporal después de usarlo
-        #try:
-            #os.remove(temp_file_path)
-        #except FileNotFoundError:
-            #print(f"El archivo {temp_file_path} no se encontró y no pudo ser eliminado.")
+        try:
+            os.remove(temp_file_path)
+        except FileNotFoundError:
+            print(f"El archivo {temp_file_path} no se encontró y no pudo ser eliminado.")
 
         return response
 
     return render_template('formulario_demanda.html')
 
 
-def crear_documento(nombre, dni, fecha_adquisicion_derecho, garcia_vidal, domicilio, localidad, fecha_reajuste, expediente_reajuste):
+def crear_documento(datos_formulario):
     # Convertir fecha_adquisicion_derecho a un objeto de fecha
-    fecha_adquisicion_derecho = datetime.strptime(fecha_adquisicion_derecho, '%Y-%m-%d')
+    fecha_adquisicion_derecho=datos_formulario["datos_cliente"]["fecha_adquisicion_derecho"] 
+    fecha_adquisicion_derecho =datetime.strptime(fecha_adquisicion_derecho, '%Y-%m-%d')
 
     # Inicializar fecha_escrito con la fecha de adquisición
     fecha_escrito = fecha_adquisicion_derecho
