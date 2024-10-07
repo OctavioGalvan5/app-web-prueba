@@ -124,6 +124,13 @@
             margin-top: 3rem;
         }
 
+        .centered-image {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
@@ -136,8 +143,6 @@
             .services {
                 grid-template-columns: 1fr;
             }
-           
-
         }
     </style>
 </head>
@@ -145,7 +150,7 @@
     {% include 'navs/nav.html' %}
     <main class="container">
         <section class="welcome-section">
-             <p class="subtitle">Tu asistente legal inteligente</p>
+             <img src="static/logoestudio.jpg"alt="Tu asistente legal inteligente" class="centered-image">
         </section>
 
         <section class="services">
