@@ -1,6 +1,12 @@
 from docxtpl import DocxTemplate
 from datetime import datetime, timedelta
-from flask import send_file
+from docx import Document
+from docx.shared import Inches
+import os
+import tempfile
+from flask import request, send_file
+from werkzeug.utils import secure_filename
+
 
 class Formulario:
     def __init__(self, datos):
@@ -63,7 +69,69 @@ class Formulario:
     def sumas_no_remunerativas(self):
         """Recoge los datos de servicios."""
         # Inicializar los textos de servicios
+        Titulo_sumas_no_remunerativas = ""
+        parrafo_introduccion = ""
         parrafo_sumas=""
+        parrafo_legalidad = ""
+
+
+        if self.datos["casillas_verificacion"].get('opcion_sumas_remunerativas', False):
+            # Título de la sección de sumas no remunerativas
+            Titulo_sumas_no_remunerativas = "De las sumas no remunerativas"
+
+            parrafo_introduccion = (
+                "Solicito se incorporen para el cálculo del ingreso base las sumas no remunerativas percibidas por mi mandante "
+                "con carácter de normal y habitual por parte de su empleadora, provincia de Salta, conforme a la doctrina sentada "
+                "en el caso 'Rainone de Ruffo' de la CSJN. Se acompaña a la presente la historia laboral de mi mandante, "
+                "en donde se observa una columna que dice 'remuneración total', que es lo liquidado de mi mandante (incluye las "
+                "sumas no remunerativas) y una que dice 'remuneración', que es sobre lo que aportó su empleador, ocasionándole "
+                "un perjuicio a mi mandante."
+            )
+
+            # Párrafo de legalidad
+            parrafo_legalidad = (
+                "La Corte Suprema de Justicia de la Nación reconoció que el monto de las sumas no remunerativas debe "
+                "ser considerado por ANSES para el cómputo del beneficio. Así, en la causa 'Rainone de Ruffo, Juana Teresa "
+                "Berta c/ ANSeS s/ reajustes varios', Sentencia del 02.03.2011, donde se trataba de sumas no remunerativas "
+                "abonadas por el propio ANSES como empleador, el Tribunal sostuvo que correspondía '(...) admitir la pretensión "
+                "de la recurrente y ordenar que dichos montos sean incorporados en el cálculo del haber inicial ordenado por el "
+                "juez de primera instancia, sin perjuicio del cargo por aportes omitidos y de las contribuciones que deban "
+                "realizarse con destino a la seguridad social'. Máxime cuando el propio Organismo había reconocido como "
+                "'remuneraciones sin aporte' las sumas en cuestión."
+            )
+
+            # Añadir el resto de los argumentos
+            parrafo_legalidad += (
+                " En consecuencia, al tratarse de sumas no remunerativas percibidas con carácter normal y habitual, corresponde "
+                "considerar su monto para el cálculo de la jubilación, fundamentando que la misma ley de jubilaciones indica en "
+                "su artículo 6 que 'a los fines previsionales, remuneración es todo ingreso que recibe un trabajador en retribución "
+                "o compensación por su actividad personal prestados en relación de dependencia, incluidos los suplementos que "
+                "tengan el carácter de habituales y regulares'."
+            )
+
+            parrafo_legalidad += (
+                " Los pagos se hicieron con regularidad (variando el porcentaje respecto del salario). La omisión de aportes y "
+                "contribuciones, por el eventual incumplimiento de los deberes a cargo de la Administración como agente de "
+                "retención, no puede cambiar la verdadera naturaleza del desembolso efectuado. Además, la liberación de todo cargo "
+                "al Estado Nacional en la implementación de los incentivos se refiere al origen de los fondos para llevar adelante "
+                "el programa (arts. 4, 5 y 11 de la ley 23283), pero no lo libera de otras obligaciones, entre las que se encuentran "
+                "las de obrar como agente de retención de los aportes y realizar las cotizaciones de seguridad social."
+            )
+
+            parrafo_legalidad += (
+                " Más aún, el carácter remunerativo de los conceptos abonados encuadra en el art. 6 de la ley 24241, que asigna esa "
+                "naturaleza 'a ciertas sumas que son abonadas a agentes de la Administración Pública, entre las que menciona al "
+                "'premio estímulo, gratificaciones u otros conceptos de análogas características', con la modalidad de poner a cargo "
+                "del agente, además de su aporte personal, la contribución que corresponde al empleador."
+            )
+
+            parrafo_legalidad += (
+                " En virtud de lo expuesto, solicito se incorporen al cómputo del haber jubilatorio de mi mandante las sumas percibidas "
+                "como no remunerativas y se ordene a su empleadora realizar las contribuciones previsionales correspondientes, teniendo "
+                "en cuenta el criterio de ambas salas sobre este tema: Van Cauwlaert, Eduardo, sent. del 9/6/17, haciendo mérito de la "
+                "doctrina que emana del precedente 'Rainone de Ruffo, Juana Teresa Berta' (Fallos: 334:210), y Fallos: 333:699 "
+                "'González, Martín Nicolás c/ Polimat S.A. y otro', sent. del 19/5/2010."
+            )
 
         # Comprobar si se deben incluir servicios en dependencia
         if self.datos["sumas_no_remunerativas"]["recibos"]["Recibos_Si"]:
@@ -79,6 +147,9 @@ class Formulario:
         # Devolver un diccionario con los resultados
         return {
             'parrafo_sumas': parrafo_sumas,
+            'parrafo_legalidad': parrafo_legalidad,
+            'Titulo_sumas_no_remunerativas' : Titulo_sumas_no_remunerativas,
+            'parrafo_introduccion': parrafo_introduccion
         }
 
     def generar_diccionario_docx(self):
@@ -87,6 +158,7 @@ class Formulario:
             'cliente': self.datos_cliente(),
             'beneficios': self.beneficio(),
             'servicios': self.servicios(),
+            'sumas_no_remunerativas': self.sumas_no_remunerativas()
             # Agrega más secciones según lo necesites
         }
         return doc_data
@@ -95,6 +167,7 @@ class Formulario:
         """Crea un archivo Word usando la plantilla y los datos proporcionados."""
         fecha_escrito = self.datos["datos_cliente"].get("fecha_adquisicion_derecho")
         fecha_escrito = datetime.strptime(fecha_escrito, '%Y-%m-%d')
+
         # Restar un año si garcia_vidal es True
         if self.datos["datos_cliente"].get("garciaVidal"):
             fecha_escrito = fecha_escrito - timedelta(days=365)  # Restar un año
@@ -106,15 +179,14 @@ class Formulario:
             plantilla = 'datos/plantillaB.docx'
         else:
             plantilla = 'datos/plantillaC.docx'
-        # Cargar el archivo .docx de la plantilla seleccionada
-        plantilla = 'ruta/a/tu/plantilla.docx'  # Especifica la ruta de tu plantilla
-        doc = DocxTemplate(plantilla)
 
-        # Crear el contexto usando los datos del formulario
+        # Cargar la plantilla y crear el contexto
+        doc = DocxTemplate(plantilla)
         contexto = {
-            'datos_cliente': self.datos_cliente(),  # Asegúrate de que este método devuelva el formato correcto
-            'servicios': self.servicios(),           # Asegúrate de que este método devuelva el formato correcto
-            'beneficio': self.beneficio()            # Asegúrate de que este método devuelva el formato correcto
+            'datos_cliente': self.datos_cliente(),  # Método para los datos del cliente
+            'servicios': self.servicios(),           # Método para los datos de servicios
+            'beneficio': self.beneficio(),           # Método para los datos de beneficio
+            'sumas_no_remunerativas': self.sumas_no_remunerativas()  # Método para las sumas no remunerativas
         }
 
         # Renderizar el documento con el contexto
@@ -124,5 +196,12 @@ class Formulario:
         final_path = 'datos/documento_editado.docx'
         doc.save(final_path)
 
-        # Devolver el archivo editado al usuario
-        return send_file(final_path, as_attachment=True)
+        # Devolver la ruta del archivo
+        return final_path
+
+    def procesar_documento(self):
+        # Crear el archivo Word
+        documento_path = self.crear_archivo_word()  # Obtiene la ruta del documento generado
+
+        # Devolver el archivo al usuario
+        return send_file(documento_path, as_attachment=True)
