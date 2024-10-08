@@ -219,7 +219,7 @@
             <div class="form-group form-inline">
                 <label for="fechas">Ultima Remuneracion en Actividad:</label>
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="Ultima_Remuneracion_Actividad" name="Ultima_Remuneracion_Actividad" required
+                    <input type="text" id="Ultima_Remuneracion_Actividad" name="Ultima_Remuneracion_Actividad" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"required>
                     <span>al</span>
                     <input type="date" id="fecha_Ultima_Remuneracion_Actividad" name="fecha_Ultima_Remuneracion_Actividad" required>
                 </div>
@@ -228,7 +228,7 @@
             <div class="form-group form-inline">
                 <div>
                     <label for="Ultima_remuneracion_actualizada_Anses">Ultima remuneracion Actualizada por Anses:</label>
-                    <input type="text" id="Ultima_remuneracion_actualizada_Anses" name="Ultima_remuneracion_actualizada_Anses" style="width: 50%;" required>
+                    <input type="text" id="Ultima_remuneracion_actualizada_Anses" name="Ultima_remuneracion_actualizada_Anses" style="width: 50%;" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" required>
                 </div>
             </div>
 
@@ -239,7 +239,7 @@
                 </div>
                 <div>
                     <label for="Monto_primer_haber">Monto Primer haber jubilatorio:</label>
-                    <input type="text" id="Monto_primer_haber" name="Monto_primer_haber" required>
+                    <input type="text" id="Monto_primer_haber" name="Monto_primer_haber" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"required>
                 </div>
 
                 <div>
@@ -290,7 +290,7 @@
             <div class="form-group form-inline">
                 <label for="fechas">Ultimo haber percibido:</label>
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="Ultimo_haber" name="Ultimo_haber" required
+                    <input type="text" id="Ultimo_haber" name="Ultimo_haber" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" required>
                     <span>al</span>
                     <input type="date" id="fecha_Ultimo_haber" name="fecha_Ultimo_haber" required>
                 </div>

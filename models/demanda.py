@@ -6,6 +6,7 @@ import os
 import tempfile
 from flask import request, send_file
 from werkzeug.utils import secure_filename
+from models.calculos import formatear_dinero, transformar_fecha
 
 
 class Formulario:
@@ -26,32 +27,35 @@ class Formulario:
             'dni': self.datos["datos_cliente"].get('dni'),
             'domicilio': self.datos["datos_cliente"].get('domicilio'),
             'localidad': self.datos["datos_cliente"].get('localidad'),
-            "fecha_adquisicion_derecho": self.datos["datos_cliente"].get("fecha_adquisicion_derecho"),
+            "fecha_adquisicion_derecho": transformar_fecha(self.datos["datos_cliente"].get("fecha_adquisicion_derecho")),
             "garciaVidal" : self.datos["datos_cliente"].get("garciaVidal")
         }
 
     def beneficio(self):
         """Recoge los datos de beneficios."""
         return {
-            'fecha_reajuste': self.datos["beneficio"].get('fecha_reajuste'),
+            'fecha_reajuste': transformar_fecha(self.datos["beneficio"].get('fecha_reajuste')),
             'expediente_reajuste': self.datos["beneficio"].get('expediente_reajuste'),
             'numero_beneficio': self.datos["beneficio"].get('numero_beneficio'),
-            'fecha_inicio_remuneraciones': self.datos["beneficio"].get('fecha_inicio_remuneraciones'),
-            'fecha_fin_remuneraciones': self.datos["beneficio"].get('fecha_fin_remuneraciones'),
-            'fecha_cese': self.datos["beneficio"].get('fecha_cese'),
+            'fecha_inicio_remuneraciones': transformar_fecha(self.datos["beneficio"].get('fecha_inicio_remuneraciones')),
+            'fecha_fin_remuneraciones': transformar_fecha(self.datos["beneficio"].get('fecha_fin_remuneraciones')),
+            'fecha_cese': transformar_fecha(self.datos["beneficio"].get('fecha_cese')),
             'ultima_remuneracion_actividad': self.datos["beneficio"].get('ultima_remuneracion_actividad'),
-            'fecha_ultima_remuneracion_actividad': self.datos["beneficio"].get('fecha_ultima_remuneracion_actividad'),
+            'fecha_ultima_remuneracion_actividad': transformar_fecha(self.datos["beneficio"].get('fecha_ultima_remuneracion_actividad')),
             'ultima_remuneracion_actualizada_anses': self.datos["beneficio"].get('ultima_remuneracion_actualizada_anses'),
-            'fecha_alta_primer_haber': self.datos["beneficio"].get('fecha_alta_primer_haber'),
+            'fecha_alta_primer_haber': transformar_fecha(self.datos["beneficio"].get('fecha_alta_primer_haber')),
             'monto_primer_haber': self.datos["beneficio"].get('monto_primer_haber'),
             'taza_de_reemplazo': self.datos["beneficio"].get('taza_de_reemplazo'),
+            'ultimo_haber': self.datos["beneficio"].get('ultimo_haber'),
+            'fecha_ultimo_haber': transformar_fecha(self.datos["beneficio"].get('fecha_ultimo_haber')),
+            'fecha_reclamo' : transformar_fecha(self.datos["beneficio"].get('fecha_reclamo')),
         }
 
     def servicios(self):
         """Recoge los datos de servicios."""
         # Inicializar los textos de servicios
-        servicios_dependencia = ""
-        servicios_autonomos = ""
+        servicios_dependencia = "Servicios en Dependencia: No tiene"
+        servicios_autonomos = "Servicios Autonomos: No tiene"
 
         # Comprobar si se deben incluir servicios en dependencia
         if self.datos["servicios"].get('servicios_dependencia'):
@@ -77,7 +81,11 @@ class Formulario:
         Titulo_sumas_no_remunerativas = ""
         parrafo_introduccion = ""
         parrafo_sumas=""
-        parrafo_legalidad = ""
+        parrafo_legalidad1 = ""
+        parrafo_legalidad2 = ""
+        parrafo_legalidad3 = ""
+        parrafo_legalidad4 = ""
+        parrafo_legalidad5 = ""
 
 
         if self.datos["casillas_verificacion"].get('opcion_sumas_remunerativas', False):
@@ -94,7 +102,7 @@ class Formulario:
             )
 
             # Párrafo de legalidad
-            parrafo_legalidad = (
+            parrafo_legalidad1 = (
                 "La Corte Suprema de Justicia de la Nación reconoció que el monto de las sumas no remunerativas debe "
                 "ser considerado por ANSES para el cómputo del beneficio. Así, en la causa 'Rainone de Ruffo, Juana Teresa "
                 "Berta c/ ANSeS s/ reajustes varios', Sentencia del 02.03.2011, donde se trataba de sumas no remunerativas "
@@ -106,7 +114,7 @@ class Formulario:
             )
 
             # Añadir el resto de los argumentos
-            parrafo_legalidad += (
+            parrafo_legalidad2 = (
                 " En consecuencia, al tratarse de sumas no remunerativas percibidas con carácter normal y habitual, corresponde "
                 "considerar su monto para el cálculo de la jubilación, fundamentando que la misma ley de jubilaciones indica en "
                 "su artículo 6 que 'a los fines previsionales, remuneración es todo ingreso que recibe un trabajador en retribución "
@@ -114,7 +122,7 @@ class Formulario:
                 "tengan el carácter de habituales y regulares'."
             )
 
-            parrafo_legalidad += (
+            parrafo_legalidad3 = (
                 " Los pagos se hicieron con regularidad (variando el porcentaje respecto del salario). La omisión de aportes y "
                 "contribuciones, por el eventual incumplimiento de los deberes a cargo de la Administración como agente de "
                 "retención, no puede cambiar la verdadera naturaleza del desembolso efectuado. Además, la liberación de todo cargo "
@@ -123,14 +131,14 @@ class Formulario:
                 "las de obrar como agente de retención de los aportes y realizar las cotizaciones de seguridad social."
             )
 
-            parrafo_legalidad += (
+            parrafo_legalidad4 = (
                 " Más aún, el carácter remunerativo de los conceptos abonados encuadra en el art. 6 de la ley 24241, que asigna esa "
                 "naturaleza 'a ciertas sumas que son abonadas a agentes de la Administración Pública, entre las que menciona al "
                 "'premio estímulo, gratificaciones u otros conceptos de análogas características', con la modalidad de poner a cargo "
                 "del agente, además de su aporte personal, la contribución que corresponde al empleador."
             )
 
-            parrafo_legalidad += (
+            parrafo_legalidad5 = (
                 " En virtud de lo expuesto, solicito se incorporen al cómputo del haber jubilatorio de mi mandante las sumas percibidas "
                 "como no remunerativas y se ordene a su empleadora realizar las contribuciones previsionales correspondientes, teniendo "
                 "en cuenta el criterio de ambas salas sobre este tema: Van Cauwlaert, Eduardo, sent. del 9/6/17, haciendo mérito de la "
@@ -144,7 +152,7 @@ class Formulario:
 
         # Comprobar si se deben incluir servicios autónomos
         if self.datos["sumas_no_remunerativas"]["recibos"]["Recibos_No"]:
-           parrafo_sumas = "Asimismo, peticiono se libre oficio a " + self.datos["sumas_no_remunerativas"]["recibos_no"]["Librar_oficio_a"] + " a los fines de que remita los recibos de sueldo de mi representada que se encuentran en su poder, correspondientes al período " + self.datos["sumas_no_remunerativas"]["recibos_no"]["inicio_periodo_sumas"] + " hasta " + self.datos["sumas_no_remunerativas"]["recibos_no"]["fin_periodo_sumas"] + " , de los que surgirán las sumas abonadas como no remunerativas, En su defecto, peticiono informe los haberes con aportes y sin aportes abonados en cada período peticionado.  De ellos surgirán las sumas no remunerativas abonadas por el empleador, bajo los siguientes códigos y conceptos: "
+           parrafo_sumas = "Asimismo, peticiono se libre oficio a " + self.datos["sumas_no_remunerativas"]["recibos_no"]["Librar_oficio_a"] + " a los fines de que remita los recibos de sueldo de mi representada que se encuentran en su poder, correspondientes al período " + transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["inicio_periodo_sumas"]) + " hasta " + transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["fin_periodo_sumas"]) + " , de los que surgirán las sumas abonadas como no remunerativas, En su defecto, peticiono informe los haberes con aportes y sin aportes abonados en cada período peticionado.  De ellos surgirán las sumas no remunerativas abonadas por el empleador, bajo los siguientes códigos y conceptos: "
 
         if self.datos["sumas_no_remunerativas"]["Imagen"]["Imagen"]:
             parrafo_sumas += "\nImagen aquí"
@@ -152,7 +160,11 @@ class Formulario:
         # Devolver un diccionario con los resultados
         return {
             'parrafo_sumas': parrafo_sumas,
-            'parrafo_legalidad': parrafo_legalidad,
+            'parrafo_legalidad1': parrafo_legalidad1,
+            'parrafo_legalidad2': parrafo_legalidad2,
+            'parrafo_legalidad3': parrafo_legalidad3,
+            'parrafo_legalidad4': parrafo_legalidad4,
+            'parrafo_legalidad5': parrafo_legalidad5,
             'Titulo_sumas_no_remunerativas' : Titulo_sumas_no_remunerativas,
             'parrafo_introduccion': parrafo_introduccion
         }
@@ -161,7 +173,7 @@ class Formulario:
         """Genera el diccionario que se usará para crear el archivo Word."""
         doc_data = {
             'cliente': self.datos_cliente(),
-            'beneficios': self.beneficio(),
+            'beneficio': self.beneficio(),
             'servicios': self.servicios(),
             'sumas_no_remunerativas': self.sumas_no_remunerativas()
             # Agrega más secciones según lo necesites
@@ -232,7 +244,7 @@ class Formulario:
         imagenes_por_marcador = {}
 
         # Asignar cada imagen a su respectivo marcador si existe
-        for imagen, marcador in zip([imagen1], ['Imagen_aqui']):
+        for imagen, marcador in zip([imagen1], ['Imagen_suma_aqui']):
             if imagen:  # Verificar si el usuario subió una imagen
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
                     temp_file.write(imagen.read())

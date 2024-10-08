@@ -158,12 +158,15 @@ def formulario_demandas():
                 'fecha_inicio_remuneraciones': request.form.get('fecha_inicio_remuneraciones'),
                 'fecha_fin_remuneraciones': request.form.get('fecha_fin_remuneraciones'),
                 'fecha_cese': request.form.get('fechaCese'),
-                'ultima_remuneracion_actividad': request.form.get('Ultima_Remuneracion_Actividad'),
+                'ultima_remuneracion_actividad': float(request.form.get('Ultima_Remuneracion_Actividad')),
                 'fecha_ultima_remuneracion_actividad': request.form.get('fecha_Ultima_Remuneracion_Actividad'),
-                'ultima_remuneracion_actualizada_anses': request.form.get('Ultima_remuneracion_actualizada_Anses'),
+                'ultima_remuneracion_actualizada_anses': float(request.form.get('Ultima_remuneracion_actualizada_Anses')),
                 'fecha_alta_primer_haber': request.form.get('fecha_alta_primer_haber'),
-                'monto_primer_haber': request.form.get('Monto_primer_haber'),
+                'monto_primer_haber': float(request.form.get('Monto_primer_haber')),
                 'taza_de_reemplazo': request.form.get('Taza_de_reemplazo'),
+                'ultimo_haber': float(request.form.get('Ultimo_haber')),
+                'fecha_ultimo_haber': request.form.get('fecha_Ultimo_haber'),
+                'fecha_reclamo': request.form.get('fecha_reclamo'),
             },
             # Servicios
             'servicios': {
