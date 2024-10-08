@@ -15,8 +15,13 @@ class Formulario:
 
     def datos_cliente(self):
         """Recoge los datos del cliente."""
+        genero = ""
+        if self.datos["datos_cliente"].get('genero') == "Masculino":
+            genero = "del Sr"
+        elif self.datos["datos_cliente"].get('genero') == "Femenino":
+            genero = "de la Sra"
         return {
-            'genero': self.datos["datos_cliente"].get('genero'),
+            'genero': genero,
             'nombre': self.datos["datos_cliente"].get('nombre'),
             'dni': self.datos["datos_cliente"].get('dni'),
             'domicilio': self.datos["datos_cliente"].get('domicilio'),
@@ -163,14 +168,15 @@ class Formulario:
         }
         return doc_data
 
-    def crear_archivo_word(self):
-        """Crea un archivo Word usando la plantilla y los datos proporcionados."""
+    def crear_archivo_word(self, imagenes_por_marcador):
+        """Crea un archivo Word usando la plantilla y los datos proporcionados, incluyendo imágenes."""
+
         fecha_escrito = self.datos["datos_cliente"].get("fecha_adquisicion_derecho")
         fecha_escrito = datetime.strptime(fecha_escrito, '%Y-%m-%d')
 
         # Restar un año si garcia_vidal es True
         if self.datos["datos_cliente"].get("garciaVidal"):
-            fecha_escrito = fecha_escrito - timedelta(days=365)  # Restar un año
+            fecha_escrito = fecha_escrito - timedelta(days=365)
 
         # Seleccionar plantilla según la fecha_escrito
         if fecha_escrito < datetime(2018, 3, 1):
@@ -183,25 +189,67 @@ class Formulario:
         # Cargar la plantilla y crear el contexto
         doc = DocxTemplate(plantilla)
         contexto = {
-            'datos_cliente': self.datos_cliente(),  # Método para los datos del cliente
-            'servicios': self.servicios(),           # Método para los datos de servicios
-            'beneficio': self.beneficio(),           # Método para los datos de beneficio
-            'sumas_no_remunerativas': self.sumas_no_remunerativas()  # Método para las sumas no remunerativas
+            'datos_cliente': self.datos_cliente(),
+            'servicios': self.servicios(),
+            'beneficio': self.beneficio(),
+            'sumas_no_remunerativas': self.sumas_no_remunerativas()
         }
 
         # Renderizar el documento con el contexto
         doc.render(contexto)
 
         # Guardar el documento editado temporalmente
+        temp_doc_path = 'datos/documento_temporal.docx'
+        doc.save(temp_doc_path)
+
+        # Manejo de las imágenes
+        doc = Document(temp_doc_path)
+
+        # Insertar imágenes en posiciones específicas según el diccionario
+        for marcador, imagen_path in imagenes_por_marcador.items():
+            for paragraph in doc.paragraphs:
+                if marcador in paragraph.text:  # Buscar el marcador
+                    paragraph.text = paragraph.text.replace(marcador, '')  # Eliminar el marcador del texto
+
+                    if imagen_path:  # Verificar si hay imagen para ese marcador
+                        run = paragraph.add_run()
+                        run.add_picture(imagen_path, width=Inches(5))  # Ajusta el tamaño según sea necesario
+                    break  # Detener la búsqueda en los párrafos una vez encontrado el marcador
+
+        # Guardar el documento final editado
         final_path = 'datos/documento_editado.docx'
         doc.save(final_path)
 
-        # Devolver la ruta del archivo
+        # Devolver la ruta del archivo final
         return final_path
 
-    def procesar_documento(self):
-        # Crear el archivo Word
-        documento_path = self.crear_archivo_word()  # Obtiene la ruta del documento generado
+    def procesar_imagenes(self):
+        """Procesa las imágenes subidas por el usuario y las asigna a sus respectivos marcadores."""
+        # Obtener las imágenes proporcionadas por el usuario (pueden ser opcionales)
+        imagen1 = self.datos["sumas_no_remunerativas"]["Imagen"].get("Imagen")  # Primer input de imagen (puede ser None)
 
-        # Devolver el archivo al usuario
+        # Crear diccionario para asignar las imágenes a sus marcadores
+        imagenes_por_marcador = {}
+
+        # Asignar cada imagen a su respectivo marcador si existe
+        for imagen, marcador in zip([imagen1], ['Imagen_aqui']):
+            if imagen:  # Verificar si el usuario subió una imagen
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
+                    temp_file.write(imagen.read())
+                    imagenes_por_marcador[marcador] = temp_file.name  # Mapea el marcador a la ruta del archivo temporal
+            else:
+                imagenes_por_marcador[marcador] = None  # No hay imagen para este marcador, se eliminará del documento
+
+        # Llama a la función para crear el documento Word
+        documento_path = self.crear_archivo_word(imagenes_por_marcador)  # Pasa el diccionario
+
+        # Eliminar los archivos temporales después de usarlos
+        for temp_file_path in imagenes_por_marcador.values():
+            if temp_file_path:  # Solo eliminar archivos que existan
+                try:
+                    os.remove(temp_file_path)
+                except FileNotFoundError:
+                    print(f"El archivo {temp_file_path} no se encontró y no pudo ser eliminado.")
+
+        # Enviar el archivo generado al usuario como descarga
         return send_file(documento_path, as_attachment=True)

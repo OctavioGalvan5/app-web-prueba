@@ -211,7 +211,7 @@ def formulario_demandas():
                     "fin_periodo_sumas": request.form.get('fin_periodo_sumas', '')         # Fecha de fin
                 },
                 "Imagen": {
-                    "Imagen": request.form.get('imageUploadSumas', ''),  # Destino del oficio
+                    "Imagen": request.files['imageUploadSumas']  # Destino del oficio
                 },
 
             # Manejo de la imagen
@@ -222,7 +222,7 @@ def formulario_demandas():
         
         # Llama a la función para crear el documento Word
         demanda = Formulario(datos_formulario)
-        response = demanda.procesar_documento()
+        response = demanda.procesar_imagenes()
 
         return response
 
