@@ -98,7 +98,10 @@
             padding: 12px;
             font-size: 16px;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            width: 100%; /* Make all inputs full width */
+            box-sizing: border-box; /* Include padding and border in the element's total width */
         }
+
         .form-group input:focus {
             border-color: #6A0DAD;
             outline: none;
@@ -152,6 +155,10 @@
             .periodo-container {
                 flex-direction: column;
             }
+            .input-large {
+                width: 100%; 
+            }
+
         }
     </style>
 </head>
