@@ -314,12 +314,32 @@
                 <h3>Error Material</h3>
                 <div class="form-group form-inline">
                     <div>
-                        <label for="errorInput1">Input 1:</label>
-                        <input type="text" id="errorInput1" name="errorInput1">
+                        <label for="errorInput1">Lugar de trabajo durante el error material:</label>
+                        <input type="text" id="errorInput1" name="Lugar_error">
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="fechas">Períodos de remuneraciones tomadas erroneamente:</label>
+                        <div style="display: flex; gap: 10px;">
+                             <input type="date" id="fecha_inicio_remuneraciones" name="fecha_inicio_remuneraciones_error">
+                            <span>al</span>
+                            <input type="date" id="fecha_fin_remuneraciones" name="fecha_fin_remuneraciones_error">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div class="dropZone dropZone.hover" id="dropZoneError">Arrastre imagen de cuadro de error material</div>
+                    <input type="file" id="imagenError" name="imagenError" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="nombre">"W" con error material:</label>
+                        <input type="text" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" id="nombre" name="W_error">
                     </div>
                     <div>
-                        <label for="errorInput2">Input 2:</label>
-                        <input type="text" id="errorInput2" name="errorInput2">
+                        <label for="DNI">"W" sin error material:</label>
+                        <input type="text" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" id="DNI" name="W_sin_error">
                     </div>
                 </div>
             </div>
@@ -480,6 +500,8 @@
         // Configurar múltiples zonas de arrastre
         setupDragAndDrop('dropZone', 'imageUpload');
         setupDragAndDrop('dropZoneSumas', 'imageUploadSumas');
+        setupDragAndDrop('dropZoneError', 'imagenError');
+
         
     </script>
     </body>

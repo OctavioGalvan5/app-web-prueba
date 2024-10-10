@@ -191,8 +191,16 @@ def formulario_demandas():
             },
             # Zona de Error Material
             "error_material": {
-                "errorInput1": request.form.get('errorInput1', ''),  # Valor del input 1 recibido del formulario
-                "errorInput2": request.form.get('errorInput2', '')   # Valor del input 2 recibido del formulario
+                "Lugar_error": request.form.get('Lugar_error', ''),  # Valor del input 1 recibido del formulario
+                "fecha_inicio_remuneraciones_error": request.form.get('fecha_inicio_remuneraciones_error', ''),
+                "fecha_fin_remuneraciones_error": request.form.get('fecha_fin_remuneraciones_error', ''),
+                "W_error": request.form.get('W_error', ''),
+                "W_sin_error": request.form.get('W_sin_error', ''),
+
+                "Imagen": {
+                    "Imagen": request.files['imagenError']  # Destino del oficio
+                },
+
             },
 
             # Zona de Sumas No Remunerativas

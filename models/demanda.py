@@ -169,13 +169,72 @@ class Formulario:
             'parrafo_introduccion': parrafo_introduccion
         }
 
+    def error_material(self):
+        """Recoge los datos de servicios."""
+        # Inicializar los textos de servicios
+        Titulo_error_material = ""
+        parrafo_1 = ""
+        parrafo_2 =""
+        parrafo_3 = ""
+        parrafo_4 = ""
+        parrafo_5= ""
+        parrafo_6= ""
+        parrafo_7 = ""
+
+
+        if self.datos["casillas_verificacion"].get('opcion_error_material', False):
+            # Título de la sección de sumas no remunerativas
+            Titulo_error_material= "Del error material "
+
+            parrafo_1 = (
+                "Mi mandante trabajó en " + self.datos["error_material"]["Lugar_error"] + " desde el " + self.datos["error_material"]["fecha_inicio_remuneraciones_error"] + " hasta el " + self.datos["error_material"]["fecha_fin_remuneraciones_error"] +"."
+            )
+
+            # Párrafo de legalidad
+            parrafo_2 = (
+                "Del detalle de beneficios de Anses se observan los siguientes errores materiales en los que incurrió el organismo previsional al momento del cálculo del haber jubilatorio inicial:"
+            )
+
+            # Añadir el resto de los argumentos
+            parrafo_3= (
+                "Toma remuneraciones erróneas, diferentes a las efectivamente percibidas:"
+            )
+
+            parrafo_4 = (
+                "Se adjunta cálculo de haber de caja con y sin corrección del error material, de los que surgen los siguientes promedios de remuneraciones:"
+            )
+
+            parrafo_5 = (
+                "W de caja con error material en remuneraciones consideradas: " + self.datos["error_material"]["W_error"] +"."
+            )
+
+            parrafo_6 = (
+                "W de caja sin error material, con remuneraciones correctas: " + self.datos["error_material"]["W_sin_error"] +"."
+            )
+            parrafo_7 = (
+                "Solicito se corrija el error material y se tomen las verdaderas remuneraciones percibidas para el cálculo del haber inicial." 
+            )
+
+        
+        return {
+            'Titulo_error_material': Titulo_error_material,
+            'parrafo_1': parrafo_1,
+            'parrafo_2': parrafo_2,
+            'parrafo_3': parrafo_3,
+            'parrafo_4': parrafo_4,
+            'parrafo_5': parrafo_5,
+            'parrafo_6': parrafo_6,
+            'parrafo_7': parrafo_7,
+        }
+
     def generar_diccionario_docx(self):
         """Genera el diccionario que se usará para crear el archivo Word."""
         doc_data = {
             'cliente': self.datos_cliente(),
             'beneficio': self.beneficio(),
             'servicios': self.servicios(),
-            'sumas_no_remunerativas': self.sumas_no_remunerativas()
+            'sumas_no_remunerativas': self.sumas_no_remunerativas(),
+            'error_material': self.error_material()
             # Agrega más secciones según lo necesites
         }
         return doc_data
@@ -204,7 +263,8 @@ class Formulario:
             'datos_cliente': self.datos_cliente(),
             'servicios': self.servicios(),
             'beneficio': self.beneficio(),
-            'sumas_no_remunerativas': self.sumas_no_remunerativas()
+            'sumas_no_remunerativas': self.sumas_no_remunerativas(),
+            'error_material': self.error_material()
         }
 
         # Renderizar el documento con el contexto
@@ -239,12 +299,13 @@ class Formulario:
         """Procesa las imágenes subidas por el usuario y las asigna a sus respectivos marcadores."""
         # Obtener las imágenes proporcionadas por el usuario (pueden ser opcionales)
         imagen1 = self.datos["sumas_no_remunerativas"]["Imagen"].get("Imagen")  # Primer input de imagen (puede ser None)
+        imagen2 = self.datos["error_material"]["Imagen"].get("Imagen")
 
         # Crear diccionario para asignar las imágenes a sus marcadores
         imagenes_por_marcador = {}
 
         # Asignar cada imagen a su respectivo marcador si existe
-        for imagen, marcador in zip([imagen1], ['Imagen_suma_aqui']):
+        for imagen, marcador in zip([imagen1, imagen2], ['Imagen_suma_aqui', 'Imagen_error_material_aqui']):
             if imagen:  # Verificar si el usuario subió una imagen
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
                     temp_file.write(imagen.read())
