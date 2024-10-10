@@ -224,12 +224,32 @@ def formulario_demandas():
                 "Imagen": {
                     "Imagen": request.files['imageUploadSumas']  # Destino del oficio
                 },
+            },
+
+                # Zona de PBU
+            "PBU": {
+                "porcentaje_haber_reemplazo": request.form.get('porcentaje_haber_reemplazo', ''),  
+                "porcentaje_quita_Soule": request.form.get('porcentaje_quita_Soule', ''), 
+
+                "quita_menor_15": {
+                        "quita_menor_15": 'quita_menor_15' in request.form,  # Si el checkbox está marcado
+                        "quita_menor_15_1": request.form.get('quita_menor_15_1', ''), 
+                        "quita_menor_15_2": request.form.get('quita_menor_15_2', ''), 
+
+                },
+
+                "Imagen": {
+                        "Imagen1": request.files['imagenPBU1'],  # Destino del oficio
+                        "Imagen2": request.files['imagenPBU2']  # Destino del oficio
+
+                },
+
+                },
 
             # Manejo de la imagen
             'imagenes': []  # Lista para almacenar las rutas de las imágenes subidas
         }
-        }
-        #NECESITO ALMACENAR TODAS LAS RUTAS EN UN VECTOR, LUEGO USANDO UN METODO CREARE ARCHIVOS TEMPORALES Y USANDO OTRA FUNCION LOS INSERTARE EN EL WORD
+        
         
         # Llama a la función para crear el documento Word
         demanda = Formulario(datos_formulario)

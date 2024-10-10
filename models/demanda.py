@@ -187,7 +187,7 @@ class Formulario:
             Titulo_error_material= "Del error material "
 
             parrafo_1 = (
-                "Mi mandante trabajó en " + self.datos["error_material"]["Lugar_error"] + " desde el " + self.datos["error_material"]["fecha_inicio_remuneraciones_error"] + " hasta el " + self.datos["error_material"]["fecha_fin_remuneraciones_error"] +"."
+                "Mi mandante trabajó en " + self.datos["error_material"]["Lugar_error"] + " desde el " + transformar_fecha(self.datos["error_material"]["fecha_inicio_remuneraciones_error"]) + " hasta el " + transformar_fecha(self.datos["error_material"]["fecha_fin_remuneraciones_error"]) +"."
             )
 
             # Párrafo de legalidad
@@ -205,11 +205,11 @@ class Formulario:
             )
 
             parrafo_5 = (
-                "W de caja con error material en remuneraciones consideradas: " + self.datos["error_material"]["W_error"] +"."
+                "W de caja con error material en remuneraciones consideradas: " + formatear_dinero(self.datos["error_material"]["W_error"]) +"."
             )
 
             parrafo_6 = (
-                "W de caja sin error material, con remuneraciones correctas: " + self.datos["error_material"]["W_sin_error"] +"."
+                "W de caja sin error material, con remuneraciones correctas: " + formatear_dinero(self.datos["error_material"]["W_sin_error"]) +"."
             )
             parrafo_7 = (
                 "Solicito se corrija el error material y se tomen las verdaderas remuneraciones percibidas para el cálculo del haber inicial." 
@@ -227,6 +227,111 @@ class Formulario:
             'parrafo_7': parrafo_7,
         }
 
+    def reajuste_pbu(self):
+        """Recoge los datos de servicios."""
+        # Inicializar los textos de servicios
+        Titulo_PBU = ""
+        parrafo_1 = ""
+        parrafo_2 =""
+        parrafo_3 = ""
+        parrafo_4 = ""
+        parrafo_5= ""
+        parrafo_6= ""
+        parrafo_7 = ""
+        parrafo_8 = ""
+        parrafo_9 = ""
+        parrafo_10 = ""
+        parrafo_11 = ""
+        parrafo_12 = ""
+        parrafo_13 = ""
+        parrafo_14 = ""
+        parrafo_15 = "" #aca se agregan cosas
+        parrafo_16 = ""
+        parrafo_17 = ""
+
+
+        if self.datos["casillas_verificacion"].get('opcion_reajuste_pbu', False):
+            Titulo_PBU= "PBU"
+
+            parrafo_1 = (
+                "Solicito se declare la inconstitucionalidad del art. 4° de la Ley 26.417 que estableció un monto fijo para la PBU y se utilice para la actualización de la Prestación Básica Universal, ISCIB al 02.2009. "
+            )
+
+            parrafo_2= (
+                "Debe tenerse presente que al momento de la sanción de la Ley 24241 la determinación de esta prestación estaba ligada al valor del AMPO (arts. 20 y 21), que fue reemplazado por el MOPRE en el año 1997 (art. 1 Decreto 833/97) y alcanzó la suma de $80 a partir de abril de 1997 hasta septiembre de ese año, cuando dejó de publicarse y se mantuvo inalterado ($200) hasta la sanción de la Ley 26417 que elevó el monto de la PBU a $326."
+            )
+
+            # Añadir el resto de los argumentos
+            parrafo_3 = (
+              "Por lo tanto, el cálculo de la PBU determinado por ANSES surge palmariamente desactualizado, y por ello solicito la actualización del AMPO/MOPRE con el índice de salarios de la industria y la construcción (ISBIC), hasta el 28.02.2009, conforme el fallo “Aguado, Nélida del Carmen c/ ANSES y/o PEN s/ Reajustes Varios” Expte. N° FSA 15100230/2012, sentencia del 12.06.2019, “Fernández Gladis” FSA 18234/2014, sentencia del 19.06.2019 y “Jaureguina, Víctor Hugo” FSA 4900/2016, sentencia del 21.08.2019. Ello así, toda vez que es el mismo índice que se solicita para la actualización de las otras prestaciones (PC-PAP)."
+            )
+
+            parrafo_4 = (
+                "Solicito tenga presente que desde la sanción de la ley N° 27.426, los índices de movilidad y actualización de remuneraciones fueron diferentes y se mantuvo el concepto de monto fijo. "
+            )
+
+            parrafo_5 = (
+                "Luego, con la suspensión de la fórmula de movilidad jubilatoria, se adiciono un monto fijo en el haber para el mes de marzo de 2020, que luego en junio fue imputado en parte a la Pbu. "
+            )
+
+            parrafo_6 = (
+                "En esencia, a la fecha del presente reclamo, la  PBU no guarda la proporción que tuvo en miras el legislador al crear dicho instituto, siendo determinación de la misma  regresiva y afectar la integralidad del haber de mi mandante, conforme lo acredito con las pruebas adjuntadas en autos."
+            )
+            parrafo_7 = (
+                "Tenga presente VS. que la CSJN ha zanjado el tema respecto de que debe actualizarse a beneficios anteriores y posteriores a la sanción de la ley 26.417, poniendo especial énfasis en que todos los componentes del haber jubilatorio resultan revisables y que debe acreditarse la confiscatoriedad. "
+            )
+            parrafo_8 = (
+                "Solicito que habiéndose  acreditado  el 15% de confiscatoriedad requerido en el fallo Conforme fallo “Quiroga” ( 337:1277) “Ciuti Pablo c/ ANSES s/ reajustes varios”, sentencia del 30/6/2015(CSJ 111/2012(48-C)/CS1);  Pichersky Alberto Raúl c/Anses s/reajustes Varios”, la C.S.J.N, el 23 de mayo de 2017(Expte SS 80278/20l2/l/RH 1)“González Héctor Orlando c/ ANSES s/ Reajuste de haberes” Expte FMP 41051103/2011/1/RH1., el reajuste del haber se haga contra pc y pap sin reajustar, dejando de lado los criterios fijados en Soule y Blanco , por cuanto cae la lógica de medición establecida en los mismos cuando la persona solo reclama el reajuste del PBU, a lo que se agrega que no se puede medir quita o merma respecto de una prestación ya mermada , conforme lo expresado por el Cuerpo de peritos de la CSJN, que determinó que el reajuste debe hacerse PBU reaj. + PC sin reaj. + PAP sin reaj. Solicito libre oficio a fin de solicitar a dicho organismo proceda a remitir copia de lo dictaminado sobre este punto."
+            )
+            parrafo_9 = (
+                "De la lectura del precedente de la CSJN “Quiroga” se observa que la comparación debe hacerse con el total del haber inicial  y no con el haber total reajustado, conforme el considerando 10, que textualmente dice:"
+            )
+            parrafo_10 = (
+                "LA CSJN no dice que el haber inicial sobre el que hay que medir deba contener PC y PAP reajustadas."
+            )
+            parrafo_11 = (
+                "Además, no se puede medir quita o merma respecto de una prestación ya mermada, puesto que el haber inicial sobre el que hay que medir no puede contener PC y PAP reajustadas pues se estarían incorporando variables que no hacen a la naturaleza del componente sobre el que se quiere evaluar la incidencia de la quita."
+            )
+            parrafo_12 = (
+                "Considerándose la medición el haber inicial -conforme considerando 10 del fallo- en la comparación entre haber de caja con PBU reajustada con ISBIC y PBU sin reajustar, solicito se reajuste la PBU sin realizar quita alguna, máxime teniendo en cuenta:"
+            )
+            parrafo_13 = (
+                "a.	que en caso de que no se produzca una modificación en las remuneraciones al actualizarlas, cae la lógica fijada por esta jurisdicción en Soule y Blanco, por cuanto la metodología para evaluar la confiscatoriedad es compararla con PC y PAP reajustada "
+            )
+            parrafo_14 = (
+                "b.	No se puede medir la merma con respecto a algo ya mermado (PBU sin reajustar).  Dicha medición pierde objetividad, sería como decir que la CSJN en “Del Azar Suaya” o “Actis Caporale” ordenó medir la incidencia de la quita sobre el tope y no sobre el haber reajustado."
+            )
+            parrafo_15 = (
+                "c.	El haber sería más integral, teniendo en cuenta el último haber percibido por mi mandate en actividad que era de "+ formatear_dinero(self.datos["beneficio"].get('ultima_remuneracion_actividad')) + "  y la Pbu sin quita, permitiría obtener un haber de reemplazo del " + self.datos["PBU"].get('porcentaje_haber_reemplazo') + " y con quita de Soule del " + self.datos["PBU"].get('porcentaje_quita_Soule') + "."
+            )
+            parrafo_16 = (
+                "d.	Las palabras quita, merma o disminución, ya tienen una quita, merma o disminución en el haber, por lo cual si quiero medir la incidencia tiene que ser sobre el haber antes de la disminución, por eso se debe tomar el haber de caja y no el reajustado."
+            )
+        if self.datos["PBU"]["quita_menor_15"]["quita_menor_15"]:
+            parrafo_17 = "Por último, corresponde poner en resalto que si bien de acuerdo a los cálculos adjuntos la PBU no alcanza un 15% de confiscatoriedad, de no aplicarse su actualización arrojaría una quita del " + self.datos["PBU"]["quita_menor_15"]["quita_menor_15_1"] + ", por lo que de aplicarse los topes cuya inaplicabilidad de solicita, no deberían superar el "+ self.datos["PBU"]["quita_menor_15"]["quita_menor_15_2"] + "."
+
+        return {
+            'Titulo_PBU': Titulo_PBU,
+            'parrafo_1': parrafo_1,
+            'parrafo_2': parrafo_2,
+            'parrafo_3': parrafo_3,
+            'parrafo_4': parrafo_4,
+            'parrafo_5': parrafo_5,
+            'parrafo_6': parrafo_6,
+            'parrafo_7': parrafo_7,
+            'parrafo_8': parrafo_8,
+            'parrafo_9': parrafo_9,
+            'parrafo_10': parrafo_10,
+            'parrafo_11': parrafo_11,
+            'parrafo_12': parrafo_12,
+            'parrafo_13': parrafo_13,
+            'parrafo_14': parrafo_14,
+            'parrafo_15': parrafo_15,
+            'parrafo_16': parrafo_16,
+            'parrafo_17': parrafo_17,
+            
+        }
+    
     def generar_diccionario_docx(self):
         """Genera el diccionario que se usará para crear el archivo Word."""
         doc_data = {
@@ -264,7 +369,8 @@ class Formulario:
             'servicios': self.servicios(),
             'beneficio': self.beneficio(),
             'sumas_no_remunerativas': self.sumas_no_remunerativas(),
-            'error_material': self.error_material()
+            'error_material': self.error_material(),
+            'PBU': self.reajuste_pbu()
         }
 
         # Renderizar el documento con el contexto
@@ -298,20 +404,30 @@ class Formulario:
     def procesar_imagenes(self):
         """Procesa las imágenes subidas por el usuario y las asigna a sus respectivos marcadores."""
         # Obtener las imágenes proporcionadas por el usuario (pueden ser opcionales)
-        imagen1 = self.datos["sumas_no_remunerativas"]["Imagen"].get("Imagen")  # Primer input de imagen (puede ser None)
-        imagen2 = self.datos["error_material"]["Imagen"].get("Imagen")
+        imagenSumas = self.datos["sumas_no_remunerativas"]["Imagen"].get("Imagen")  # Primer input de imagen (puede ser None)
+        imagenError = self.datos["error_material"]["Imagen"].get("Imagen")
+        imagenPBU_1 = self.datos["PBU"]["Imagen"].get("Imagen1")
+        imagenPBU_2= self.datos["PBU"]["Imagen"].get("Imagen2")
+        imagen_fija_pbu = 'datos/imagenes_fijas/imagen_fija_pbu.png'
 
         # Crear diccionario para asignar las imágenes a sus marcadores
         imagenes_por_marcador = {}
 
         # Asignar cada imagen a su respectivo marcador si existe
-        for imagen, marcador in zip([imagen1, imagen2], ['Imagen_suma_aqui', 'Imagen_error_material_aqui']):
+        for imagen, marcador in zip([imagenSumas, imagenError, imagenPBU_1, imagenPBU_2], ['Imagen_suma_aqui', 'Imagen_error_material_aqui', 'Imagen_PBU_1', 'Imagen_PBU_2']):
             if imagen:  # Verificar si el usuario subió una imagen
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
                     temp_file.write(imagen.read())
                     imagenes_por_marcador[marcador] = temp_file.name  # Mapea el marcador a la ruta del archivo temporal
             else:
                 imagenes_por_marcador[marcador] = None  # No hay imagen para este marcador, se eliminará del documento
+
+        if self.datos["casillas_verificacion"].get('opcion_reajuste_pbu', False):
+            with open(imagen_fija_pbu, 'rb') as imagen_fija:
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file_fija:
+                    temp_file_fija.write(imagen_fija.read())
+                    imagenes_por_marcador['Imagen_fija_pbu_aqui'] = temp_file_fija.name  # Mapa el marcador de la imagen fija
+
 
         # Llama a la función para crear el documento Word
         documento_path = self.crear_archivo_word(imagenes_por_marcador)  # Pasa el diccionario

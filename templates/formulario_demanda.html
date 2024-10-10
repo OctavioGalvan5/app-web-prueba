@@ -395,6 +395,50 @@
                     <input type="file" id="imageUploadSumas" name="imageUploadSumas" accept="image/*" style="display: none;">
                 </div>
             </div>
+            <!-- Zona de PBU -->
+
+            <div id="PBUSection" style="display: none; margin-top: 20px;">
+                <h3>Reajuste PBU</h3>
+                <div class="form-group form-inline">
+                    <div class="dropZone dropZone.hover" id="dropZonePBU1">Arrastre imagen de Calculo de Incidencia de PBU</div>
+                    <input type="file" id="imagenPBU1" name="imagenPBU1" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Porcentaje haber reemplazo:</label>
+                        <input type="text" id="errorInput1" name="porcentaje_haber_reemplazo">
+                    </div>
+                    <div>
+                        <label for="errorInput1">Porcentaje quita Soule:</label>
+                        <input type="text" id="errorInput1" name="porcentaje_quita_Soule">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label for="Ultima_remuneracion_actualizada_Anses">Tiene quita menor al 15%:</label>
+                        <label><input type="checkbox" name="quita_menor_15"> Si</label>
+                    </div>
+                </div>
+                <div id="Quita_menor_15_Section" style="display: none; margin-top: 20px;">
+                    <div class="form-group form-inline">
+                        <div class="dropZone dropZone.hover" id="dropZonePBU2">Arrastre imagen de Grafico Comparativo</div>
+                        <input type="file" id="imagenPBU2" name="imagenPBU2" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="form-group form-inline">
+                        <label for="fechas">De no aplicarse su actualización arrojaría una quita del :</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="quita_menor_15_1">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="fechas">Por lo que de aplicarse los topes cuya inaplicabilidad de solicita, no deberían superar el :</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="quita_menor_15_2">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="button-container">
                 <button type="submit" class="button">Generar Demanda</button>
@@ -417,6 +461,11 @@
                     const Recibos_NoCheckbox = document.querySelector('input[name="Recibos_No"]');
                     //error material
                     const errorMaterialCheckbox = document.querySelector('input[name="opcion_error_material"]');
+
+                    //Reajuste PBU
+                    const PBUCheckbox = document.querySelector('input[name="opcion_reajuste_pbu"]');
+                    const PBU_15Checkbox = document.querySelector('input[name="quita_menor_15"]');
+
 
                     // Eventos para checkboxes existentes
                     if (serviciosAutonomosCheckbox) {
@@ -455,6 +504,18 @@
                     if (errorMaterialCheckbox) {
                         errorMaterialCheckbox.addEventListener('change', () => {
                             toggleSection(errorMaterialCheckbox, 'errorMaterialSection');
+                        });
+                    }
+
+                    // Reajuste PBU
+                    if (PBUCheckbox) {
+                        PBUCheckbox.addEventListener('change', () => {
+                            toggleSection(PBUCheckbox, 'PBUSection');
+                        });
+                    }
+                    if (PBU_15Checkbox) {
+                        PBU_15Checkbox.addEventListener('change', () => {
+                            toggleSection(PBU_15Checkbox, 'Quita_menor_15_Section');
                         });
                     }
         });
@@ -501,6 +562,8 @@
         setupDragAndDrop('dropZone', 'imageUpload');
         setupDragAndDrop('dropZoneSumas', 'imageUploadSumas');
         setupDragAndDrop('dropZoneError', 'imagenError');
+        setupDragAndDrop('dropZonePBU1', 'imagenPBU1');
+        setupDragAndDrop('dropZonePBU2', 'imagenPBU2');
 
         
     </script>
