@@ -86,7 +86,14 @@ class Formulario:
         parrafo_legalidad3 = ""
         parrafo_legalidad4 = ""
         parrafo_legalidad5 = ""
-
+        titulo_recibos = ""
+        parrafo_recibos = ""
+        parrafo_recibos_1 = ""
+        genero = ""
+        if self.datos["datos_cliente"].get('genero') == "Masculino":
+            genero = "el Sr"
+        elif self.datos["datos_cliente"].get('genero') == "Femenino":
+            genero = "la Sra"
 
         if self.datos["casillas_verificacion"].get('opcion_sumas_remunerativas', False):
             # Título de la sección de sumas no remunerativas
@@ -153,10 +160,9 @@ class Formulario:
         # Comprobar si se deben incluir servicios autónomos
         if self.datos["sumas_no_remunerativas"]["recibos"]["Recibos_No"]:
            parrafo_sumas = "Asimismo, peticiono se libre oficio a " + self.datos["sumas_no_remunerativas"]["recibos_no"]["Librar_oficio_a"] + " a los fines de que remita los recibos de sueldo de mi representada que se encuentran en su poder, correspondientes al período " + transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["inicio_periodo_sumas"]) + " hasta " + transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["fin_periodo_sumas"]) + " , de los que surgirán las sumas abonadas como no remunerativas, En su defecto, peticiono informe los haberes con aportes y sin aportes abonados en cada período peticionado.  De ellos surgirán las sumas no remunerativas abonadas por el empleador, bajo los siguientes códigos y conceptos: "
-
-        if self.datos["sumas_no_remunerativas"]["Imagen"]["Imagen"]:
-            parrafo_sumas += "\nImagen aquí"
-
+           titulo_recibos = "Prueba en poder de tercero:"
+           parrafo_recibos = self.datos["sumas_no_remunerativas"]["recibos_no"]["Librar_oficio_a"]
+           parrafo_recibos_1 = "Peticiono se libre oficio al empleador de mi representado,"+self.datos["sumas_no_remunerativas"]["recibos_no"]["Librar_oficio_a"]+", a los fines de que adjunte los recibos de sueldo correspondientes a "+genero+" "+self.datos["datos_cliente"].get('nombre')+" DNI "+self.datos["datos_cliente"].get('dni')+" por el período "+transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["inicio_periodo_sumas"])+" a "+transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["fin_periodo_sumas"])+", los que obran en su poder. En su defecto, peticiono informe los haberes con aportes y sin aportes abonados en todos los meses comprendidos en el período solicitado, los que influyen en el cálculo del haber inicial. Y lo sea bajo apercibimiento de astreintes en caso de incumplimiento."
         # Devolver un diccionario con los resultados
         return {
             'parrafo_sumas': parrafo_sumas,
@@ -166,7 +172,10 @@ class Formulario:
             'parrafo_legalidad4': parrafo_legalidad4,
             'parrafo_legalidad5': parrafo_legalidad5,
             'Titulo_sumas_no_remunerativas' : Titulo_sumas_no_remunerativas,
-            'parrafo_introduccion': parrafo_introduccion
+            'parrafo_introduccion': parrafo_introduccion,
+            'titulo_recibos': titulo_recibos,
+            'parrafo_recibos': parrafo_recibos,
+            'parrafo_recibos_1': parrafo_recibos_1,
         }
 
     def error_material(self):
@@ -394,6 +403,44 @@ class Formulario:
                 "parrafo_8": parrafo_8,
                 "parrafo_9": parrafo_9
             }
+    def Inaplicabilidad_tope_Art_14_de_la_Res_06_09(self):
+        titulo_inaplicabilidad_tope_art_14_de_la_res_06_09 =""
+        parrafo_1=""
+        if self.datos["casillas_verificacion"].get('opcion_inaplicabilidad_tope_art_14_res_06_09', False):
+            titulo_inaplicabilidad_tope_art_14_de_la_res_06_09 = "Inaplicabilidad tope Art 14 de la Res 06.09"
+            parrafo_1 = "Solicito su inaplicabilidad por la cual al  establecer un tope a las actualizaciones de las remuneraciones, excede la facultad reglamentaria- ya que el propio artículo 24 de la ley 24.241 no establece tope alguno-, no debería incidir en este caso , dado que el mismo se fijó para actualizar las remuneraciones que componen la PC -no la Pap-, y conforme el periodo usado para el promedio de remuneraciones, no se aplica, y no es justo que se limite el haber sobre el cual se aportó, dado que arrojaría un resultado disvalioso."
+
+        return {
+            'titulo' : titulo_inaplicabilidad_tope_art_14_de_la_res_06_09,
+            'parrafo_1' : parrafo_1
+        }
+    def Inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241(self):
+        titulo_inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241 =""
+        parrafo_1=""
+        parrafo_2_1=""
+        parrafo_2_2=""
+        parrafo_3=""
+        parrafo_4=""
+        genero = ""
+        if self.datos["datos_cliente"].get('genero') == "Masculino":
+            genero = "el Sr"
+        elif self.datos["datos_cliente"].get('genero') == "Femenino":
+            genero = "la Sra"
+        if self.datos["casillas_verificacion"].get('opcion_inaplicabilidad_tope_ley_24241', False):
+            titulo_inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241 = "Inaplicabilidad del tope del art. 9 y 25 de la ley 24.241"
+            parrafo_1 = "Solicito se declare la inconstitucionalidad e inaplicabilidad del tope del art. 9 y 25 de la ley 24.241, por cuanto su aplicación para el cómputo de la PC y PAP implica la no consideración de los importes superiores a la remuneración máxima imponible, lo que disminuye notoriamente su nivel de ingresos a la hora de determinar la prestación previsional sustitutiva del haber en actividad."
+            parrafo_2_1 = "Peticiono se aplique lo recientemente resuelto por la Cámara Federal de Salta – Sala II, en los autos caratulados “RODRIGUEZ, MARIA CRISTINA c/ANSES s/REAJUSTE DE HABERES” Expte. N° FSA 13956/2015, sentencia de fecha 23 de agosto de 2024, la que entre sus considerandos sostuvo primeramente sobre la base de lo resuelto por el Máximo tribunal en el fallo “Gualtieri Alberto” (Fallos: 340:411): "
+            parrafo_2_2 = "“debemos tener en cuenta que a los fines del cálculo de la prestación jubilatoria de la Sra. Rodríguez se computaron remuneraciones por el período comprendido entre septiembre de 2003 y agosto de 2013, no surgiendo de las constancias de la causa que la actora, encontrándose en actividad y vigente el anterior régimen de capitalización, solicitara aportar por un importe superior al límite del art. 9 de la ley 24.241. Sin embargo, no puede achacársele igual conducta desaprensiva de su futuro previsional con respecto al período posterior a noviembre de 2008, considerando que el anterior régimen de capitalización estuvo vigente hasta el 8 de diciembre de 2008, ya que a partir de allí la accionante no contaba con la posibilidad legal de efectuar imposiciones voluntarias o depósitos convenidos.”"
+            parrafo_3="Así, seguidamente resolvió declarar la inconstitucionalidad de los arts. 9 y 25 de la ley 24.241, en el período comprendido desde diciembre de 2008 en adelante, para el re-cálculo del haber inicial. "
+            parrafo_4="Teniendo en cuenta que en el presente caso para el cálculo del haber inicial se consideraron las remuneraciones percibidas por "+ genero + " "+ self.datos["datos_cliente"].get('nombre') + " desde el "+transformar_fecha(self.datos["beneficio"].get('fecha_inicio_remuneraciones'))+" a " + transformar_fecha(self.datos["beneficio"].get('fecha_fin_remuneraciones')) + ", es decir que todas sus remuneraciones consideradas para el cálculo de la PC y PAP son posteriores a diciembre de 2008, peticiono se declare la inconstitucionalidad y por lo tanto, la inaplicabilidad del tope previsto por los arts. 9 y 25 de la ley 24.241 por cuanto mi mandante no tuvo posibilidad alguna de ingresar aportes, facultad que solo estaba disponible en vigencia de la ley 24241 sin la modificación del régimen de capitalización."
+        return {
+            'titulo' : titulo_inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241,
+            'parrafo_1' : parrafo_1,
+            'parrafo_2_1' : parrafo_2_1,
+            'parrafo_2_2' : parrafo_2_2,
+            'parrafo_3' : parrafo_3,
+            'parrafo_4' : parrafo_4
+        }
     def generar_diccionario_docx(self):
         """Genera el diccionario que se usará para crear el archivo Word."""
         doc_data = {
@@ -434,6 +481,8 @@ class Formulario:
             'error_material': self.error_material(),
             'PBU': self.reajuste_pbu(),
             'taza_complementacion' : self.taza_complementacion(),
+            'inaplicabilidad_tope_art_14_de_la_res_06_09' : self.Inaplicabilidad_tope_Art_14_de_la_Res_06_09(),
+            'Inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241' : self.Inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241(),
         }
 
         # Renderizar el documento con el contexto
@@ -467,11 +516,18 @@ class Formulario:
     def procesar_imagenes(self):
         """Procesa las imágenes subidas por el usuario y las asigna a sus respectivos marcadores."""
         # Obtener las imágenes proporcionadas por el usuario (pueden ser opcionales)
-        imagenSumas = self.datos["sumas_no_remunerativas"]["Imagen"].get("Imagen")  # Primer input de imagen (puede ser None)
+        #sumas no remunerativas
+        imagenSumas = self.datos["sumas_no_remunerativas"]["Imagen"].get("Imagen")
+
+        # error material
         imagenError = self.datos["error_material"]["Imagen"].get("Imagen")
+
+        # PBU
         imagenPBU_1 = self.datos["PBU"]["Imagen"].get("Imagen1")
         imagenPBU_2= self.datos["PBU"]["Imagen"].get("Imagen2")
         imagen_fija_pbu = 'datos/imagenes_fijas/imagen_fija_pbu.png'
+
+        #Taza de complementacion
         Imagen_Taza = self.datos["Taza_complementacion"]["Imagen"].get("Imagen")
         imagen_fija_taza = 'datos/imagenes_fijas/imagen_fija_taza.png'
 
@@ -492,13 +548,21 @@ class Formulario:
             with open(imagen_fija_pbu, 'rb') as imagen_fija:
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file_fija:
                     temp_file_fija.write(imagen_fija.read())
-                    imagenes_por_marcador['Imagen_fija_pbu_aqui'] = temp_file_fija.name  # Mapa el marcador de la imagen fija
-        #Imagen Taza de complementacion
+                    imagenes_por_marcador['Imagen_fija_pbu_aqui'] = temp_file_fija.name  # Agregar la imagen
+        else:
+            # Eliminar marcador 'Imagen_fija_pbu_aqui' si no hay imagen
+            imagenes_por_marcador['Imagen_fija_pbu_aqui'] = ''  # Asignar cadena vacía si no hay imagen
+
+        # Verificar si existe la imagen para el marcador 'Imagen_fija_taza_aqui'
         if self.datos["casillas_verificacion"].get('opcion_tasa_complementacion', False):
             with open(imagen_fija_taza, 'rb') as imagen_fija:
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file_fija:
                     temp_file_fija.write(imagen_fija.read())
-                    imagenes_por_marcador['Imagen_fija_taza_aqui'] = temp_file_fija.name  # Mapa el marcador de la imagen fija
+                    imagenes_por_marcador['Imagen_fija_taza_aqui'] = temp_file_fija.name  # Agregar la imagen
+        else:
+            # Eliminar marcador 'Imagen_fija_taza_aqui' si no hay imagen
+            imagenes_por_marcador['Imagen_fija_taza_aqui'] = ''  # Asignar cadena vacía si no hay imagen
+
         # Llama a la función para crear el documento Word
         documento_path = self.crear_archivo_word(imagenes_por_marcador)  # Pasa el diccionario
 

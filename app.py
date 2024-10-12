@@ -263,11 +263,29 @@ def formulario_demandas():
                         "Imagen": request.files['imagenTaza'],  # Destino del oficio
 
                 },
+                # Zona de Tope Haber Maximo
+                "Tope_haber_maximo": {
+
+                    "Tope_haber_maximo": {
+                            "fecha_haber_actual": 'fecha_haber_actual' in request.form,  # Si el checkbox está marcado
+                            "reajustado_cf_ley_27551_mensual": request.form.get('reajustado_cf_ley_27551_mensual', ''), 
+                            "reajustado_cf_ley_27551_tres_meses": request.form.get('reajustado_cf_ley_27551_tres_meses', ''), 
+                            "reajustado_IPC_sin_topes": float(request.form.get('reajustado_IPC_sin_topes', '')),
+                            "tope_haber_maximo_anses": request.form.get('tope_haber_maximo_anses', ''),
+                            "tope_actualizado_cf_badaro_mas_caliva_marquez": float(request.form.get('tope_actualizado_cf_badaro_mas_caliva_marquez', '')),
+
+                    },
+
+                    "Imagen": {
+                            "Imagen": request.files['imagenHaberMaximo'],  # Destino del oficio
+
+                    },
 
                 },
 
             # Manejo de la imagen
             'imagenes': []  # Lista para almacenar las rutas de las imágenes subidas
+        }
         }
         
         
