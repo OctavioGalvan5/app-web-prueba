@@ -331,7 +331,69 @@ class Formulario:
             'parrafo_17': parrafo_17,
             
         }
-    
+
+    def taza_complementacion(self):
+        """Recoge los datos de servicios."""
+        # Inicializar los textos de servicios
+        Titulo_taza_complementacion = ""
+        parrafo_1 = ""
+        parrafo_2 =""
+        Titulo_parrafo_3 = ""
+        parrafo_3 = ""
+        Titulo_parrafo_4 = ""
+        parrafo_4 = ""
+        Titulo_parrafo_5 = ""
+        parrafo_5 = ""
+        parrafo_6 = ""
+        parrafo_7 = ""
+        parrafo_8 = ""
+
+        if self.datos["casillas_verificacion"].get('opcion_tasa_complementacion', False):
+
+            Titulo_taza_complementacion = "Tasa de complementación: "
+            
+            parrafo_1 = "Atento a que, aun reajustando el haber de mi mandante conforme los parámetros ut supra solicitados, éste no guarda una debida proporcionalidad con el haber en actividad, solicito se fije una pauta de complementación que consagre la sustitutividad del haber de pasividad respecto al de actividad a fin de cumplir con la manda constitucional de tener una haber integral y en consecuencia sustitutivo del salario, en consonancia con los compromisos internacionales asumidos por el estado nacional al suscribir las normas mínimas de seguridad social de la OIT."
+
+            parrafo_2 = "Los derechos a una retribución justa y a un salario mínimo vital y móvil encuentran su correlato en las jubilaciones y pensiones móviles que deben ser garantizadas a los trabajadores cuando entran en pasividad, nótese que el haber que percibe mi mandante es inferior al Salario mínimo vital y móvil"
+
+            Titulo_parrafo_3 = "SMVM "
+            parrafo_3 = "A partir del 1º de julio de 2024 el salario mínimo es de $ 254.231,91 el cual ha decrecido notoriamente, no obstante, es superior a la jubilación mínima que percibe mi mandante. "
+
+            if self.datos["Taza_complementacion"]["haber_menor_ripte"]:
+                Titulo_parrafo_4 = "Ripte"
+                parrafo_4 = "al último índice aplicado, mayo de 2024 es de $879.483,08. "
+                
+
+            Titulo_parrafo_5 = "Canasta Básica Total "            
+            parrafo_5 = "$ 282.579 a Julio de 2024."
+
+            parrafo_6 = "La Cámara Federal de Salta también se pronunció en un fallo de la Sala II, en autos “GOMEZ AUGIER GUSTAVO FEDERICO C/ ANSES S/ REAJUSTES VARIOS” EXPTE. 11730/2016, donde, haciendo alusión a los casos “Betancur” y “Benoist”, sentó doctrina respecto a la integralidad de los derechos de la seguridad social reconocido en el art. 14 bis de la CN, y sostuvo que “(…) si bien no corresponde fijación de una “tasa” de sustitución para que el beneficio de jubilación ordinaria otorgado al actor bajo el régimen de la ley 24.241 alcance un mínimo determinado - tal como lo establecía el art. 49 de la ley 18.037-, ello no enerva el derecho del accionante de acreditar en la etapa de ejecución la necesidad de establecer un suplemento que resguarde los principios de “sustitutividad” y de “proporcionalidad” que, según los lineamientos del Superior Tribunal, debe existir entre la jubilación y el ingreso que tenía cuando se encontraba en actividad” ."
+
+            parrafo_7 = "En este sentido, el Tribunal de Alzada de nuestra jurisdicción entendió que “… si luego de la redeterminación del haber de inicio conforme las pautas de sentencia y efectuada la verificación de confiscatoriedad -tanto de la merma producida ante la ausencia de incrementos de la Prestación Básica Universal, como de la aplicación de los topes máximos-el análisis integral del haber reajustado demuestra que el haber de pasividad no guarda razonable proporción con el haber de actividad ejercido al cese por el titular, corresponderá establecer -como última ratio- una pauta de complementación del beneficio que torne operativa la directriz jurídica no normativa que dimana de los principios de sustitutividad y proporcionalidad”."
+
+            parrafo_9 = "Por lo que así lo solicito, a fin de que el haber de mi mandante sea integral y sustitutivo del salario."
+
+            if self.datos["Taza_complementacion"]["print_equiparacion"]["print_equiparacion"]:
+                calculo = self.datos["Taza_complementacion"]["print_equiparacion"]["monto_jubilacion_taza"] * 100
+                calculo = calculo / self.datos["Taza_complementacion"]["print_equiparacion"]["monto_cargo_ejercido"]
+                calculo = round(calculo, 2)
+                parrafo_8 = "Note VS. que surge de la equiparación expedida por su ex empleador, " + self.datos["Taza_complementacion"]["print_equiparacion"]["taza_ex_empleador"] + ", que siendo su última categoría de " + self.datos["Taza_complementacion"]["print_equiparacion"]["ultimo_cargo_ejercido"] + " , por el mes " + self.datos["Taza_complementacion"]["print_equiparacion"]["fecha_monto_cargo_ejercido"] + " su remuneración hubiese sido por el monto de " + formatear_dinero(self.datos["Taza_complementacion"]["print_equiparacion"]["monto_cargo_ejercido"]) +", mientras que el organismo previsional determinó en el mismo mes un haber jubilatorio de "+ formatear_dinero(self.datos["Taza_complementacion"]["print_equiparacion"]["monto_jubilacion_taza"]) +", el que solo representa un "+str(calculo)+"% de lo que le correspondería de estar en actividad, por lo tanto, no es sustitutivo del salario activo y no alcanza la tasa de complementación que se peticiona "
+
+            return {
+                "Titulo_taza_complementacion": Titulo_taza_complementacion,
+                "parrafo_1": parrafo_1,
+                "parrafo_2": parrafo_2,
+                "Titulo_parrafo_3": Titulo_parrafo_3,
+                "parrafo_3": parrafo_3,
+                "Titulo_parrafo_4": Titulo_parrafo_4,
+                "parrafo_4": parrafo_4,
+                "Titulo_parrafo_5": Titulo_parrafo_5,
+                "parrafo_5": parrafo_5,
+                "parrafo_6": parrafo_6,
+                "parrafo_7": parrafo_7,
+                "parrafo_8": parrafo_8,
+                "parrafo_9": parrafo_9
+            }
     def generar_diccionario_docx(self):
         """Genera el diccionario que se usará para crear el archivo Word."""
         doc_data = {
@@ -370,7 +432,8 @@ class Formulario:
             'beneficio': self.beneficio(),
             'sumas_no_remunerativas': self.sumas_no_remunerativas(),
             'error_material': self.error_material(),
-            'PBU': self.reajuste_pbu()
+            'PBU': self.reajuste_pbu(),
+            'taza_complementacion' : self.taza_complementacion(),
         }
 
         # Renderizar el documento con el contexto
@@ -409,12 +472,14 @@ class Formulario:
         imagenPBU_1 = self.datos["PBU"]["Imagen"].get("Imagen1")
         imagenPBU_2= self.datos["PBU"]["Imagen"].get("Imagen2")
         imagen_fija_pbu = 'datos/imagenes_fijas/imagen_fija_pbu.png'
+        Imagen_Taza = self.datos["Taza_complementacion"]["Imagen"].get("Imagen")
+        imagen_fija_taza = 'datos/imagenes_fijas/imagen_fija_taza.png'
 
         # Crear diccionario para asignar las imágenes a sus marcadores
         imagenes_por_marcador = {}
 
         # Asignar cada imagen a su respectivo marcador si existe
-        for imagen, marcador in zip([imagenSumas, imagenError, imagenPBU_1, imagenPBU_2], ['Imagen_suma_aqui', 'Imagen_error_material_aqui', 'Imagen_PBU_1', 'Imagen_PBU_2']):
+        for imagen, marcador in zip([imagenSumas, imagenError, imagenPBU_1, imagenPBU_2, Imagen_Taza ], ['Imagen_suma_aqui', 'Imagen_error_material_aqui', 'Imagen_PBU_1', 'Imagen_PBU_2', 'Imagen_Taza' ]):
             if imagen:  # Verificar si el usuario subió una imagen
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
                     temp_file.write(imagen.read())
@@ -422,13 +487,18 @@ class Formulario:
             else:
                 imagenes_por_marcador[marcador] = None  # No hay imagen para este marcador, se eliminará del documento
 
+        #Imagen PBU
         if self.datos["casillas_verificacion"].get('opcion_reajuste_pbu', False):
             with open(imagen_fija_pbu, 'rb') as imagen_fija:
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file_fija:
                     temp_file_fija.write(imagen_fija.read())
                     imagenes_por_marcador['Imagen_fija_pbu_aqui'] = temp_file_fija.name  # Mapa el marcador de la imagen fija
-
-
+        #Imagen Taza de complementacion
+        if self.datos["casillas_verificacion"].get('opcion_tasa_complementacion', False):
+            with open(imagen_fija_taza, 'rb') as imagen_fija:
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file_fija:
+                    temp_file_fija.write(imagen_fija.read())
+                    imagenes_por_marcador['Imagen_fija_taza_aqui'] = temp_file_fija.name  # Mapa el marcador de la imagen fija
         # Llama a la función para crear el documento Word
         documento_path = self.crear_archivo_word(imagenes_por_marcador)  # Pasa el diccionario
 

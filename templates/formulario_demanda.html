@@ -440,6 +440,57 @@
                 </div>
             </div>
 
+            <!-- Zona de Tasa de complementacion -->
+
+            <div id="Tasa_complementacion_Section" style="display: none; margin-top: 20px;">
+                <h3>Tasa de complementacion</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="Ultima_remuneracion_actualizada_Anses">Haber jubilatorio actual es menor al ripte:</label>
+                        <label><input type="checkbox" name="haber_menor_ripte"> Si</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label for="Ultima_remuneracion_actualizada_Anses">Hay print de equiparacion del caso:</label>
+                        <label><input type="checkbox" name="print_equiparacion"> Si</label>
+                    </div>
+                </div>
+                <div id="print_equiparacion_Section" style="display: none; margin-top: 20px;">
+                    <div class="form-group form-inline">
+                        <div class="dropZone dropZone.hover" id="dropZoneTaza">Arrastre imagen de print de equiparacion del caso</div>
+                        <input type="file" id="imagenTaza" name="imagenTaza" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="form-group form-inline">
+                        <label for="fechas">Ex empleador :</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="taza_ex_empleador">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="fechas">Ultimo cargo ejercido:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="ultimo_cargo_ejercido">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="fechas">Monto del cargo ejercido:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="monto_cargo_ejercido" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"required>
+                            <span>al</span>
+                            <input type="date" id="fecha_Ultima_Remuneracion_Actividad" name="fecha_monto_cargo_ejercido" required>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="fechas">Monto de jubilacion en el mismo mes:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="monto_jubilacion_taza" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="button-container">
                 <button type="submit" class="button">Generar Demanda</button>
             </div>
@@ -465,6 +516,10 @@
                     //Reajuste PBU
                     const PBUCheckbox = document.querySelector('input[name="opcion_reajuste_pbu"]');
                     const PBU_15Checkbox = document.querySelector('input[name="quita_menor_15"]');
+
+                    //Taza de complementacion
+                    const taza_complementacion_Checkbox = document.querySelector('input[name="opcion_tasa_complementacion"]');
+                    const print_taza_Checkbox = document.querySelector('input[name="print_equiparacion"]');
 
 
                     // Eventos para checkboxes existentes
@@ -518,6 +573,18 @@
                             toggleSection(PBU_15Checkbox, 'Quita_menor_15_Section');
                         });
                     }
+
+                    // Taza de complementacion
+                    if (taza_complementacion_Checkbox) {
+                        taza_complementacion_Checkbox.addEventListener('change', () => {
+                            toggleSection(taza_complementacion_Checkbox, 'Tasa_complementacion_Section');
+                        });
+                    }
+                    if (print_taza_Checkbox) {
+                        print_taza_Checkbox.addEventListener('change', () => {
+                            toggleSection(print_taza_Checkbox, 'print_equiparacion_Section');
+                        });
+                    }
         });
 
 
@@ -564,6 +631,8 @@
         setupDragAndDrop('dropZoneError', 'imagenError');
         setupDragAndDrop('dropZonePBU1', 'imagenPBU1');
         setupDragAndDrop('dropZonePBU2', 'imagenPBU2');
+        setupDragAndDrop('dropZoneTaza', 'imagenTaza');
+
 
         
     </script>

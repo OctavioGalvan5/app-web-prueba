@@ -245,6 +245,26 @@ def formulario_demandas():
                 },
 
                 },
+            # Zona de Taza de complementacion
+            "Taza_complementacion": {
+                "haber_menor_ripte": 'haber_menor_ripte' in request.form,
+
+                "print_equiparacion": {
+                        "print_equiparacion": 'print_equiparacion' in request.form,  # Si el checkbox está marcado
+                        "taza_ex_empleador": request.form.get('taza_ex_empleador', ''), 
+                        "ultimo_cargo_ejercido": request.form.get('ultimo_cargo_ejercido', ''), 
+                        "monto_cargo_ejercido": float(request.form.get('monto_cargo_ejercido', '')),
+                        "fecha_monto_cargo_ejercido": request.form.get('fecha_monto_cargo_ejercido', ''),
+                        "monto_jubilacion_taza": float(request.form.get('monto_jubilacion_taza', '')),
+
+                },
+
+                "Imagen": {
+                        "Imagen": request.files['imagenTaza'],  # Destino del oficio
+
+                },
+
+                },
 
             # Manejo de la imagen
             'imagenes': []  # Lista para almacenar las rutas de las imágenes subidas
