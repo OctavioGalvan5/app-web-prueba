@@ -263,11 +263,12 @@ def formulario_demandas():
                         "Imagen": request.files['imagenTaza'],  # Destino del oficio
 
                 },
+            },
                 # Zona de Tope Haber Maximo
-                "Tope_haber_maximo": {
+            "Tope_haber_maximo": {
 
                     "Tope_haber_maximo": {
-                            "fecha_haber_actual": 'fecha_haber_actual' in request.form,  # Si el checkbox está marcado
+                            "fecha_haber_actual": request.form.get('fecha_haber_actual', ''),  # Si el checkbox está marcado
                             "reajustado_cf_ley_27551_mensual": request.form.get('reajustado_cf_ley_27551_mensual', ''), 
                             "reajustado_cf_ley_27551_tres_meses": request.form.get('reajustado_cf_ley_27551_tres_meses', ''), 
                             "reajustado_IPC_sin_topes": float(request.form.get('reajustado_IPC_sin_topes', '')),
@@ -286,7 +287,7 @@ def formulario_demandas():
             # Manejo de la imagen
             'imagenes': []  # Lista para almacenar las rutas de las imágenes subidas
         }
-        }
+        
         
         
         # Llama a la función para crear el documento Word

@@ -477,15 +477,15 @@
                     <div class="form-group form-inline">
                         <label for="fechas">Monto del cargo ejercido:</label>
                         <div style="display: flex; gap: 10px;">
-                            <input type="text" id="Ultima_Remuneracion_Actividad" name="monto_cargo_ejercido" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"required>
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="monto_cargo_ejercido" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78">
                             <span>al</span>
-                            <input type="date" id="fecha_Ultima_Remuneracion_Actividad" name="fecha_monto_cargo_ejercido" required>
+                            <input type="date" id="fecha_Ultima_Remuneracion_Actividad" name="fecha_monto_cargo_ejercido">
                         </div>
                     </div>
                     <div class="form-group form-inline">
                         <label for="fechas">Monto de jubilacion en el mismo mes:</label>
                         <div style="display: flex; gap: 10px;">
-                            <input type="text" id="Ultima_Remuneracion_Actividad" name="monto_jubilacion_taza" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"required>
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="monto_jubilacion_taza" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78">
                         </div>
                     </div>
                 </div>
@@ -687,6 +687,8 @@
         setupDragAndDrop('dropZonePBU1', 'imagenPBU1');
         setupDragAndDrop('dropZonePBU2', 'imagenPBU2');
         setupDragAndDrop('dropZoneTaza', 'imagenTaza');
+        setupDragAndDrop('dropZoneHaberMaximo', 'imagenHaberMaximo');
+
 
 
         

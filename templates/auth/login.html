@@ -21,7 +21,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             padding: 40px;
             width: 100%;
-            max-width: 400px;
+            max-width: 1200px; /* Aumenta el ancho máximo aquí */
             text-align: center;
         }
         h1 {
@@ -31,6 +31,9 @@
         }
         .input-container {
             margin-bottom: 20px;
+            position: relative;
+            width: 80%; /* Aumenta el ancho de los inputs */
+            margin: 0 auto;
         }
         input {
             width: 100%;
@@ -40,13 +43,14 @@
             border-radius: 25px;
             font-size: 16px;
             transition: border-color 0.3s ease;
+            box-sizing: border-box;
         }
         input:focus {
             border-color: #6A0DAD;
             outline: none;
         }
         button {
-            width: 100%;
+            width: 80%; /* Botón más ancho */
             padding: 12px;
             background-color: #6A0DAD;
             color: white;
@@ -76,10 +80,25 @@
             background-color: transparent;
             color: #6A0DAD;
             border: 2px solid #6A0DAD;
+            width: 80%; /* Botón alternativo más ancho */
         }
         .no-login button:hover {
             background-color: #6A0DAD;
             color: white;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            user-select: none;
+            font-size: 20px;
+            color: #6A0DAD;
+            padding-left: 5px;
+        }
+        .input-container input {
+            padding-right: 40px; /* Aumentar el espacio del padding para acomodar el ícono */
         }
     </style>
 </head>
@@ -96,7 +115,10 @@
         <form class="form" action="/login" method="POST">
             <div class="input-container">
                 <input type="text" placeholder="Usuario" name="username" required />
-                <input type="password" placeholder="Contraseña" name="password" required />
+            </div>
+            <div class="input-container">
+                <input type="password" placeholder="Contraseña" name="password" id="password" required />
+                <span class="password-toggle" id="passwordToggle" onclick="togglePassword()">🔒</span>
             </div>
             <button type="submit">Ingresar</button>
         </form>
@@ -104,5 +126,19 @@
             <a href="#"><button>Continuar sin iniciar sesión</button></a>
         </div>
     </div>
+
+    <script>
+        function togglePassword() {
+            var passwordInput = document.getElementById('password');
+            var passwordToggle = document.getElementById('passwordToggle');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggle.textContent = '🔓';
+            } else {
+                passwordInput.type = 'password';
+                passwordToggle.textContent = '🔒';
+            }
+        }
+    </script>
 </body>
 </html>

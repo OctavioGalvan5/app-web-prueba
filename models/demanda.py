@@ -97,7 +97,7 @@ class Formulario:
 
         if self.datos["casillas_verificacion"].get('opcion_sumas_remunerativas', False):
             # Título de la sección de sumas no remunerativas
-            Titulo_sumas_no_remunerativas = "De las sumas no remunerativas"
+            Titulo_sumas_no_remunerativas = "6.1.1.	De las sumas no remunerativas"
 
             parrafo_introduccion = (
                 "Solicito se incorporen para el cálculo del ingreso base las sumas no remunerativas percibidas por mi mandante "
@@ -160,7 +160,7 @@ class Formulario:
         # Comprobar si se deben incluir servicios autónomos
         if self.datos["sumas_no_remunerativas"]["recibos"]["Recibos_No"]:
            parrafo_sumas = "Asimismo, peticiono se libre oficio a " + self.datos["sumas_no_remunerativas"]["recibos_no"]["Librar_oficio_a"] + " a los fines de que remita los recibos de sueldo de mi representada que se encuentran en su poder, correspondientes al período " + transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["inicio_periodo_sumas"]) + " hasta " + transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["fin_periodo_sumas"]) + " , de los que surgirán las sumas abonadas como no remunerativas, En su defecto, peticiono informe los haberes con aportes y sin aportes abonados en cada período peticionado.  De ellos surgirán las sumas no remunerativas abonadas por el empleador, bajo los siguientes códigos y conceptos: "
-           titulo_recibos = "Prueba en poder de tercero:"
+           titulo_recibos = "1.2 Prueba en poder de tercero:"
            parrafo_recibos = self.datos["sumas_no_remunerativas"]["recibos_no"]["Librar_oficio_a"]
            parrafo_recibos_1 = "Peticiono se libre oficio al empleador de mi representado,"+self.datos["sumas_no_remunerativas"]["recibos_no"]["Librar_oficio_a"]+", a los fines de que adjunte los recibos de sueldo correspondientes a "+genero+" "+self.datos["datos_cliente"].get('nombre')+" DNI "+self.datos["datos_cliente"].get('dni')+" por el período "+transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["inicio_periodo_sumas"])+" a "+transformar_fecha(self.datos["sumas_no_remunerativas"]["recibos_no"]["fin_periodo_sumas"])+", los que obran en su poder. En su defecto, peticiono informe los haberes con aportes y sin aportes abonados en todos los meses comprendidos en el período solicitado, los que influyen en el cálculo del haber inicial. Y lo sea bajo apercibimiento de astreintes en caso de incumplimiento."
         # Devolver un diccionario con los resultados
@@ -193,7 +193,7 @@ class Formulario:
 
         if self.datos["casillas_verificacion"].get('opcion_error_material', False):
             # Título de la sección de sumas no remunerativas
-            Titulo_error_material= "Del error material "
+            Titulo_error_material= "5.1.2 Del error material "
 
             parrafo_1 = (
                 "Mi mandante trabajó en " + self.datos["error_material"]["Lugar_error"] + " desde el " + transformar_fecha(self.datos["error_material"]["fecha_inicio_remuneraciones_error"]) + " hasta el " + transformar_fecha(self.datos["error_material"]["fecha_fin_remuneraciones_error"]) +"."
@@ -206,19 +206,19 @@ class Formulario:
 
             # Añadir el resto de los argumentos
             parrafo_3= (
-                "Toma remuneraciones erróneas, diferentes a las efectivamente percibidas:"
+                "• Toma remuneraciones erróneas, diferentes a las efectivamente percibidas:"
             )
 
             parrafo_4 = (
-                "Se adjunta cálculo de haber de caja con y sin corrección del error material, de los que surgen los siguientes promedios de remuneraciones:"
+                "• Se adjunta cálculo de haber de caja con y sin corrección del error material, de los que surgen los siguientes promedios de remuneraciones:"
             )
 
             parrafo_5 = (
-                "W de caja con error material en remuneraciones consideradas: " + formatear_dinero(self.datos["error_material"]["W_error"]) +"."
+                "o W de caja con error material en remuneraciones consideradas: " + formatear_dinero(self.datos["error_material"]["W_error"]) +"."
             )
 
             parrafo_6 = (
-                "W de caja sin error material, con remuneraciones correctas: " + formatear_dinero(self.datos["error_material"]["W_sin_error"]) +"."
+                "o W de caja sin error material, con remuneraciones correctas: " + formatear_dinero(self.datos["error_material"]["W_sin_error"]) +"."
             )
             parrafo_7 = (
                 "Solicito se corrija el error material y se tomen las verdaderas remuneraciones percibidas para el cálculo del haber inicial." 
@@ -260,7 +260,7 @@ class Formulario:
 
 
         if self.datos["casillas_verificacion"].get('opcion_reajuste_pbu', False):
-            Titulo_PBU= "PBU"
+            Titulo_PBU= "5.1.4 PBU"
 
             parrafo_1 = (
                 "Solicito se declare la inconstitucionalidad del art. 4° de la Ley 26.417 que estableció un monto fijo para la PBU y se utilice para la actualización de la Prestación Básica Universal, ISCIB al 02.2009. "
@@ -359,21 +359,21 @@ class Formulario:
 
         if self.datos["casillas_verificacion"].get('opcion_tasa_complementacion', False):
 
-            Titulo_taza_complementacion = "Tasa de complementación: "
+            Titulo_taza_complementacion = "5.1.5 Tasa de complementación:  "
             
             parrafo_1 = "Atento a que, aun reajustando el haber de mi mandante conforme los parámetros ut supra solicitados, éste no guarda una debida proporcionalidad con el haber en actividad, solicito se fije una pauta de complementación que consagre la sustitutividad del haber de pasividad respecto al de actividad a fin de cumplir con la manda constitucional de tener una haber integral y en consecuencia sustitutivo del salario, en consonancia con los compromisos internacionales asumidos por el estado nacional al suscribir las normas mínimas de seguridad social de la OIT."
 
             parrafo_2 = "Los derechos a una retribución justa y a un salario mínimo vital y móvil encuentran su correlato en las jubilaciones y pensiones móviles que deben ser garantizadas a los trabajadores cuando entran en pasividad, nótese que el haber que percibe mi mandante es inferior al Salario mínimo vital y móvil"
 
-            Titulo_parrafo_3 = "SMVM "
+            Titulo_parrafo_3 = "• SMVM "
             parrafo_3 = "A partir del 1º de julio de 2024 el salario mínimo es de $ 254.231,91 el cual ha decrecido notoriamente, no obstante, es superior a la jubilación mínima que percibe mi mandante. "
 
             if self.datos["Taza_complementacion"]["haber_menor_ripte"]:
-                Titulo_parrafo_4 = "Ripte"
+                Titulo_parrafo_4 = "• Ripte"
                 parrafo_4 = "al último índice aplicado, mayo de 2024 es de $879.483,08. "
                 
 
-            Titulo_parrafo_5 = "Canasta Básica Total "            
+            Titulo_parrafo_5 = "• Canasta Básica Total "            
             parrafo_5 = "$ 282.579 a Julio de 2024."
 
             parrafo_6 = "La Cámara Federal de Salta también se pronunció en un fallo de la Sala II, en autos “GOMEZ AUGIER GUSTAVO FEDERICO C/ ANSES S/ REAJUSTES VARIOS” EXPTE. 11730/2016, donde, haciendo alusión a los casos “Betancur” y “Benoist”, sentó doctrina respecto a la integralidad de los derechos de la seguridad social reconocido en el art. 14 bis de la CN, y sostuvo que “(…) si bien no corresponde fijación de una “tasa” de sustitución para que el beneficio de jubilación ordinaria otorgado al actor bajo el régimen de la ley 24.241 alcance un mínimo determinado - tal como lo establecía el art. 49 de la ley 18.037-, ello no enerva el derecho del accionante de acreditar en la etapa de ejecución la necesidad de establecer un suplemento que resguarde los principios de “sustitutividad” y de “proporcionalidad” que, según los lineamientos del Superior Tribunal, debe existir entre la jubilación y el ingreso que tenía cuando se encontraba en actividad” ."
@@ -407,7 +407,7 @@ class Formulario:
         titulo_inaplicabilidad_tope_art_14_de_la_res_06_09 =""
         parrafo_1=""
         if self.datos["casillas_verificacion"].get('opcion_inaplicabilidad_tope_art_14_res_06_09', False):
-            titulo_inaplicabilidad_tope_art_14_de_la_res_06_09 = "Inaplicabilidad tope Art 14 de la Res 06.09"
+            titulo_inaplicabilidad_tope_art_14_de_la_res_06_09 = "5.1.6. Inaplicabilidad tope Art 14 de la Res 06.09"
             parrafo_1 = "Solicito su inaplicabilidad por la cual al  establecer un tope a las actualizaciones de las remuneraciones, excede la facultad reglamentaria- ya que el propio artículo 24 de la ley 24.241 no establece tope alguno-, no debería incidir en este caso , dado que el mismo se fijó para actualizar las remuneraciones que componen la PC -no la Pap-, y conforme el periodo usado para el promedio de remuneraciones, no se aplica, y no es justo que se limite el haber sobre el cual se aportó, dado que arrojaría un resultado disvalioso."
 
         return {
@@ -427,7 +427,7 @@ class Formulario:
         elif self.datos["datos_cliente"].get('genero') == "Femenino":
             genero = "la Sra"
         if self.datos["casillas_verificacion"].get('opcion_inaplicabilidad_tope_ley_24241', False):
-            titulo_inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241 = "Inaplicabilidad del tope del art. 9 y 25 de la ley 24.241"
+            titulo_inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241 = "5.1.7 Inaplicabilidad del tope del art. 9 y 25 de la ley 24.241"
             parrafo_1 = "Solicito se declare la inconstitucionalidad e inaplicabilidad del tope del art. 9 y 25 de la ley 24.241, por cuanto su aplicación para el cómputo de la PC y PAP implica la no consideración de los importes superiores a la remuneración máxima imponible, lo que disminuye notoriamente su nivel de ingresos a la hora de determinar la prestación previsional sustitutiva del haber en actividad."
             parrafo_2_1 = "Peticiono se aplique lo recientemente resuelto por la Cámara Federal de Salta – Sala II, en los autos caratulados “RODRIGUEZ, MARIA CRISTINA c/ANSES s/REAJUSTE DE HABERES” Expte. N° FSA 13956/2015, sentencia de fecha 23 de agosto de 2024, la que entre sus considerandos sostuvo primeramente sobre la base de lo resuelto por el Máximo tribunal en el fallo “Gualtieri Alberto” (Fallos: 340:411): "
             parrafo_2_2 = "“debemos tener en cuenta que a los fines del cálculo de la prestación jubilatoria de la Sra. Rodríguez se computaron remuneraciones por el período comprendido entre septiembre de 2003 y agosto de 2013, no surgiendo de las constancias de la causa que la actora, encontrándose en actividad y vigente el anterior régimen de capitalización, solicitara aportar por un importe superior al límite del art. 9 de la ley 24.241. Sin embargo, no puede achacársele igual conducta desaprensiva de su futuro previsional con respecto al período posterior a noviembre de 2008, considerando que el anterior régimen de capitalización estuvo vigente hasta el 8 de diciembre de 2008, ya que a partir de allí la accionante no contaba con la posibilidad legal de efectuar imposiciones voluntarias o depósitos convenidos.”"
@@ -441,6 +441,68 @@ class Formulario:
             'parrafo_3' : parrafo_3,
             'parrafo_4' : parrafo_4
         }
+
+    def tope_haber_maximo(self):
+        titulo_tope_haber_maximo =""
+        parrafo_1=""
+        parrafo_2=""
+        parrafo_3=""
+        parrafo_4=""
+        parrafo_5=""
+        parrafo_6=""
+        parrafo_7=""
+        parrafo_8=""
+        parrafo_9=""
+        parrafo_10=""
+        parrafo_11=""
+        parrafo_12=""
+        parrafo_13=""
+        parrafo_14=""
+        parrafo_15=""
+        parrafo_16=""
+        parrafo_17=""
+
+        if self.datos["casillas_verificacion"].get('opcion_movilidad_tope_haber_maximo', False):
+            titulo_tope_haber_maximo = "5.5 Tope de haber máximo "
+            parrafo_1 = "En el caso, de que del resultado del juicio surja que el haber reajustado supera el tope establecido por ley otorgante, desde ya, dejó planteada su inconstitucionalidad, en concordancia con la doctrina de la Corte Suprema de Justicia de la Nación; en la medida que su aplicación implique una merma en el haber previsional que, por su magnitud, sea confiscatorio (cfr. sent. del 25.09.97, Del Azar Suaya, Abraham”). De allí que sólo procederá la tacha de inconstitucionalidad cuando se demuestre que la aplicación del tope legal importe una disminución irrazonable del haber de pasividad en relación al nivel de vida del titular, medido en función de la pauta legal contemplada en la ley mediante la cual se obtuvo el beneficio. "
+            parrafo_2 = "El artículo 9 de la Ley 24.463 establece los llamados topes máximos, los que justifica en el principio de solidaridad que rige el sistema. "
+            parrafo_3="Esta limitación a la percepción del haber, resulta lesiva al Art. 17 de la CN. En el supuesto de que la correspondiente liquidación arroje un haber que supere el tope reajustado, teniendo dicha limitación carácter confiscatorio, solicito expresamente: "
+            parrafo_4="a)	Se aplique el criterio citado en Actis Caporale, Tudor y Pellegrini Américo, por cuanto si el tope excede el 15% no se debe aplicar."
+            parrafo_5="b)	En caso de que decida aplicarse el mismo, expresamente se deje constancia que, de las sucesivas acumulaciones de tope, no puede producirse una quita superior al 15%, como se resolvió en “García Vidal”."
+            parrafo_6="c)	 Previo a la aplicación del tope solicito que previamente se movilice el mismo conforme “Badaro”, por cuanto los $3.100 estuvieron fijos en el periodo 2002 a 2006, teniendo en cuenta que en su origen el mismo era el 82% de la remuneración máxima sujeta a aportes, y hoy con suerte llega al 60%. Debiendo aplicarse para movilizar este tope del art 9 inc. 3, el mismo criterio fijado por la CSJN en los autos “Badaro” para el periodo 2002 a 2006 y las pautas de movilidad que se fijen en la sentencia."
+            parrafo_7="d)	En el improbable caso que no haga lugar al punto anterior, expresamente solicito que la movilidad que le fije a los haberes, se la den al tope del haber máximo."
+            parrafo_8="El tope del art 9 de la ley 24463 es a agosto de 2024 de $1.517.094,79 (Res. ANSES 390.2024)."
+            parrafo_9="Si se tuviera en cuenta que los $3.100 representaban el 82% de la remuneración máxima sujeta a aportes que era $3.780 (60 ampo de $63), y trajéramos el mismo criterio a hoy, nos daría que el tope del haber máximo debiera ser a agosto de 2024 del 82% de la remuneración máxima sujeta a aportes que es $2.467.787,04= $2.023.426,54"
+            parrafo_10="Por lo que, si a los $3.100, que eran a 01/2002, lo actualizamos con las mismas pautas de “Badaro” y aumentos generales de ANSES el tope hoy sería notablemente superior."
+            parrafo_11="•	Haber reclamado al "+ transformar_fecha(self.datos["Tope_haber_maximo"]["Tope_haber_maximo"]["fecha_haber_actual"]) +" reajustado cf. Ley 27.551 (50% IPC y 50% RIPTE mensual) sin topes: " + formatear_dinero(self.datos["Tope_haber_maximo"]["Tope_haber_maximo"]["reajustado_cf_ley_27551_mensual"])
+            parrafo_12="•	Haber reclamado al "+ transformar_fecha(self.datos["Tope_haber_maximo"]["Tope_haber_maximo"]["fecha_haber_actual"]) +" reajustado cf. Ley 27.551 (50% IPC y 50% RIPTE retrasado tres meses) sin topes: " + formatear_dinero(self.datos["Tope_haber_maximo"]["Tope_haber_maximo"]["reajustado_cf_ley_27551_tres_meses"])
+            parrafo_13="•	Haber reclamado al "+ transformar_fecha(self.datos["Tope_haber_maximo"]["Tope_haber_maximo"]["fecha_haber_actual"]) +" reajustado cf. IPC retrasado dos meses sin topes: " + formatear_dinero(self.datos["Tope_haber_maximo"]["Tope_haber_maximo"]["reajustado_IPC_sin_topes"])
+            parrafo_14="•	Tope de haber máximo de ANSES sin actualizar al "+ transformar_fecha(self.datos["Tope_haber_maximo"]["Tope_haber_maximo"]["fecha_haber_actual"]) +" : "+ formatear_dinero(self.datos["Tope_haber_maximo"]["Tope_haber_maximo"]["tope_haber_maximo_anses"])
+            parrafo_15="•	Tope actualizado cf. Badaro más Caliva Márquez: "+ formatear_dinero(self.datos["Tope_haber_maximo"]["Tope_haber_maximo"]["tope_actualizado_cf_badaro_mas_caliva_marquez"])
+            parrafo_16="De aplicarse la movilidad del tope que se peticiona, ello permitiría mantener la integralidad del haber de mi mandante."
+            parrafo_17="Acá se cuestiona el monto del haber máximo, como así también la quita que se produce tanto por su inadecuada movilidad y como por su aplicación, provocando un daño notorio en el haber, por cuanto si tengo que realizar una quita del 15% sobre un haber máximo no actualizado desde 1995 que se dictó la ley 24463, a mayo de 2006 que se incrementó con el Decreto Nº 764/06, un 11%, resultando el mismo de $3.441. Los aumentos posteriores otorgados a las prestaciones previsionales mediante la Ley 26.198, los Decretos 1346/07, 279/08 y posteriormente en virtud de la ley de movilidad 26.417, se reflejaron en el haber máximo. Pero de 2002 al 05-2006 NO, causando un perjuicio enorme a mi mandante en caso de ser alcanzado por el mismo."
+
+        return {
+            'titulo' : titulo_tope_haber_maximo,
+            'parrafo_1' : parrafo_1,
+            'parrafo_2' : parrafo_2,
+            'parrafo_3' : parrafo_3,
+            'parrafo_4' : parrafo_4,
+            'parrafo_5' : parrafo_5,
+            'parrafo_6' : parrafo_6,
+            'parrafo_7' : parrafo_7,
+            'parrafo_8' : parrafo_8,
+            'parrafo_9' : parrafo_9,
+            'parrafo_10' : parrafo_10,
+            'parrafo_11' : parrafo_11,
+            'parrafo_12' : parrafo_12,
+            'parrafo_13' : parrafo_13,
+            'parrafo_14' : parrafo_14,
+            'parrafo_15' : parrafo_15,
+            'parrafo_16' : parrafo_16,
+            'parrafo_17' : parrafo_17
+        }
+        
     def generar_diccionario_docx(self):
         """Genera el diccionario que se usará para crear el archivo Word."""
         doc_data = {
@@ -483,6 +545,7 @@ class Formulario:
             'taza_complementacion' : self.taza_complementacion(),
             'inaplicabilidad_tope_art_14_de_la_res_06_09' : self.Inaplicabilidad_tope_Art_14_de_la_Res_06_09(),
             'Inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241' : self.Inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241(),
+            'tope_haber_maximo' : self.tope_haber_maximo(),
         }
 
         # Renderizar el documento con el contexto
@@ -531,11 +594,14 @@ class Formulario:
         Imagen_Taza = self.datos["Taza_complementacion"]["Imagen"].get("Imagen")
         imagen_fija_taza = 'datos/imagenes_fijas/imagen_fija_taza.png'
 
+        #Tope Haber Maximo
+        imagenTopeMaximo = self.datos["Tope_haber_maximo"]["Imagen"].get("Imagen")
+
         # Crear diccionario para asignar las imágenes a sus marcadores
         imagenes_por_marcador = {}
 
         # Asignar cada imagen a su respectivo marcador si existe
-        for imagen, marcador in zip([imagenSumas, imagenError, imagenPBU_1, imagenPBU_2, Imagen_Taza ], ['Imagen_suma_aqui', 'Imagen_error_material_aqui', 'Imagen_PBU_1', 'Imagen_PBU_2', 'Imagen_Taza' ]):
+        for imagen, marcador in zip([imagenSumas, imagenError, imagenPBU_1, imagenPBU_2, Imagen_Taza,imagenTopeMaximo  ], ['Imagen_suma_aqui', 'Imagen_error_material_aqui', 'Imagen_PBU_1', 'Imagen_PBU_2', 'Imagen_Taza', 'Imagen_Tope_haber_maximo' ]):
             if imagen:  # Verificar si el usuario subió una imagen
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_file:
                     temp_file.write(imagen.read())
