@@ -101,6 +101,48 @@
                 margin-right: 0; /* Elimina el margen derecho del último elemento */
             }
         }
+        .label-with-icon {
+            display: flex;
+            align-items: center;
+        }
+        .info-icon {
+            margin-left: 5px;
+            cursor: help;
+            position: relative;
+        }
+        .info-icon::after {
+            content: "?";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #6a1b9a;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .info-icon .tooltip {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .info-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
     <body>
@@ -141,11 +183,21 @@
             <!-- Nombre y DNI -->
             <div class="form-group form-inline">
                 <div>
-                    <label for="nombre">Nombre:</label>
+                    <label for="nombre" class="label-with-icon">
+                        Nombre y Apellido:
+                        <span class="info-icon">
+                            <span class="tooltip">Ingrese nombre completo</span>
+                        </span>
+                    </label>
                     <input type="text" id="nombre" name="nombre" required>
                 </div>
                 <div>
-                    <label for="DNI">DNI:</label>
+                    <label for="DNI" class="label-with-icon">
+                        DNI:
+                        <span class="info-icon">
+                            <span class="tooltip">Ingrese su numero de documento</span>
+                        </span>
+                    </label>
                     <input type="text" id="DNI" name="DNI" required>
                 </div>
             </div>
