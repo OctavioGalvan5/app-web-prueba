@@ -250,39 +250,39 @@ def formulario_demandas():
                 "haber_menor_ripte": 'haber_menor_ripte' in request.form,
 
                 "print_equiparacion": {
-                        "print_equiparacion": 'print_equiparacion' in request.form,  # Si el checkbox está marcado
-                        "taza_ex_empleador": request.form.get('taza_ex_empleador', ''), 
-                        "ultimo_cargo_ejercido": request.form.get('ultimo_cargo_ejercido', ''), 
-                        "monto_cargo_ejercido": float(request.form.get('monto_cargo_ejercido', '')),
-                        "fecha_monto_cargo_ejercido": request.form.get('fecha_monto_cargo_ejercido', ''),
-                        "monto_jubilacion_taza": float(request.form.get('monto_jubilacion_taza', '')),
+                    "print_equiparacion": 'print_equiparacion' in request.form,
+                    "taza_ex_empleador": request.form.get('taza_ex_empleador', ''),
+                    "ultimo_cargo_ejercido": request.form.get('ultimo_cargo_ejercido', ''),
 
+                    # Intentar convertir a float con manejo de valores vacíos
+                    "monto_cargo_ejercido": float(request.form.get("monto_cargo_ejercido", 0) or 0),
+                    "fecha_monto_cargo_ejercido": request.form.get('fecha_monto_cargo_ejercido', ''),
+
+                    # Manejar la conversión a float de manera segura
+                    "monto_jubilacion_taza": float(request.form.get("monto_jubilacion_taza", 0) or 0),
                 },
 
                 "Imagen": {
-                        "Imagen": request.files['imagenTaza'],  # Destino del oficio
-
+                    "Imagen": request.files['imagenTaza'],  # Destino del oficio
                 },
             },
                 # Zona de Tope Haber Maximo
             "Tope_haber_maximo": {
+                "Tope_haber_maximo": {
+                    "fecha_haber_actual": request.form.get('fecha_haber_actual', ''),  # Si el checkbox está marcado
 
-                    "Tope_haber_maximo": {
-                            "fecha_haber_actual": request.form.get('fecha_haber_actual', ''),  # Si el checkbox está marcado
-                            "reajustado_cf_ley_27551_mensual": request.form.get('reajustado_cf_ley_27551_mensual', ''), 
-                            "reajustado_cf_ley_27551_tres_meses": request.form.get('reajustado_cf_ley_27551_tres_meses', ''), 
-                            "reajustado_IPC_sin_topes": float(request.form.get('reajustado_IPC_sin_topes', '')),
-                            "tope_haber_maximo_anses": request.form.get('tope_haber_maximo_anses', ''),
-                            "tope_actualizado_cf_badaro_mas_caliva_marquez": float(request.form.get('tope_actualizado_cf_badaro_mas_caliva_marquez', '')),
-
-                    },
-
-                    "Imagen": {
-                            "Imagen": request.files['imagenHaberMaximo'],  # Destino del oficio
-
-                    },
-
+                    # Intentar convertir a float con manejo de valores vacíos
+                    "reajustado_cf_ley_27551_mensual": float(request.form.get('reajustado_cf_ley_27551_mensual', 0) or 0),
+                    "reajustado_cf_ley_27551_tres_meses": float(request.form.get('reajustado_cf_ley_27551_tres_meses', 0) or 0),
+                    "reajustado_IPC_sin_topes": float(request.form.get('reajustado_IPC_sin_topes', 0) or 0),
+                    "tope_haber_maximo_anses": float(request.form.get('tope_haber_maximo_anses', 0) or 0),
+                    "tope_actualizado_cf_badaro_mas_caliva_marquez": float(request.form.get('tope_actualizado_cf_badaro_mas_caliva_marquez', 0) or 0),
                 },
+
+                "Imagen": {
+                    "Imagen": request.files['imagenHaberMaximo'],  # Destino del oficio
+                },
+            },
 
             # Manejo de la imagen
             'imagenes': []  # Lista para almacenar las rutas de las imágenes subidas
