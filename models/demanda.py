@@ -529,9 +529,9 @@ class Formulario:
         if fecha_escrito < datetime(2018, 3, 1):
             plantilla = 'datos/MODELO ANT 03.2018. COMPLETO..docx'
         elif datetime(2018, 3, 1) <= fecha_escrito < datetime(2021, 1, 1):
-            plantilla = 'datos/plantillaB.docx'
+            plantilla = 'datos/MODELO POST 3.18 COMPLETO..docx'
         else:
-            plantilla = 'datos/plantillaC.docx'
+            plantilla = 'datos/MODELO POST 01.2021 COMPLETO.docx'
 
         # Cargar la plantilla y crear el contexto
         doc = DocxTemplate(plantilla)
