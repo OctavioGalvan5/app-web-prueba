@@ -502,6 +502,14 @@ class Formulario:
             'parrafo_16' : parrafo_16,
             'parrafo_17' : parrafo_17
         }
+
+    def ganancias(self):
+        titulo_ganancias =""
+        if self.datos["casillas_verificacion"].get('opcion_inaplicabilidad_impuesto_ganancias', False):
+            titulo_ganancias="12.Ganancias: "
+        return{
+            'titulo' : titulo_ganancias
+        }
         
     def generar_diccionario_docx(self):
         """Genera el diccionario que se usará para crear el archivo Word."""
@@ -546,6 +554,7 @@ class Formulario:
             'inaplicabilidad_tope_art_14_de_la_res_06_09' : self.Inaplicabilidad_tope_Art_14_de_la_Res_06_09(),
             'Inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241' : self.Inaplicabilidad_del_tope_del_art_9_y_25_de_la_ley_24241(),
             'tope_haber_maximo' : self.tope_haber_maximo(),
+            'ganancias' : self.ganancias(),
         }
 
         # Renderizar el documento con el contexto
