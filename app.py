@@ -11,9 +11,9 @@ from werkzeug.wrappers import response
 from config import config
 #Models
 from models.demanda import Formulario
-from models.generador_pdf import PDFGenerator
+from models.calculadora_uma.generador_pdf import PDFGenerator
+from models.calculadora_uma.generador_docx import Documento
 from models.ModelUser import ModelUser
-from models.demanda import Formulario
 
 # Entities
 from models.entities.User import User
@@ -96,6 +96,8 @@ def generar_pdf_route():
     fecha_aprobacion_sentencia = request.form.get('Fecha_Aprobacion_Sentencia')
     monto_aprobado = request.form.get('Monto_Aprobado')
     monto_aprobado_actualizado = request.form.get('Monto_Aprobado_Actualizado')
+   
+    
 
     # Descontar 1 crédito al usuario
     current_user.credito -= 1
@@ -120,7 +122,23 @@ def generar_pdf_route():
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
         return response
+        
+    if action == 'generar_escrito':
+        deuda = request.form.get('Deuda')
+        intereses = request.form.get('Intereses')
+        imagenCapturaSentencia = request.files['imagenCapturaSentencia']
+        imagenMonto = request.files['imagenMonto']
+        # Crear una instancia de Liquidacion
+        documento = Documento(
+            autos, expediente, periodo_desde, periodo_hasta,
+            fecha_de_cierre_de_liquidacion, fecha_de_regulacion,
+            fecha_aprobacion_sentencia, monto_aprobado,
+            monto_aprobado_actualizado, deuda, intereses,
+            imagenCapturaSentencia, imagenMonto
+        )
 
+        # Llama al método para procesar imágenes y generar el documento
+        return documento.procesar_imagenes()
 @app.route('/formulario_demandas', methods=['GET', 'POST'])
 @login_required
 def formulario_demandas():

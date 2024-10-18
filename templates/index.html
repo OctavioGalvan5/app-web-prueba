@@ -97,7 +97,7 @@
             transform: translateY(-5px);
         }
         .service-card h3 {
-            color: var(--secondary-color);
+            color: var(--primary-color);
             margin-bottom: 15px;
         }
         .cta {
@@ -145,14 +145,7 @@
 </head>
 <body>
     <header>
-        <nav class="container">
-            <div class="logo">Martínez & Asociados</div>
-            <div class="nav-links">
-                <a href="#about">Quiénes Somos</a>
-                <a href="#services">Servicios</a>
-                <a href="/login">Acceso Clientes</a>
-            </div>
-        </nav>
+          {% include 'navs/nav_pre_login.html' %}
     </header>
 
     <main>
@@ -166,8 +159,8 @@
         <section id="about" class="about">
             <div class="container">
                 <h2>Quiénes Somos</h2>
-                <p>En Martínez & Asociados, nos enorgullecemos de ofrecer servicios legales de la más alta calidad a nuestros clientes desde 1985. Nuestro equipo de abogados altamente calificados combina años de experiencia con un profundo conocimiento de las leyes más recientes para brindar asesoramiento legal experto y representación efectiva.</p>
-                <p>Nos distinguimos por nuestro compromiso con la excelencia, la integridad y la atención personalizada a cada caso. Entendemos que cada situación legal es única, y nos esforzamos por desarrollar estrategias adaptadas a las necesidades específicas de cada cliente.</p>
+                <p>En Toyos y Espin, nos especializamos en brindar soluciones legales precisas y confiables en el ámbito judicial, con un enfoque particular en el derecho previsional. Nuestro equipo combina experiencia y conocimiento actualizado para realizar cálculos complejos y asesorar a nuestros clientes en sus derechos previsionales, garantizando una representación efectiva y personalizada.</p>
+                <p>Desde nuestra fundación, hemos sido un aliado confiable para quienes buscan claridad y justicia en temas de jubilaciones, pensiones y otras áreas del derecho previsional.</p>
             </div>
         </section>
 
@@ -176,38 +169,28 @@
                 <h2>Nuestros Servicios</h2>
                 <div class="services-grid">
                     <div class="service-card">
-                        <h3>Derecho Civil</h3>
-                        <p>Asesoramiento y representación en litigios civiles, contratos y responsabilidad civil.</p>
+                        <h3>Calculadora de Movilidad</h3>
+                        <p>Calcula fácilmente los costos de movilidad para tus casos legales.</p>
                     </div>
                     <div class="service-card">
-                        <h3>Derecho Laboral</h3>
-                        <p>Protección de los derechos de empleadores y empleados en disputas laborales.</p>
+                        <h3>Calculadora de UMA</h3>
+                        <p>Determina rápidamente los valores de la Unidad de Medida y Actualización.</p>
                     </div>
                     <div class="service-card">
-                        <h3>Derecho Mercantil</h3>
-                        <p>Asistencia en formación de empresas, fusiones y adquisiciones, y contratos comerciales.</p>
+                        <h3>Calculadora de Tope maximo</h3>
+                        <p>Calcula el haber usando los topes maximos de Anses.</p>
                     </div>
                     <div class="service-card">
-                        <h3>Derecho de Familia</h3>
-                        <p>Apoyo en divorcios, custodia de menores y otros asuntos familiares.</p>
+                        <h3>Proximamente</h3>
+                        <p>Mas servicios proximamente...</p>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="cta">
-            <div class="container">
-                <h2>¿Necesita Asesoramiento Legal?</h2>
-                <p>Nuestro equipo está listo para ayudarle. Contáctenos hoy para una consulta inicial gratuita.</p>
-                <a href="#" class="button">Solicitar Consulta</a>
             </div>
         </section>
     </main>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2023 Estudio Jurídico Martínez & Asociados. Todos los derechos reservados.</p>
-        </div>
+         {% include 'footers/footer_pre_login.html' %}
     </footer>
 
     <script>

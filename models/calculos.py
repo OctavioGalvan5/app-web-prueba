@@ -7,7 +7,7 @@ def formatear_dinero(cantidad):
     return format_currency(cantidad, 'ARS', locale='es_AR').replace(u'\xa0', u'')
   
 def dividir(monto, valor_uma):
-  resultado = monto / float(valor_uma)
+  resultado = float(monto) / float(valor_uma)
   return round(resultado, 2)
 
 def calcular_porcentaje(porcentaje, numero):

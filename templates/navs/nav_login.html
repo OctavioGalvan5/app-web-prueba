@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <style>
         :root {
             --primary-color: #1a365d;
-            --secondary-color: #2c5282;
+            --secondary-color: #f72585;
             --background-color: #f0f0f0;
             --text-color: #333;
             --nav-height: 60px;
@@ -150,16 +151,12 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="navbar-links">
-            <a href="/home" class="navbar-brand"></a>
-            <a href="/home">Inicio</a>
-            <a href="#">Contáctanos</a>
-            <a href="#">Acerca de</a>
-            <a href='/logout'>Cerrar sesión</a>
+            <a href="/">Volver</a>
         </div>
-        <span class="credits">{{ current_user.fullname }}, Créditos: {{ current_user.credito }}</span>
         <div class="menu-toggle" onclick="toggleNav()">
             <span></span>
             <span></span>
@@ -169,13 +166,8 @@
 
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="/home">Inicio</a>
-        <a href="#">Contáctanos</a>
-        <a href="#">Acerca de</a>
-        <a href='/logout'>Cerrar sesión</a>
-        <span class="credits">{{ current_user.fullname }}, Créditos: {{ current_user.credito }}</span>
+        <a href="/">Volver</a>
     </div>
-
     <script>
         let isNavOpen = false;
 
@@ -206,9 +198,10 @@
             }
         });
 
-        document.querySelector(".menu-toggle").addEventListener('click', function() {
+        document.querySelector(".menu-toggle").addEventListener('click', function () {
             this.classList.toggle("active");
         });
     </script>
 </body>
+
 </html>
