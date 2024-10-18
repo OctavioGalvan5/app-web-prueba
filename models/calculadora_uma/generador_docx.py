@@ -4,6 +4,7 @@ from datetime import datetime, timedelta  # Para manejar fechas y horas
 from docxtpl import DocxTemplate  # Para trabajar con plantillas de Word
 from docx import Document  # Para manipular documentos de Word
 from flask import send_file  # Para enviar archivos en respuestas HTTP
+from docx.shared import Inches
 from models.calculos import calcular_porcentajes, formatear_dinero, transformar_fecha
 from models.database import obtener_acordada, obtener_valor_uma
 class Documento:
@@ -35,24 +36,40 @@ class Documento:
               datos['Acordada_fecha_de_regulacion'] = obtener_acordada(self.fecha_de_regulacion)
               datos['UMA_fecha_de_regulacion'] = obtener_valor_uma(self.fecha_de_regulacion)
               datos['porcentajesR'], datos['cantidadR'], datos['minimoR'], datos['apoderadoR'], datos['reduccionR'], datos['ejecucionR'], datos['incidenciaR'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_de_regulacion'])
+              
 
               datos['Acordada_fecha_aprobacion_sentencia'] = obtener_acordada(self.fecha_aprobacion_sentencia)
               datos['UMA_fecha_aprobacion_sentencia'] = obtener_valor_uma(self.fecha_aprobacion_sentencia)
               datos['porcentajesAS'], datos['cantidadAS'], datos['minimoAS'], datos['apoderadoAS'], datos['reduccionAS'], datos['ejecucionAS'], datos['incidenciaAS'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_aprobacion_sentencia'])
+              
 
               datos['porcentajesTP'], datos['cantidadTP'], datos['minimoTP'], datos['apoderadoTP'], datos['reduccionTP'], datos['ejecucionTP'], datos['incidenciaTP'] = calcular_porcentajes(self.monto_aprobado_actualizado, datos['UMA_fecha_de_regulacion'])
-        
-              datos['deuda'] = float(self.deuda)
-              datos['intereses'] = float(self.intereses)
+
+              datos['autos'] = self.autos
+              datos['expediente'] = self.expediente
+              datos['periodo_desde'] = transformar_fecha(self.periodo_desde)
+              datos['periodo_hasta'] = transformar_fecha(self.periodo_hasta)
+              datos['fecha_de_cierre_de_liquidacion'] = transformar_fecha(self.fecha_de_cierre_de_liquidacion)
+              datos['fecha_de_regulacion'] = transformar_fecha(self.fecha_de_regulacion)
+              datos['fecha_aprobacion_sentencia'] = transformar_fecha(self.fecha_aprobacion_sentencia)
+              datos['monto_aprobado'] = formatear_dinero(float(self.monto_aprobado))
+              datos['monto_aprobado_actualizado'] = formatear_dinero(float(self.monto_aprobado_actualizado))
+
+              datos['deuda'] = formatear_dinero(float(self.deuda))
+              datos['intereses'] = formatear_dinero(float(self.intereses))
               datos['imagenCapturaSentencia'] = self.imagenCapturaSentencia
               datos['imagenMonto'] = self.imagenMonto
 
+              datos['UMA_fecha_de_regulacion'] = formatear_dinero(obtener_valor_uma(self.fecha_de_regulacion))
+              datos['UMA_fecha_de_cierre_de_liquidacion'] = formatear_dinero(obtener_valor_uma(self.fecha_de_cierre_de_liquidacion))
+              datos['UMA_fecha_aprobacion_sentencia'] = formatear_dinero(obtener_valor_uma(self.fecha_aprobacion_sentencia))
 
+            
               return datos
 
         def crear_archivo_word(self, imagenes_por_marcador):
           
-            plantilla = 'datos/MODELO POST 01.2021 COMPLETO.docx'
+            plantilla = 'datos/calculadora_uma/plantilla_escrito_uma.docx'
 
             # Cargar la plantilla y crear el contexto
             doc = DocxTemplate(plantilla)
