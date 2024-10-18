@@ -160,6 +160,16 @@
             }
 
         }
+        .dropZone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 20px; /* Espacio entre el botón y la zona de arrastre */
+        }
+        .dropZone.hover {
+            border-color: #00f;
+        }
     </style>
 </head>
 <body>
@@ -223,17 +233,64 @@
             </div>
             <div class="form-group">
                 <label for="montoActualizado">Monto Aprobado Actualizado (con Tasa Pasiva):</label>
+
+                <!-- Links debajo de la label -->
+                <div>
+                    <a href="https://consejo.jusbaires.gob.ar/servicios/calculo-de-interes/" style="display: block;">Consejo Magistratura</a>
+                    <a href="https://www.bcra.gob.ar/BCRAyVos/calculadora-intereses-tasa-justicia.asp" style="display: block;">BCRA</a>
+                </div>
+
                 <div style="position: relative;">
                     <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">$</span>
                     <input type="text" id="montoActualizado" name="Monto_Aprobado_Actualizado" 
                            placeholder="Ingrese el monto actualizado" 
                            pattern="^\d+(\.\d{2})?$" 
                            title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
-                           style="padding-left: 25px;"
+                           style="padding-left: 25px;" 
                            required />
                 </div>
             </div>
-            <button type="submit" class="submit-button">Generar PDF</button>
+            <div>
+                 <label><input type="checkbox" name="escrito"> Crear Escrito</label>
+            </div>
+            <div id="EscritoSection" class="form-group" style="display: none">
+                <div class="form-group">
+                    <label for="montoActualizado">Deuda:</label>
+                    <div style="position: relative;">
+                        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">$</span>
+                        <input type="text" id="montoActualizado" name="Deuda" 
+                               placeholder="Ingrese el valor de la deuda sin intereses" 
+                               pattern="^\d+(\.\d{2})?$" 
+                               title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                               style="padding-left: 25px;" 
+                               />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="montoActualizado">Intereses:</label>
+                    <div style="position: relative;">
+                        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">$</span>
+                        <input type="text" id="montoActualizado" name="Intereses" 
+                               placeholder="Ingrese el valor de los intereses" 
+                               pattern="^\d+(\.\d{2})?$" 
+                               title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                               style="padding-left: 25px;" 
+                               />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="dropZone dropZone.hover" id="dropZoneCapturaSentencia">Arrastre imagen de Captura de Sentencia</div>
+                    <input type="file" id="imagenCapturaSentencia" name="imagenCapturaSentencia" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group">
+                    <div class="dropZone dropZone.hover" id="dropZoneCapturaMontos">Arrastre imagen de Captura de Sentencia</div>
+                    <input type="file" id="imagenMonto" name="imagenMonto" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group">
+                <button type="submit" name="action" value="generar_escrito" class="submit-button" style="margin-top: 20px;">Generar Escrito</button>
+                </div>
+            </div>
+            <button type="submit" name="action" value="generar_pdf" class="submit-button">Generar Planilla PDF</button>
         </form>
     </div>
     {% include 'footers/footer.html' %}
@@ -257,6 +314,63 @@
                 submitButton.style.transform = 'translateY(0)';
             });
         });
+        function setupDragAndDrop(dropZoneId, imageUploadId) {
+            const dropZone = document.getElementById(dropZoneId);
+            const imageUpload = document.getElementById(imageUploadId);
+
+            // Muestra el selector de archivos al hacer clic en la zona de arrastre
+            dropZone.addEventListener('click', () => {
+                imageUpload.click();
+            });
+
+            // Manejo de eventos de arrastre
+            dropZone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                dropZone.classList.add('hover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('hover');
+            });
+
+            dropZone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('hover');
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    imageUpload.files = files;  // Asigna los archivos al input
+                    dropZone.textContent = files[0].name; // Muestra el nombre del archivo
+                }
+            });
+
+            // Asigna el archivo seleccionado al drop zone
+            imageUpload.addEventListener('change', () => {
+                if (imageUpload.files.length > 0) {
+                    dropZone.textContent = imageUpload.files[0].name; // Muestra el nombre del archivo
+                }
+            });
+        }
+        function toggleSection(checkbox, sectionId) {
+                    const section = document.getElementById(sectionId);
+                    section.style.display = checkbox.checked ? 'block' : 'none'; // Mostrar u ocultar según el estado del checkbox
+                }
+
+                // Inicialización de los checkboxes y secciones
+                document.addEventListener('DOMContentLoaded', () => {
+                    const escritoCheckbox = document.querySelector('input[name="escrito"]');
+
+                    // Eventos para checkboxes existentes
+                    if (escritoCheckbox) {
+                        escritoCheckbox.addEventListener('change', () => {
+                            toggleSection(escritoCheckbox, 'EscritoSection');
+                        });
+                    }
+
+                    
+        });
+        //// ZONA DE ARRASTRE DE IMAGENES ////
+         setupDragAndDrop('dropZoneCapturaSentencia', 'imagenCapturaSentencia');
+         setupDragAndDrop('dropZoneCapturaMontos', 'imagenMonto');
     </script>
 </body>
 </html>

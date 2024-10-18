@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudio Jurídico Martínez & Asociados</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2c5282;
+            --accent-color: #e2e8f0;
+            --text-color: #2d3748;
+            --light-text-color: #718096;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+        .hero {
+            background-image: url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+        .hero-content {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 8px;
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .about, .services {
+            padding: 60px 0;
+        }
+        .about h2, .services h2 {
+            color: var(--primary-color);
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .service-card {
+            background-color: var(--accent-color);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+        .service-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        .cta {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 60px 0;
+        }
+        .cta h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            background-color: white;
+            color: var(--secondary-color);
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: var(--accent-color);
+        }
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 14px;
+        }
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            .hero p {
+                font-size: 18px;
+            }
+            .about h2, .services h2, .cta h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Martínez & Asociados</div>
+            <div class="nav-links">
+                <a href="#about">Quiénes Somos</a>
+                <a href="#services">Servicios</a>
+                <a href="/login">Acceso Clientes</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Experiencia y Compromiso Legal</h1>
+                <p>Protegiendo sus derechos y asegurando su futuro con soluciones legales personalizadas</p>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <h2>Quiénes Somos</h2>
+                <p>En Martínez & Asociados, nos enorgullecemos de ofrecer servicios legales de la más alta calidad a nuestros clientes desde 1985. Nuestro equipo de abogados altamente calificados combina años de experiencia con un profundo conocimiento de las leyes más recientes para brindar asesoramiento legal experto y representación efectiva.</p>
+                <p>Nos distinguimos por nuestro compromiso con la excelencia, la integridad y la atención personalizada a cada caso. Entendemos que cada situación legal es única, y nos esforzamos por desarrollar estrategias adaptadas a las necesidades específicas de cada cliente.</p>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <div class="container">
+                <h2>Nuestros Servicios</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>Derecho Civil</h3>
+                        <p>Asesoramiento y representación en litigios civiles, contratos y responsabilidad civil.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Derecho Laboral</h3>
+                        <p>Protección de los derechos de empleadores y empleados en disputas laborales.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Derecho Mercantil</h3>
+                        <p>Asistencia en formación de empresas, fusiones y adquisiciones, y contratos comerciales.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Derecho de Familia</h3>
+                        <p>Apoyo en divorcios, custodia de menores y otros asuntos familiares.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="container">
+                <h2>¿Necesita Asesoramiento Legal?</h2>
+                <p>Nuestro equipo está listo para ayudarle. Contáctenos hoy para una consulta inicial gratuita.</p>
+                <a href="#" class="button">Solicitar Consulta</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Estudio Jurídico Martínez & Asociados. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

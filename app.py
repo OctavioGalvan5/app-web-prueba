@@ -35,7 +35,7 @@ def load_user(id):
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    return render_template("index.html")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -103,21 +103,23 @@ def generar_pdf_route():
 
     # Vuelve a cargar la información del usuario para reflejar el cambio en current_user
     login_user(ModelUser.get_by_id(current_user.id))  # Esto actualizará la información del usuario en Flask-Login
+    # Verificar qué botón fue presionado
+    action = request.form.get('action')
 
-    # Generar el PDF
-    pdf_generator = PDFGenerator(
-        autos, expediente, periodo_desde, periodo_hasta,
-        fecha_de_cierre_de_liquidacion, fecha_de_regulacion, 
-        fecha_aprobacion_sentencia, monto_aprobado, monto_aprobado_actualizado
-    )
+    if action == 'generar_pdf':
+        # Generar el PDF
+        pdf_generator = PDFGenerator(
+            autos, expediente, periodo_desde, periodo_hasta,
+            fecha_de_cierre_de_liquidacion, fecha_de_regulacion, 
+            fecha_aprobacion_sentencia, monto_aprobado, monto_aprobado_actualizado
+        )
+        pdf = pdf_generator.generar_pdf()
 
-    pdf = pdf_generator.generar_pdf()
-
-    # Devolver el PDF al navegador
-    response = make_response(pdf)
-    response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline; filename=resultado.pdf'
-    return response
+        # Devolver el PDF para descarga
+        response = make_response(pdf)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
+        return response
 
 @app.route('/formulario_demandas', methods=['GET', 'POST'])
 @login_required
