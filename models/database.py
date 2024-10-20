@@ -16,13 +16,14 @@ engine = create_engine(
 def formatear_dinero(cantidad):
     return format_currency(cantidad, 'ARS', locale='es_AR').replace(u'\xa0', u'')
 
-def buscar_fechas(fecha_ingresada, monto):
+def buscar_fechas(fecha_inicio,fecha_fin, monto):
     # Convertir la fecha ingresada a un objeto datetime.date en formato 'dd/mm/yyyy'
-    fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
-
+    fecha_ingresada_dt = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+    fecha_fin_dt = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
 
     # Lista para almacenar las tuplas de montos
     lista_filas = []
+    lista_montos = []
 
     with engine.connect() as conn:
         # Buscar la fila con la fecha más cercana menor a la ingresada
@@ -48,6 +49,7 @@ def buscar_fechas(fecha_ingresada, monto):
                 formatear_dinero(monto_columna6),
                 formatear_dinero(monto_columna7)
             ))
+            lista_montos.append((monto_columna2,monto_columna3,monto_columna4,monto_columna5,monto_columna6,monto_columna7))
         else:
             print("No se encontró una fecha menor a la ingresada.")
             return []
@@ -80,11 +82,16 @@ def buscar_fechas(fecha_ingresada, monto):
                     formatear_dinero(monto_columna6),
                     formatear_dinero(monto_columna7)
                 ))
+                lista_montos.append((monto_columna2,monto_columna3,monto_columna4,monto_columna5,monto_columna6,monto_columna7))
+
+                # Comparar si el año y el mes son los mismos
+                if fila[1].year == fecha_fin_dt.year and fila[1].month == fecha_fin_dt.month:
+                    break
         else:
             print("No se encontraron filas con fechas mayores a la ingresada.")
             return []
 
-    return lista_filas
+    return lista_filas, lista_montos
 
 def convertir_fecha(fecha):
     """

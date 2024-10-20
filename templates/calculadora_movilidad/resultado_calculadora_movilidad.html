@@ -31,9 +31,56 @@
         th {
             font-weight: bold;
         }
+        .page-break {
+            page-break-before: always;
+        }
     </style>
 </head>
 <body>
+    <table>
+        <tr>
+            <td>-</td>
+            <td>IPC</td>
+            <td>RIPTE</td>
+            <td>UMA</td>
+            <td>Mov.Sentencia</td>
+            <td>Ley 27426 con rezago</td>
+        </tr>
+        <tr>
+            <td>Diferencia con Anses</td>
+            <td> {{ comparacion.dif_anses_ipc }}</td>
+            <td> {{ comparacion.dif_anses_ripte }}</td>
+            <td> {{ comparacion.dif_anses_UMA }}</td>
+            <td> {{ comparacion.dif_anses_sent }}</td>
+            <td> {{ comparacion.dif_anses_ley27426 }}</td>
+        </tr>
+        <tr>
+            <td>Confiscatoriedad por la quita</td>
+            <td>{{ comparacion.conf_anses_ipc }}</td>
+            <td>{{ comparacion.conf_anses_ripte }}</td>
+            <td>{{ comparacion.conf_anses_UMA }}</td>
+            <td>{{ comparacion.conf_anses_sent }}</td>
+            <td>{{ comparacion.conf_anses_ley27426 }}</td>
+        </tr>
+        <tr>
+            <td>Diferencia con el haber de sentencia</td>
+            <td> {{ comparacion.dif_sent_ipc }}</td>
+            <td> {{ comparacion.dif_sent_ripte }}</td>
+            <td> {{ comparacion.dif_sent_UMA }}</td>
+            <td>-</td> <!-- Vacío, ya que no aplica -->
+            <td> {{ comparacion.dif_sent_ley27426 }}</td>
+        </tr>
+        <tr>
+            <td>Confiscatoriedad por la quita</td>
+            <td>{{ comparacion.conf_sent_ipc }}</td>
+            <td>{{ comparacion.conf_sent_ripte }}</td>
+            <td>{{ comparacion.conf_sent_UMA }}</td>
+            <td>-</td> <!-- Vacío, ya que no aplica -->
+            <td>{{ comparacion.conf_sent_ley27426 }}</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
     <table>
         <thead>
             <tr>

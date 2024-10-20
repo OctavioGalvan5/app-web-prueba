@@ -19,6 +19,7 @@ from services.generador_demandas.demanda import Formulario
 from services.calculadora_uma.generador_pdf import PDFGenerator
 from services.calculadora_uma.generador_docx import Documento
 from services.calculadora_movilidad.calculadora import generador_pdf_calculadora_movilidad, calculadora_movilidad
+from services.calculos import formatear_dinero
 # Entities
 from models.entities.User import User
 
@@ -327,18 +328,44 @@ def prueba():
 @login_required
 def resultado_calculado_movilidad():
         # Recibir los datos necesarios del formulario
-        fecha_ingresada = request.form['fecha']
+        fecha_inicio = request.form['fecha_inicio']
+        fecha_fin = request.form['fecha_fin']
+
         monto = float(request.form['monto'])
 
         # Obtener los datos para el PDF
-        lista_filas = buscar_fechas(fecha_ingresada, monto)
+        lista_filas, lista_montos = buscar_fechas(fecha_inicio,fecha_fin, monto)
+        ultimos_valores = lista_montos[-1]
+        diccionario_comparacion = {
+           'dif_anses_ipc': formatear_dinero(ultimos_valores[1] - ultimos_valores[0]),
+           'conf_anses_ipc': str(round((ultimos_valores[1] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+           'dif_sent_ipc': formatear_dinero(ultimos_valores[1] - ultimos_valores[4]),
+           'conf_sent_ipc': str(round((ultimos_valores[1] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
+           #
+           'dif_anses_ripte': formatear_dinero(ultimos_valores[2] - ultimos_valores[0]),
+           'conf_anses_ripte': str(round((ultimos_valores[2] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+           'dif_sent_ripte': formatear_dinero(ultimos_valores[2] - ultimos_valores[4]),
+           'conf_sent_ripte': str(round((ultimos_valores[2] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
+            #
+           'dif_anses_UMA': formatear_dinero(ultimos_valores[3] - ultimos_valores[0]),
+           'conf_anses_UMA': str(round((ultimos_valores[3] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+           'dif_sent_UMA': formatear_dinero(ultimos_valores[3] - ultimos_valores[4]),
+           'conf_sent_UMA': str(round((ultimos_valores[3] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
+            #
+           'dif_anses_sent': formatear_dinero(ultimos_valores[4] - ultimos_valores[0]),
+           'conf_anses_sent': str(round((ultimos_valores[4] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+            #
+           'dif_anses_ley27426': formatear_dinero(ultimos_valores[5] - ultimos_valores[0]),
+           'conf_anses_ley27426': str(round((ultimos_valores[5] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+           'dif_sent_ley27426': formatear_dinero(ultimos_valores[5] - ultimos_valores[4]),
+           'conf_sent_ley27426': str(round((ultimos_valores[5] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%"
+       }
 
-        # Renderizar la plantilla HTML con los datos
         rendered = render_template(
-            'calculadora_movilidad/resultado_calculadora_movilidad.html',  # Asegúrate de que este sea tu archivo HTML correcto
-            filas=lista_filas,
+            'calculadora_movilidad/resultado_calculadora_movilidad.html',  # Archivo HTML
+            filas=lista_filas,  # Pasar otras variables que necesites
+            comparacion=diccionario_comparacion  # Pasar el diccionario a la plantilla
         )
-
         # Crear el PDF en memoria
         pdf_buffer = BytesIO()
         pisa_status = pisa.CreatePDF(rendered, dest=pdf_buffer)
