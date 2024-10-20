@@ -318,11 +318,13 @@ def formulario_demandas():
     return render_template('formulario_demanda.html')
     
 @app.route('/calculadora_movilidad')
+@login_required
 def prueba():
     return render_template('calculadora_movilidad/calculadora_movilidad.html')
 
 
 @app.route('/resultado_calculado_movilidad', methods=['POST'])
+@login_required
 def resultado_calculado_movilidad():
         # Recibir los datos necesarios del formulario
         fecha_ingresada = request.form['fecha']
