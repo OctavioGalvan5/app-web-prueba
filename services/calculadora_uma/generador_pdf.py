@@ -1,8 +1,63 @@
 from xhtml2pdf import pisa
 from io import BytesIO
-from models.database import obtener_acordada, obtener_valor_uma
-from models.calculos import calcular_porcentajes, formatear_dinero, transformar_fecha, calcular_porcentajes_ley_21839
+from models.database import engine
+from services.calculos import calcular_porcentajes, formatear_dinero, transformar_fecha, calcular_porcentajes_ley_21839
 from flask import render_template
+from datetime import datetime
+from sqlalchemy import text
+
+
+def obtener_acordada(fecha_ingresada):
+    # Convertir la fecha ingresada por el usuario a un objeto datetime.date
+    fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
+
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM valor_uma"))
+
+        # Variables para almacenar la fila más cercana
+        fila_cercana = None
+        fecha_cercana = None
+
+        for row in result:
+            fecha_fila = row[1]  # Asumiendo que la segunda columna es la fecha
+            if fecha_fila <= fecha_ingresada_dt:
+                # Comparar para encontrar la fecha más cercana
+                if fecha_cercana is None or fecha_fila > fecha_cercana:
+                    fecha_cercana = fecha_fila
+                    fila_cercana = row
+
+        if fila_cercana:
+            # Extraer el elemento 4
+            acordada = fila_cercana[3]
+            return acordada
+        else:
+            return None
+
+def obtener_valor_uma(fecha_ingresada):
+    fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
+
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM valor_uma"))
+
+        # Variables para almacenar la fila más cercana
+        fila_cercana = None
+        fecha_cercana = None
+
+        for row in result:
+            fecha_fila = row[1]  # Asumiendo que la segunda columna es la fecha
+            if fecha_fila <= fecha_ingresada_dt:
+                # Comparar para encontrar la fecha más cercana
+                if fecha_cercana is None or fecha_fila > fecha_cercana:
+                    fecha_cercana = fecha_fila
+                    fila_cercana = row
+
+        if fila_cercana:
+            # Extraer el elemento 5
+            acordada = fila_cercana[4]
+            return acordada
+        else:
+            return None
+
 
 class PDFGenerator:
   def __init__(self, autos, expediente, periodo_desde, periodo_hasta, fecha_de_cierre_de_liquidacion,
@@ -42,7 +97,7 @@ class PDFGenerator:
       datos = self.obtener_datos()
 
       rendered = render_template(
-          'resultado_calculadora_uma.html',
+          'calculadora_uma/resultado_calculadora_uma.html',
           autos=self.autos,
           expediente=self.expediente,
           periodo_desde=transformar_fecha(self.periodo_desde),

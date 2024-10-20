@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Haberes</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+            background-image: url('static/logoestudiomarca.jpg');
+            background-repeat: no-repeat;
+            background-object-position: 130 270px;
+            background-height: 500px;
+            background-width: 500px;
+            background-opacity: 0.25;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Haber con Anses</th>
+                <th>Haber con IPC</th>
+                <th>Haber con RIPTE</th>
+                <th>Haber con UMA</th>
+                <th>Haber con Movilidad de Sentencia</th>
+                <th>Haber con ley 2700</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in filas %}
+            <tr>
+                <td>{{ fila[0] }}</td>
+                <td>{{ fila[1] }}</td>
+                <td>{{ fila[2] }}</td>
+                <td>{{ fila[3] }}</td>
+                <td>{{ fila[4] }}</td>
+                <td>{{ fila[5] }}</td>
+                <td>{{ fila[6] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

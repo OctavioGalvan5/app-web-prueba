@@ -1,7 +1,37 @@
-from models.database import obtener_porcentajes, obtener_porcentaje_minimo
+
 from babel.numbers import format_currency
 from datetime import datetime
+from models.database import engine
+from sqlalchemy import text
 
+def obtener_porcentajes(valor_ingresado):
+  with engine.connect() as conn:
+      result = conn.execute(text("SELECT * FROM porcentaje_uma"))
+
+      for row in result:
+          valor1 = row[1]  # Asumiendo que la columna 1 es el primer elemento
+          valor2 = row[2]  # Asumiendo que la columna 2 es el segundo elemento
+
+          # Verificar si valor_ingresado está entre valor1 y valor2
+          if valor1 <= valor_ingresado <= valor2:
+              # Devolver el elemento 3 de la fila
+              return row[3]  # Asumiendo que la columna 3 es el tercer elemento
+
+  return None  # Si no se encuentra ningún rango que contenga el valor ingresado
+
+def obtener_porcentaje_minimo(valor_ingresado):
+  with engine.connect() as conn:
+      result = conn.execute(text("SELECT * FROM porcentaje_uma"))
+
+      for row in result:
+          valor1 = row[1]  # Asumiendo que la columna 1 es el primer elemento
+          valor2 = row[2]  # Asumiendo que la columna 2 es el segundo elemento
+
+          # Verificar si valor_ingresado está entre valor1 y valor2
+          if valor1 <= valor_ingresado <= valor2:
+              # Devolver el elemento 3 de la fila
+              return row[4]  # Asumiendo que la columna 3 es el tercer elemento
+  return None  # Si no se encuentra ningún rango que contenga el valor ingresado
 
 def formatear_dinero(cantidad):
     return format_currency(cantidad, 'ARS', locale='es_AR').replace(u'\xa0', u'')
@@ -48,4 +78,12 @@ def calcular_porcentajes_ley_21839(monto):
   criterio_jurisprudencial = sin_excepciones/2
 
   return porcentaje_aplicable, apoderada, sin_excepciones, criterio_jurisprudencial
-  
+
+def convertir_fecha(fecha):
+    """
+    Convierte una fecha de tipo datetime al formato 'dd/mm/yyyy'.
+
+    :param fecha: Un objeto de tipo datetime.
+    :return: Una cadena de texto con la fecha en formato 'dd/mm/yyyy'.
+    """
+    return fecha.strftime('%d/%m/%Y')

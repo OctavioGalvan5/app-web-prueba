@@ -16,6 +16,7 @@ docxtpl = "^0.18.0"
 flask-login = "^0.6.3"
 flask-wtf = "^1.2.1"
 werkzeug = "^3.0.4"
+html2pdf = "^0.1"
 
 
 [build-system]

@@ -5,8 +5,8 @@ from docxtpl import DocxTemplate  # Para trabajar con plantillas de Word
 from docx import Document  # Para manipular documentos de Word
 from flask import send_file  # Para enviar archivos en respuestas HTTP
 from docx.shared import Inches
-from models.calculos import calcular_porcentajes, formatear_dinero, transformar_fecha
-from models.database import obtener_acordada, obtener_valor_uma
+from services.calculos import calcular_porcentajes, formatear_dinero, transformar_fecha
+from services.calculadora_uma.generador_pdf import obtener_acordada, obtener_valor_uma
 class Documento:
         def __init__(self, autos, expediente, periodo_desde, periodo_hasta,
                      fecha_de_cierre_de_liquidacion, fecha_de_regulacion,

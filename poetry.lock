@@ -566,6 +566,16 @@ docs = ["Sphinx", "furo"]
 test = ["objgraph", "psutil"]
 
 [[package]]
+name = "html2pdf"
+version = "0.1"
+description = "Wkhtmltopdf wrapper"
+optional = false
+python-versions = "*"
+files = [
+    {file = "html2pdf-0.1.tar.gz", hash = "sha256:a8876811688017c24636f36b90cadd423c9c324882b5a8369e1bf2a7b2181657"},
+]
+
+[[package]]
 name = "html5lib"
 version = "1.1"
 description = "HTML parser based on the WHATWG HTML specification"
@@ -1679,4 +1689,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "3a634f260baa5b293030a9e0b121e42f6f3393a0d8813039898ff1c83a5c41dc"
+content-hash = "1034aec73d671f6634c28d4cbb41c464dba3960f4064b2445387ab0f2c56d005"

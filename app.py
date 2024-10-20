@@ -9,12 +9,16 @@ from flask_wtf.csrf import CSRFProtect
 from docxtpl import DocxTemplate
 from werkzeug.wrappers import response
 from config import config
+from xhtml2pdf import pisa
+from io import BytesIO
 #Models
-from models.demanda import Formulario
-from models.calculadora_uma.generador_pdf import PDFGenerator
-from models.calculadora_uma.generador_docx import Documento
+from models.database import buscar_fechas
 from models.ModelUser import ModelUser
-
+#Services
+from services.generador_demandas.demanda import Formulario
+from services.calculadora_uma.generador_pdf import PDFGenerator
+from services.calculadora_uma.generador_docx import Documento
+from services.calculadora_movilidad.calculadora import generador_pdf_calculadora_movilidad, calculadora_movilidad
 # Entities
 from models.entities.User import User
 
@@ -68,15 +72,10 @@ def home():
         print('El usuario no está autenticado')  # Esto imprimirá si el usuario no está autenticado
         return redirect(url_for('login'))  # Redirige a la página de login si no está autenticado
 
-@app.route('/calculadora_movilidad')
-@login_required
-def Calculadora_Percibido():
-    return render_template('calculadora_movilidad.html')
-
 @app.route('/calculadora_uma')
 @login_required
 def calculadora_uma():
-    return render_template('/calculadora_uma.html')
+    return render_template('calculadora_uma/calculadora_uma.html')
 
 @app.route('/resultado_uma', methods=['POST'])
 @login_required
@@ -317,8 +316,39 @@ def formulario_demandas():
         return response
 
     return render_template('formulario_demanda.html')
+    
+@app.route('/calculadora_movilidad')
+def prueba():
+    return render_template('calculadora_movilidad/calculadora_movilidad.html')
 
 
+@app.route('/resultado_calculado_movilidad', methods=['POST'])
+def resultado_calculado_movilidad():
+        # Recibir los datos necesarios del formulario
+        fecha_ingresada = request.form['fecha']
+        monto = float(request.form['monto'])
+
+        # Obtener los datos para el PDF
+        lista_filas = buscar_fechas(fecha_ingresada, monto)
+
+        # Renderizar la plantilla HTML con los datos
+        rendered = render_template(
+            'calculadora_movilidad/resultado_calculadora_movilidad.html',  # Asegúrate de que este sea tu archivo HTML correcto
+            filas=lista_filas,
+        )
+
+        # Crear el PDF en memoria
+        pdf_buffer = BytesIO()
+        pisa_status = pisa.CreatePDF(rendered, dest=pdf_buffer)
+
+        if pisa_status.err:
+            # Manejar el error en caso de que la creación del PDF falle
+            return "Error al crear el PDF", 500
+
+        pdf_buffer.seek(0)
+
+        # Enviar el PDF como respuesta
+        return send_file(pdf_buffer, as_attachment=True, download_name='resultado.pdf', mimetype='application/pdf')
 
 
 if __name__ == '__main__':
