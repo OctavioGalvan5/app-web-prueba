@@ -328,9 +328,12 @@ def prueba():
 @login_required
 def resultado_calculado_movilidad():
         # Recibir los datos necesarios del formulario
+        datos_del_actor =  request.form['datos_del_actor']
+        expediente =  request.form['expediente']
+        beneficio =  request.form['beneficio']
         fecha_inicio = request.form['fecha_inicio']
         fecha_fin = request.form['fecha_fin']
-
+        fecha_adquisicion_del_derecho= request.form['fecha_adquisicion_del_derecho']
         monto = float(request.form['monto'])
 
         # Obtener los datos para el PDF
@@ -368,11 +371,17 @@ def resultado_calculado_movilidad():
 
 
         rendered = render_template(
-            'calculadora_movilidad/resultado_calculadora_movilidad.html',  # Archivo HTML
-            filas=lista_filas,  # Pasar otras variables que necesites
-            comparacion=diccionario_comparacion, # Pasar el diccionario a la plantilla
+            'calculadora_movilidad/resultado_calculadora_movilidad.html',
+            filas=lista_filas, 
+            comparacion=diccionario_comparacion, 
             grafico1 = grafico1,
-            grafico2 = grafico2
+            grafico2 = grafico2,
+            monto = formatear_dinero(monto),
+            datos_del_actor = datos_del_actor,
+            expediente = expediente,
+            beneficio = beneficio,
+            fecha_inicio = fecha_inicio,
+            fecha_adquisicion_del_derecho = fecha_adquisicion_del_derecho,
         )
         # Crear el PDF en memoria
         pdf_buffer = BytesIO()
