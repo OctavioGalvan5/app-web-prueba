@@ -7,4 +7,5 @@ babel
 docxtpl
 flask_login
 Flask-WTF
-matplotlib
+plotly
+kaleido
