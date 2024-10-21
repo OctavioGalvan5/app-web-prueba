@@ -18,7 +18,7 @@ from models.ModelUser import ModelUser
 from services.generador_demandas.demanda import Formulario
 from services.calculadora_uma.generador_pdf import PDFGenerator
 from services.calculadora_uma.generador_docx import Documento
-from services.calculadora_movilidad.calculadora import crear_grafico
+from services.calculadora_movilidad.calculadora import crear_grafico, crear_grafico2
 from services.calculos import formatear_dinero
 # Entities
 from models.entities.User import User
@@ -361,10 +361,10 @@ def resultado_calculado_movilidad():
            'conf_sent_ley27426': str(round((ultimos_valores[5] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%"
        }
         datos1 = [round(ultimos_valores[1] - ultimos_valores[0],2), round(ultimos_valores[2] - ultimos_valores[0],2), round(ultimos_valores[3] - ultimos_valores[0],2), round(ultimos_valores[4] - ultimos_valores[0],2), round(ultimos_valores[5] - ultimos_valores[0],2)]
-        grafico1 = crear_grafico(datos1, 'Comparativa de Haberes con Movilidad de Anses')
+        grafico1 = crear_grafico(datos1, '')
 
         datos2 = [round(ultimos_valores[1] - ultimos_valores[4],2), round(ultimos_valores[2] - ultimos_valores[4],2), round(ultimos_valores[3] - ultimos_valores[4],2), round(ultimos_valores[5] - ultimos_valores[4],2)]
-        grafico2 = crear_grafico(datos2, 'Comparativa de Haberes con Movilidad de Sentencia')
+        grafico2 = crear_grafico2(datos2, '')
 
 
         rendered = render_template(

@@ -21,8 +21,9 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            page-break-inside: avoid; /* Evitar saltos de página dentro de la tabla */
-            margin-bottom: 200px; /* Añadir un margen inferior */
+            page-break-inside: avoid;
+            margin-bottom: 30px;
+            margin-top: 30px;
         }
         td {
             border: 1px solid black;
@@ -79,6 +80,11 @@
     </style>
 </head>
 <body>
+    <p>Autos: </p>
+    <p>Periodo tomado: </p>
+    <p>Fecha de Adquicision de derecho: </p>
+    <p>Fecha de pago inicial fijada en la sentencia: </p>
+    <h6>Diferencias entre haber Anses: </h6>
     <table>
         <tr class="font-large first-column-cell2">
             <td style="visibility: hidden;">Indices</td>
@@ -110,8 +116,8 @@
     </div>
 
     <div class="page-break"></div>
-
-    <table>
+    <h6>Diferencias entre haber de Sentencia: </h6>
+    <table style="margin-bottom: 30px">
         <tr class="font-large first-column-cell2">
             <td style="visibility: hidden;">Indices</td>
             <td class="negrita">IPC</td>
@@ -135,10 +141,8 @@
         </tr>
     </table>
     <div>
-        <img src="data:image/png;base64,{{ grafico2 }}" alt="Gráfico 2">
+        <img style="margin-bottom: 150px" src="data:image/png;base64,{{ grafico2 }}" alt="Gráfico 2">
     </div>
-
-    <div class="page-break"></div>
 
     <table>
         <tbody>
