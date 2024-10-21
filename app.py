@@ -18,7 +18,7 @@ from models.ModelUser import ModelUser
 from services.generador_demandas.demanda import Formulario
 from services.calculadora_uma.generador_pdf import PDFGenerator
 from services.calculadora_uma.generador_docx import Documento
-from services.calculadora_movilidad.calculadora import generador_pdf_calculadora_movilidad, calculadora_movilidad
+from services.calculadora_movilidad.calculadora import crear_grafico
 from services.calculos import formatear_dinero
 # Entities
 from models.entities.User import User
@@ -360,11 +360,19 @@ def resultado_calculado_movilidad():
            'dif_sent_ley27426': formatear_dinero(ultimos_valores[5] - ultimos_valores[4]),
            'conf_sent_ley27426': str(round((ultimos_valores[5] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%"
        }
+        datos1 = [round(ultimos_valores[1] - ultimos_valores[0],2), round(ultimos_valores[2] - ultimos_valores[0],2), round(ultimos_valores[3] - ultimos_valores[0],2), round(ultimos_valores[4] - ultimos_valores[0],2), round(ultimos_valores[5] - ultimos_valores[0],2)]
+        grafico1 = crear_grafico(datos1, 'Comparativa de Haberes con Movilidad de Anses')
+
+        datos2 = [round(ultimos_valores[1] - ultimos_valores[4],2), round(ultimos_valores[2] - ultimos_valores[4],2), round(ultimos_valores[3] - ultimos_valores[4],2), round(ultimos_valores[5] - ultimos_valores[4],2)]
+        grafico2 = crear_grafico(datos2, 'Comparativa de Haberes con Movilidad de Sentencia')
+
 
         rendered = render_template(
             'calculadora_movilidad/resultado_calculadora_movilidad.html',  # Archivo HTML
             filas=lista_filas,  # Pasar otras variables que necesites
-            comparacion=diccionario_comparacion  # Pasar el diccionario a la plantilla
+            comparacion=diccionario_comparacion, # Pasar el diccionario a la plantilla
+            grafico1 = grafico1,
+            grafico2 = grafico2
         )
         # Crear el PDF en memoria
         pdf_buffer = BytesIO()

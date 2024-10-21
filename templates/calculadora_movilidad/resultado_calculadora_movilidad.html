@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado {{autos}} {{expediente}} </title>
+    <title>Resultado {{autos}} {{expediente}}</title>
     <style>
         @page {
             size: A4;
@@ -21,7 +21,8 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            page-break-inside: avoid;
+            page-break-inside: avoid; /* Evitar saltos de página dentro de la tabla */
+            margin-bottom: 200px; /* Añadir un margen inferior */
         }
         td {
             border: 1px solid black;
@@ -36,25 +37,18 @@
         .font-large {
             font-size: 13px;
         }
-        /* Estilos del primer cuadro */
         .custom-table {
             border-collapse: collapse;
             width: 100%;
             border: 1px solid #ccc;
             font-family: Arial, sans-serif;
             margin-bottom: 10px;
-            page-break-inside: avoid;
+            page-break-inside: avoid; /* Asegúrate de evitar saltos dentro de la tabla */
         }
         .custom-table td {
             border: 1px solid black;
             padding: 5px;
             text-align: left;
-        }
-        .custom-table .narrow-column {
-            width: 30%; /* Mantén un ancho fijo en la primera columna si lo deseas */
-        }
-        .custom-table .wide-column {
-            /* Elimina el ancho para que la columna se ajuste al contenido automáticamente */
         }
         .header-cell {
             background-color: #f0f0f0;
@@ -68,92 +62,107 @@
             font-weight: bold;
         }
         .page-break {
-            page-break-before: always; /* Salto de página antes de esta tabla */
+            page-break-after: always; /* Asegúrate de que después de esta clase haya un salto de página */
         }
         .first-column-cell2 {
             background-color: #c8daf6;
             font-weight: bold;
-            width: 25%; /* Aumentar el ancho de la primera columna */
-            word-wrap: break-word; /* Ajustar palabra a varias líneas si es necesario */
+            width: 25%;
+            word-wrap: break-word;
             word-break: break-word;
         }
         .first-column-cell3 {
             background-color: #f0f0f0;
             font-weight: bold;
         }
-        .custom-table .narrow-column {
-            width: 30%;
-        }
+        
     </style>
 </head>
-    <body>
-        <table>
-            <tr class="font-large first-column-cell2">
-                <td style="visibility: hidden;">Indices</td>
-                <td class="negrita">IPC</td>
-                <td class="negrita">RIPTE</td>
-                <td class="negrita">UMA</td>
-                <td class="negrita">Movilidad de Sentencia</td>
-                <td class="negrita">Ley 27426 con rezago</td>
-            </tr>
-            <tr class="font-large">
-                <td class="negrita first-column-cell">Diferencia con Anses</td>
-                <td> {{ comparacion.dif_anses_ipc }}</td>
-                <td> {{ comparacion.dif_anses_ripte }}</td>
-                <td> {{ comparacion.dif_anses_UMA }}</td>
-                <td> {{ comparacion.dif_anses_sent }}</td>
-                <td> {{ comparacion.dif_anses_ley27426 }}</td>
-            </tr>
-            <tr class="font-large">
-                <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
-                <td style="color: red;">{{ comparacion.conf_anses_ipc }}</td>
-                <td style="color: red;">{{ comparacion.conf_anses_ripte }}</td>
-                <td style="color: red;">{{ comparacion.conf_anses_UMA }}</td>
-                <td style="color: red;">{{ comparacion.conf_anses_sent }}</td>
-                <td style="color: red;">{{ comparacion.conf_anses_ley27426 }}</td>
-            </tr>
-            <tr class="font-large">
-                <td class="negrita first-column-cell">Diferencia con el haber de sentencia</td>
-                <td> {{ comparacion.dif_sent_ipc }}</td>
-                <td> {{ comparacion.dif_sent_ripte }}</td>
-                <td> {{ comparacion.dif_sent_UMA }}</td>
-                <td>-</td> <!-- Vacío, ya que no aplica -->
-                <td> {{ comparacion.dif_sent_ley27426 }}</td>
-            </tr>
-            <tr class="font-large">
-                <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
-                <td>{{ comparacion.conf_sent_ipc }}</td>
-                <td>{{ comparacion.conf_sent_ripte }}</td>
-                <td>{{ comparacion.conf_sent_UMA }}</td>
-                <td>-</td> <!-- Vacío, ya que no aplica -->
-                <td>{{ comparacion.conf_sent_ley27426 }}</td>
-            </tr>
-        </table>
+<body>
+    <table>
+        <tr class="font-large first-column-cell2">
+            <td style="visibility: hidden;">Indices</td>
+            <td class="negrita">IPC</td>
+            <td class="negrita">RIPTE</td>
+            <td class="negrita">UMA</td>
+            <td class="negrita">Movilidad de Sentencia</td>
+            <td class="negrita">Ley 27426 con rezago</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Diferencia con Anses</td>
+            <td>{{ comparacion.dif_anses_ipc }}</td>
+            <td>{{ comparacion.dif_anses_ripte }}</td>
+            <td>{{ comparacion.dif_anses_UMA }}</td>
+            <td>{{ comparacion.dif_anses_sent }}</td>
+            <td>{{ comparacion.dif_anses_ley27426 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
+            <td style="color: red;">{{ comparacion.conf_anses_ipc }}</td>
+            <td style="color: red;">{{ comparacion.conf_anses_ripte }}</td>
+            <td style="color: red;">{{ comparacion.conf_anses_UMA }}</td>
+            <td style="color: red;">{{ comparacion.conf_anses_sent }}</td>
+            <td style="color: red;">{{ comparacion.conf_anses_ley27426 }}</td>
+        </tr>
+    </table>
+    <div>
+        <img src="data:image/png;base64,{{ grafico1 }}" alt="Gráfico 1">
+    </div>
 
-        <div class="page-break"></div>
-        <table>
-            <tbody>
-                <tr class="font-large first-column-cell2">
-                    <td class="negrita">Fecha</td>
-                    <td class="negrita">Haber con Anses</td>
-                    <td class="negrita">Haber con IPC</td>
-                    <td class="negrita">Haber con RIPTE</td>
-                    <td class="negrita">Haber con UMA</td>
-                    <td class="negrita">Haber con Movilidad de Sentencia</td>
-                    <td class="negrita">Haber con Ley 27426 con rezago</td>
-                </tr>
-                {% for fila in filas %}
-                <tr class="font-large">
-                    <td class="first-column-cell3">{{ fila[0] }}</td>
-                    <td>{{ fila[1] }}</td>
-                    <td>{{ fila[2] }}</td>
-                    <td>{{ fila[3] }}</td>
-                    <td>{{ fila[4] }}</td>
-                    <td>{{ fila[5] }}</td>
-                    <td>{{ fila[6] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </body>
-    </html>
+    <div class="page-break"></div>
+
+    <table>
+        <tr class="font-large first-column-cell2">
+            <td style="visibility: hidden;">Indices</td>
+            <td class="negrita">IPC</td>
+            <td class="negrita">RIPTE</td>
+            <td class="negrita">UMA</td>
+            <td class="negrita">Ley 27426 con rezago</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Diferencia con el haber de sentencia</td>
+            <td>{{ comparacion.dif_sent_ipc }}</td>
+            <td>{{ comparacion.dif_sent_ripte }}</td>
+            <td>{{ comparacion.dif_sent_UMA }}</td>
+            <td>{{ comparacion.dif_sent_ley27426 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
+            <td style="color: red;">{{ comparacion.conf_sent_ipc }}</td>
+            <td style="color: red;">{{ comparacion.conf_sent_ripte }}</td>
+            <td style="color: red;">{{ comparacion.conf_sent_UMA }}</td>
+            <td style="color: red;">{{ comparacion.conf_sent_ley27426 }}</td>
+        </tr>
+    </table>
+    <div>
+        <img src="data:image/png;base64,{{ grafico2 }}" alt="Gráfico 2">
+    </div>
+
+    <div class="page-break"></div>
+
+    <table>
+        <tbody>
+            <tr class="font-large first-column-cell2">
+                <td class="negrita">Fecha</td>
+                <td class="negrita">Haber con Anses</td>
+                <td class="negrita">Haber con IPC</td>
+                <td class="negrita">Haber con RIPTE</td>
+                <td class="negrita">Haber con UMA</td>
+                <td class="negrita">Haber con Movilidad de Sentencia</td>
+                <td class="negrita">Haber con Ley 27426 con rezago</td>
+            </tr>
+            {% for fila in filas %}
+            <tr class="font-large">
+                <td class="first-column-cell3">{{ fila[0] }}</td>
+                <td style="color: blue;">{{ fila[1] }}</td>
+                <td style="color: blue;">{{ fila[2] }}</td>
+                <td style="color: blue;">{{ fila[3] }}</td>
+                <td style="color: blue;">{{ fila[4] }}</td>
+                <td style="color: blue;">{{ fila[5] }}</td>
+                <td style="color: blue;">{{ fila[6] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
