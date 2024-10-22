@@ -13,21 +13,38 @@
             background-object-position: 130 270px;
             background-height: 500px;
             background-width: 500px;
-            background-opacity: 0.25;
+            background-opacity: 0.1;
         }
         body {
-            font-size: 13px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+        h1 {
+            font-size: 24px;
+            color: #1a365d;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h6 {
+            font-size: 16px;
+            color: #2c5282;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin: 5px 0;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             page-break-inside: avoid;
-            margin-bottom: 30px;
-            margin-top: 30px;
+            margin-bottom: 20px;
         }
         td {
-            border: 1px solid black;
-            padding: 4px;
+            border: 1px solid #ccc;
+            padding: 6px;
             text-align: left;
             word-wrap: break-word;
             white-space: normal;
@@ -36,60 +53,63 @@
             font-weight: bold;
         }
         .font-large {
-            font-size: 13px;
+            font-size: 12px;
         }
-        .custom-table {
-            border-collapse: collapse;
-            width: 100%;
-            border: 1px solid #ccc;
-            font-family: Arial, sans-serif;
-            margin-bottom: 10px;
-            page-break-inside: avoid; /* Asegúrate de evitar saltos dentro de la tabla */
-        }
-        .custom-table td {
-            border: 1px solid black;
-            padding: 5px;
-            text-align: left;
-        }
-        .header-cell {
-            background-color: #f0f0f0;
+        .first-column-cell2 {
+            background-color: #e2e8f0;
             font-weight: bold;
-        }
-        .regular-cell {
-            background-color: #f9f9f9;
+            width: 25%;
         }
         .first-column-cell {
             background-color: #f0f0f0;
             font-weight: bold;
         }
-        .page-break {
-            page-break-after: always; /* Asegúrate de que después de esta clase haya un salto de página */
-        }
-        .first-column-cell2 {
-            background-color: #c8daf6;
-            font-weight: bold;
-            width: 25%;
-            word-wrap: break-word;
-            word-break: break-word;
-        }
         .first-column-cell3 {
             background-color: #f0f0f0;
             font-weight: bold;
         }
-        
+        .page-break {
+            page-break-after: always;
+        }
+        .info-section {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .graph-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .graph-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        .confiscatoriedad {
+            color: #e53e3e;
+        }
+        .haber {
+            color: #2b6cb0;
+        }
     </style>
 </head>
 <body>
-    <p>Datos del actor: {{datos_del_actor}} </p>
-    <p>Expediente: {{expediente}}</p>
-    <p>Beneficio: {{beneficio}}</p>
-    <p>Fecha de adquisicion del derecho: {{fecha_adquisicion_del_derecho}}</p>
-    <p>Haber de partida: {{monto}} </p>
-    <p>Fecha del haber de partida: {{fecha_inicio}} </p>
-    <h6>Diferencias entre haber Anses: </h6>
+    <h1>Resultados de Calculadora de Movilidad</h1>
+
+    <div class="info-section">
+        <p><strong>Datos del actor:</strong> {{datos_del_actor}}</p>
+        <p><strong>Expediente:</strong> {{expediente}}</p>
+        <p><strong>Beneficio:</strong> {{beneficio}}</p>
+        <p><strong>Fecha de adquisición del derecho:</strong> {{fecha_adquisicion_del_derecho}}</p>
+        <p><strong>Haber de partida:</strong> {{monto}}</p>
+        <p><strong>Fecha del haber de partida:</strong> {{fecha_inicio}}</p>
+    </div>
+
+    <h6>Diferencias entre haber Anses:</h6>
     <table>
         <tr class="font-large first-column-cell2">
-            <td style="visibility: hidden;">Indices</td>
+            <td style="visibility: hidden;">Índices</td>
             <td class="negrita">IPC</td>
             <td class="negrita">RIPTE</td>
             <td class="negrita">UMA</td>
@@ -106,22 +126,24 @@
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
-            <td style="color: red;">{{ comparacion.conf_anses_ipc }}</td>
-            <td style="color: red;">{{ comparacion.conf_anses_ripte }}</td>
-            <td style="color: red;">{{ comparacion.conf_anses_UMA }}</td>
-            <td style="color: red;">{{ comparacion.conf_anses_sent }}</td>
-            <td style="color: red;">{{ comparacion.conf_anses_ley27426 }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_ipc }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_ripte }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_UMA }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_sent }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_ley27426 }}</td>
         </tr>
     </table>
-    <div>
-        <img src="data:image/png;base64,{{ grafico1 }}" alt="Gráfico 1">
+
+    <div class="graph-container">
+        <img src="data:image/png;base64,{{ grafico1 }}" alt="Gráfico comparativo de haberes Anses">
     </div>
 
     <div class="page-break"></div>
-    <h6>Diferencias entre haber de Sentencia: </h6>
-    <table style="margin-bottom: 30px">
+
+    <h6>Diferencias entre haber de Sentencia:</h6>
+    <table>
         <tr class="font-large first-column-cell2">
-            <td style="visibility: hidden;">Indices</td>
+            <td style="visibility: hidden;">Índices</td>
             <td class="negrita">IPC</td>
             <td class="negrita">RIPTE</td>
             <td class="negrita">UMA</td>
@@ -136,18 +158,20 @@
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
-            <td style="color: red;">{{ comparacion.conf_sent_ipc }}</td>
-            <td style="color: red;">{{ comparacion.conf_sent_ripte }}</td>
-            <td style="color: red;">{{ comparacion.conf_sent_UMA }}</td>
-            <td style="color: red;">{{ comparacion.conf_sent_ley27426 }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_sent_ipc }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_sent_ripte }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_sent_UMA }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_sent_ley27426 }}</td>
         </tr>
     </table>
-    <div>
-        <img style="margin-bottom: 150px" src="data:image/png;base64,{{ grafico2 }}" alt="Gráfico 2">
+
+    <div class="graph-container">
+        <img src="data:image/png;base64,{{ grafico2 }}" alt="Gráfico comparativo de haberes de Sentencia">
     </div>
 
+    <h6>Comparativa de Haberes:</h6>
     <table>
-        <tbody>
+        <thead>
             <tr class="font-large first-column-cell2">
                 <td class="negrita">Fecha</td>
                 <td class="negrita">Haber con Anses</td>
@@ -157,15 +181,17 @@
                 <td class="negrita">Haber con Movilidad de Sentencia</td>
                 <td class="negrita">Haber con Ley 27426 con rezago</td>
             </tr>
+        </thead>
+        <tbody>
             {% for fila in filas %}
             <tr class="font-large">
                 <td class="first-column-cell3">{{ fila[0] }}</td>
-                <td style="color: blue;">{{ fila[1] }}</td>
-                <td style="color: blue;">{{ fila[2] }}</td>
-                <td style="color: blue;">{{ fila[3] }}</td>
-                <td style="color: blue;">{{ fila[4] }}</td>
-                <td style="color: blue;">{{ fila[5] }}</td>
-                <td style="color: blue;">{{ fila[6] }}</td>
+                <td class="haber">{{ fila[1] }}</td>
+                <td class="haber">{{ fila[2] }}</td>
+                <td class="haber">{{ fila[3] }}</td>
+                <td class="haber">{{ fila[4] }}</td>
+                <td class="haber">{{ fila[5] }}</td>
+                <td class="haber">{{ fila[6] }}</td>
             </tr>
             {% endfor %}
         </tbody>

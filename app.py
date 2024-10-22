@@ -19,7 +19,7 @@ from services.generador_demandas.demanda import Formulario
 from services.calculadora_uma.generador_pdf import PDFGenerator
 from services.calculadora_uma.generador_docx import Documento
 from services.calculadora_movilidad.calculadora import crear_grafico, crear_grafico2
-from services.calculos import formatear_dinero
+from services.calculos import formatear_dinero, transformar_fecha
 # Entities
 from models.entities.User import User
 
@@ -327,13 +327,21 @@ def prueba():
 @app.route('/resultado_calculado_movilidad', methods=['POST'])
 @login_required
 def resultado_calculado_movilidad():
+        if current_user.credito <= 0:
+            flash("No tienes suficientes créditos para realizar esta operación.")
+            return redirect(url_for('prueba'))
+        current_user.credito -= 1
+        ModelUser.update_credito(current_user.id, current_user.credito)  # Actualiza el crédito en la base de datos
+
+        # Vuelve a cargar la información del usuario para reflejar el cambio en current_user
+        login_user(ModelUser.get_by_id(current_user.id))  # Esto actualizará la información del usuario en Flask-Login
         # Recibir los datos necesarios del formulario
         datos_del_actor =  request.form['datos_del_actor']
         expediente =  request.form['expediente']
         beneficio =  request.form['beneficio']
         fecha_inicio = request.form['fecha_inicio']
         fecha_fin = request.form['fecha_fin']
-        fecha_adquisicion_del_derecho= request.form['fecha_adquisicion_del_derecho']
+        fecha_adquisicion_del_derecho= transformar_fecha(request.form['fecha_adquisicion_del_derecho'])
         monto = float(request.form['monto'])
 
         # Obtener los datos para el PDF
@@ -380,7 +388,7 @@ def resultado_calculado_movilidad():
             datos_del_actor = datos_del_actor,
             expediente = expediente,
             beneficio = beneficio,
-            fecha_inicio = fecha_inicio,
+            fecha_inicio = transformar_fecha(fecha_inicio),
             fecha_adquisicion_del_derecho = fecha_adquisicion_del_derecho,
         )
         # Crear el PDF en memoria
