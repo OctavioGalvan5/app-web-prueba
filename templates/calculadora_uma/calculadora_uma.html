@@ -171,6 +171,48 @@
         .dropZone.hover {
             border-color: #00f;
         }
+        .label-with-icon {
+            display: flex;
+            align-items: center;
+        }
+        .info-icon {
+            margin-left: 5px;
+            cursor: help;
+            position: relative;
+        }
+        .info-icon::after {
+            content: "?";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #1e88e5;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .info-icon .tooltip {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .info-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -256,7 +298,13 @@
             </div>
             <div id="EscritoSection" class="form-group" style="display: none">
                 <div class="form-group">
-                    <label for="fechaRegulacion">Sentencia de trance :</label>
+                    <label for="fechaRegulacion" class="label-with-icon">
+                        Sentencia de trance
+                        <span class="info-icon">
+                            <!-- El icono de información -->
+                            <span class="tooltip">Fecha en la que se dictó la sentencia de trance</span>
+                        </span>
+                    </label>
                     <input type="date" name="fecha_de_sentencia_de_trance">
                 </div>
                 <div class="form-group">
