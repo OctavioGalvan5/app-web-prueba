@@ -11,8 +11,10 @@ def crear_grafico(datos, nombre_grafico):
     fig = go.Figure(data=go.Bar(
         x=etiquetas, 
         y=valores, 
-        marker_color=['blue', 'orange', 'green', 'red', 'purple'],
-        text=resultados, textposition='auto'
+         marker_color=['#7671FA', '#E5EAF3', '#07244C', '#178DAD', '#7E7F9C'],
+        text=resultados, textposition='auto',
+        textfont=dict(size=14)
+        
     ))
 
     # Actualizar el diseño del gráfico
@@ -44,7 +46,7 @@ def crear_grafico2(datos, nombre_grafico):
     fig = go.Figure(data=go.Bar(
         x=etiquetas, 
         y=valores, 
-        marker_color=['blue', 'orange', 'green', 'purple'],
+        marker_color=['#7671FA', '#E5EAF3', '#07244C', '#7E7F9C'],
         text=resultados, textposition='auto'
     ))
 

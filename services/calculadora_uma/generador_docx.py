@@ -12,7 +12,7 @@ class Documento:
                      fecha_de_cierre_de_liquidacion, fecha_de_regulacion,
                      fecha_aprobacion_sentencia, monto_aprobado,
                      monto_aprobado_actualizado, deuda, intereses,
-                     imagenCapturaSentencia, imagenMonto):
+                     imagenCapturaSentencia, imagenMonto, fecha_de_sentencia_de_trance):
             self.autos = autos
             self.expediente = expediente
             self.periodo_desde = periodo_desde
@@ -26,6 +26,7 @@ class Documento:
             self.intereses = intereses
             self.imagenCapturaSentencia = imagenCapturaSentencia
             self.imagenMonto = imagenMonto
+            self.fecha_de_sentencia_de_trance = fecha_de_sentencia_de_trance
 
         def obtener_datos(self):
               datos = {}
@@ -59,6 +60,7 @@ class Documento:
               datos['intereses'] = formatear_dinero(float(self.intereses))
               datos['imagenCapturaSentencia'] = self.imagenCapturaSentencia
               datos['imagenMonto'] = self.imagenMonto
+              datos['fecha_de_sentencia_de_trance'] = transformar_fecha(self.fecha_de_sentencia_de_trance)
 
               datos['UMA_fecha_de_regulacion'] = formatear_dinero(obtener_valor_uma(self.fecha_de_regulacion))
               datos['UMA_fecha_de_cierre_de_liquidacion'] = formatear_dinero(obtener_valor_uma(self.fecha_de_cierre_de_liquidacion))

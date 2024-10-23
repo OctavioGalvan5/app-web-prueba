@@ -96,6 +96,7 @@ def generar_pdf_route():
     fecha_aprobacion_sentencia = request.form.get('Fecha_Aprobacion_Sentencia')
     monto_aprobado = request.form.get('Monto_Aprobado')
     monto_aprobado_actualizado = request.form.get('Monto_Aprobado_Actualizado')
+    
    
     
 
@@ -124,6 +125,7 @@ def generar_pdf_route():
         return response
         
     if action == 'generar_escrito':
+        fecha_de_sentencia_de_trance = request.form.get('fecha_de_sentencia_de_trance')
         deuda = request.form.get('Deuda')
         intereses = request.form.get('Intereses')
         imagenCapturaSentencia = request.files['imagenCapturaSentencia']
@@ -134,7 +136,7 @@ def generar_pdf_route():
             fecha_de_cierre_de_liquidacion, fecha_de_regulacion,
             fecha_aprobacion_sentencia, monto_aprobado,
             monto_aprobado_actualizado, deuda, intereses,
-            imagenCapturaSentencia, imagenMonto
+            imagenCapturaSentencia, imagenMonto,fecha_de_sentencia_de_trance
         )
 
         # Llama al método para procesar imágenes y generar el documento
