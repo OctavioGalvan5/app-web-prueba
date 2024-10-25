@@ -406,6 +406,10 @@ def resultado_calculado_movilidad():
         # Enviar el PDF como respuesta
         return send_file(pdf_buffer, as_attachment=True, download_name='resultado.pdf', mimetype='application/pdf')
 
+@app.route('/generador_regulacion')
+@login_required
+def generador_regulacion():
+    return render_template('escritos_regulacion/formulario_regulacion.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Liquidación Ampliado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .checkbox-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .conditional-section {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .read-only {
+            background-color: #f0f0f0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <form id="liquidacionForm">
+        <h2>Formulario de Liquidación Ampliado</h2>
+
+        <label for="autos">Cliente:</label>
+        <input type="text" id="autos" name="autos" required>
+
+        <label for="expediente">Expediente:</label>
+        <input type="text" id="expediente" name="expediente" required>
+
+        <h3>Liquidación ordinaria:</h3>
+
+        <label for="fecha_aprobacion_planilla">Fecha de aprobación de planilla inicial de retroactivo:</label>
+        <input type="date" id="fecha_aprobacion_planilla" name="fecha_aprobacion_planilla" required>
+
+        <label for="monto_aprobacion_planilla">Monto de primera liquidación presentada:</label>
+        <input type="number" id="monto_aprobacion_planilla" name="monto_aprobacion_planilla" step="0.01" required>
+
+        <label for="fecha_comienzo_planilla">Fecha de donde comienza el cálculo de la planilla de liquidación:</label>
+        <input type="date" id="fecha_comienzo_planilla" name="fecha_comienzo_planilla" required>
+
+        <label for="fecha_corte_planilla">Fecha en la cual se corta el cálculo de la planilla de liquidación:</label>
+        <input type="date" id="fecha_corte_planilla" name="fecha_corte_planilla" required>
+
+        <label for="interés_planilla">Porcentaje del interés de planilla por tasa pasiva (xx,xx%):</label>
+        <input type="text" id="interés_planilla" name="interés_planilla" pattern="\d{1,2},\d{2}%" required>
+
+        <label for="monto_interes_planilla">Monto del interés:</label>
+        <input type="number" id="monto_interes_planilla" name="monto_interes_planilla" step="0.01" required>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="costas_orden" name="costas_orden">
+            <label for="costas_orden">Costas no son para ANSES</label>
+        </div>
+
+        <div id="costasAdicionales" class="conditional-section">
+            <label for="sentencia_interlocutoria_costas">Sentencia en la cual las costas se pasan a ANSES:</label>
+            <input type="text" id="sentencia_interlocutoria_costas" name="sentencia_interlocutoria_costas">
+        </div>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="sentencia_trance_liquidacion" name="sentencia_trance_liquidacion">
+            <label for="sentencia_trance_liquidacion">La liquidación tiene sentencia de trance</label>
+        </div>
+
+        <div id="sentenciaTranceSection" class="conditional-section">
+            <label for="fecha_sentencia_trance_liquidacion">Fecha de sentencia de trance de liquidación:</label>
+            <input type="date" id="fecha_sentencia_trance_liquidacion" name="fecha_sentencia_trance_liquidacion">
+
+            <label for="fecha_pago_planilla">Fecha de pago de planilla:</label>
+            <input type="date" id="fecha_pago_planilla" name="fecha_pago_planilla">
+
+            <label for="interés_planilla_trance">Interés de planilla de trance (xx,xx%):</label>
+            <input type="text" id="interés_planilla_trance" name="interés_planilla_trance" pattern="\d{1,2},\d{2}%">
+
+            <label for="monto_interes_planilla_trance">Monto de interés de planilla de trance:</label>
+            <input type="number" id="monto_interes_planilla_trance" name="monto_interes_planilla_trance" step="0.01">
+
+            <label for="monto_total_planilla_trance">Monto total de planilla de trance:</label>
+            <input type="number" id="monto_total_planilla_trance" name="monto_total_planilla_trance" class="read-only" readonly>
+
+            <label for="valor_uma_fecha_pago_planilla">Valor UMA en fecha de pago de planilla:</label>
+            <input type="number" id="valor_uma_fecha_pago_planilla" name="valor_uma_fecha_pago_planilla" class="read-only" readonly>
+
+            <label for="acordada_fecha_pago_planilla">Acordada en fecha de pago de planilla:</label>
+            <input type="text" id="acordada_fecha_pago_planilla" name="acordada_fecha_pago_planilla" class="read-only" readonly>
+        </div>
+
+        <div class="checkbox-container">
+            <input type="checkbox" id="planilla_ampliacion" name="planilla_ampliacion">
+            <label for="planilla_ampliacion">Hay una planilla de ampliación presentada</label>
+        </div>
+
+        <div id="planillaAmpliacionSection" class="conditional-section">
+            <label for="fecha_aprobacion_planilla_ampliacion">Fecha de aprobación de la planilla de ampliación:</label>
+            <input type="date" id="fecha_aprobacion_planilla_ampliacion" name="fecha_aprobacion_planilla_ampliacion">
+
+            <label for="monto_ampliacion">Monto aprobado de la planilla de ampliación:</label>
+            <input type="number" id="monto_ampliacion" name="monto_ampliacion" step="0.01">
+
+            <label for="fecha_inicio">Fecha de inicio de liquidación:</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio">
+
+            <label for="fecha_corte">Fecha de corte del cálculo de la planilla de ampliación:</label>
+            <input type="date" id="fecha_corte" name="fecha_corte">
+
+            <label for="interes">Interés (xx,xx%):</label>
+            <input type="text" id="interes" name="interes" pattern="\d{1,2},\d{2}%">
+
+            <label for="monto_interes">Monto del interés:</label>
+            <input type="number" id="monto_interes" name="monto_interes" step="0.01">
+
+            <label for="monto_total">Monto total (suma del monto interés más monto ampliación):</label>
+            <input type="number" id="monto_total" name="monto_total" class="read-only" readonly>
+
+            <label for="valor_uma_fecha_aprobacion_planilla_ampliacion">Valor UMA en fecha de aprobación de planilla de ampliación:</label>
+            <input type="number" id="valor_uma_fecha_aprobacion_planilla_ampliacion" name="valor_uma_fecha_aprobacion_planilla_ampliacion" class="read-only" readonly>
+
+            <label for="acordada_fecha_aprobacion_planilla_ampliacion">Acordada en fecha de aprobación de planilla de ampliación:</label>
+            <input type="text" id="acordada_fecha_aprobacion_planilla_ampliacion" name="acordada_fecha_aprobacion_planilla_ampliacion" class="read-only" readonly>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="costas_a_su_orden" name="costas_a_su_orden">
+                <label for="costas_a_su_orden">Las costas no fueron a ANSES</label>
+            </div>
+
+            <div id="costasAsuOrdenSection" class="conditional-section">
+                <label for="fecha_sentencia_interlocutoria">Fecha de la sentencia en la cual las costas se imponen a ANSES:</label>
+                <input type="date" id="fecha_sentencia_interlocutoria" name="fecha_sentencia_interlocutoria">
+            </div>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="sentencia_trance" name="sentencia_trance">
+                <label for="sentencia_trance">Hay sentencia de trance de la planilla de liquidación</label>
+            </div>
+
+            <div id="sentenciaTranceAmpliacionSection" class="conditional-section">
+                <label for="sentencia_trance_fecha">Fecha de la sentencia de trance:</label>
+                <input type="date" id="sentencia_trance_fecha" name="sentencia_trance">
+
+                <label for="fecha_pago">Fecha del pago de la planilla de sentencia de trance:</label>
+                <input type="date" id="fecha_pago" name="fecha_pago">
+
+                <label for="interes_trance">Interés de trance (xx,xx%):</label>
+                <input type="text" id="interes_trance" name="interes_trance" pattern="\d{1,2},\d{2}%">
+
+                <label for="monto_interes_trance">Monto del interés de trance:</label>
+                <input type="number" id="monto_interes_trance" name="monto_interes_trance" step="0.01">
+
+                <label for="monto_total_trance">Monto total de trance (suma de monto_interes_trance y monto_ampliacion):</label>
+                <input type="number" id="monto_total_trance" name="monto_total_trance" class="read-only" readonly>
+
+                <label for="valor_uma_fecha_pago">Valor UMA en fecha de pago:</label>
+                <input type="number" id="valor_uma_fecha_pago" name="valor_uma_fecha_pago" class="read-only" readonly>
+
+                <label for="acordada_fecha_pago">Acordada en fecha de pago:</label>
+                <input type="text" id="acordada_fecha_pago" name="acordada_fecha_pago" class="read-only" readonly>
+            </div>
+        </div>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('liquidacionForm');
+            const checkboxes = {
+                costas_orden: document.getElementById('costas_orden'),
+                sentencia_trance_liquidacion: document.getElementById('sentencia_trance_liquidacion'),
+                planilla_ampliacion: document.getElementById('planilla_ampliacion'),
+                costas_a_su_orden: document.getElementById('costas_a_su_orden'),
+                sentencia_trance: document.getElementById('sentencia_trance')
+            };
+            const sections = {
+                costasAdicionales: document.getElementById('costasAdicionales'),
+                sentenciaTranceSection: document.getElementById('sentenciaTranceSection'),
+                planillaAmpliacionSection: document.getElementById('planillaAmpliacionSection'),
+                costasAsuOrdenSection: document.getElementById('costasAsuOrdenSection'),
+                sentenciaTranceAmpliacionSection: document.getElementById('sentenciaTranceAmpliacionSection')
+            };
+
+            function toggleSection(checkbox, section) {
+                checkbox.addEventListener('change', function() {
+                    section.style.display = this.checked ? 'block' : 'none';
+                });
+            }
+
+            toggleSection(checkboxes.costas_orden, sections.costasAdicionales);
+            toggleSection(checkboxes.sentencia_trance_liquidacion, sections.sentenciaTranceSection);
+            toggleSection(checkboxes.planilla_ampliacion, sections.planillaAmpliacionSection);
+            toggleSection(checkboxes.costas_a_su_orden, sections.costasAsuOrdenSection);
+            toggleSection(checkboxes.sentencia_trance, sections.sentenciaTranceAmpliacionSection);
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Aquí puedes agregar la lógica para manejar el envío del formulario
+                console.log('Formulario enviado');
+            });
+        });
+    </script>
+</body>
+
+</html>
