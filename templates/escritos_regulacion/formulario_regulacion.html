@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Liquidación Ampliado</title>
+    <title>Formulario de Liquidación Completo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,6 +19,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 800px;
             margin: 0 auto;
+            margin-top: 50px;
         }
         h2, h3 {
             color: #333;
@@ -71,8 +72,9 @@
     </style>
 </head>
 <body>
-    <form id="liquidacionForm">
-        <h2>Formulario de Liquidación Ampliado</h2>
+    {% include 'navs/nav.html' %}
+    <form id="liquidacionForm" action="{{ url_for('resultado_regulacion') }}" method="POST">
+        <h2>Formulario de Liquidación Completo</h2>
 
         <label for="autos">Cliente:</label>
         <input type="text" id="autos" name="autos" required>
@@ -86,7 +88,12 @@
         <input type="date" id="fecha_aprobacion_planilla" name="fecha_aprobacion_planilla" required>
 
         <label for="monto_aprobacion_planilla">Monto de primera liquidación presentada:</label>
-        <input type="number" id="monto_aprobacion_planilla" name="monto_aprobacion_planilla" step="0.01" required>
+        <input type="text" id="monto_aprobacion_planilla" name="monto_aprobacion_planilla" 
+               placeholder="Ingrese el monto actualizado" 
+               pattern="^\d+(\.\d{2})?$" 
+               title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+               style="padding-left: 25px;" 
+               required />
 
         <label for="fecha_comienzo_planilla">Fecha de donde comienza el cálculo de la planilla de liquidación:</label>
         <input type="date" id="fecha_comienzo_planilla" name="fecha_comienzo_planilla" required>
@@ -94,11 +101,17 @@
         <label for="fecha_corte_planilla">Fecha en la cual se corta el cálculo de la planilla de liquidación:</label>
         <input type="date" id="fecha_corte_planilla" name="fecha_corte_planilla" required>
 
-        <label for="interés_planilla">Porcentaje del interés de planilla por tasa pasiva (xx,xx%):</label>
-        <input type="text" id="interés_planilla" name="interés_planilla" pattern="\d{1,2},\d{2}%" required>
+        <label for="interes_planilla">Porcentaje del interés de planilla por tasa pasiva (xx,xx%):</label>
+        <input type="text" id="interes_planilla" name="interes_planilla" required>
 
         <label for="monto_interes_planilla">Monto del interés:</label>
-        <input type="number" id="monto_interes_planilla" name="monto_interes_planilla" step="0.01" required>
+        <input type="text" id="monto_interes_planilla" name="monto_interes_planilla" 
+               placeholder="Ingrese el monto actualizado" 
+               pattern="^\d+(\.\d{2})?$" 
+               title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+               style="padding-left: 25px;" 
+               required />
+
 
         <div class="checkbox-container">
             <input type="checkbox" id="costas_orden" name="costas_orden">
@@ -107,8 +120,11 @@
 
         <div id="costasAdicionales" class="conditional-section">
             <label for="sentencia_interlocutoria_costas">Sentencia en la cual las costas se pasan a ANSES:</label>
-            <input type="text" id="sentencia_interlocutoria_costas" name="sentencia_interlocutoria_costas">
+            <input type="date" id="sentencia_interlocutoria_costas" name="sentencia_interlocutoria_costas">
         </div>
+
+        <label for="fecha_sentencia_apelacion">Fecha de sentencia de apelación:</label>
+        <input type="date" id="fecha_sentencia_apelacion" name="fecha_sentencia_apelacion">
 
         <div class="checkbox-container">
             <input type="checkbox" id="sentencia_trance_liquidacion" name="sentencia_trance_liquidacion">
@@ -122,20 +138,15 @@
             <label for="fecha_pago_planilla">Fecha de pago de planilla:</label>
             <input type="date" id="fecha_pago_planilla" name="fecha_pago_planilla">
 
-            <label for="interés_planilla_trance">Interés de planilla de trance (xx,xx%):</label>
-            <input type="text" id="interés_planilla_trance" name="interés_planilla_trance" pattern="\d{1,2},\d{2}%">
+            <label for="interes_planilla_trance">Interés de planilla de trance (xx,xx%):</label>
+            <input type="text" id="interes_planilla_trance" name="interes_planilla_trance">
 
             <label for="monto_interes_planilla_trance">Monto de interés de planilla de trance:</label>
-            <input type="number" id="monto_interes_planilla_trance" name="monto_interes_planilla_trance" step="0.01">
-
-            <label for="monto_total_planilla_trance">Monto total de planilla de trance:</label>
-            <input type="number" id="monto_total_planilla_trance" name="monto_total_planilla_trance" class="read-only" readonly>
-
-            <label for="valor_uma_fecha_pago_planilla">Valor UMA en fecha de pago de planilla:</label>
-            <input type="number" id="valor_uma_fecha_pago_planilla" name="valor_uma_fecha_pago_planilla" class="read-only" readonly>
-
-            <label for="acordada_fecha_pago_planilla">Acordada en fecha de pago de planilla:</label>
-            <input type="text" id="acordada_fecha_pago_planilla" name="acordada_fecha_pago_planilla" class="read-only" readonly>
+            <input type="text" id="monto_interes_planilla_trance" name="monto_interes_planilla_trance" 
+                   placeholder="Ingrese el monto actualizado" 
+                   pattern="^\d+(\.\d{2})?$" 
+                   title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                   style="padding-left: 25px;"/>
         </div>
 
         <div class="checkbox-container">
@@ -148,7 +159,11 @@
             <input type="date" id="fecha_aprobacion_planilla_ampliacion" name="fecha_aprobacion_planilla_ampliacion">
 
             <label for="monto_ampliacion">Monto aprobado de la planilla de ampliación:</label>
-            <input type="number" id="monto_ampliacion" name="monto_ampliacion" step="0.01">
+            <input type="text" id="monto_ampliacion" name="monto_ampliacion" 
+                   placeholder="Ingrese el monto actualizado" 
+                   pattern="^\d+(\.\d{2})?$" 
+                   title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                   style="padding-left: 25px;" />
 
             <label for="fecha_inicio">Fecha de inicio de liquidación:</label>
             <input type="date" id="fecha_inicio" name="fecha_inicio">
@@ -157,19 +172,14 @@
             <input type="date" id="fecha_corte" name="fecha_corte">
 
             <label for="interes">Interés (xx,xx%):</label>
-            <input type="text" id="interes" name="interes" pattern="\d{1,2},\d{2}%">
+            <input type="text" id="interes" name="interes">
 
             <label for="monto_interes">Monto del interés:</label>
-            <input type="number" id="monto_interes" name="monto_interes" step="0.01">
-
-            <label for="monto_total">Monto total (suma del monto interés más monto ampliación):</label>
-            <input type="number" id="monto_total" name="monto_total" class="read-only" readonly>
-
-            <label for="valor_uma_fecha_aprobacion_planilla_ampliacion">Valor UMA en fecha de aprobación de planilla de ampliación:</label>
-            <input type="number" id="valor_uma_fecha_aprobacion_planilla_ampliacion" name="valor_uma_fecha_aprobacion_planilla_ampliacion" class="read-only" readonly>
-
-            <label for="acordada_fecha_aprobacion_planilla_ampliacion">Acordada en fecha de aprobación de planilla de ampliación:</label>
-            <input type="text" id="acordada_fecha_aprobacion_planilla_ampliacion" name="acordada_fecha_aprobacion_planilla_ampliacion" class="read-only" readonly>
+            <input type="text" id="monto_interes" name="monto_interes" 
+               placeholder="Ingrese el monto actualizado" 
+               pattern="^\d+(\.\d{2})?$" 
+               title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+               style="padding-left: 25px;"/>
 
             <div class="checkbox-container">
                 <input type="checkbox" id="costas_a_su_orden" name="costas_a_su_orden">
@@ -188,31 +198,92 @@
 
             <div id="sentenciaTranceAmpliacionSection" class="conditional-section">
                 <label for="sentencia_trance_fecha">Fecha de la sentencia de trance:</label>
-                <input type="date" id="sentencia_trance_fecha" name="sentencia_trance">
+                <input type="date" id="sentencia_trance_fecha" name="sentencia_trance_fecha">
 
                 <label for="fecha_pago">Fecha del pago de la planilla de sentencia de trance:</label>
                 <input type="date" id="fecha_pago" name="fecha_pago">
 
                 <label for="interes_trance">Interés de trance (xx,xx%):</label>
-                <input type="text" id="interes_trance" name="interes_trance" pattern="\d{1,2},\d{2}%">
+                <input type="text" id="interes_trance" name="interes_trance">
 
                 <label for="monto_interes_trance">Monto del interés de trance:</label>
-                <input type="number" id="monto_interes_trance" name="monto_interes_trance" step="0.01">
+                <input type="text" id="monto_interes_trance" name="monto_interes_trance" 
+                       placeholder="Ingrese el monto actualizado" 
+                       pattern="^\d+(\.\d{2})?$" 
+                       title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                       style="padding-left: 25px;"/>
+            </div>
 
-                <label for="monto_total_trance">Monto total de trance (suma de monto_interes_trance y monto_ampliacion):</label>
-                <input type="number" id="monto_total_trance" name="monto_total_trance" class="read-only" readonly>
+            <div class="checkbox-container">
+                <input type="checkbox" id="planilla_ampliacion_2" name="planilla_ampliacion_2">
+                <label for="planilla_ampliacion_2">Hay una segunda planilla de ampliación presentada</label>
+            </div>
 
-                <label for="valor_uma_fecha_pago">Valor UMA en fecha de pago:</label>
-                <input type="number" id="valor_uma_fecha_pago" name="valor_uma_fecha_pago" class="read-only" readonly>
+            <div id="planillaAmpliacion2Section" class="conditional-section">
+                <label for="fecha_aprobacion_planilla_ampliacion_2">Fecha de aprobación de la segunda planilla de ampliación:</label>
+                <input type="date" id="fecha_aprobacion_planilla_ampliacion_2" name="fecha_aprobacion_planilla_ampliacion_2">
 
-                <label for="acordada_fecha_pago">Acordada en fecha de pago:</label>
-                <input type="text" id="acordada_fecha_pago" name="acordada_fecha_pago" class="read-only" readonly>
+                <label for="monto_ampliacion_2">Monto aprobado de la segunda planilla de ampliación:</label>
+                <input type="text" id="monto_ampliacion_2" name="monto_ampliacion_2" 
+                       placeholder="Ingrese el monto actualizado" 
+                       pattern="^\d+(\.\d{2})?$" 
+                       title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                       style="padding-left: 25px;"/>
+
+                <label for="fecha_inicio_2">Fecha de inicio de liquidación (segunda ampliación):</label>
+                <input type="date" id="fecha_inicio_2"   name="fecha_inicio_2">
+
+                <label for="fecha_corte_2">Fecha de corte del cálculo de la segunda planilla de ampliación:</label>
+                <input type="date" id="fecha_corte_2" name="fecha_corte_2">
+
+                <label for="interes_2">Interés (xx,xx%) (segunda ampliación):</label>
+                <input type="text" id="interes_2" name="interes_2">
+
+                <label for="monto_interes_2">Monto del interés (segunda ampliación):</label>
+                <input type="text" id="monto_interes_2" name="monto_interes_2" 
+                       placeholder="Ingrese el monto actualizado" 
+                       pattern="^\d+(\.\d{2})?$" 
+                       title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                       style="padding-left: 25px;"/>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="costas_a_su_orden_2" name="costas_a_su_orden_2">
+                    <label for="costas_a_su_orden_2">Las costas no fueron a ANSES (segunda ampliación)</label>
+                </div>
+
+                <div id="costasAsuOrden2Section" class="conditional-section">
+                    <label for="fecha_sentencia_interlocutoria_2">Fecha de la sentencia en la cual las costas se imponen a ANSES (segunda ampliación):</label>
+                    <input type="date" id="fecha_sentencia_interlocutoria_2" name="fecha_sentencia_interlocutoria_2">
+                </div>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="sentencia_trance_2" name="sentencia_trance_2">
+                    <label for="sentencia_trance_2">Hay sentencia de trance de la segunda planilla de liquidación</label>
+                </div>
+
+                <div id="sentenciaTranceAmpliacion2Section" class="conditional-section">
+                    <label for="sentencia_trance_2_fecha">Fecha de la sentencia de trance (segunda ampliación):</label>
+                    <input type="date" id="sentencia_trance_2_fecha" name="sentencia_trance_fecha_2">
+
+                    <label for="fecha_pago_2">Fecha del pago de la planilla de sentencia de trance (segunda ampliación):</label>
+                    <input type="date" id="fecha_pago_2" name="fecha_pago_2">
+
+                    <label for="interes_trance_2">Interés de trance (xx,xx%) (segunda ampliación):</label>
+                    <input type="text" id="interes_trance_2" name="interes_trance_2">
+
+                    <label for="monto_interes_trance_2">Monto del interés de trance (segunda ampliación):</label>
+                    <input type="text" id="monto_interes_trance_2" name="monto_interes_trance_2" 
+                           placeholder="Ingrese el monto actualizado" 
+                           pattern="^\d+(\.\d{2})?$" 
+                           title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                           style="padding-left: 25px;"/>
+                </div>
             </div>
         </div>
 
         <button type="submit">Enviar</button>
     </form>
-
+    {% include 'footers/footer.html' %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('liquidacionForm');
@@ -221,14 +292,20 @@
                 sentencia_trance_liquidacion: document.getElementById('sentencia_trance_liquidacion'),
                 planilla_ampliacion: document.getElementById('planilla_ampliacion'),
                 costas_a_su_orden: document.getElementById('costas_a_su_orden'),
-                sentencia_trance: document.getElementById('sentencia_trance')
+                sentencia_trance: document.getElementById('sentencia_trance'),
+                planilla_ampliacion_2: document.getElementById('planilla_ampliacion_2'),
+                costas_a_su_orden_2: document.getElementById('costas_a_su_orden_2'),
+                sentencia_trance_2: document.getElementById('sentencia_trance_2')
             };
             const sections = {
                 costasAdicionales: document.getElementById('costasAdicionales'),
                 sentenciaTranceSection: document.getElementById('sentenciaTranceSection'),
                 planillaAmpliacionSection: document.getElementById('planillaAmpliacionSection'),
                 costasAsuOrdenSection: document.getElementById('costasAsuOrdenSection'),
-                sentenciaTranceAmpliacionSection: document.getElementById('sentenciaTranceAmpliacionSection')
+                sentenciaTranceAmpliacionSection: document.getElementById('sentenciaTranceAmpliacionSection'),
+                planillaAmpliacion2Section: document.getElementById('planillaAmpliacion2Section'),
+                costasAsuOrden2Section: document.getElementById('costasAsuOrden2Section'),
+                sentenciaTranceAmpliacion2Section: document.getElementById('sentenciaTranceAmpliacion2Section')
             };
 
             function toggleSection(checkbox, section) {
@@ -242,14 +319,10 @@
             toggleSection(checkboxes.planilla_ampliacion, sections.planillaAmpliacionSection);
             toggleSection(checkboxes.costas_a_su_orden, sections.costasAsuOrdenSection);
             toggleSection(checkboxes.sentencia_trance, sections.sentenciaTranceAmpliacionSection);
-
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                // Aquí puedes agregar la lógica para manejar el envío del formulario
-                console.log('Formulario enviado');
-            });
+            toggleSection(checkboxes.planilla_ampliacion_2, sections.planillaAmpliacion2Section);
+            toggleSection(checkboxes.costas_a_su_orden_2, sections.costasAsuOrden2Section);
+            toggleSection(checkboxes.sentencia_trance_2, sections.sentenciaTranceAmpliacion2Section);
         });
     </script>
 </body>
-
 </html>

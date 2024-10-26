@@ -20,6 +20,7 @@ from services.calculadora_uma.generador_pdf import PDFGenerator
 from services.calculadora_uma.generador_docx import Documento
 from services.calculadora_movilidad.calculadora import crear_grafico, crear_grafico2
 from services.calculos import formatear_dinero, transformar_fecha
+from services.generador_regulacion.generador_regulacion import Regulacion
 # Entities
 from models.entities.User import User
 
@@ -410,6 +411,68 @@ def resultado_calculado_movilidad():
 @login_required
 def generador_regulacion():
     return render_template('escritos_regulacion/formulario_regulacion.html')
+
+@app.route('/resultado_regulacion', methods=['POST'])
+def resultado_regulacion():
+    # Recoge los datos enviados desde el formulario
+    datos_formulario = {
+        "autos": request.form.get("autos"),
+        "expediente": request.form.get("expediente"),
+        "fecha_aprobacion_planilla": request.form.get("fecha_aprobacion_planilla"),
+        "monto_aprobacion_planilla": request.form.get("monto_aprobacion_planilla"),
+        "fecha_comienzo_planilla": request.form.get("fecha_comienzo_planilla"),
+        "fecha_corte_planilla": request.form.get("fecha_corte_planilla"),
+        "interes_planilla": request.form.get("interes_planilla"),
+        "monto_interes_planilla": request.form.get("monto_interes_planilla"),
+        "costas_orden": request.form.get("costas_orden") == "on",
+        "sentencia_interlocutoria_costas": request.form.get("sentencia_interlocutoria_costas") or "2022-02-01",
+        "fecha_sentencia_apelacion": request.form.get("fecha_sentencia_apelacion"),
+        ## sentencia trance liquidacion
+        "sentencia_trance_liquidacion": request.form.get("sentencia_trance_liquidacion") == "on",
+        "fecha_sentencia_trance_liquidacion": request.form.get("fecha_sentencia_trance_liquidacion") or "2022-02-01",
+        "fecha_pago_planilla": request.form.get("fecha_pago_planilla") or "2022-02-01",
+        "interes_planilla_trance": request.form.get("interes_planilla_trance"),
+        "monto_interes_planilla_trance": request.form.get("monto_interes_planilla_trance") or 100,
+        ## planilla ampliacion
+        "planilla_ampliacion" : request.form.get("planilla_ampliacion") == "on",
+        "fecha_aprobacion_planilla_ampliacion": request.form.get("fecha_aprobacion_planilla_ampliacion") or "2022-02-01",
+        "monto_ampliacion" : request.form.get("monto_ampliacion") or 0,
+        "fecha_inicio" : request.form.get("fecha_inicio") or "2022-02-01",
+        "fecha_corte" : request.form.get("fecha_corte") or "2022-02-01",
+        "interes" : request.form.get("interes"),
+        "monto_interes" : request.form.get("monto_interes") or 0,
+        "costas_a_su_orden" : request.form.get("costas_a_su_orden") == "on",
+        "fecha_sentencia_interlocutoria" : request.form.get("fecha_sentencia_interlocutoria") or "2022-02-01",
+        ## sentencia trance planilla ampliacion 
+        "sentencia_trance" : request.form.get("sentencia_trance") == "on",
+        "sentencia_trance_fecha" : request.form.get("sentencia_trance_fecha") or "2022-02-01",
+        "fecha_pago" : request.form.get("fecha_pago") or "2022-02-01",
+        "interes_trance" : request.form.get("interes_trance"),
+        "monto_interes_trance" : request.form.get("monto_interes_trance") or 0,
+        ## planilla ampliacion 2
+        "planilla_ampliacion_2": request.form.get("planilla_ampliacion_2") == "on",
+        "fecha_aprobacion_planilla_ampliacion_2": request.form.get("fecha_aprobacion_planilla_ampliacion_2") or "2022-02-01",
+        "monto_ampliacion_2": request.form.get("monto_ampliacion_2") or 0,
+        "fecha_inicio_2": request.form.get("fecha_inicio_2") or "2022-02-01",
+        "fecha_corte_2": request.form.get("fecha_corte_2") or "2022-02-01",
+        "interes_2": request.form.get("interes_2"),
+        "monto_interes_2": request.form.get("monto_interes_2") or 0,
+        "costas_a_su_orden_2": request.form.get("costas_a_su_orden_2") == "on",
+        "fecha_sentencia_interlocutoria_2": request.form.get("fecha_sentencia_interlocutoria_2") or "2022-02-01",
+        ## sentencia trance planilla ampliacion 2
+        "sentencia_trance_2": request.form.get("sentencia_trance_2") == "on",
+        "sentencia_trance_fecha_2": request.form.get("sentencia_trance_fecha_2") or "2022-02-01",
+        "fecha_pago_2": request.form.get("fecha_pago_2") or "2022-02-01",
+        "interes_trance_2": request.form.get("interes_trance_2"),
+        "monto_interes_trance_2": request.form.get("monto_interes_trance_2") or 0,
+        
+    }
+    
+    regulacion = Regulacion(datos_formulario)
+    response = regulacion.crear_documento()
+
+    return response
+
 
 if __name__ == '__main__':
     app.run(debug=True)
