@@ -17,7 +17,7 @@ class Regulacion:
       datos["valor_uma_fecha_aprobacion_planilla_ampliacion"] = formatear_dinero(obtener_valor_uma(datos["fecha_aprobacion_planilla_ampliacion"]))
       datos["acordada_fecha_aprobacion_planilla_ampliacion"] = obtener_acordada(datos["fecha_aprobacion_planilla_ampliacion"])
       ### sentencia trance ampliacion ###
-      datos["monla_ato_total_trance"] = formatear_dinero(float(datos["monto_interes_trance"]) + float(datos["monto_ampliacion"]))
+      datos["monto_total_trance"] = formatear_dinero(float(datos["monto_interes_trance"]) + float(datos["monto_ampliacion"]))
       datos["valor_uma_fecha_pago"] = formatear_dinero(obtener_valor_uma(datos["fecha_pago"]))
       datos["acordada_fecha_pago"] = obtener_acordada(datos["fecha_pago"])
       ### planilla ampliacion 2 ###
