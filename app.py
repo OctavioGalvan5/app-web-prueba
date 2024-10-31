@@ -21,6 +21,7 @@ from services.calculadora_uma.generador_docx import Documento
 from services.calculadora_movilidad.calculadora import crear_grafico, crear_grafico2
 from services.calculos import formatear_dinero, transformar_fecha
 from services.generador_regulacion.generador_regulacion import Regulacion
+from services.calculadora_tope_maximo.generador_pdf import Comparativa
 # Entities
 from models.entities.User import User
 
@@ -473,7 +474,30 @@ def resultado_regulacion():
 
     return response
 
+@app.route('/generador_tope_maximo')
+@login_required
+def generador_tope_maximo():
+    return render_template('calculadora_tope_maximo/calculadora_tope_maximo.html')
 
+@app.route('/resultado_comparativa_tope_maximo', methods=['POST'])
+def resultado_comparativa_tope_maximo():
+    # Recoge los datos enviados desde el formulario
+    autos = request.form.get("Autos")
+    expediente = request.form.get("Expediente")
+    primera_fecha = request.form.get("primera_fecha")
+    segunda_fecha = request.form.get("segunda_fecha")
+
+    pdf_generator = Comparativa(
+        autos, expediente, primera_fecha, segunda_fecha
+    )
+    pdf = pdf_generator.generar_pdf()
+
+    # Devolver el PDF para descarga
+    responsee = make_response(pdf)
+    responsee.headers['Content-Type'] = 'application/pdf'
+    responsee.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
+    return responsee
+    
 if __name__ == '__main__':
     app.run(debug=True)
 

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado {{autos}} {{expediente}}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+            background-image: url('static/logoestudiomarca.jpg');
+            background-repeat: no-repeat;
+            background-object-position: 130 270px;
+            background-height: 500px;
+            background-width: 500px;
+            background-opacity: 0.1;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+        hr {
+            border: none;
+            height: 2px; /* Grosor de la línea */
+            background-color: #D3D3D3; /* Color de la línea */
+        }
+        h1 {
+            font-size: 24px;
+            color: #1a365d;
+            text-align: center;
+        }
+        h6 {
+            font-size: 16px;
+            color: #2c5282;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: avoid;
+            margin-bottom: 20px;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        .negrita {
+            font-weight: bold;
+        }
+        .font-large {
+            font-size: 12px;
+        }
+        .first-column-cell2 {
+            background-color: #e2e8f0;
+            font-weight: bold;
+            width: 25%;
+        }
+        .first-column-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .first-column-cell3 {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .info-section {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .graph-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .graph-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        .confiscatoriedad {
+            color: blue;
+        }
+        .haber {
+            color: #2b6cb0;
+        }
+    </style>
+</head>
+<body>
+    <hr>
+    <h1>Resultados de Calculadora de Movilidad</h1>
+    <hr style="margin-bottom: 20px;">
+
+    <div class="info-section">
+        <p><strong>Datos del actor:</strong> {{autos}}</p>
+        <p><strong>Expediente:</strong> {{expediente}}</p>
+    </div>
+    <h6>Haber Maximo:</h6>
+    <table>
+        <tr class="font-large first-column-cell2";>
+            <td>Fecha</td>
+            <td class="negrita">Anses</td>
+            <td class="negrita">Caliva Marquez</td>
+            <td class="negrita">Badaro</td>
+            <td class="negrita">Badaro C+M</td>
+            <td class="negrita">82% de la Rem Max</td>
+            <td class="negrita">Rem. Maxima</td>
+            <td class="negrita">Rem Max Imponible C+M extendido 27551</td>
+
+
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">{{periodo_desde}}</td>
+            <td>{{ anses_1 }}</td>
+            <td>{{caliva_ext_27551_1}}</td>
+            <td>{{ badaro_1 }}</td>
+            <td>{{ badaro_cm_1 }}</td>
+            <td>{{ ocheintados_rem_max_1 }}</td>
+            <td>{{ rem_max_1 }}</td>
+            <td>{{ rem_max_imponible_cm_extendido_27551_1 }}</td>
+
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">{{periodo_hasta}}</td>
+            <td class="confiscatoriedad">{{ anses_2 }}</td>
+            <td class="confiscatoriedad">{{ calivas_ext_27551_2 }}</td>
+            <td class="confiscatoriedad">{{ badaro_2 }}</td>
+            <td class="confiscatoriedad">{{ badaro_cm_2 }}</td>
+            <td class="confiscatoriedad">{{ ocheintados_rem_max_2 }}</td>
+            <td class="confiscatoriedad">{{ rem_max_2 }}</td>
+            <td class="confiscatoriedad">{{ rem_max_imponible_cm_extendido_27551_2 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell" colspan="2">Diferencia con Haber maximo Anses</td>
+            <td class="confiscatoriedad">{{ dif_caliva_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_badaro_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_badaro_cm_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_ocheintados_rem_max_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_rem_max_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_rem_max_imponible_cm_extendido_27551_anses }}</td>
+        </tr>
+    </table>
+
+    <div class="graph-container">
+        <img src="data:image/png;base64,{{ grafico }}" alt="Gráfico comparativo de haberes Anses">
+    </div>
+ </body>
+</html>
