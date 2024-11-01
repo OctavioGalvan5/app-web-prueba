@@ -70,3 +70,4 @@ def crear_grafico2(datos, nombre_grafico):
     grafico_base64 = base64.b64encode(img_bytes).decode('utf-8')
 
     return grafico_base64
+
