@@ -115,27 +115,57 @@
     <table>
         <tr class="font-large first-column-cell2";>
             <td>Índices</td>
+            {% if ipc %}
             <td class="negrita">IPC</td>
+            {% endif %}
+            {% if ripte %}
             <td class="negrita">RIPTE</td>
+            {% endif %}
+            {% if uma %}
             <td class="negrita">UMA</td>
+            {% endif %}
+            {% if movilidad_sentencia %}
             <td class="negrita">Movilidad de Sentencia</td>
+            {% endif %}
+            {% if Ley_27426_rezago  %}
             <td class="negrita">Ley 27426 con rezago</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Diferencia con Anses</td>
+            {% if ipc %}
             <td>{{ comparacion.dif_anses_ipc }}</td>
+            {% endif %}
+            {% if ripte %}
             <td>{{ comparacion.dif_anses_ripte }}</td>
+            {% endif %}
+            {% if uma %}
             <td>{{ comparacion.dif_anses_UMA }}</td>
+            {% endif %}
+            {% if movilidad_sentencia %}
             <td>{{ comparacion.dif_anses_sent }}</td>
+            {% endif %}
+            {% if Ley_27426_rezago %}
             <td>{{ comparacion.dif_anses_ley27426 }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
+            {% if ipc %}
             <td class="confiscatoriedad">{{ comparacion.conf_anses_ipc }}</td>
+            {% endif %}
+            {% if ripte %}
             <td class="confiscatoriedad">{{ comparacion.conf_anses_ripte }}</td>
+            {% endif %}
+            {% if uma %}
             <td class="confiscatoriedad">{{ comparacion.conf_anses_UMA }}</td>
+            {% endif %}
+            {% if movilidad_sentencia %}
             <td class="confiscatoriedad">{{ comparacion.conf_anses_sent }}</td>
+            {% endif %}
+            {% if Ley_27426_rezago %}
             <td class="confiscatoriedad">{{ comparacion.conf_anses_ley27426 }}</td>
+            {% endif %}
         </tr>
     </table>
 
@@ -144,29 +174,53 @@
     </div>
 
     <div class="page-break"></div>
-
+    {% if comparacion_mov_sentencia_si %}
     <h6>Diferencias de Movilidad segun Jurisdiccion:</h6>
     <table>
         <tr class="font-large first-column-cell2">
             <td style="visibility: hidden;">Índices</td>
+            {% if ipc %}
             <td class="negrita">IPC</td>
+            {% endif %}
+            {% if ripte %}
             <td class="negrita">RIPTE</td>
+            {% endif %}
+            {% if uma %}
             <td class="negrita">UMA</td>
+            {% endif %}
+            {% if Ley_27426_rezago %}
             <td class="negrita">Ley 27426 con rezago</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Diferencia con el haber de sentencia</td>
+            {% if ipc %}
             <td>{{ comparacion.dif_sent_ipc }}</td>
+            {% endif %}
+            {% if ripte %}
             <td>{{ comparacion.dif_sent_ripte }}</td>
+            {% endif %}
+            {% if uma %}
             <td>{{ comparacion.dif_sent_UMA }}</td>
+            {% endif %}
+            {% if Ley_27426_rezago %}
             <td>{{ comparacion.dif_sent_ley27426 }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
+            {% if ipc %}
             <td class="confiscatoriedad">{{ comparacion.conf_sent_ipc }}</td>
+            {% endif %}
+            {% if ripte %}
             <td class="confiscatoriedad">{{ comparacion.conf_sent_ripte }}</td>
+            {% endif %}
+            {% if uma %}
             <td class="confiscatoriedad">{{ comparacion.conf_sent_UMA }}</td>
+            {% endif %}
+            {% if Ley_27426_rezago %}
             <td class="confiscatoriedad">{{ comparacion.conf_sent_ley27426 }}</td>
+            {% endif %}
         </tr>
     </table>
 
@@ -174,17 +228,29 @@
         <img src="data:image/png;base64,{{ grafico2 }}" alt="Gráfico comparativo de haberes de Sentencia">
     </div>
 
+    {% endif %}
+    
     <h6>Comparativa de Haberes:</h6>
     <table>
         <thead>
             <tr class="font-large first-column-cell2">
                 <td class="negrita">Fecha</td>
                 <td class="negrita">Haber con Anses</td>
+                {% if ipc %}
                 <td class="negrita">Haber con IPC</td>
+                {% endif %}
+                {% if ripte %}
                 <td class="negrita">Haber con RIPTE</td>
+                {% endif %}
+                {% if uma %}
                 <td class="negrita">Haber con UMA</td>
+                {% endif %}
+                {% if movilidad_sentencia %}
                 <td class="negrita">Haber con Movilidad de Sentencia</td>
+                {% endif %}
+                {% if Ley_27426_rezago %}
                 <td class="negrita">Haber con Ley 27426 con rezago</td>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -192,11 +258,21 @@
             <tr class="font-large">
                 <td class="first-column-cell3">{{ fila[0] }}</td>
                 <td class="haber">{{ fila[1] }}</td>
+                {% if ipc %}
                 <td class="haber">{{ fila[2] }}</td>
+                {% endif %}
+                {% if ripte %}
                 <td class="haber">{{ fila[3] }}</td>
+                {% endif %}
+                {% if uma %}
                 <td class="haber">{{ fila[4] }}</td>
+                {% endif %}
+                {% if movilidad_sentencia %}
                 <td class="haber">{{ fila[5] }}</td>
+                {% endif %}
+                {% if Ley_27426_rezago %}
                 <td class="haber">{{ fila[6] }}</td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

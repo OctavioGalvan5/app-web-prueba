@@ -12,13 +12,12 @@ from config import config
 from xhtml2pdf import pisa
 from io import BytesIO
 #Models
-from models.database import buscar_fechas
 from models.ModelUser import ModelUser
 #Services
 from services.generador_demandas.demanda import Formulario
 from services.calculadora_uma.generador_pdf import PDFGenerator
 from services.calculadora_uma.generador_docx import Documento
-from services.calculadora_movilidad.calculadora import crear_grafico, crear_grafico2
+from services.calculadora_movilidad.calculadora import CalculadorMovilidad
 from services.calculos import formatear_dinero, transformar_fecha
 from services.generador_regulacion.generador_regulacion import Regulacion
 from services.calculadora_tope_maximo.generador_pdf import Comparativa
@@ -347,66 +346,20 @@ def resultado_calculado_movilidad():
         fecha_fin = request.form['fecha_fin']
         fecha_adquisicion_del_derecho= transformar_fecha(request.form['fecha_adquisicion_del_derecho'])
         monto = float(request.form['monto'])
+    
+        ipc = request.form.get('ipc')
+        ripte = request.form.get('ripte', False)
+        uma = request.form.get('uma', False)
+        movilidad_sentencia = request.form.get('movilidad_sentencia', False)
+        Ley_27426_rezago = request.form.get('Ley_27426_rezago', False)
 
-        # Obtener los datos para el PDF
-        lista_filas, lista_montos = buscar_fechas(fecha_inicio,fecha_fin, monto)
-        ultimos_valores = lista_montos[-1]
-        diccionario_comparacion = {
-           'dif_anses_ipc': formatear_dinero(ultimos_valores[1] - ultimos_valores[0]),
-           'conf_anses_ipc': str(round((ultimos_valores[1] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
-           'dif_sent_ipc': formatear_dinero(ultimos_valores[1] - ultimos_valores[4]),
-           'conf_sent_ipc': str(round((ultimos_valores[1] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
-           #
-           'dif_anses_ripte': formatear_dinero(ultimos_valores[2] - ultimos_valores[0]),
-           'conf_anses_ripte': str(round((ultimos_valores[2] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
-           'dif_sent_ripte': formatear_dinero(ultimos_valores[2] - ultimos_valores[4]),
-           'conf_sent_ripte': str(round((ultimos_valores[2] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
-            #
-           'dif_anses_UMA': formatear_dinero(ultimos_valores[3] - ultimos_valores[0]),
-           'conf_anses_UMA': str(round((ultimos_valores[3] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
-           'dif_sent_UMA': formatear_dinero(ultimos_valores[3] - ultimos_valores[4]),
-           'conf_sent_UMA': str(round((ultimos_valores[3] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
-            #
-           'dif_anses_sent': formatear_dinero(ultimos_valores[4] - ultimos_valores[0]),
-           'conf_anses_sent': str(round((ultimos_valores[4] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
-            #
-           'dif_anses_ley27426': formatear_dinero(ultimos_valores[5] - ultimos_valores[0]),
-           'conf_anses_ley27426': str(round((ultimos_valores[5] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
-           'dif_sent_ley27426': formatear_dinero(ultimos_valores[5] - ultimos_valores[4]),
-           'conf_sent_ley27426': str(round((ultimos_valores[5] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%"
-       }
-        datos1 = [round(ultimos_valores[1] - ultimos_valores[0],2), round(ultimos_valores[2] - ultimos_valores[0],2), round(ultimos_valores[3] - ultimos_valores[0],2), round(ultimos_valores[4] - ultimos_valores[0],2), round(ultimos_valores[5] - ultimos_valores[0],2)]
-        grafico1 = crear_grafico(datos1, '')
+        comparacion_mov_sentencia_si = request.form.get('comparacion_mov_sentencia_si', False)
+        comparacion_mov_sentencia_no = request.form.get('comparacion_mov_sentencia_no', False)
+    
+        calculo = CalculadorMovilidad(datos_del_actor, expediente, beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no)
 
-        datos2 = [round(ultimos_valores[1] - ultimos_valores[4],2), round(ultimos_valores[2] - ultimos_valores[4],2), round(ultimos_valores[3] - ultimos_valores[4],2), round(ultimos_valores[5] - ultimos_valores[4],2)]
-        grafico2 = crear_grafico2(datos2, '')
-
-
-        rendered = render_template(
-            'calculadora_movilidad/resultado_calculadora_movilidad.html',
-            filas=lista_filas, 
-            comparacion=diccionario_comparacion, 
-            grafico1 = grafico1,
-            grafico2 = grafico2,
-            monto = formatear_dinero(monto),
-            datos_del_actor = datos_del_actor,
-            expediente = expediente,
-            beneficio = beneficio,
-            fecha_inicio = transformar_fecha(fecha_inicio),
-            fecha_adquisicion_del_derecho = fecha_adquisicion_del_derecho,
-        )
-        # Crear el PDF en memoria
-        pdf_buffer = BytesIO()
-        pisa_status = pisa.CreatePDF(rendered, dest=pdf_buffer)
-
-        if pisa_status.err:
-            # Manejar el error en caso de que la creación del PDF falle
-            return "Error al crear el PDF", 500
-
-        pdf_buffer.seek(0)
-
-        # Enviar el PDF como respuesta
-        return send_file(pdf_buffer, as_attachment=True, download_name='resultado.pdf', mimetype='application/pdf')
+        resultado = calculo.generar_pdf()
+        return resultado
 
 @app.route('/generador_regulacion')
 @login_required
