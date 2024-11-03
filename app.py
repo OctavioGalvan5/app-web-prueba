@@ -342,6 +342,7 @@ def resultado_calculado_movilidad():
         datos_del_actor =  request.form['datos_del_actor']
         expediente =  request.form['expediente']
         beneficio =  request.form['beneficio']
+        num_beneficio =  request.form['num_beneficio']    
         fecha_inicio = request.form['fecha_inicio']
         fecha_fin = request.form['fecha_fin']
         fecha_adquisicion_del_derecho= transformar_fecha(request.form['fecha_adquisicion_del_derecho'])
@@ -352,12 +353,12 @@ def resultado_calculado_movilidad():
         uma = request.form.get('uma', False)
         movilidad_sentencia = request.form.get('movilidad_sentencia', False)
         Ley_27426_rezago = request.form.get('Ley_27426_rezago', False)
-        Caliva_mas_anses = request.form.get('Caliva_mas_anses', False)
+        Caliva_Marquez_con_27551_con_3_rezago = request.form.get('Caliva_Marquez_con_27551_con_3_rezago', False)
 
         comparacion_mov_sentencia_si = request.form.get('comparacion_mov_sentencia_si', False)
         comparacion_mov_sentencia_no = request.form.get('comparacion_mov_sentencia_no', False)
     
-        calculo = CalculadorMovilidad(datos_del_actor, expediente, beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,Caliva_mas_anses, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no)
+        calculo = CalculadorMovilidad(datos_del_actor, expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,Caliva_Marquez_con_27551_con_3_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no)
 
         resultado = calculo.generar_pdf()
         return resultado

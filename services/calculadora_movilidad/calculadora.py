@@ -31,7 +31,7 @@ def crear_graficos(datos, etiquetas):
         plot_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del área de trazado transparente
         paper_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del gráfico transparente
         margin=dict(l=40, r=40, t=40, b=40),
-        width=800, height=400,
+        width=800, height=600,
         xaxis=dict(title_font=dict(size=14), tickfont=dict(size=10)),
         yaxis=dict(title_font=dict(size=14), tickfont=dict(size=15))
     )
@@ -45,10 +45,11 @@ def crear_graficos(datos, etiquetas):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor, expediente, beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, Caliva_mas_anses, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no ):
+    def __init__(self, datos_del_actor, expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, Caliva_Marquez_con_27551_con_3_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no ):
         self.datos_del_actor = datos_del_actor
         self.expediente = expediente
         self.beneficio = beneficio
+        self.num_beneficio = num_beneficio
         self.fecha_inicio = fecha_inicio
         self.fecha_fin = fecha_fin
         self.fecha_adquisicion_del_derecho = fecha_adquisicion_del_derecho
@@ -58,7 +59,7 @@ class CalculadorMovilidad:
         self.uma = uma
         self.movilidad_sentencia = movilidad_sentencia
         self.Ley_27426_rezago = Ley_27426_rezago
-        self.Caliva_mas_anses = Caliva_mas_anses
+        self.Caliva_Marquez_con_27551_con_3_rezago = Caliva_Marquez_con_27551_con_3_rezago
         self.comparacion_mov_sentencia_si = comparacion_mov_sentencia_si
         self.comparacion_mov_sentencia_no = comparacion_mov_sentencia_no
 
@@ -89,10 +90,10 @@ class CalculadorMovilidad:
                'dif_sent_ley27426': formatear_dinero(ultimos_valores[5] - ultimos_valores[4]),
                'conf_sent_ley27426': str(round((ultimos_valores[5] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
                 #
-                'dif_anses_caliva_mas_anses': formatear_dinero(ultimos_valores[6] - ultimos_valores[0]),
-                'conf_anses_caliva_mas_anses': str(round((ultimos_valores[6] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
-                'dif_sent_caliva_mas_anses': formatear_dinero(ultimos_valores[6] - ultimos_valores[4]),
-                'conf_sent_caliva_mas_anses': str(round((ultimos_valores[6] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%"
+                'dif_anses_Caliva_Marquez_con_27551_con_3_rezago': formatear_dinero(ultimos_valores[6] - ultimos_valores[0]),
+                'conf_anses_Caliva_Marquez_con_27551_con_3_rezago': str(round((ultimos_valores[6] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+                'dif_sent_Caliva_Marquez_con_27551_con_3_rezago': formatear_dinero(ultimos_valores[6] - ultimos_valores[4]),
+                'conf_sent_Caliva_Marquez_con_27551_con_3_rezago': str(round((ultimos_valores[6] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%"
            }
         datos = []
         etiquetas = []
@@ -111,9 +112,9 @@ class CalculadorMovilidad:
         if self.Ley_27426_rezago:
             datos.append(round(ultimos_valores[5] - ultimos_valores[0],2))
             etiquetas.append('Ley 27426 con rezago')
-        if self.Caliva_mas_anses:
+        if self.Caliva_Marquez_con_27551_con_3_rezago:
             datos.append(round(ultimos_valores[6] - ultimos_valores[0],2))
-            etiquetas.append('Caliva mas Anses')
+            etiquetas.append('Caliva_Marquez_con_27551_con_3_rezago')
         grafico1 = crear_graficos(datos,etiquetas)
 
         if self.comparacion_mov_sentencia_si:
@@ -131,17 +132,17 @@ class CalculadorMovilidad:
             if self.Ley_27426_rezago:
                 datos_2.append(round(ultimos_valores[5] - ultimos_valores[4],2))
                 etiquetas_2.append('Ley 27426 con rezago')
-            if self.Caliva_mas_anses:
+            if self.Caliva_Marquez_con_27551_con_3_rezago:
                 datos_2.append(round(ultimos_valores[6] - ultimos_valores[4],2))
-                etiquetas_2.append('Caliva mas Anses')
+                etiquetas_2.append('Caliva_Marquez_con_27551_con_3_rezago')
             grafico2 = crear_graficos(datos_2, etiquetas_2)
         else:
             grafico2 = None
             
-        return lista_filas, grafico1, grafico2, diccionario_comparacion
+        return lista_filas, grafico1, grafico2, diccionario_comparacion, ultimos_valores
         
     def generar_pdf(self):
-        lista_filas, grafico1, grafico2, diccionario_comparacion = self.obtener_datos()
+        lista_filas, grafico1, grafico2, diccionario_comparacion, montos_a_fecha_cierre = self.obtener_datos()
         rendered = render_template(
             'calculadora_movilidad/resultado_calculadora_movilidad.html',
             filas=lista_filas, 
@@ -152,15 +153,25 @@ class CalculadorMovilidad:
             datos_del_actor = self.datos_del_actor,
             expediente = self.expediente,
             beneficio = self.beneficio,
+            num_beneficio = self.num_beneficio,
             fecha_inicio = transformar_fecha(self.fecha_inicio),
+            fecha_fin = transformar_fecha(self.fecha_fin),
             fecha_adquisicion_del_derecho = self.fecha_adquisicion_del_derecho,
             ipc = self.ipc,
             uma = self.uma,
             ripte = self.ripte,
             movilidad_sentencia = self.movilidad_sentencia,
             Ley_27426_rezago = self.Ley_27426_rezago,
-            Caliva_mas_anses = self.Caliva_mas_anses,
-            comparacion_mov_sentencia_si = self.comparacion_mov_sentencia_si
+            Caliva_Marquez_con_27551_con_3_rezago= self.Caliva_Marquez_con_27551_con_3_rezago,
+            comparacion_mov_sentencia_si = self.comparacion_mov_sentencia_si,
+            valor_anses = formatear_dinero(montos_a_fecha_cierre[0]),
+            valor_ipc = formatear_dinero(montos_a_fecha_cierre[1]),
+            valor_ripte = formatear_dinero(montos_a_fecha_cierre[2]),
+            valor_uma = formatear_dinero(montos_a_fecha_cierre[3]),
+            valor_mov_sentencia = formatear_dinero(montos_a_fecha_cierre[4]),
+            valor_Ley_27426_rezago = formatear_dinero(montos_a_fecha_cierre[5]),
+            valor_Caliva_Marquez_con_27551_con_3_rezago = formatear_dinero(montos_a_fecha_cierre[6]),
+            
         )
         # Crear el PDF en memoria
         pdf_buffer = BytesIO()
