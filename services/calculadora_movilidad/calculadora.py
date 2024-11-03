@@ -45,7 +45,7 @@ def crear_graficos(datos, etiquetas):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor, expediente, beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no ):
+    def __init__(self, datos_del_actor, expediente, beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, Caliva_mas_anses, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no ):
         self.datos_del_actor = datos_del_actor
         self.expediente = expediente
         self.beneficio = beneficio
@@ -58,6 +58,7 @@ class CalculadorMovilidad:
         self.uma = uma
         self.movilidad_sentencia = movilidad_sentencia
         self.Ley_27426_rezago = Ley_27426_rezago
+        self.Caliva_mas_anses = Caliva_mas_anses
         self.comparacion_mov_sentencia_si = comparacion_mov_sentencia_si
         self.comparacion_mov_sentencia_no = comparacion_mov_sentencia_no
 
@@ -86,7 +87,12 @@ class CalculadorMovilidad:
                'dif_anses_ley27426': formatear_dinero(ultimos_valores[5] - ultimos_valores[0]),
                'conf_anses_ley27426': str(round((ultimos_valores[5] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
                'dif_sent_ley27426': formatear_dinero(ultimos_valores[5] - ultimos_valores[4]),
-               'conf_sent_ley27426': str(round((ultimos_valores[5] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%"
+               'conf_sent_ley27426': str(round((ultimos_valores[5] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
+                #
+                'dif_anses_caliva_mas_anses': formatear_dinero(ultimos_valores[6] - ultimos_valores[0]),
+                'conf_anses_caliva_mas_anses': str(round((ultimos_valores[6] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+                'dif_sent_caliva_mas_anses': formatear_dinero(ultimos_valores[6] - ultimos_valores[4]),
+                'conf_sent_caliva_mas_anses': str(round((ultimos_valores[6] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%"
            }
         datos = []
         etiquetas = []
@@ -105,6 +111,9 @@ class CalculadorMovilidad:
         if self.Ley_27426_rezago:
             datos.append(round(ultimos_valores[5] - ultimos_valores[0],2))
             etiquetas.append('Ley 27426 con rezago')
+        if self.Caliva_mas_anses:
+            datos.append(round(ultimos_valores[6] - ultimos_valores[0],2))
+            etiquetas.append('Caliva mas Anses')
         grafico1 = crear_graficos(datos,etiquetas)
 
         if self.comparacion_mov_sentencia_si:
@@ -121,7 +130,10 @@ class CalculadorMovilidad:
                 etiquetas_2.append('UMA')
             if self.Ley_27426_rezago:
                 datos_2.append(round(ultimos_valores[5] - ultimos_valores[4],2))
-                etiquetas_2.append('Ley 27426')
+                etiquetas_2.append('Ley 27426 con rezago')
+            if self.Caliva_mas_anses:
+                datos_2.append(round(ultimos_valores[6] - ultimos_valores[4],2))
+                etiquetas_2.append('Caliva mas Anses')
             grafico2 = crear_graficos(datos_2, etiquetas_2)
         else:
             grafico2 = None
@@ -147,6 +159,7 @@ class CalculadorMovilidad:
             ripte = self.ripte,
             movilidad_sentencia = self.movilidad_sentencia,
             Ley_27426_rezago = self.Ley_27426_rezago,
+            Caliva_mas_anses = self.Caliva_mas_anses,
             comparacion_mov_sentencia_si = self.comparacion_mov_sentencia_si
         )
         # Crear el PDF en memoria

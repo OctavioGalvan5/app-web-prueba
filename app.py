@@ -352,11 +352,12 @@ def resultado_calculado_movilidad():
         uma = request.form.get('uma', False)
         movilidad_sentencia = request.form.get('movilidad_sentencia', False)
         Ley_27426_rezago = request.form.get('Ley_27426_rezago', False)
+        Caliva_mas_anses = request.form.get('Caliva_mas_anses', False)
 
         comparacion_mov_sentencia_si = request.form.get('comparacion_mov_sentencia_si', False)
         comparacion_mov_sentencia_no = request.form.get('comparacion_mov_sentencia_no', False)
     
-        calculo = CalculadorMovilidad(datos_del_actor, expediente, beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no)
+        calculo = CalculadorMovilidad(datos_del_actor, expediente, beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,Caliva_mas_anses, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no)
 
         resultado = calculo.generar_pdf()
         return resultado

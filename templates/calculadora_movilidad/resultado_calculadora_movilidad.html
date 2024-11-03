@@ -130,6 +130,9 @@
             {% if Ley_27426_rezago  %}
             <td class="negrita">Ley 27426 con rezago</td>
             {% endif %}
+            {% if Caliva_mas_anses  %}
+            <td class="negrita">Caliva mas Anses</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Diferencia con Anses</td>
@@ -148,9 +151,12 @@
             {% if Ley_27426_rezago %}
             <td>{{ comparacion.dif_anses_ley27426 }}</td>
             {% endif %}
+            {% if Caliva_mas_anses %}
+            <td>{{ comparacion.dif_anses_caliva_mas_anses }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
-            <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
+            <td class="negrita first-column-cell">Confisc. por la quita</td>
             {% if ipc %}
             <td class="confiscatoriedad">{{ comparacion.conf_anses_ipc }}</td>
             {% endif %}
@@ -165,6 +171,9 @@
             {% endif %}
             {% if Ley_27426_rezago %}
             <td class="confiscatoriedad">{{ comparacion.conf_anses_ley27426 }}</td>
+            {% endif %}
+            {% if Caliva_mas_anses %}
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_caliva_mas_anses }}</td>
             {% endif %}
         </tr>
     </table>
@@ -191,6 +200,9 @@
             {% if Ley_27426_rezago %}
             <td class="negrita">Ley 27426 con rezago</td>
             {% endif %}
+            {% if Caliva_mas_anses %}
+            <td class="negrita">Caliva mas Anses</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Diferencia con el haber de sentencia</td>
@@ -206,6 +218,9 @@
             {% if Ley_27426_rezago %}
             <td>{{ comparacion.dif_sent_ley27426 }}</td>
             {% endif %}
+            {% if Caliva_mas_anses %}
+            <td>{{ comparacion.dif_sent_caliva_mas_anses }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
@@ -220,6 +235,9 @@
             {% endif %}
             {% if Ley_27426_rezago %}
             <td class="confiscatoriedad">{{ comparacion.conf_sent_ley27426 }}</td>
+            {% endif %}
+            {% if Caliva_mas_anses %}
+            <td class="confiscatoriedad">{{ comparacion.conf_sent_caliva_mas_anses}}</td>
             {% endif %}
         </tr>
     </table>
@@ -251,6 +269,9 @@
                 {% if Ley_27426_rezago %}
                 <td class="negrita">Haber con Ley 27426 con rezago</td>
                 {% endif %}
+                {% if Caliva_mas_anses %}
+                <td class="negrita">Haber con Caliva mas Anses</td>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -272,6 +293,9 @@
                 {% endif %}
                 {% if Ley_27426_rezago %}
                 <td class="haber">{{ fila[6] }}</td>
+                {% endif %}
+                {% if Caliva_mas_anses %}
+                <td class="haber">{{ fila[7] }}</td>
                 {% endif %}
             </tr>
             {% endfor %}
