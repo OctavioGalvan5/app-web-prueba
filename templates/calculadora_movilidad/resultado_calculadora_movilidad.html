@@ -59,6 +59,11 @@
         .font-large {
             font-size: 12px;
         }
+
+        .font-pequeña {
+            font-size: 10px;
+        }
+        
         .first-column-cell2 {
             background-color: #e2e8f0;
             font-weight: bold;
@@ -122,7 +127,7 @@
         <tr class="font-large first-column-cell2";>
             <td rowspan="1" class="negrita">Movilidad</td>
             <td rowspan="2" class="negrita">Haber al {{fecha_fin}} </td>
-            <td colspan="2" class="negrita">Daño en el haber</td>
+            <td colspan="2" class="negrita" style="text-align: center;">Daño en el haber</td>
         </tr>
         <tr class="font-large first-column-cell2";>
             <td class="negrita">Variables comparativas</td>
@@ -194,11 +199,12 @@
     <h6>Diferencias de Movilidad segun Jurisdiccion:</h6>
     <table>
         <tr class="font-large first-column-cell2";>
-            <td rowspan="2" class="negrita">Movilidad</td>
+            <td rowspan="1" class="negrita">Movilidad</td>
             <td rowspan="2" class="negrita">Haber al {{fecha_fin}} </td>
-            <td colspan="2" class="negrita">Daño en el haber</td>
+            <td colspan="2" class="negrita" style="text-align: center;">Daño en el haber</td>
         </tr>
         <tr class="font-large first-column-cell2";>
+            <td class="negrita">Variables comparativas</td>
             <td class="negrita">Diferencia mensual en $</td>
             <td class="negrita">Porcentaje de quita respecto del haber de sentencia</td>
         </tr>
@@ -259,8 +265,8 @@
     <h6>Comparativa de Haberes:</h6>
     <table>
         <thead>
-            <tr class="font-large first-column-cell2">
-                <td class="negrita">Fecha</td>
+            <tr class="font-pequeña first-column-cell2">
+                <td class="negrita" style="width: 55px;"" >Periodo</td>
                 <td class="negrita">Haber con Anses</td>
                 {% if ipc %}
                 <td class="negrita">Haber con IPC</td>
@@ -284,8 +290,8 @@
         </thead>
         <tbody>
             {% for fila in filas %}
-            <tr class="font-large">
-                <td class="first-column-cell3" >{{ fila[0] }}</td>
+            <tr class="font-pequeña">
+                <td class="first-column-cell3" style="width: 55px; height: 40px;"" >{{ fila[0] }}</td>
                 <td class="haber">{{ fila[1] }}</td>
                 {% if ipc %}
                 <td class="haber">{{ fila[2] }}</td>

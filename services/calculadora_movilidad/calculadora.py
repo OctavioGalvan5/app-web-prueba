@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 import io
 import base64
-from services.calculos import formatear_dinero, transformar_fecha
+from services.calculos import formatear_dinero, transformar_fecha, transformar_fecha_periodo
 from models.database import buscar_fechas
 from flask import render_template, send_file
 from werkzeug.wrappers import response

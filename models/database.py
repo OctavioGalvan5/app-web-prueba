@@ -43,7 +43,7 @@ def buscar_fechas(fecha_inicio,fecha_fin, monto):
 
 
             # Agregar la primera tupla a la lista
-            lista_filas.append((convertir_fecha(fila_menor[1]),
+            lista_filas.append((convertir_fecha_periodo(fila_menor[1]),
                 formatear_dinero(monto_columna2),
                 formatear_dinero(monto_columna3),
                 formatear_dinero(monto_columna4),
@@ -79,7 +79,7 @@ def buscar_fechas(fecha_inicio,fecha_fin, monto):
                 monto_columna8 *= fila[8]
 
                 # Agregar la tupla a la lista
-                lista_filas.append((convertir_fecha(fila[1]),
+                lista_filas.append((convertir_fecha_periodo(fila[1]),
                     formatear_dinero(monto_columna2),
                     formatear_dinero(monto_columna3),
                     formatear_dinero(monto_columna4),
@@ -108,3 +108,12 @@ def convertir_fecha(fecha):
     :return: Una cadena de texto con la fecha en formato 'dd/mm/yyyy'.
     """
     return fecha.strftime('%d/%m/%Y')
+
+def convertir_fecha_periodo(fecha):
+  """
+  Convierte una fecha de tipo datetime al formato 'mm/yyyy'.
+
+  :param fecha: Un objeto de tipo datetime.
+  :return: Una cadena de texto con la fecha en formato 'mm/yyyy'.
+  """
+  return fecha.strftime('%m/%Y')

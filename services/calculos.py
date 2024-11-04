@@ -70,6 +70,13 @@ def transformar_fecha(fecha):
   # Formatear la fecha al nuevo formato deseado
   fecha_formateada = fecha_objeto.strftime("%d/%m/%Y")
   return fecha_formateada
+
+def transformar_fecha_periodo(fecha):
+  # Convertir la fecha de string a objeto datetime
+  fecha_objeto = datetime.strptime(fecha, "%Y-%m-%d")
+  # Formatear la fecha al nuevo formato deseado
+  fecha_formateada = fecha_objeto.strftime("%m/%Y")
+  return fecha_formateada
                                       
 def calcular_porcentajes_ley_21839(monto):
   porcentaje_aplicable= calcular_porcentaje(13,monto)
@@ -87,3 +94,12 @@ def convertir_fecha(fecha):
     :return: Una cadena de texto con la fecha en formato 'dd/mm/yyyy'.
     """
     return fecha.strftime('%d/%m/%Y')
+
+def convertir_fecha_periodo(fecha):
+  """
+  Convierte una fecha de tipo datetime al formato 'mm/yyyy'.
+
+  :param fecha: Un objeto de tipo datetime.
+  :return: Una cadena de texto con la fecha en formato 'mm/yyyy'.
+  """
+  return fecha.strftime('%m/%Y')
