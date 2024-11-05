@@ -17,7 +17,7 @@ def crear_graficos(datos, etiquetas):
     fig = go.Figure(data=go.Bar(
         x=etiquetas, 
         y=valores, 
-         marker_color=['#7671FA','#00c4ff', '#E5EAF3', '#07244C', '#178DAD', '#7E7F9C', '#9e73a3', '#3cd7c4'],
+         marker_color=['#7671FA','#00c4ff', '#E5EAF3', '#07244C', '#178DAD', '#7E7F9C', '#9e73a3', '#3cd7c4', '#83007f','#bb73b3'],
         text=resultados, textposition='auto',
         textfont=dict(size=14)
 
@@ -45,7 +45,7 @@ def crear_graficos(datos, etiquetas):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor, expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, Caliva_Marquez_con_27551_con_3_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no ):
+    def __init__(self, datos_del_actor, expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no ):
         self.datos_del_actor = datos_del_actor
         self.expediente = expediente
         self.beneficio = beneficio
@@ -59,7 +59,11 @@ class CalculadorMovilidad:
         self.uma = uma
         self.movilidad_sentencia = movilidad_sentencia
         self.Ley_27426_rezago = Ley_27426_rezago
+        self.caliva_mas_anses = caliva_mas_anses
         self.Caliva_Marquez_con_27551_con_3_rezago = Caliva_Marquez_con_27551_con_3_rezago
+        self.Caliva_Marquez_con_27551_con_6_rezago = Caliva_Marquez_con_27551_con_6_rezago
+        self.Alanis_Mas_Anses = Alanis_Mas_Anses
+        self.Alanis_con_27551_con_3_meses_rezago = Alanis_con_27551_con_3_meses_rezago
         self.comparacion_mov_sentencia_si = comparacion_mov_sentencia_si
         self.comparacion_mov_sentencia_no = comparacion_mov_sentencia_no
 
@@ -93,8 +97,29 @@ class CalculadorMovilidad:
                 'dif_anses_Caliva_Marquez_con_27551_con_3_rezago': formatear_dinero(ultimos_valores[6] - ultimos_valores[0]),
                 'conf_anses_Caliva_Marquez_con_27551_con_3_rezago': str(round((ultimos_valores[6] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
                 'dif_sent_Caliva_Marquez_con_27551_con_3_rezago': formatear_dinero(ultimos_valores[6] - ultimos_valores[4]),
-                'conf_sent_Caliva_Marquez_con_27551_con_3_rezago': str(round((ultimos_valores[6] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%"
-           }
+                'conf_sent_Caliva_Marquez_con_27551_con_3_rezago': str(round((ultimos_valores[6] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
+                #
+                'dif_anses_caliva_mas_anses': formatear_dinero(ultimos_valores[7] - ultimos_valores[0]),
+                'conf_anses_caliva_mas_anses': str(round((ultimos_valores[7] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+                'dif_sent_caliva_mas_anses': formatear_dinero(ultimos_valores[7] - ultimos_valores[4]),
+                'conf_sent_caliva_mas_anses': str(round((ultimos_valores[7] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
+                #
+                'dif_anses_Caliva_Marquez_con_27551_con_6_rezago': formatear_dinero(ultimos_valores[8] - ultimos_valores[0]),
+                'conf_anses_Caliva_Marquez_con_27551_con_6_rezago': str(round((ultimos_valores[8] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+                'dif_sent_Caliva_Marquez_con_27551_con_6_rezago': formatear_dinero(ultimos_valores[8] - ultimos_valores[4]),
+                'conf_sent_Caliva_Marquez_con_27551_con_6_rezago': str(round((ultimos_valores[8] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
+                #
+                'dif_anses_alanis_mas_anses': formatear_dinero(ultimos_valores[9] - ultimos_valores[0]),
+                'conf_anses_alanis_mas_anses': str(round((ultimos_valores[9] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+                'dif_sent_alanis_mas_anses': formatear_dinero(ultimos_valores[9] - ultimos_valores[4]),
+                'conf_sent_alanis_mas_anses': str(round((ultimos_valores[9] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
+                #
+                'dif_anses_Alanis_con_27551_con_3_rezago': formatear_dinero(ultimos_valores[10] - ultimos_valores[0]),
+                'conf_anses_Alanis_con_27551_con_3_rezago': str(round((ultimos_valores[10] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+                'dif_sent_Alanis_con_27551_con_3_rezago': formatear_dinero(ultimos_valores[10] - ultimos_valores[4]),
+                'conf_sent_Alanis_con_27551_con_3_rezago': str(round((ultimos_valores[10] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
+                #
+           }    
         datos = []
         etiquetas = []
         if self.ipc:
@@ -108,13 +133,25 @@ class CalculadorMovilidad:
             etiquetas.append('UMA')
         if self.movilidad_sentencia:
             datos.append(round(ultimos_valores[4] - ultimos_valores[0],2))
-            etiquetas.append('Movilidad de Sentencia')
+            etiquetas.append('Movilidad de Sentencia (Caliva)')
         if self.Ley_27426_rezago:
             datos.append(round(ultimos_valores[5] - ultimos_valores[0],2))
             etiquetas.append('Ley 27426 con rezago')
         if self.Caliva_Marquez_con_27551_con_3_rezago:
             datos.append(round(ultimos_valores[6] - ultimos_valores[0],2))
-            etiquetas.append('Caliva_Marquez_con_27551_con_3_rezago')
+            etiquetas.append('Caliva Marquez con 27551 con 3 rezago')
+        if self.caliva_mas_anses:
+            datos.append(round(ultimos_valores[7] - ultimos_valores[0],2))
+            etiquetas.append('Caliva mas Anses')
+        if self.Caliva_Marquez_con_27551_con_6_rezago:
+            datos.append(round(ultimos_valores[8] - ultimos_valores[0],2))
+            etiquetas.append('Caliva Marquez con 27551 con 6 rezago')
+        if self.Alanis_Mas_Anses:
+            datos.append(round(ultimos_valores[9] - ultimos_valores[0],2))
+            etiquetas.append('Alanis mas Anses')
+        if self.Alanis_con_27551_con_3_meses_rezago:
+            datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+            etiquetas.append('Alanis con 27551 con 3 rezago')
         grafico1 = crear_graficos(datos,etiquetas)
 
         if self.comparacion_mov_sentencia_si:
@@ -134,7 +171,19 @@ class CalculadorMovilidad:
                 etiquetas_2.append('Ley 27426 con rezago')
             if self.Caliva_Marquez_con_27551_con_3_rezago:
                 datos_2.append(round(ultimos_valores[6] - ultimos_valores[4],2))
-                etiquetas_2.append('Caliva_Marquez_con_27551_con_3_rezago')
+                etiquetas_2.append('Caliva Marquez con 27551 con 3 rezago')
+            if self.caliva_mas_anses:
+                datos_2.append(round(ultimos_valores[7] - ultimos_valores[4],2))
+                etiquetas_2.append('Caliva mas Anses')
+            if self.Caliva_Marquez_con_27551_con_6_rezago:
+                datos_2.append(round(ultimos_valores[8] - ultimos_valores[4],2))
+                etiquetas_2.append('Caliva Marquez con 27551 con 6 rezago')
+            if self.Alanis_Mas_Anses:
+                datos_2.append(round(ultimos_valores[9] - ultimos_valores[4],2))
+                etiquetas_2.append('Alanis mas Anses')
+            if self.Alanis_con_27551_con_3_meses_rezago:
+                datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
+                etiquetas_2.append('Alanis con 27551 con 3 rezago')
             grafico2 = crear_graficos(datos_2, etiquetas_2)
         else:
             grafico2 = None
@@ -162,7 +211,11 @@ class CalculadorMovilidad:
             ripte = self.ripte,
             movilidad_sentencia = self.movilidad_sentencia,
             Ley_27426_rezago = self.Ley_27426_rezago,
+            caliva_mas_anses = self.caliva_mas_anses,
             Caliva_Marquez_con_27551_con_3_rezago= self.Caliva_Marquez_con_27551_con_3_rezago,
+            Caliva_Marquez_con_27551_con_6_rezago = self.Caliva_Marquez_con_27551_con_6_rezago,
+            Alanis_Mas_Anses = self.Alanis_Mas_Anses,
+            Alanis_con_27551_con_3_meses_rezago = self.Alanis_con_27551_con_3_meses_rezago,
             comparacion_mov_sentencia_si = self.comparacion_mov_sentencia_si,
             valor_anses = formatear_dinero(montos_a_fecha_cierre[0]),
             valor_ipc = formatear_dinero(montos_a_fecha_cierre[1]),
@@ -171,6 +224,10 @@ class CalculadorMovilidad:
             valor_mov_sentencia = formatear_dinero(montos_a_fecha_cierre[4]),
             valor_Ley_27426_rezago = formatear_dinero(montos_a_fecha_cierre[5]),
             valor_Caliva_Marquez_con_27551_con_3_rezago = formatear_dinero(montos_a_fecha_cierre[6]),
+            valor_Caliva_mas_Anses = formatear_dinero(montos_a_fecha_cierre[7]),
+            valor_Caliva_Marquez_con_27551_con_6_rezago = formatear_dinero(montos_a_fecha_cierre[8]),
+            valor_Alanis_mas_Anses = formatear_dinero(montos_a_fecha_cierre[9]),
+            valor_Alanis_con_27551_con_3_rezago = formatear_dinero(montos_a_fecha_cierre[10])
             
         )
         # Crear el PDF en memoria

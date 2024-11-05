@@ -40,6 +40,10 @@ def buscar_fechas(fecha_inicio,fecha_fin, monto):
             monto_columna6 = fila_menor[6] * monto
             monto_columna7 = fila_menor[7] * monto
             monto_columna8 = fila_menor[8] * monto
+            monto_columna9 = fila_menor[9] * monto
+            monto_columna10 = fila_menor[10] * monto
+            monto_columna11 = fila_menor[11] * monto
+            monto_columna12 = fila_menor[12] * monto
 
 
             # Agregar la primera tupla a la lista
@@ -50,10 +54,14 @@ def buscar_fechas(fecha_inicio,fecha_fin, monto):
                 formatear_dinero(monto_columna5),
                 formatear_dinero(monto_columna6),
                 formatear_dinero(monto_columna7),
-                formatear_dinero(monto_columna8)
+                formatear_dinero(monto_columna8),
+                formatear_dinero(monto_columna9),
+                formatear_dinero(monto_columna10),
+                formatear_dinero(monto_columna11),
+                formatear_dinero(monto_columna12)
 
             ))
-            lista_montos.append((monto_columna2,monto_columna3,monto_columna4,monto_columna5,monto_columna6,monto_columna7, monto_columna8))
+            lista_montos.append((monto_columna2,monto_columna3,monto_columna4,monto_columna5,monto_columna6,monto_columna7, monto_columna8, monto_columna9, monto_columna10, monto_columna11,monto_columna12))
         else:
             print("No se encontró una fecha menor a la ingresada.")
             return []
@@ -77,6 +85,10 @@ def buscar_fechas(fecha_inicio,fecha_fin, monto):
                 monto_columna6 *= fila[6]
                 monto_columna7 *= fila[7]
                 monto_columna8 *= fila[8]
+                monto_columna9 *= fila[9]
+                monto_columna10 *= fila[10]
+                monto_columna11 *= fila[11]
+                monto_columna12 *= fila[12]
 
                 # Agregar la tupla a la lista
                 lista_filas.append((convertir_fecha_periodo(fila[1]),
@@ -86,10 +98,14 @@ def buscar_fechas(fecha_inicio,fecha_fin, monto):
                     formatear_dinero(monto_columna5),
                     formatear_dinero(monto_columna6),
                     formatear_dinero(monto_columna7),
-                    formatear_dinero(monto_columna8)
+                    formatear_dinero(monto_columna8),
+                    formatear_dinero(monto_columna9),
+                    formatear_dinero(monto_columna10),
+                    formatear_dinero(monto_columna11),
+                    formatear_dinero(monto_columna12)
 
                 ))
-                lista_montos.append((monto_columna2,monto_columna3,monto_columna4,monto_columna5,monto_columna6,monto_columna7,monto_columna8))
+                lista_montos.append((monto_columna2,monto_columna3,monto_columna4,monto_columna5,monto_columna6,monto_columna7,monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12))
 
                 # Comparar si el año y el mes son los mismos
                 if fila[1].year == fecha_fin_dt.year and fila[1].month == fecha_fin_dt.month:
