@@ -1,35 +1,56 @@
 import plotly.graph_objects as go
 import io
 import base64
-from services.calculos import formatear_dinero, transformar_fecha, transformar_fecha_periodo
+from services.calculos import formatear_dinero, transformar_fecha
 from models.database import buscar_fechas
 from flask import render_template, send_file
 from werkzeug.wrappers import response
 from config import config
 from xhtml2pdf import pisa
 from io import BytesIO
+from datetime import datetime
+
+
+def convertir_fecha_periodo(fecha):
+    # Convertir la fecha si es una cadena
+    if isinstance(fecha, str):
+        fecha = datetime.strptime(fecha, '%Y-%m-%d')  # Ajusta el formato a como esté tu fecha
+    return fecha.strftime('%m/%Y')
+
+
 
 def crear_graficos(datos, etiquetas):
     etiquetas = etiquetas
     valores = datos
     resultados = list(map(formatear_dinero, valores))
-    # Crear el gráfico
+
+    # Crear el gráfico de barras
     fig = go.Figure(data=go.Bar(
         x=etiquetas, 
         y=valores, 
-         marker_color=['#7671FA','#00c4ff', '#E5EAF3', '#07244C', '#178DAD', '#7E7F9C', '#9e73a3', '#3cd7c4', '#83007f','#bb73b3'],
+        marker_color=['#7671FA','#00c4ff', '#E5EAF3', '#07244C', '#178DAD', '#7E7F9C', '#9e73a3', '#3cd7c4', '#83007f','#bb73b3'],
         text=resultados, textposition='auto',
         textfont=dict(size=14)
-
     ))
+
+    # Agregar la línea horizontal en el nivel de la primera columna
+    valor_primera_columna = valores[0]
+    fig.add_shape(
+        type="line",
+        x0=-0.5,  # Colocar la línea al inicio del gráfico
+        x1=len(etiquetas) - 0.5,  # Colocar la línea hasta el final del gráfico
+        y0=valor_primera_columna,
+        y1=valor_primera_columna,
+        line=dict(color="red", width=3, dash="solid")
+    )
 
     # Actualizar el diseño del gráfico
     fig.update_layout(
         title='', 
         xaxis_title='', 
         yaxis_title='',
-        plot_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del área de trazado transparente
-        paper_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del gráfico transparente
+        plot_bgcolor='rgba(0, 0, 0, 0)',
+        paper_bgcolor='rgba(0, 0, 0, 0)',
         margin=dict(l=40, r=40, t=40, b=40),
         width=800, height=600,
         xaxis=dict(title_font=dict(size=14), tickfont=dict(size=10)),
@@ -120,69 +141,88 @@ class CalculadorMovilidad:
                 'conf_sent_Alanis_con_27551_con_3_rezago': str(round((ultimos_valores[10] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
                 #
            }    
-        datos = []
-        etiquetas = []
+        datos = [ultimos_valores[0]]
+        etiquetas = ['Anses']
         if self.ipc:
-            datos.append(round(ultimos_valores[1] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[1])
+            #datos.append(round(ultimos_valores[1] - ultimos_valores[0],2))
             etiquetas.append('IPC')
         if self.ripte:
-            datos.append(round(ultimos_valores[2] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[2])
+            #datos.append(round(ultimos_valores[2] - ultimos_valores[0],2))
             etiquetas.append('RIPTE')
         if self.uma:
-            datos.append(round(ultimos_valores[3] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[3])
+            #datos.append(round(ultimos_valores[3] - ultimos_valores[0],2))
             etiquetas.append('UMA')
         if self.movilidad_sentencia:
-            datos.append(round(ultimos_valores[4] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[4])
+            #datos.append(round(ultimos_valores[4] - ultimos_valores[0],2))
             etiquetas.append('Movilidad de Sentencia (Caliva)')
         if self.Ley_27426_rezago:
-            datos.append(round(ultimos_valores[5] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[5])
+            #datos.append(round(ultimos_valores[5] - ultimos_valores[0],2))
             etiquetas.append('Ley 27426 con rezago')
         if self.Caliva_Marquez_con_27551_con_3_rezago:
-            datos.append(round(ultimos_valores[6] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[6])
+            #datos.append(round(ultimos_valores[6] - ultimos_valores[0],2))
             etiquetas.append('Caliva Marquez con 27551 con 3 rezago')
         if self.caliva_mas_anses:
-            datos.append(round(ultimos_valores[7] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[7])
+            #datos.append(round(ultimos_valores[7] - ultimos_valores[0],2))
             etiquetas.append('Caliva mas Anses')
         if self.Caliva_Marquez_con_27551_con_6_rezago:
-            datos.append(round(ultimos_valores[8] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[8])
+            #datos.append(round(ultimos_valores[8] - ultimos_valores[0],2))
             etiquetas.append('Caliva Marquez con 27551 con 6 rezago')
         if self.Alanis_Mas_Anses:
-            datos.append(round(ultimos_valores[9] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[9])
+            #datos.append(round(ultimos_valores[9] - ultimos_valores[0],2))
             etiquetas.append('Alanis mas Anses')
         if self.Alanis_con_27551_con_3_meses_rezago:
-            datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+            datos.append(ultimos_valores[10])
+            #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
             etiquetas.append('Alanis con 27551 con 3 rezago')
         grafico1 = crear_graficos(datos,etiquetas)
 
         if self.comparacion_mov_sentencia_si:
-            datos_2 = []
-            etiquetas_2 = []
+            datos_2 = [ultimos_valores[4]]
+            etiquetas_2 = ['Movilidad de Sentencia (Caliva)']
             if self.ipc:
-                datos_2.append(round(ultimos_valores[1] - ultimos_valores[4],2))
+                datos_2.append(ultimos_valores[1])
+                #datos_2.append(round(ultimos_valores[1] - ultimos_valores[4],2))
                 etiquetas_2.append('IPC')
             if self.ripte:
-                datos_2.append(round(ultimos_valores[2] - ultimos_valores[4],2))
+                datos_2.append(ultimos_valores[2])
+                #datos_2.append(round(ultimos_valores[2] - ultimos_valores[4],2))
                 etiquetas_2.append('RIPTE')
             if self.uma:
-                datos_2.append(round(ultimos_valores[3] - ultimos_valores[4],2))
+                datos_2.append(ultimos_valores[3])
+                #datos_2.append(round(ultimos_valores[3] - ultimos_valores[4],2))
                 etiquetas_2.append('UMA')
             if self.Ley_27426_rezago:
-                datos_2.append(round(ultimos_valores[5] - ultimos_valores[4],2))
+                datos_2.append(ultimos_valores[5])
+                #datos_2.append(round(ultimos_valores[5] - ultimos_valores[4],2))
                 etiquetas_2.append('Ley 27426 con rezago')
             if self.Caliva_Marquez_con_27551_con_3_rezago:
-                datos_2.append(round(ultimos_valores[6] - ultimos_valores[4],2))
+                datos_2.append(ultimos_valores[6])
+                #datos_2.append(round(ultimos_valores[6] - ultimos_valores[4],2))
                 etiquetas_2.append('Caliva Marquez con 27551 con 3 rezago')
             if self.caliva_mas_anses:
-                datos_2.append(round(ultimos_valores[7] - ultimos_valores[4],2))
+                datos_2.append(ultimos_valores[7])
+                #datos_2.append(round(ultimos_valores[7] - ultimos_valores[4],2))
                 etiquetas_2.append('Caliva mas Anses')
             if self.Caliva_Marquez_con_27551_con_6_rezago:
-                datos_2.append(round(ultimos_valores[8] - ultimos_valores[4],2))
+                datos_2.append(ultimos_valores[8])
+                #datos_2.append(round(ultimos_valores[8] - ultimos_valores[4],2))
                 etiquetas_2.append('Caliva Marquez con 27551 con 6 rezago')
             if self.Alanis_Mas_Anses:
-                datos_2.append(round(ultimos_valores[9] - ultimos_valores[4],2))
+                datos_2.append(ultimos_valores[9])
+                #datos_2.append(round(ultimos_valores[9] - ultimos_valores[4],2))
                 etiquetas_2.append('Alanis mas Anses')
             if self.Alanis_con_27551_con_3_meses_rezago:
-                datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
+                datos_2.append(ultimos_valores[10])
+                #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
                 etiquetas_2.append('Alanis con 27551 con 3 rezago')
             grafico2 = crear_graficos(datos_2, etiquetas_2)
         else:
@@ -203,8 +243,8 @@ class CalculadorMovilidad:
             expediente = self.expediente,
             beneficio = self.beneficio,
             num_beneficio = self.num_beneficio,
-            fecha_inicio = transformar_fecha(self.fecha_inicio),
-            fecha_fin = transformar_fecha(self.fecha_fin),
+            fecha_inicio = convertir_fecha_periodo(self.fecha_inicio),
+            fecha_fin = convertir_fecha_periodo(self.fecha_fin),
             fecha_adquisicion_del_derecho = self.fecha_adquisicion_del_derecho,
             ipc = self.ipc,
             uma = self.uma,
