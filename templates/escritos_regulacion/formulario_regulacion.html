@@ -41,7 +41,7 @@
         .checkbox-container {
             display: flex;
             align-items: center;
-            margin-top: 10px;
+            gap: 10px;
         }
         .checkbox-container input[type="checkbox"] {
             margin-right: 10px;
@@ -82,7 +82,7 @@
         <label for="expediente">Expediente:</label>
         <input type="text" id="expediente" name="expediente" required>
 
-        <h3>Liquidación:</h3>
+        <h3>Primera Liquidacion:</h3>
 
         <label for="fecha_aprobacion_planilla">Fecha de aprobación de planilla:</label>
         <input type="date" id="fecha_aprobacion_planilla" name="fecha_aprobacion_planilla" required>
@@ -112,10 +112,17 @@
                style="padding-left: 25px;" 
                required />
 
-
-        <div class="checkbox-container">
-            <input type="checkbox" id="costas_orden" name="costas_orden">
-            <label for="costas_orden">¿Las costas no fueron para ANSES?</label>
+        
+        <h4>Costas a Anses:</h4>
+        <div class="checkbox-container" style="display: flex; gap: 20px;">
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" id="costas" name="costas">
+                <label for="costas" style="margin-left: 5px;">Si</label>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" id="costas_orden" name="costas_orden">
+                <label for="costas_orden" style="margin-left: 5px;">No</label>
+            </div>
         </div>
 
         <div id="costasAdicionales" class="conditional-section">
@@ -123,9 +130,21 @@
             <input type="date" id="sentencia_interlocutoria_costas" name="sentencia_interlocutoria_costas">
         </div>
 
-        <label for="fecha_sentencia_apelacion">Fecha de sentencia de apelación:</label>
-        <input type="date" id="fecha_sentencia_apelacion" name="fecha_sentencia_apelacion">
-
+        <h4>Posee sentencia de apelacion:</h4>
+        <div class="checkbox-container" style="display: flex; gap: 20px;">
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" id="sentencia_apelacion" name="sentencia_apelacion">
+                <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" id="no_sentencia_apelacion" name="no_sentencia_apelacion">
+                <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+            </div>
+        </div>
+        <div id="sentencia_apelacion_section" class="conditional-section">
+            <label for="fecha_sentencia_apelacion">Fecha de sentencia de apelación:</label>
+            <input type="date" id="fecha_sentencia_apelacion" name="fecha_sentencia_apelacion">
+        </div>
         <div class="checkbox-container">
             <input type="checkbox" id="sentencia_trance_liquidacion" name="sentencia_trance_liquidacion">
             <label for="sentencia_trance_liquidacion">¿Tiene sentencia de trance?</label>
@@ -291,6 +310,7 @@
             const checkboxes = {
                 costas_orden: document.getElementById('costas_orden'),
                 sentencia_trance_liquidacion: document.getElementById('sentencia_trance_liquidacion'),
+                sentencia_apelacion: document.getElementById('sentencia_apelacion'),
                 planilla_ampliacion: document.getElementById('planilla_ampliacion'),
                 costas_a_su_orden: document.getElementById('costas_a_su_orden'),
                 sentencia_trance: document.getElementById('sentencia_trance'),
@@ -301,6 +321,7 @@
             const sections = {
                 costasAdicionales: document.getElementById('costasAdicionales'),
                 sentenciaTranceSection: document.getElementById('sentenciaTranceSection'),
+                sentencia_apelacion_section: document.getElementById('sentencia_apelacion_section'),
                 planillaAmpliacionSection: document.getElementById('planillaAmpliacionSection'),
                 costasAsuOrdenSection: document.getElementById('costasAsuOrdenSection'),
                 sentenciaTranceAmpliacionSection: document.getElementById('sentenciaTranceAmpliacionSection'),
@@ -317,6 +338,7 @@
 
             toggleSection(checkboxes.costas_orden, sections.costasAdicionales);
             toggleSection(checkboxes.sentencia_trance_liquidacion, sections.sentenciaTranceSection);
+            toggleSection(checkboxes.sentencia_apelacion, sections.sentencia_apelacion_section);
             toggleSection(checkboxes.planilla_ampliacion, sections.planillaAmpliacionSection);
             toggleSection(checkboxes.costas_a_su_orden, sections.costasAsuOrdenSection);
             toggleSection(checkboxes.sentencia_trance, sections.sentenciaTranceAmpliacionSection);

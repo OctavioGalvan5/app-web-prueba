@@ -386,7 +386,8 @@ def resultado_regulacion():
         "monto_interes_planilla": request.form.get("monto_interes_planilla"),
         "costas_orden": request.form.get("costas_orden") == "on",
         "sentencia_interlocutoria_costas": request.form.get("sentencia_interlocutoria_costas") or "2022-02-01",
-        "fecha_sentencia_apelacion": request.form.get("fecha_sentencia_apelacion"),
+        "sentencia_apelacion" : request.form.get("sentencia_apelacion") == "on",
+        "fecha_sentencia_apelacion": request.form.get("fecha_sentencia_apelacion") or "2022-02-01",
         ## sentencia trance liquidacion
         "sentencia_trance_liquidacion": request.form.get("sentencia_trance_liquidacion") == "on",
         "fecha_sentencia_trance_liquidacion": request.form.get("fecha_sentencia_trance_liquidacion") or "2022-02-01",
