@@ -131,8 +131,8 @@
             <strong>Fecha de cierre del haber:</strong> {{fecha_fin}}
         </p>
     </div>
-    <h6>Diferencias de Movilidad segun Jurisdiccion:</h6>
-    <table>
+    <h6>Diferencias de Movilidad con Haber Anses segun Jurisdiccion:</h6>
+    <table style="margin-top: 20px;">
         <tr class="font-large first-column-cell2";>
             <td rowspan="1" class="negrita">Movilidad</td>
             <td rowspan="2" class="negrita">Haber al {{fecha_fin}} </td>
@@ -234,10 +234,9 @@
         <img src="data:image/png;base64,{{ grafico1 }}" alt="Gráfico comparativo de haberes Anses">
     </div>
 
-    <div class="page-break"></div>
 
     {% if comparacion_mov_sentencia_si %}
-    <h6>Diferencias de Movilidad segun Jurisdiccion:</h6>
+    <h6>Diferencias de Movilidad con Haber de Sentencia segun Jurisdiccion:</h6>
     <table>
         <tr class="font-large first-column-cell2";>
             <td rowspan="1" class="negrita">Movilidad</td>
@@ -331,7 +330,6 @@
         <img src="data:image/png;base64,{{ grafico2 }}" alt="Gráfico comparativo de haberes de Sentencia">
     </div>
 
-    <div class="page-break"></div>
     {% endif %}
 
     

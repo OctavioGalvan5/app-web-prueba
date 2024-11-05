@@ -111,11 +111,23 @@ class Comparativa:
       datos['rem_max_imponible_cm_extendido_27551_2'] = rem_max_imponible_cm_extendido_27551_2
 
       datos['dif_caliva_anses']  = str(round((caliva_ext_27551_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_caliva_anses']  = formatear_dinero(caliva_ext_27551_2 - anses_2)
+
       datos['dif_badaro_anses']  = str(round((badaro_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_badaro_anses']  = formatear_dinero(badaro_2 - anses_2)
+
       datos['dif_badaro_cm_anses']  = str(round((badaro_cm_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_badaro_cm_anses']  = formatear_dinero(badaro_cm_2 - anses_2)
+      
       datos['dif_ocheintados_rem_max_anses']  = str(round((ocheintados_rem_max_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_ocheintados_rem_max_anses']  = formatear_dinero(ocheintados_rem_max_2 - anses_2)
+
       datos['dif_rem_max_anses']  = str(round((rem_max_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_rem_max_anses']  = formatear_dinero(rem_max_2 - anses_2)
+
       datos['dif_rem_max_imponible_cm_extendido_27551_anses']  = str(round((rem_max_imponible_cm_extendido_27551_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_rem_max_imponible_cm_extendido_27551_anses']  = formatear_dinero(rem_max_imponible_cm_extendido_27551_2 - anses_2)
+
 
       return datos
 
@@ -147,11 +159,22 @@ class Comparativa:
           rem_max_imponible_cm_extendido_27551_2=formatear_dinero(datos['rem_max_imponible_cm_extendido_27551_2']),
 
           dif_caliva_anses=datos['dif_caliva_anses'],
+          dif_monto_caliva_anses=datos['dif_monto_caliva_anses'] ,
+          
           dif_badaro_anses=datos['dif_badaro_anses'],
+          dif_monto_badaro_anses=datos['dif_monto_badaro_anses'],
+          
           dif_badaro_cm_anses=datos['dif_badaro_cm_anses'],
+          dif_monto_badaro_cm_anses=datos['dif_monto_badaro_cm_anses'],
+          
           dif_ocheintados_rem_max_anses=datos['dif_ocheintados_rem_max_anses'],
+          dif_monto_ocheintados_rem_max_anses=datos['dif_monto_ocheintados_rem_max_anses'],
+          
           dif_rem_max_anses=datos['dif_rem_max_anses'],
+          dif_monto_rem_max_anses=datos['dif_monto_rem_max_anses'],
+          
           dif_rem_max_imponible_cm_extendido_27551_anses= datos['dif_rem_max_imponible_cm_extendido_27551_anses'],
+          dif_monto_rem_max_imponible_cm_extendido_27551_anses= datos['dif_monto_rem_max_imponible_cm_extendido_27551_anses'],
           grafico = grafico
          
       )

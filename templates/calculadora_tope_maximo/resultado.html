@@ -100,7 +100,7 @@
 </head>
 <body>
     <hr>
-    <h1>Resultados de Calculadora de Movilidad</h1>
+    <h1>Comparativa de Haberes Maximos</h1>
     <hr style="margin-bottom: 20px;">
 
     <div class="info-section">
@@ -134,16 +134,25 @@
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">{{periodo_hasta}}</td>
-            <td class="confiscatoriedad">{{ anses_2 }}</td>
-            <td class="confiscatoriedad">{{ calivas_ext_27551_2 }}</td>
-            <td class="confiscatoriedad">{{ badaro_2 }}</td>
-            <td class="confiscatoriedad">{{ badaro_cm_2 }}</td>
-            <td class="confiscatoriedad">{{ ocheintados_rem_max_2 }}</td>
-            <td class="confiscatoriedad">{{ rem_max_2 }}</td>
-            <td class="confiscatoriedad">{{ rem_max_imponible_cm_extendido_27551_2 }}</td>
+            <td>{{ anses_2 }}</td>
+            <td>{{ calivas_ext_27551_2 }}</td>
+            <td>{{ badaro_2 }}</td>
+            <td>{{ badaro_cm_2 }}</td>
+            <td>{{ ocheintados_rem_max_2 }}</td>
+            <td>{{ rem_max_2 }}</td>
+            <td>{{ rem_max_imponible_cm_extendido_27551_2 }}</td>
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell" colspan="2">Diferencia con Haber maximo Anses</td>
+            <td class="confiscatoriedad">{{ dif_monto_caliva_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_monto_badaro_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_monto_badaro_cm_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_monto_ocheintados_rem_max_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_monto_rem_max_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_monto_rem_max_imponible_cm_extendido_27551_anses }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell" colspan="2">Porcentaje de Diferencia con Haber maximo Anses</td>
             <td class="confiscatoriedad">{{ dif_caliva_anses }}</td>
             <td class="confiscatoriedad">{{ dif_badaro_anses }}</td>
             <td class="confiscatoriedad">{{ dif_badaro_cm_anses }}</td>

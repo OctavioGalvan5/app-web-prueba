@@ -8,27 +8,32 @@ class Regulacion:
       datos["monto_total_planilla"] = formatear_dinero(float(datos["monto_interes_planilla"]) + float(datos["monto_aprobacion_planilla"]))
       datos["valor_uma_fecha_aprobacion_planilla"] = formatear_dinero(obtener_valor_uma(datos["fecha_aprobacion_planilla"]))
       datos["acordada_fecha_aprobacion_planilla"] = obtener_acordada(datos["fecha_aprobacion_planilla"])
+      datos["monto_uma_planilla"] = round((float(datos["monto_interes_planilla"]) + float(datos["monto_aprobacion_planilla"])) / float(obtener_valor_uma(datos["fecha_aprobacion_planilla"])),2)
       ### sentencia trance ###
       datos["monto_total_planilla_trance"] = formatear_dinero(float(datos["monto_interes_planilla_trance"]) + float(datos["monto_aprobacion_planilla"]))
       datos["valor_uma_fecha_pago_planilla"] = formatear_dinero(obtener_valor_uma(datos["fecha_pago_planilla"]))
       datos["acordada_fecha_pago_planilla"] = obtener_acordada(datos["fecha_pago_planilla"])
+      datos["monto_uma_planilla_trance"] = round((float(datos["monto_interes_planilla_trance"]) + float(datos["monto_aprobacion_planilla"])) / float(obtener_valor_uma(datos["fecha_pago_planilla"])),2)
       ### planilla ampliacion ###
       datos["monto_total"] = formatear_dinero(float(datos["monto_interes"]) + float(datos["monto_ampliacion"]))
       datos["valor_uma_fecha_aprobacion_planilla_ampliacion"] = formatear_dinero(obtener_valor_uma(datos["fecha_aprobacion_planilla_ampliacion"]))
       datos["acordada_fecha_aprobacion_planilla_ampliacion"] = obtener_acordada(datos["fecha_aprobacion_planilla_ampliacion"])
+      datos["monto_uma"] = round((float(datos["monto_interes"]) + float(datos["monto_ampliacion"])) / float(obtener_valor_uma(datos["fecha_aprobacion_planilla_ampliacion"])),2)
       ### sentencia trance ampliacion ###
       datos["monto_total_trance"] = formatear_dinero(float(datos["monto_interes_trance"]) + float(datos["monto_ampliacion"]))
       datos["valor_uma_fecha_pago"] = formatear_dinero(obtener_valor_uma(datos["fecha_pago"]))
       datos["acordada_fecha_pago"] = obtener_acordada(datos["fecha_pago"])
+      datos["monto_uma_trance"] = round((float(datos["monto_interes_trance"]) + float(datos["monto_ampliacion"])) / float(obtener_valor_uma(datos["fecha_pago"])),2)
       ### planilla ampliacion 2 ###
       datos["monto_total_2"] = formatear_dinero(float(datos["monto_interes_2"]) + float(datos["monto_ampliacion_2"]))
       datos["valor_uma_fecha_aprobacion_planilla_ampliacion_2"] = formatear_dinero(obtener_valor_uma(datos["fecha_aprobacion_planilla_ampliacion_2"]))
       datos["acordada_fecha_aprobacion_planilla_ampliacion_2"] = obtener_acordada(datos["fecha_aprobacion_planilla_ampliacion_2"])
+      datos["monto_uma_2"] = round((float(datos["monto_interes_2"]) + float(datos["monto_ampliacion_2"])) / float(obtener_valor_uma(datos["fecha_aprobacion_planilla_ampliacion_2"])),2)
       ### sentencia trance ampliacion 2 ###
       datos["monto_total_trance_2"] = formatear_dinero(float(datos["monto_interes_trance_2"]) + float(datos["monto_ampliacion_2"]))
       datos["valor_uma_fecha_pago_2"] = formatear_dinero(obtener_valor_uma(datos["fecha_pago_2"]))
       datos["acordada_fecha_pago_2"] = obtener_acordada(datos["fecha_pago_2"])
-
+      datos["monto_uma_trance_2"] = round((float(datos["monto_interes_trance_2"]) + float(datos["monto_ampliacion_2"])) / float(obtener_valor_uma(datos["fecha_pago_2"])),2)
       ### planilla ###
       datos["fecha_aprobacion_planilla"] = transformar_fecha(datos["fecha_aprobacion_planilla"])
       datos["monto_aprobacion_planilla"] = formatear_dinero(datos["monto_aprobacion_planilla"])
