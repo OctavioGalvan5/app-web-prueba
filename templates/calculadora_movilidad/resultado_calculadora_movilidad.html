@@ -28,7 +28,7 @@
         }
         h1 {
             font-size: 24px;
-            color: #8400DA;
+            color: #845EC2;
             text-align: center;
         }
         h6 {
@@ -110,11 +110,22 @@
         .haber {
             color: #2b6cb0;
         }
+        hr {
+            border: none;               /* Elimina el estilo predeterminado */
+            border-top: 1px solid #000; /* Define la línea */
+            margin: 0;                  /* Quita los márgenes del <hr> */
+        }
+
+        h1 {
+            margin: 0;                  /* Quita los márgenes del <h1> */
+            padding-bottom: 1px;        /* Espacio interno para acercarse al <hr> */
+            font-size: 24px;            /* Tamaño del texto, ajustable según diseño */
+        }
     </style>
 </head>
 <body>
     <hr>
-    <h1>Resultados de Calculadora de Movilidad</h1>
+    <h1 style="margin-top: 10px;">Resultados de Calculadora de Movilidad</h1>
     <hr style="margin-bottom: 20px;">
 
     <div class="info-section">
@@ -374,7 +385,7 @@
         <tbody>
             {% for fila in filas %}
             <tr class="font-pequeña">
-                <td class="first-column-cell3" style="width: 55px; height: 40px;">{{ fila[0] }}</td>
+                <td class="first-column-cell3" style=" padding-top: 1px;padding-bottom: 1px;">{{ fila[0] }}</td>
                 <td class="haber">{{ fila[1] }}</td>
                 {% if ipc %}
                 <td class="haber">{{ fila[2] }}</td>    
