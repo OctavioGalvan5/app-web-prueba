@@ -112,9 +112,8 @@
                style="padding-left: 25px;" 
                required />
 
-        
-        <h4>Costas a Anses:</h4>
         <div class="checkbox-container" style="display: flex; gap: 20px;">
+            <h4>Costas a Anses:</h4>
             <div style="display: flex; align-items: center;">
                 <input type="checkbox" id="costas" name="costas">
                 <label for="costas" style="margin-left: 5px;">Si</label>
@@ -129,9 +128,8 @@
             <label for="sentencia_interlocutoria_costas">Fecha de sentencia en la cual las costas se pasan a ANSES:</label>
             <input type="date" id="sentencia_interlocutoria_costas" name="sentencia_interlocutoria_costas">
         </div>
-
-        <h4>Posee sentencia de apelacion:</h4>
         <div class="checkbox-container" style="display: flex; gap: 20px;">
+            <h4>Posee sentencia de apelacion:</h4>
             <div style="display: flex; align-items: center;">
                 <input type="checkbox" id="sentencia_apelacion" name="sentencia_apelacion">
                 <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
@@ -145,11 +143,17 @@
             <label for="fecha_sentencia_apelacion">Fecha de sentencia de apelación:</label>
             <input type="date" id="fecha_sentencia_apelacion" name="fecha_sentencia_apelacion">
         </div>
-        <div class="checkbox-container">
-            <input type="checkbox" id="sentencia_trance_liquidacion" name="sentencia_trance_liquidacion">
-            <label for="sentencia_trance_liquidacion">¿Tiene sentencia de trance?</label>
+        <div class="checkbox-container" style="display: flex; gap: 20px;">
+            <h4>¿Tiene sentencia de trance?</h4>
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" id="sentencia_trance_liquidacion" name="sentencia_trance_liquidacion">
+                <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <input type="checkbox" id="no_sentencia_apelacion" name="no_sentencia_apelacion">
+                <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+            </div>
         </div>
-
         <div id="sentenciaTranceSection" class="conditional-section">
             <label for="fecha_sentencia_trance_liquidacion">Fecha de sentencia de trance:</label>
             <input type="date" id="fecha_sentencia_trance_liquidacion" name="fecha_sentencia_trance_liquidacion">
@@ -166,9 +170,16 @@
                    pattern="^\d+(\.\d{2})?$" 
                    title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
                    style="padding-left: 25px;"/>
-            <div class="checkbox-container">
-                <input type="checkbox" id="planilla_ampliacion" name="planilla_ampliacion">
-                <label for="planilla_ampliacion">Hay una planilla de ampliación presentada</label>
+            <div class="checkbox-container" style="display: flex; gap: 20px;">
+                <h4>Hay una planilla de ampliación presentada</h4>
+                <div style="display: flex; align-items: center;">
+                    <input type="checkbox" id="planilla_ampliacion" name="planilla_ampliacion">
+                    <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <input type="checkbox" id="no_sentencia_apelacion" name="no_sentencia_apelacion">
+                    <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+                </div>
             </div>
 
             <div id="planillaAmpliacionSection" class="conditional-section">
@@ -198,9 +209,16 @@
                    title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
                    style="padding-left: 25px;"/>
 
-                <div class="checkbox-container">
-                    <input type="checkbox" id="costas_a_su_orden" name="costas_a_su_orden">
-                    <label for="costas_a_su_orden">¿Las costas no fueron a ANSES?</label>
+                <div class="checkbox-container" style="display: flex; gap: 20px;">
+                    <h4>Costas a Anses</h4>
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" id="planilla_ampliacion" name="costas_a_su_orden_no">
+                        <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" id="costas_a_su_orden" name="costas_a_su_orden">
+                        <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+                    </div>
                 </div>
 
                 <div id="costasAsuOrdenSection" class="conditional-section">
@@ -208,9 +226,16 @@
                     <input type="date" id="fecha_sentencia_interlocutoria" name="fecha_sentencia_interlocutoria">
                 </div>
 
-                <div class="checkbox-container">
-                    <input type="checkbox" id="sentencia_trance" name="sentencia_trance">
-                    <label for="sentencia_trance">¿Hay sentencia de trance de la planilla de liquidación?</label>
+                <div class="checkbox-container" style="display: flex; gap: 20px;">
+                    <h4>¿Hay sentencia de trance de la planilla de liquidación?</h4>
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" id="sentencia_trance" name="sentencia_trance">
+                        <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" id="no_sentencia_apelacion" name="no_sentencia_apelacion">
+                        <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+                    </div>
                 </div>
 
                 <div id="sentenciaTranceAmpliacionSection" class="conditional-section">
@@ -229,77 +254,182 @@
                            pattern="^\d+(\.\d{2})?$" 
                            title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
                            style="padding-left: 25px;"/>
-                </div>
-
-                <div class="checkbox-container">
-                    <input type="checkbox" id="planilla_ampliacion_2" name="planilla_ampliacion_2">
-                    <label for="planilla_ampliacion_2">Hay una segunda planilla de ampliación presentada</label>
-                </div>
-
-                <div id="planillaAmpliacion2Section" class="conditional-section">
-                    <label for="fecha_aprobacion_planilla_ampliacion_2">Fecha de aprobación de la segunda planilla de ampliación:</label>
-                    <input type="date" id="fecha_aprobacion_planilla_ampliacion_2" name="fecha_aprobacion_planilla_ampliacion_2">
-
-                    <label for="monto_ampliacion_2">Monto aprobado de la segunda planilla de ampliación:</label>
-                    <input type="text" id="monto_ampliacion_2" name="monto_ampliacion_2" 
-                           placeholder="Ingrese el monto actualizado" 
-                           pattern="^\d+(\.\d{2})?$" 
-                           title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
-                           style="padding-left: 25px;"/>
-
-                    <label for="fecha_inicio_2">Fecha de inicio de liquidación (segunda ampliación):</label>
-                    <input type="date" id="fecha_inicio_2"   name="fecha_inicio_2">
-
-                    <label for="fecha_corte_2">Fecha de corte del cálculo de la segunda planilla de ampliación:</label>
-                    <input type="date" id="fecha_corte_2" name="fecha_corte_2">
-
-                    <label for="interes_2">Interés (ej. 45,34%) (segunda ampliación):</label>
-                    <input type="text" id="interes_2" name="interes_2">
-
-                    <label for="monto_interes_2">Monto del interés (segunda ampliación):</label>
-                    <input type="text" id="monto_interes_2" name="monto_interes_2" 
-                           placeholder="Ingrese el monto actualizado" 
-                           pattern="^\d+(\.\d{2})?$" 
-                           title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
-                           style="padding-left: 25px;"/>
-
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="costas_a_su_orden_2" name="costas_a_su_orden_2">
-                        <label for="costas_a_su_orden_2">Las costas no fueron a ANSES (segunda ampliación)</label>
+                    <div class="checkbox-container" style="display: flex; gap: 20px;">
+                        <h4>Hay una segunda planilla de ampliación presentada</h4>
+                        <div style="display: flex; align-items: center;">
+                            <input type="checkbox" id="planilla_ampliacion_2" name="planilla_ampliacion_2">
+                            <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <input type="checkbox" id="no_sentencia_apelacion" name="no_sentencia_apelacion">
+                            <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+                        </div>
                     </div>
 
-                    <div id="costasAsuOrden2Section" class="conditional-section">
-                        <label for="fecha_sentencia_interlocutoria_2">Fecha de la sentencia en la cual las costas se imponen a ANSES (segunda ampliación):</label>
-                        <input type="date" id="fecha_sentencia_interlocutoria_2" name="fecha_sentencia_interlocutoria_2">
-                    </div>
+                    <div id="planillaAmpliacion2Section" class="conditional-section">
+                        <label for="fecha_aprobacion_planilla_ampliacion_2">Fecha de aprobación de la segunda planilla de ampliación</label>
+                        <input type="date" id="fecha_aprobacion_planilla_ampliacion_2" name="fecha_aprobacion_planilla_ampliacion_2">
 
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="sentencia_trance_2" name="sentencia_trance_2">
-                        <label for="sentencia_trance_2">Hay sentencia de trance de la segunda planilla de liquidación</label>
-                    </div>
-
-                    <div id="sentenciaTranceAmpliacion2Section" class="conditional-section">
-                        <label for="sentencia_trance_2_fecha">Fecha de la sentencia de trance (segunda ampliación):</label>
-                        <input type="date" id="sentencia_trance_2_fecha" name="sentencia_trance_fecha_2">
-
-                        <label for="fecha_pago_2">Fecha del pago de la planilla de sentencia de trance (segunda ampliación):</label>
-                        <input type="date" id="fecha_pago_2" name="fecha_pago_2">
-
-                        <label for="interes_trance_2">Interés de trance (ej. 45,34%) (segunda ampliación):</label>
-                        <input type="text" id="interes_trance_2" name="interes_trance_2">
-
-                        <label for="monto_interes_trance_2">Monto del interés de trance (segunda ampliación):</label>
-                        <input type="text" id="monto_interes_trance_2" name="monto_interes_trance_2" 
+                        <label for="monto_ampliacion_2">Monto aprobado de la segunda planilla de ampliación:</label>
+                        <input type="text" id="monto_ampliacion_2" name="monto_ampliacion_2" 
                                placeholder="Ingrese el monto actualizado" 
                                pattern="^\d+(\.\d{2})?$" 
                                title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
                                style="padding-left: 25px;"/>
+
+                        <label for="fecha_inicio_2">Fecha de inicio de liquidación (segunda ampliación):</label>
+                        <input type="date" id="fecha_inicio_2"   name="fecha_inicio_2">
+
+                        <label for="fecha_corte_2">Fecha de corte del cálculo de la segunda planilla de ampliación:</label>
+                        <input type="date" id="fecha_corte_2" name="fecha_corte_2">
+
+                        <label for="interes_2">Interés (ej. 45,34%) (segunda ampliación):</label>
+                        <input type="text" id="interes_2" name="interes_2">
+
+                        <label for="monto_interes_2">Monto del interés (segunda ampliación):</label>
+                        <input type="text" id="monto_interes_2" name="monto_interes_2" 
+                               placeholder="Ingrese el monto actualizado" 
+                               pattern="^\d+(\.\d{2})?$" 
+                               title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                               style="padding-left: 25px;"/>
+
+                        <div class="checkbox-container" style="display: flex; gap: 20px;">
+                            <h4>Costas a ANSES (segunda ampliación)</h4>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="planilla_ampliacion_2" name="planilla_ampliacion_2_2">
+                                <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="costas_a_su_orden_2" name="costas_a_su_orden_2">
+                                <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+                            </div>
+                        </div>
+
+                        <div id="costasAsuOrden2Section" class="conditional-section">
+                            <label for="fecha_sentencia_interlocutoria_2">Fecha de la sentencia en la cual las costas se imponen a ANSES (segunda ampliación):</label>
+                            <input type="date" id="fecha_sentencia_interlocutoria_2" name="fecha_sentencia_interlocutoria_2">
+                        </div>
+                        <div class="checkbox-container" style="display: flex; gap: 20px;">
+                            <h4>Hay sentencia de trance de la segunda planilla de liquidación</h4>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="sentencia_trance_2" name="sentencia_trance_2">
+                                <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                                <input type="checkbox" id="no_sentencia_apelacion" name="no_sentencia_apelacion">
+                                <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+                            </div>
+                        </div>
+
+                        <div id="sentenciaTranceAmpliacion2Section" class="conditional-section">
+                            <label for="sentencia_trance_2_fecha">Fecha de la sentencia de trance (segunda ampliación):</label>
+                            <input type="date" id="sentencia_trance_2_fecha" name="sentencia_trance_fecha_2">
+
+                            <label for="fecha_pago_2">Fecha del pago de la planilla de sentencia de trance (segunda ampliación):</label>
+                            <input type="date" id="fecha_pago_2" name="fecha_pago_2">
+
+                            <label for="interes_trance_2">Interés de trance (ej. 45,34%) (segunda ampliación):</label>
+                            <input type="text" id="interes_trance_2" name="interes_trance_2">
+
+                            <label for="monto_interes_trance_2">Monto del interés de trance (segunda ampliación):</label>
+                            <input type="text" id="monto_interes_trance_2" name="monto_interes_trance_2" 
+                                   placeholder="Ingrese el monto actualizado" 
+                                   pattern="^\d+(\.\d{2})?$" 
+                                   title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                                   style="padding-left: 25px;"/>
+
+                            <div class="checkbox-container" style="display: flex; gap: 20px;">
+                                <h4>Hay una tercera planilla de ampliación presentada</h4>
+                                <div style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="planilla_ampliacion_3" name="planilla_ampliacion_3">
+                                    <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="no_sentencia_apelacion" name="no_sentencia_apelacion">
+                                    <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+                                </div>
+                            </div>
+
+                            <div id="planillaAmpliacion3Section" class="conditional-section">
+                                <label for="fecha_aprobacion_planilla_ampliacion_3">Fecha de aprobación de la tercera planilla de ampliación</label>
+                                <input type="date" id="fecha_aprobacion_planilla_ampliacion_3" name="fecha_aprobacion_planilla_ampliacion_3">
+
+                                <label for="monto_ampliacion_3">Monto aprobado de la tercera planilla de ampliación:</label>
+                                <input type="text" id="monto_ampliacion_3" name="monto_ampliacion_3" 
+                                       placeholder="Ingrese el monto actualizado" 
+                                       pattern="^\d+(\.\d{2})?$" 
+                                       title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                                       style="padding-left: 25px;"/>
+
+                                <label for="fecha_inicio_3">Fecha de inicio de liquidación (tercera ampliación):</label>
+                                <input type="date" id="fecha_inicio_3" name="fecha_inicio_3">
+
+                                <label for="fecha_corte_3">Fecha de corte del cálculo de la tercera planilla de ampliación:</label>
+                                <input type="date" id="fecha_corte_3" name="fecha_corte_3">
+
+                                <label for="interes_3">Interés (ej. 45,34%) (tercera ampliación):</label>
+                                <input type="text" id="interes_3" name="interes_3">
+
+                                <label for="monto_interes_3">Monto del interés (tercera ampliación):</label>
+                                <input type="text" id="monto_interes_3" name="monto_interes_3" 
+                                       placeholder="Ingrese el monto actualizado" 
+                                       pattern="^\d+(\.\d{2})?$" 
+                                       title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                                       style="padding-left: 25px;"/>
+                                <div class="checkbox-container" style="display: flex; gap: 20px;">
+                                    <h4>Costas a ANSES (tercera ampliación)</h4>
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="checkbox" id="planilla_ampliacion_3" name="planilla_ampliacion_333">
+                                        <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="checkbox" id="costas_a_su_orden_3" name="costas_a_su_orden_3">
+                                        <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+                                    </div>
+                                </div>
+
+                                <div id="costasAsuOrden3Section" class="conditional-section">
+                                    <label for="fecha_sentencia_interlocutoria_3">Fecha de la sentencia en la cual las costas se imponen a ANSES (tercera ampliación):</label>
+                                    <input type="date" id="fecha_sentencia_interlocutoria_3" name="fecha_sentencia_interlocutoria_3">
+                                </div>
+                                <div class="checkbox-container" style="display: flex; gap: 20px;">
+                                    <h4>Hay sentencia de trance de la tercera planilla de liquidación</h4>
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="checkbox" id="sentencia_trance_3" name="sentencia_trance_3">
+                                        <label for="sentencia_apelacion" style="margin-left: 5px;">Si</label>
+                                    </div>
+                                    <div style="display: flex; align-items: center;">
+                                        <input type="checkbox" id="no_sentencia_apelacion" name="no_sentencia_apelacion">
+                                        <label for="no_sentencia_apelacion" style="margin-left: 5px;">No</label>
+                                    </div>
+                                </div>
+
+                                <div id="sentenciaTranceAmpliacion3Section" class="conditional-section">
+                                    <label for="sentencia_trance_3_fecha">Fecha de la sentencia de trance (tercera ampliación):</label>
+                                    <input type="date" id="sentencia_trance_3_fecha" name="sentencia_trance_fecha_3">
+
+                                    <label for="fecha_pago_3">Fecha del pago de la planilla de sentencia de trance (tercera ampliación):</label>
+                                    <input type="date" id="fecha_pago_3" name="fecha_pago_3">
+
+                                    <label for="interes_trance_3">Interés de trance (ej. 45,34%) (tercera ampliación):</label>
+                                    <input type="text" id="interes_trance_3" name="interes_trance_3">
+
+                                    <label for="monto_interes_trance_3">Monto del interés de trance (tercera ampliación):</label>
+                                    <input type="text" id="monto_interes_trance_3" name="monto_interes_trance_3" 
+                                           placeholder="Ingrese el monto actualizado" 
+                                           pattern="^\d+(\.\d{2})?$" 
+                                           title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                                           style="padding-left: 25px;"/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
 
-        
+
 
         <button type="submit">Enviar</button>
     </form>
@@ -311,12 +441,18 @@
                 costas_orden: document.getElementById('costas_orden'),
                 sentencia_trance_liquidacion: document.getElementById('sentencia_trance_liquidacion'),
                 sentencia_apelacion: document.getElementById('sentencia_apelacion'),
+
                 planilla_ampliacion: document.getElementById('planilla_ampliacion'),
                 costas_a_su_orden: document.getElementById('costas_a_su_orden'),
                 sentencia_trance: document.getElementById('sentencia_trance'),
+
                 planilla_ampliacion_2: document.getElementById('planilla_ampliacion_2'),
                 costas_a_su_orden_2: document.getElementById('costas_a_su_orden_2'),
-                sentencia_trance_2: document.getElementById('sentencia_trance_2')
+                sentencia_trance_2: document.getElementById('sentencia_trance_2'),
+
+                planilla_ampliacion_3: document.getElementById('planilla_ampliacion_3'),
+                costas_a_su_orden_3: document.getElementById('costas_a_su_orden_3'),
+                sentencia_trance_3: document.getElementById('sentencia_trance_3')
             };
             const sections = {
                 costasAdicionales: document.getElementById('costasAdicionales'),
@@ -327,7 +463,10 @@
                 sentenciaTranceAmpliacionSection: document.getElementById('sentenciaTranceAmpliacionSection'),
                 planillaAmpliacion2Section: document.getElementById('planillaAmpliacion2Section'),
                 costasAsuOrden2Section: document.getElementById('costasAsuOrden2Section'),
-                sentenciaTranceAmpliacion2Section: document.getElementById('sentenciaTranceAmpliacion2Section')
+                sentenciaTranceAmpliacion2Section: document.getElementById('sentenciaTranceAmpliacion2Section'),
+                planillaAmpliacion3Section: document.getElementById('planillaAmpliacion3Section'),
+                costasAsuOrden3Section: document.getElementById('costasAsuOrden3Section'),
+                sentenciaTranceAmpliacion3Section: document.getElementById('sentenciaTranceAmpliacion3Section')
             };
 
             function toggleSection(checkbox, section) {
@@ -339,12 +478,18 @@
             toggleSection(checkboxes.costas_orden, sections.costasAdicionales);
             toggleSection(checkboxes.sentencia_trance_liquidacion, sections.sentenciaTranceSection);
             toggleSection(checkboxes.sentencia_apelacion, sections.sentencia_apelacion_section);
+
             toggleSection(checkboxes.planilla_ampliacion, sections.planillaAmpliacionSection);
             toggleSection(checkboxes.costas_a_su_orden, sections.costasAsuOrdenSection);
             toggleSection(checkboxes.sentencia_trance, sections.sentenciaTranceAmpliacionSection);
+
             toggleSection(checkboxes.planilla_ampliacion_2, sections.planillaAmpliacion2Section);
             toggleSection(checkboxes.costas_a_su_orden_2, sections.costasAsuOrden2Section);
             toggleSection(checkboxes.sentencia_trance_2, sections.sentenciaTranceAmpliacion2Section);
+
+            toggleSection(checkboxes.planilla_ampliacion_3, sections.planillaAmpliacion3Section);
+            toggleSection(checkboxes.costas_a_su_orden_3, sections.costasAsuOrden3Section);
+            toggleSection(checkboxes.sentencia_trance_3, sections.sentenciaTranceAmpliacion3Section);
         });
     </script>
 </body>

@@ -24,16 +24,34 @@ class Regulacion:
       datos["valor_uma_fecha_pago"] = formatear_dinero(obtener_valor_uma(datos["fecha_pago"]))
       datos["acordada_fecha_pago"] = obtener_acordada(datos["fecha_pago"])
       datos["monto_uma_trance"] = round((float(datos["monto_interes_trance"]) + float(datos["monto_ampliacion"])) / float(obtener_valor_uma(datos["fecha_pago"])),2)
+
       ### planilla ampliacion 2 ###
       datos["monto_total_2"] = formatear_dinero(float(datos["monto_interes_2"]) + float(datos["monto_ampliacion_2"]))
       datos["valor_uma_fecha_aprobacion_planilla_ampliacion_2"] = formatear_dinero(obtener_valor_uma(datos["fecha_aprobacion_planilla_ampliacion_2"]))
       datos["acordada_fecha_aprobacion_planilla_ampliacion_2"] = obtener_acordada(datos["fecha_aprobacion_planilla_ampliacion_2"])
       datos["monto_uma_2"] = round((float(datos["monto_interes_2"]) + float(datos["monto_ampliacion_2"])) / float(obtener_valor_uma(datos["fecha_aprobacion_planilla_ampliacion_2"])),2)
+
       ### sentencia trance ampliacion 2 ###
       datos["monto_total_trance_2"] = formatear_dinero(float(datos["monto_interes_trance_2"]) + float(datos["monto_ampliacion_2"]))
       datos["valor_uma_fecha_pago_2"] = formatear_dinero(obtener_valor_uma(datos["fecha_pago_2"]))
       datos["acordada_fecha_pago_2"] = obtener_acordada(datos["fecha_pago_2"])
       datos["monto_uma_trance_2"] = round((float(datos["monto_interes_trance_2"]) + float(datos["monto_ampliacion_2"])) / float(obtener_valor_uma(datos["fecha_pago_2"])),2)
+
+
+      ### planilla ampliacion 3 ###
+      datos["monto_total_3"] = formatear_dinero(float(datos["monto_interes_3"]) + float(datos["monto_ampliacion_3"]))
+      datos["valor_uma_fecha_aprobacion_planilla_ampliacion_3"] = formatear_dinero(obtener_valor_uma(datos["fecha_aprobacion_planilla_ampliacion_3"]))
+      datos["acordada_fecha_aprobacion_planilla_ampliacion_3"] = obtener_acordada(datos["fecha_aprobacion_planilla_ampliacion_3"])
+      datos["monto_uma_3"] = round((float(datos["monto_interes_3"]) + float(datos["monto_ampliacion_3"])) / float(obtener_valor_uma(datos["fecha_aprobacion_planilla_ampliacion_3"])),2)
+
+        ### sentencia trance ampliacion 2 ###
+      datos["monto_total_trance_3"] = formatear_dinero(float(datos["monto_interes_trance_3"]) + float(datos["monto_ampliacion_3"]))
+      datos["valor_uma_fecha_pago_3"] = formatear_dinero(obtener_valor_uma(datos["fecha_pago_3"]))
+      datos["acordada_fecha_pago_3"] = obtener_acordada(datos["fecha_pago_3"])
+      datos["monto_uma_trance_3"] = round((float(datos["monto_interes_trance_3"]) + float(datos["monto_ampliacion_3"])) / float(obtener_valor_uma(datos["fecha_pago_3"])),2)
+
+
+
       ### planilla ###
       datos["fecha_aprobacion_planilla"] = transformar_fecha(datos["fecha_aprobacion_planilla"])
       datos["monto_aprobacion_planilla"] = formatear_dinero(datos["monto_aprobacion_planilla"])
@@ -61,7 +79,7 @@ class Regulacion:
       datos["sentencia_trance_fecha"] = transformar_fecha(datos["sentencia_trance_fecha"])
       datos["fecha_pago"] = transformar_fecha(datos["fecha_pago"])
       datos["monto_interes_trance"] = formatear_dinero(datos["monto_interes_trance"])
-      
+
       ## planilla ampliacion 2
       datos["fecha_aprobacion_planilla_ampliacion_2"] = transformar_fecha(datos["fecha_aprobacion_planilla_ampliacion_2"])
       datos["monto_ampliacion_2"] = formatear_dinero(datos["monto_ampliacion_2"])
@@ -74,6 +92,21 @@ class Regulacion:
       datos["sentencia_trance_fecha_2"] = transformar_fecha(datos["sentencia_trance_fecha_2"])
       datos["fecha_pago_2"] = transformar_fecha(datos["fecha_pago_2"])
       datos["monto_interes_trance_2"] = formatear_dinero(datos["monto_interes_trance_2"])
+
+      ## planilla ampliacion 3
+      datos["fecha_aprobacion_planilla_ampliacion_3"] = transformar_fecha(datos["fecha_aprobacion_planilla_ampliacion_3"])
+      datos["monto_ampliacion_3"] = formatear_dinero(datos["monto_ampliacion_3"])
+      datos["fecha_inicio_3"] = transformar_fecha(datos["fecha_inicio_3"])
+      datos["fecha_corte_3"] = transformar_fecha(datos["fecha_corte_3"])
+      datos["monto_interes_3"] = formatear_dinero(datos["monto_interes_3"])
+      datos["fecha_sentencia_interlocutoria_3"] = transformar_fecha(datos["fecha_sentencia_interlocutoria_3"])
+
+      ## sentencia trance planilla ampliacion 3
+      datos["sentencia_trance_fecha_3"] = transformar_fecha(datos["sentencia_trance_fecha_3"])
+      datos["fecha_pago_3"] = transformar_fecha(datos["fecha_pago_3"])
+      datos["monto_interes_trance_3"] = formatear_dinero(datos["monto_interes_trance_3"])
+
+
       self.datos = datos
 
   def crear_documento(self):

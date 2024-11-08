@@ -66,9 +66,10 @@ def crear_graficos(datos, etiquetas):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor, expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no ):
+    def __init__(self, datos_del_actor, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no ):
         self.datos_del_actor = datos_del_actor
         self.expediente = expediente
+        self.cuil_expediente = cuil_expediente
         self.beneficio = beneficio
         self.num_beneficio = num_beneficio
         self.fecha_inicio = fecha_inicio
@@ -227,9 +228,9 @@ class CalculadorMovilidad:
             grafico2 = crear_graficos(datos_2, etiquetas_2)
         else:
             grafico2 = None
-            
+
         return lista_filas, grafico1, grafico2, diccionario_comparacion, ultimos_valores
-        
+
     def generar_pdf(self):
         lista_filas, grafico1, grafico2, diccionario_comparacion, montos_a_fecha_cierre = self.obtener_datos()
         rendered = render_template(
@@ -241,6 +242,7 @@ class CalculadorMovilidad:
             monto = formatear_dinero(self.monto),
             datos_del_actor = self.datos_del_actor,
             expediente = self.expediente,
+            cuil_expediente = self.cuil_expediente,
             beneficio = self.beneficio,
             num_beneficio = self.num_beneficio,
             fecha_inicio = convertir_fecha_periodo(self.fecha_inicio),
@@ -268,7 +270,7 @@ class CalculadorMovilidad:
             valor_Caliva_Marquez_con_27551_con_6_rezago = formatear_dinero(montos_a_fecha_cierre[8]),
             valor_Alanis_mas_Anses = formatear_dinero(montos_a_fecha_cierre[9]),
             valor_Alanis_con_27551_con_3_rezago = formatear_dinero(montos_a_fecha_cierre[10])
-            
+
         )
         # Crear el PDF en memoria
         pdf_buffer = BytesIO()

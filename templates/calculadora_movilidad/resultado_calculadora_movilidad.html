@@ -72,7 +72,7 @@
         .font-pequeña {
             font-size: 8px;
         }
-        
+
         .first-column-cell2 {
             background-color: #e2e8f0;
             font-weight: bold;
@@ -130,7 +130,7 @@
 
     <div class="info-section">
         <p><strong>Datos del actor:</strong> {{datos_del_actor}}&nbsp;&nbsp;&nbsp;
-           <strong>Expediente:</strong> {{expediente}}
+           <strong>{{cuil_expediente}}:</strong> {{expediente}}
         </p>
         <p><strong>Tipo de Beneficio:</strong> {{beneficio}}&nbsp;&nbsp;&nbsp;
            <strong>Numero de Beneficio:</strong> {{num_beneficio}}
@@ -154,7 +154,7 @@
             <td class="negrita">Diferencia mensual en $</td>
             <td class="negrita">Porcentaje de quita respecto del haber de anses</td>
         </tr>
-        
+
         <tr class="font-large">
             <td class="negrita first-column-cell">Haber Percibido con Movilidad Anses</td>
             <td> {{ valor_anses }} </td>
@@ -343,12 +343,12 @@
 
     {% endif %}
 
-    
+
     <h6>Comparativa de Haberes:</h6>
     <table class="benefits-comparison">
         <thead>
             <tr class="font-pequeña first-column-cell2">
-                <td class="negrita" style="width: 55px;"" >Periodo</td>
+                <td class="negrita" style="width: 55px;" >Periodo</td>
                 <td class="negrita">Haber con Anses</td>
                 {% if ipc %}
                 <td class="negrita">Haber con IPC</td>

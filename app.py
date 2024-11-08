@@ -97,9 +97,9 @@ def generar_pdf_route():
     fecha_aprobacion_sentencia = request.form.get('Fecha_Aprobacion_Sentencia')
     monto_aprobado = request.form.get('Monto_Aprobado')
     monto_aprobado_actualizado = request.form.get('Monto_Aprobado_Actualizado')
-    
-   
-    
+
+
+
 
     # Descontar 1 crédito al usuario
     current_user.credito -= 1
@@ -124,7 +124,7 @@ def generar_pdf_route():
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
         return response
-        
+
     if action == 'generar_escrito':
         fecha_de_sentencia_de_trance = request.form.get('fecha_de_sentencia_de_trance')
         deuda = request.form.get('Deuda')
@@ -310,9 +310,9 @@ def formulario_demandas():
             # Manejo de la imagen
             'imagenes': []  # Lista para almacenar las rutas de las imágenes subidas
         }
-        
-        
-        
+
+
+
         # Llama a la función para crear el documento Word
         demanda = Formulario(datos_formulario)
         response = demanda.procesar_imagenes()
@@ -320,7 +320,7 @@ def formulario_demandas():
         return response
 
     return render_template('formulario_demanda.html')
-    
+
 @app.route('/calculadora_movilidad')
 @login_required
 def prueba():
@@ -341,13 +341,14 @@ def resultado_calculado_movilidad():
         # Recibir los datos necesarios del formulario
         datos_del_actor =  request.form['datos_del_actor']
         expediente =  request.form['expediente']
+        cuil_expediente = request.form['cuil_expediente']
         beneficio =  request.form['beneficio']
         num_beneficio =  request.form['num_beneficio']    
         fecha_inicio = request.form['fecha_inicio']
         fecha_fin = request.form['fecha_fin']
         fecha_adquisicion_del_derecho= transformar_fecha(request.form['fecha_adquisicion_del_derecho'])
         monto = float(request.form['monto'])
-    
+
         ipc = request.form.get('ipc')
         ripte = request.form.get('ripte', False)
         uma = request.form.get('uma', False)
@@ -361,8 +362,8 @@ def resultado_calculado_movilidad():
 
         comparacion_mov_sentencia_si = request.form.get('comparacion_mov_sentencia_si', False)
         comparacion_mov_sentencia_no = request.form.get('comparacion_mov_sentencia_no', False)
-    
-        calculo = CalculadorMovilidad(datos_del_actor, expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no)
+
+        calculo = CalculadorMovilidad(datos_del_actor, expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no)
 
         resultado = calculo.generar_pdf()
         return resultado
@@ -426,9 +427,28 @@ def resultado_regulacion():
         "fecha_pago_2": request.form.get("fecha_pago_2") or "2022-02-01",
         "interes_trance_2": request.form.get("interes_trance_2"),
         "monto_interes_trance_2": request.form.get("monto_interes_trance_2") or 0,
-        
+
+        ## planilla ampliacion 3
+        "planilla_ampliacion_3": request.form.get("planilla_ampliacion_3") == "on",
+        "fecha_aprobacion_planilla_ampliacion_3": request.form.get("fecha_aprobacion_planilla_ampliacion_3") or '2022-02-01',
+        "monto_ampliacion_3": request.form.get("monto_ampliacion_3") or 0,
+        "fecha_inicio_3": request.form.get("fecha_inicio_3") or "2022-02-01",
+        "fecha_corte_3": request.form.get("fecha_corte_3") or "2022-02-01",
+        "interes_3": request.form.get("interes_3"),
+        "monto_interes_3": request.form.get("monto_interes_3") or 0,
+        "costas_a_su_orden_3": request.form.get("costas_a_su_orden_3") == "on",
+        "fecha_sentencia_interlocutoria_3": request.form.get("fecha_sentencia_interlocutoria_3") or "2022-02-01",
+        ## sentencia trance planilla ampliacion 3
+        "sentencia_trance_3": request.form.get("sentencia_trance_3") == "on",
+        "sentencia_trance_fecha_3": request.form.get("sentencia_trance_fecha_3") or "2022-02-01",
+        "fecha_pago_3": request.form.get("fecha_pago_3") or "2022-02-01",
+        "interes_trance_3": request.form.get("interes_trance_3"),
+        "monto_interes_trance_3": request.form.get("monto_interes_trance_3") or 0,
+
+
+
     }
-    
+
     regulacion = Regulacion(datos_formulario)
     response = regulacion.crear_documento()
 
@@ -457,7 +477,7 @@ def resultado_comparativa_tope_maximo():
     responsee.headers['Content-Type'] = 'application/pdf'
     responsee.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
     return responsee
-    
+
 if __name__ == '__main__':
     app.run(debug=True)
 

@@ -129,7 +129,7 @@
             <h1>Calculadora de Movilidad</h1>
             <form action="/resultado_calculado_movilidad" method="POST">
                 <div class="form-group">
-                    <label for="datos_del_actor">Datos del actor:
+                    <label for="datos_del_actor">Nombre del actor:
                         <span class="info-icon" data-tooltip="Información adicional sobre los datos del actor">?</span>
                     </label>
                     <input type="text" id="datos_del_actor" name="datos_del_actor" required>
@@ -156,17 +156,34 @@
                         <input type="text" id="num_beneficio" name="num_beneficio" required>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="expediente">Expediente:</label>
-                    <input type="text" id="expediente" name="expediente" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="beneficio">Cuil o Expediente:</label>
+                        <select id="beneficio" name="cuil_expediente" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="Cuil">Cuil</option>
+                            <option value="Expediente">Nro. Expediente</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expediente">Nro:</label>
+                        <input type="text" id="expediente" name="expediente">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="fecha_inicio">Fecha de haber de partida:</label>
-                    <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2017-07-01">
-                </div>
-                <div class="form-group">
-                    <label for="fecha_fin">Fecha de cierre del haber:</label>
-                    <input type="date" id="fecha_fin" name="fecha_fin" required max="2024-08-31">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fecha_inicio">Fecha de haber de partida:
+                            <span class="info-icon" data-tooltip="No debe ser inferior al 01/01/2018">?</span>
+                        </label>
+                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2017-07-01" max="2024-08-31">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_fin">Fecha de cierre del haber:
+                            <span class="info-icon" data-tooltip="No debe ser superior al 31/08/2024">?</span>
+                        </label>
+                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2018-02-28" max="2024-08-31">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="monto">Monto del haber a la fecha:</label>
