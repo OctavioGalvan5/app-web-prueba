@@ -11,6 +11,7 @@ from werkzeug.wrappers import response
 from config import config
 from xhtml2pdf import pisa
 from io import BytesIO
+from decimal import Decimal
 #Models
 from models.ModelUser import ModelUser
 #Services
@@ -21,6 +22,7 @@ from services.calculadora_movilidad.calculadora import CalculadorMovilidad
 from services.calculos import formatear_dinero, transformar_fecha
 from services.generador_regulacion.generador_regulacion import Regulacion
 from services.calculadora_tope_maximo.generador_pdf import Comparativa
+from services.movilizador_de_haber.movilizador_de_haber import calculo_retroactivo
 # Entities
 from models.entities.User import User
 
@@ -477,6 +479,45 @@ def resultado_comparativa_tope_maximo():
     responsee.headers['Content-Type'] = 'application/pdf'
     responsee.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
     return responsee
+
+@app.route('/movilizador_de_haber')
+@login_required
+def movilizador_de_haber():
+    return render_template('movilizador_de_haber/movilizador_de_haber.html')
+
+@app.route('/resultado_movilizador_de_haber', methods=['POST'])
+@login_required
+def resultado_movilizador_de_haber():
+    datos_del_actor = request.form['datos_del_actor']
+    expediente = request.form['expediente']
+    cuil_expediente = request.form['cuil_expediente']
+    beneficio = request.form['beneficio']
+    num_beneficio = request.form['num_beneficio']
+
+    # Convertir las fechas solo si no son None
+    fecha_inicio = datetime.strptime(request.form['fecha_inicio'], '%Y-%m-%d') if request.form.get('fecha_inicio') else None
+    fecha_fin = datetime.strptime(request.form['fecha_fin'], '%Y-%m-%d') if request.form.get('fecha_fin') else None
+    fecha_adquisicion_del_derecho = transformar_fecha(request.form['fecha_adquisicion_del_derecho']) if request.form.get('fecha_adquisicion_del_derecho') else None
+    primer_fecha_fin = datetime.strptime(request.form.get('primer_fecha_fin'), '%Y-%m-%d') if request.form.get('primer_fecha_fin') else None
+    segunda_fecha_fin = datetime.strptime(request.form.get('segunda_fecha_fin'), '%Y-%m-%d') if request.form.get('segunda_fecha_fin') else None
+    tercer_fecha_fin = datetime.strptime(request.form.get('tercer_fecha_fin'), '%Y-%m-%d') if request.form.get('tercer_fecha_fin') else None
+    cuarta_fecha_fin = datetime.strptime(request.form.get('cuarta_fecha_fin'), '%Y-%m-%d') if request.form.get('cuarta_fecha_fin') else None
+
+    monto = Decimal(request.form['monto'])
+    movilidad_1 = request.form.get('movilidad_1')
+    movilidad_2 = request.form.get('movilidad_2')
+    movilidad_3 = request.form.get('movilidad_3')
+    movilidad_4 = request.form.get('movilidad_4')
+
+
+    tupla=((primer_fecha_fin,movilidad_2),(segunda_fecha_fin,movilidad_3),(tercer_fecha_fin,movilidad_4))
+
+    
+    calculo = calculo_retroactivo(datos_del_actor, expediente, cuil_expediente, beneficio, 
+                                  num_beneficio, fecha_inicio, fecha_fin, 
+                                  fecha_adquisicion_del_derecho, monto, movilidad_1, tupla)
+    resultado = calculo.generar_pdf()
+    return resultado
 
 if __name__ == '__main__':
     app.run(debug=True)
