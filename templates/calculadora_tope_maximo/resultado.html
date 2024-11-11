@@ -96,12 +96,23 @@
         .haber {
             color: #2b6cb0;
         }
+        .image-container {
+            text-align: center; /* Centra el contenido */
+        }
+        .image-container img {
+            width: 300px; /* Ajusta el ancho de la imagen */
+            height: auto; /* Mantiene la proporción de la imagen */
+        }
     </style>
 </head>
 <body>
     <hr>
     <h1>Comparativa de Haberes Maximos</h1>
     <hr style="margin-bottom: 20px;">
+
+    <div class="image-container">
+        <img src="static/logoestudio.jpg" alt="Descripción de la imagen">
+    </div>
 
     <div class="info-section">
         <p><strong>Datos del actor:</strong> {{autos}}</p>

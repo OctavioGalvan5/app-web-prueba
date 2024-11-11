@@ -121,12 +121,23 @@
             padding-bottom: 1px;        /* Espacio interno para acercarse al <hr> */
             font-size: 24px;            /* Tamaño del texto, ajustable según diseño */
         }
+        .image-container {
+            text-align: center; /* Centra el contenido */
+        }
+        .image-container img {
+            width: 300px; /* Ajusta el ancho de la imagen */
+            height: auto; /* Mantiene la proporción de la imagen */
+        }
     </style>
 </head>
 <body>
     <hr>
     <h1 style="margin-top: 10px;">Resultados de Calculadora de Movilidad</h1>
     <hr style="margin-bottom: 20px;">
+
+    <div class="image-container">
+        <img src="static/logoestudio.jpg" alt="Descripción de la imagen">
+    </div>
 
     <div class="info-section">
         <p><strong>Datos del actor:</strong> {{datos_del_actor}}&nbsp;&nbsp;&nbsp;

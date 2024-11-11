@@ -502,15 +502,18 @@ def resultado_movilizador_de_haber():
     segunda_fecha_fin = datetime.strptime(request.form.get('segunda_fecha_fin'), '%Y-%m-%d') if request.form.get('segunda_fecha_fin') else None
     tercer_fecha_fin = datetime.strptime(request.form.get('tercer_fecha_fin'), '%Y-%m-%d') if request.form.get('tercer_fecha_fin') else None
     cuarta_fecha_fin = datetime.strptime(request.form.get('cuarta_fecha_fin'), '%Y-%m-%d') if request.form.get('cuarta_fecha_fin') else None
+    quinta_fecha_fin = datetime.strptime(request.form.get('quinta_fecha_fin'), '%Y-%m-%d') if request.form.get('quinta_fecha_fin') else None
 
     monto = Decimal(request.form['monto'])
     movilidad_1 = request.form.get('movilidad_1')
     movilidad_2 = request.form.get('movilidad_2')
     movilidad_3 = request.form.get('movilidad_3')
     movilidad_4 = request.form.get('movilidad_4')
+    movilidad_5 = request.form.get('movilidad_5')
 
 
-    tupla=((primer_fecha_fin,movilidad_2),(segunda_fecha_fin,movilidad_3),(tercer_fecha_fin,movilidad_4))
+
+    tupla=((primer_fecha_fin,movilidad_2),(segunda_fecha_fin,movilidad_3),(tercer_fecha_fin,movilidad_4), (cuarta_fecha_fin,movilidad_5))
 
     
     calculo = calculo_retroactivo(datos_del_actor, expediente, cuil_expediente, beneficio, 

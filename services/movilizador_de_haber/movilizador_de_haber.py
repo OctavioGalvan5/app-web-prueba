@@ -3,7 +3,7 @@ from datetime import datetime
 import plotly.graph_objects as go
 import io
 import base64
-from services.calculos import formatear_dinero, transformar_fecha
+from services.calculos import formatear_dinero
 from models.database import buscar_fechas
 from flask import render_template, send_file
 from werkzeug.wrappers import response
@@ -21,7 +21,7 @@ engine = create_engine(
         }
     }
 )
-
+        
 def convertir_fecha_periodo(fecha):
     # Convertir la fecha si es una cadena
     if isinstance(fecha, str):
@@ -64,7 +64,7 @@ def reajuste_movilidad(fecha_inicial, columna, monto, fecha_final, tupla_reajust
                 monto += 1500
 
             # Almacenar la fecha y el monto en resultados
-            resultados.append((fecha_actual, monto))
+            resultados.append((convertir_fecha_periodo(fecha_actual), formatear_dinero(monto)))
 
             # Verificar si el mes y año de fecha_actual coinciden con alguna fecha en la tupla para cambiar de columna
             for ajuste in tupla_reajuste:
@@ -89,7 +89,29 @@ def siguiente_fecha(connection, tabla, fecha_actual):
     consulta = select(tabla.c.fechas).where(tabla.c.fechas > fecha_actual).order_by(tabla.c.fechas.asc()).limit(1)
     resultado = connection.execute(consulta).fetchone()
     return resultado[0] if resultado else None
+    
+def procesar_tuplas(tuplas, movilidad_1):
 
+    diccionario = {
+        'ANSES': 'Aumentos Generales de la ANSeS por movilidad',
+        'Caliva_mas_Anses': 'Aumentos fallo Marquez, Raimundo por Ley 27551',
+        'Alanis_Mas_Anses': 'Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020'
+
+    }
+    resultado = diccionario[movilidad_1]
+
+    for elemento in tuplas:
+        # Verifica si el primer elemento no es nulo
+        if elemento[0] is not None:
+            # Obtiene el string del segundo elemento
+            clave = elemento[1]
+            fecha = elemento[0]
+            if clave in diccionario:
+                if resultado != "":
+                    resultado += " hasta el " + fecha.strftime('%d/%m/%Y') + " y desde ahi " + diccionario[clave] 
+
+
+    return resultado.strip()  # Elimina espacios al final
 
 #reajuste_movilidad(
    # datetime(2018, 1, 25),   # Fecha inicial
@@ -118,6 +140,7 @@ class calculo_retroactivo:
         self.monto = monto # monto
         self.movilidad_1 = movilidad_1 #columna
         self.tupla = tupla #tupla
+        self.resultado = procesar_tuplas(self.tupla, self.movilidad_1)
 
     def generar_pdf(self):
         filas = reajuste_movilidad(self.fecha_inicio, self.movilidad_1, self.monto, self.fecha_fin,self.tupla)
@@ -133,6 +156,7 @@ class calculo_retroactivo:
             fecha_inicio = convertir_fecha_periodo(self.fecha_inicio),
             fecha_fin = convertir_fecha_periodo(self.fecha_fin),
             fecha_adquisicion_del_derecho = self.fecha_adquisicion_del_derecho,
+            movilidad = self.resultado
         )
         # Crear el PDF en memoria
         pdf_buffer = BytesIO()

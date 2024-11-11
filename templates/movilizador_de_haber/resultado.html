@@ -121,12 +121,23 @@
             padding-bottom: 1px;        /* Espacio interno para acercarse al <hr> */
             font-size: 24px;            /* Tamaño del texto, ajustable según diseño */
         }
+        .image-container {
+            text-align: center; /* Centra el contenido */
+        }
+        .image-container img {
+            width: 300px; /* Ajusta el ancho de la imagen */
+            height: auto; /* Mantiene la proporción de la imagen */
+        }
     </style>
 </head>
 <body>
     <hr>
-    <h1 style="margin-top: 10px;">Resultados de Calculadora de Movilidad</h1>
+    <h1 style="margin-top: 10px;">Resultados de Haber con Movilidad</h1>
     <hr style="margin-bottom: 20px;">
+
+    <div class="image-container">
+        <img src="static/logoestudio.jpg" alt="Descripción de la imagen">
+    </div>
 
     <div class="info-section">
         <p><strong>Datos del actor:</strong> {{datos_del_actor}}&nbsp;&nbsp;&nbsp;
@@ -141,6 +152,8 @@
             <strong>Fecha del haber de partida:</strong> {{fecha_inicio}}&nbsp;&nbsp;&nbsp;
             <strong>Fecha de cierre del haber:</strong> {{fecha_fin}}
         </p>
+        <p><strong>La movilidad del haber reclamado es siguiendo el índice:</strong> {{movilidad}}
+        </p>
     </div>
  
 
@@ -149,7 +162,7 @@
         <thead>
             <tr class="font-pequeña first-column-cell2">
                 <td class="negrita" style="width: 55px;" >Periodo</td>
-                <td class="negrita">Haber con Anses</td>
+                <td class="negrita">Haber con movilidad aplicada</td>
             </tr>
         </thead>
         <tbody>
