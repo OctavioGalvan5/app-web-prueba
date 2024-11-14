@@ -95,7 +95,9 @@ def procesar_tuplas(tuplas, movilidad_1):
     diccionario = {
         'ANSES': 'Aumentos Generales de la ANSeS por movilidad',
         'Caliva_mas_Anses': 'Aumentos fallo Marquez, Raimundo por Ley 27551',
-        'Alanis_Mas_Anses': 'Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020'
+        'Alanis_Mas_Anses': 'Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020',
+        'IPC': 'IPC',
+
 
     }
     resultado = diccionario[movilidad_1]

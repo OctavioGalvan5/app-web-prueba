@@ -126,24 +126,6 @@ def generar_pdf_route():
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
         return response
-
-    if action == 'generar_escrito':
-        fecha_de_sentencia_de_trance = request.form.get('fecha_de_sentencia_de_trance')
-        deuda = request.form.get('Deuda')
-        intereses = request.form.get('Intereses')
-        imagenCapturaSentencia = request.files['imagenCapturaSentencia']
-        imagenMonto = request.files['imagenMonto']
-        # Crear una instancia de Liquidacion
-        documento = Documento(
-            autos, expediente, periodo_desde, periodo_hasta,
-            fecha_de_cierre_de_liquidacion, fecha_de_regulacion,
-            fecha_aprobacion_sentencia, monto_aprobado,
-            monto_aprobado_actualizado, deuda, intereses,
-            imagenCapturaSentencia, imagenMonto,fecha_de_sentencia_de_trance
-        )
-
-        # Llama al método para procesar imágenes y generar el documento
-        return documento.procesar_imagenes()
 @app.route('/formulario_demandas', methods=['GET', 'POST'])
 @login_required
 def formulario_demandas():
@@ -521,6 +503,12 @@ def resultado_movilizador_de_haber():
                                   fecha_adquisicion_del_derecho, monto, movilidad_1, tupla)
     resultado = calculo.generar_pdf()
     return resultado
+
+@app.route('/generador_escrito_liquidacion')
+@login_required
+def generador_escrito_liquidacion():
+    return render_template('generador_escritos/generador_escritos_liquidacion.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
