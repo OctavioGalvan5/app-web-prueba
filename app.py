@@ -528,6 +528,7 @@ def resultado_escrito_liquidacion():
     # Fechas relacionadas a liquidaciones
     datos['Fecha_Inicial_de_Pago'] = request.form.get('Fecha_Inicial_de_Pago') or "2022-02-01"
     datos['Fecha_de_cierre_de_liquidación'] = request.form.get('Fecha_de_cierre_de_liquidación') or "2022-02-01"
+    datos['Fecha_de_cierre_de_intereses'] = request.form.get('Fecha_de_cierre_de_intereses') or "2022-02-01"
     datos['fecha_aprobacion_planilla'] = request.form.get('fecha_aprobacion_planilla') or "2022-02-01"
 
     # Pensiones y fallecimientos
@@ -566,6 +567,9 @@ def resultado_escrito_liquidacion():
     datos['SP_Si'] = request.form.get('SP_Si', False) == 'on'
     datos['Movilidad'] = request.form.get('Movilidad')
     datos['Haber_de_Alta'] = request.form.get('Haber_de_Alta') or "25022"
+    datos['Capital'] = request.form.get('Capital')
+    datos['Intereses'] = request.form.get('Intereses')
+    datos['total_liquidacion'] = request.form.get('total_liquidacion')
 
     # Descuentos y pagos
     datos['pagos_Si'] = request.form.get('pagos_Si', False) == 'on'
@@ -577,6 +581,10 @@ def resultado_escrito_liquidacion():
     datos['fecha_descuento_3'] = request.form.get('fecha_descuento_3') or "2022-02-01"
     datos['monto_descontado_4'] = request.form.get('monto_descontado_4')
     datos['fecha_descuento_4'] = request.form.get('fecha_descuento_4') or "2022-02-01"
+    datos['tupla_descuentos'] = ((datos['monto_descontado_1'], datos['fecha_descuento_1']), (datos['monto_descontado_2'], datos['fecha_descuento_2']), (datos['monto_descontado_3'], datos['fecha_descuento_3']), (datos['monto_descontado_4'], datos['fecha_descuento_4']))
+    datos['parrafo_descuentos'] = ""
+
+    
 
     # Segunda liquidación
     datos['Segunda_Liquidacion_Si'] = request.form.get('Segunda_Liquidacion_Si', False) == 'on'

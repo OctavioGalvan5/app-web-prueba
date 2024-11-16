@@ -199,12 +199,29 @@
                 <label for="fecha_cierre_liquidacion">Fecha de Cierre de Liquidacion:</label>
                 <input type="date" id="fecha_cierre_liquidacion" name="Fecha_de_cierre_de_liquidación" required>
             </div>
+            <div class="form-group">
+                <label for="Fecha_de_cierre_de_intereses">Fecha de Cierre de Intereses:</label>
+                <input type="date" id="Fecha_de_cierre_de_intereses" name="Fecha_de_cierre_de_intereses" required>
+            </div>
         </div>
         <div id="ampliacion_section" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
                     <label for="Sentencia_de_Segunda">Fecha de Aprobacion de Planilla:</label>
                     <input type="date" id="sentencia_interlocutoria_costas" name="fecha_aprobacion_planilla">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="inline-checkbox-container">
+                <h4>¿Se liquida unicamente por honorarios?:</h4>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Sumas_Si" name="Honosarios_Si">
+                    <label for="PBU_Si">Si</label>
+                </div>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Sumas_No" name="Honosarios_No">
+                    <label for="PBU_No">No</label>
                 </div>
             </div>
         </div>
@@ -486,7 +503,7 @@
             </div>
             <div class="form-group">
                 <label for="fecha_descuento_2">Total:</label>
-                <input type="text" id="Total" name="Total" required>
+                <input type="text" id="total_liquidacion" name="total_liquidacion" required>
             </div>
         </div>
 
