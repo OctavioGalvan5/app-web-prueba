@@ -515,6 +515,15 @@ def generador_escrito_liquidacion():
 def resultado_escrito_liquidacion():
     datos = {}
 
+    #Tipo de liquidacion
+    datos['liquidacion_1ra_vez'] = request.form.get('liquidacion_1ra_vez', False) == 'on'
+    datos['liquidacion_1ra_vez_inconstitucionalidad'] = request.form.get('liquidacion_1ra_vez_inconstitucionalidad', False) == 'on'
+    datos['descuento_pago'] = request.form.get('descuento_pago', False) == 'on'
+    datos['descuento_pago_inconstitucionalidad'] = request.form.get('descuento_pago_inconstitucionalidad', False) == 'on'
+    datos['ampliacion'] = request.form.get('ampliacion', False) == 'on'
+    datos['ampliacion_inconstitucionalidad'] = request.form.get('ampliacion_inconstitucionalidad', False) == 'on'
+
+    #Datos Cliente
     datos['cliente'] = request.form.get('cliente')
     datos['expediente'] = request.form.get('expediente')
 
@@ -531,6 +540,9 @@ def resultado_escrito_liquidacion():
     datos['Fecha_de_cierre_de_intereses'] = request.form.get('Fecha_de_cierre_de_intereses') or "2022-02-01"
     datos['fecha_aprobacion_planilla'] = request.form.get('fecha_aprobacion_planilla') or "2022-02-01"
 
+    #Honorarios
+    datos['Honorarios_No'] = request.form.get('Honorarios_No', False) == 'on'
+
     # Pensiones y fallecimientos
     datos['Pension_Si'] = request.form.get('Pension_Si', False) == 'on'
     datos['Sumas_No'] = request.form.get('Sumas_No', False) == 'on'
@@ -538,6 +550,9 @@ def resultado_escrito_liquidacion():
     datos['nombre_receptor'] = request.form.get('nombre_receptor')
     datos['Receptor'] = request.form.get('Receptor')
     datos['Porcentaje_Pension'] = request.form.get('Porcentaje_Pension')
+
+    # Edad avanzada
+    datos['Edad_Avanzada_Si'] = request.form.get('Edad_Avanzada_Si', False) == 'on'
 
     # Error material
     datos['Error_Material_Si'] = request.form.get('Error_Material_Si', False) == 'on'
