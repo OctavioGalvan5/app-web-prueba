@@ -48,7 +48,9 @@
         }
         .checkbox-group {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
         }
         .checkbox-group input[type="checkbox"] {
             margin-right: 5px;
@@ -99,12 +101,49 @@
         .form-row .form-group {
             flex: 1;
         }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
     {% include 'navs/nav.html' %}
-    <form id="liquidacionForm" action="{{ url_for('resultado_regulacion') }}" method="POST">
-        <h2>Escrito de Liquidacion</h2>
+    <form id="liquidacionForm" action="{{ url_for('resultado_escrito_liquidacion') }}" method="POST">
+        <h1>Escrito de Liquidacion</h1>
+
+        <h3>Tipo de Escrito</h3>
+        <div class="checkbox-group">
+            <div class="checkbox-item">
+                <input type="checkbox" id="liquidacion_1ra_vez" name="liquidacion_1ra_vez">
+                <label for="liquidacion_1ra_vez">Liquidacion 1ra vez</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="liquidacion_1ra_vez_inconstitucionalidad" name="liquidacion_1ra_vez_inconstitucionalidad">
+                <label for="liquidacion_1ra_vez_inconstitucionalidad">Liquidacion 1ra vez con inconstitucionalidad</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="descuento_pago" name="descuento_pago">
+                <label for="descuento_pago">Descuento de pago</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="descuento_pago_inconstitucionalidad" name="descuento_pago_inconstitucionalidad">
+                <label for="descuento_pago_inconstitucionalidad">Descuento de pago con inconstitucionalidad</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="ampliacion" name="ampliacion">
+                <label for="ampliacion">Ampliacion</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="ampliacion_inconstitucionalidad" name="ampliacion_inconstitucionalidad">
+                <label for="ampliacion_inconstitucionalidad">Ampliacion con inconstitucionalidad</label>
+            </div>
+        </div>
+
+        <h3>Datos del Escrito</h3>    
         <div class="form-row">
             <div class="form-group">
                 <label for="cliente">Cliente:</label>
@@ -143,7 +182,7 @@
                 </div>
                 <div class="form-group">
                     <label for="sala">Sala:</label>
-                    <select id="sala" name="Sala" required>
+                    <select id="sala" name="Sala">
                         <option value="">Seleccione una Sala</option>
                         <option value="Sala I">Sala I</option>
                         <option value="Sala II">Sala II</option>
@@ -159,6 +198,71 @@
             <div class="form-group">
                 <label for="fecha_cierre_liquidacion">Fecha de Cierre de Liquidacion:</label>
                 <input type="date" id="fecha_cierre_liquidacion" name="Fecha_de_cierre_de_liquidación" required>
+            </div>
+        </div>
+        <div id="ampliacion_section" class="conditional-section">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="Sentencia_de_Segunda">Fecha de Aprobacion de Planilla:</label>
+                    <input type="date" id="sentencia_interlocutoria_costas" name="fecha_aprobacion_planilla">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="inline-checkbox-container">
+                <h4>¿Es una Pension?:</h4>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Pension_Si" name="Pension_Si">
+                    <label for="PBU_Si">Si</label>
+                </div>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Sumas_No" name="Sumas_No">
+                    <label for="PBU_No">No</label>
+                </div>
+            </div>
+        </div>
+        <div id="Pension_Section" class="conditional-section">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="Sentencia_de_Segunda">Fecha de fallecimiento:</label>
+                    <input type="date" id="sentencia_interlocutoria_costas" name="fecha_fallecimiento">
+                </div>
+                <div class="form-group">
+                    <label for="sala">Quien recibe la pension:</label>
+                    <select id="sala" name="Receptor">
+                        <option value="">Seleccione una opcion</option>
+                        <option value="Conyuje">Conyuje</option>
+                        <option value="Hijo">Hijo</option>
+                        <option value="Hija">Hija</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="Sentencia_de_Segunda">Nombre del receptor de la Pension:</label>
+                    <input type="text" id="sentencia_interlocutoria_costas" name="nombre_receptor">
+                </div>
+                <div class="form-group">
+                    <label for="sala">Porcentaje de Pension:</label>
+                    <select id="sala" name="Porcentaje_Pension">
+                        <option value="">Seleccione una opcion</option>
+                        <option value="100%">100%</option>
+                        <option value="70%">70%</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="inline-checkbox-container">
+                <h4>¿Tiene Edad Avanzada?:</h4>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Sumas_Si" name="Edad_Avanzada_Si">
+                    <label for="PBU_Si">Si</label>
+                </div>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Sumas_No" name="Sumas_No">
+                    <label for="PBU_No">No</label>
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -179,11 +283,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_pbu">Fecha donde empieza el error material:</label>
-                    <input type="date" id="monto_pbu" name="Error_Material_primer_fecha" required>
+                    <input type="date" id="monto_pbu" name="Error_Material_primer_fecha">
                 </div>
                 <div class="form-group">
                     <label for="porcentaje_pbu">Fecha en donde termina el error material:</label>
-                    <input type="date" id="porcentaje_pbu" name="Error_Material_ultima_fecha" required>
+                    <input type="date" id="porcentaje_pbu" name="Error_Material_ultima_fecha">
                 </div>
             </div>
         </div>
@@ -218,22 +322,22 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_pbu">Monto PBU:</label>
-                    <input type="text" id="monto_pbu" name="Monto_PBU" required>
+                    <input type="text" id="monto_pbu" name="Monto_PBU">
                 </div>
                 <div class="form-group">
                     <label for="porcentaje_pbu">Porcentaje PBU:</label>
-                    <input type="text" id="porcentaje_pbu" name="Porcentaje_PBU" required>
+                    <input type="text" id="porcentaje_pbu" name="Porcentaje_PBU">
                 </div>
             </div>
         </div>
 
         <div class="form-group">
             <label for="percibido">Percibido:</label>
-            <input type="text" id="percibido" name="Percibido" required>
+            <input type="text" id="percibido" name="Percibido">
         </div>
         <div class="form-group">
             <label for="reclamado">Reclamado:</label>
-            <input type="text" id="reclamado" name="Reclamado" required>
+            <input type="text" id="reclamado" name="Reclamado">
         </div>
 
         <div class="form-group">
@@ -254,11 +358,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="primer_fecha_RH">Fecha de comienzo:</label>
-                    <input type="date" id="primer_fecha_RH" name="primer_fecha_RH" required>
+                    <input type="date" id="primer_fecha_RH" name="primer_fecha_RH">
                 </div>
                 <div class="form-group">
                     <label for="ultima_fecha_RH">Fecha Final:</label>
-                    <input type="date" id="ultima_fecha_RH" name="ultima_fecha_RH" required>
+                    <input type="date" id="ultima_fecha_RH" name="ultima_fecha_RH">
                 </div>
             </div>
         </div>
@@ -281,11 +385,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="primer_fecha_AC">Fecha de comienzo:</label>
-                    <input type="date" id="primer_fecha_AC" name="primer_fecha_AC" required>
+                    <input type="date" id="primer_fecha_AC" name="primer_fecha_AC">
                 </div>
                 <div class="form-group">
                     <label for="ultima_fecha_AC">Fecha Final:</label>
-                    <input type="date" id="ultima_fecha_AC" name="ultima_fecha_AC" required>
+                    <input type="date" id="ultima_fecha_AC" name="ultima_fecha_AC">
                 </div>
             </div>
         </div>
@@ -332,41 +436,41 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_descontado_1">Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_1" name="monto_descontado_1" required>
+                    <input type="text" id="monto_descontado_1" name="monto_descontado_1">
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_1">Fecha:</label>
-                    <input type="date" id="fecha_descuento_1" name="fecha_descuento_1" required>
+                    <input type="date" id="fecha_descuento_1" name="fecha_descuento_1">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_descontado_2">Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_2" name="monto_descontado_2" required>
+                    <input type="text" id="monto_descontado_2" name="monto_descontado_2">
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_2">Fecha:</label>
-                    <input type="date" id="fecha_descuento_2" name="fecha_descuento_2" required>
+                    <input type="date" id="fecha_descuento_2" name="fecha_descuento_2">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_descontado_3">Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_3" name="monto_descontado_3" required>
+                    <input type="text" id="monto_descontado_3" name="monto_descontado_3">
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_3">Fecha:</label>
-                    <input type="date" id="fecha_descuento_3" name="fecha_descuento_3" required>
+                    <input type="date" id="fecha_descuento_3" name="fecha_descuento_3">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_descontado_4">Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_4" name="monto_descontado_4" required>
+                    <input type="text" id="monto_descontado_4" name="monto_descontado_4">
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_4">Fecha:</label>
-                    <input type="date" id="fecha_descuento_4" name="fecha_descuento_4" required>
+                    <input type="date" id="fecha_descuento_4" name="fecha_descuento_4">
                 </div>
             </div>
         </div>
@@ -403,25 +507,25 @@
         <div id="Segunda_Liquidacion_section" class="conditional-section">
             <div class="form-group">
                 <label for="movilidad">Movilidad Segunda Liquidacion:</label>
-                <input type="text" id="movilidad" name="Movilidad_Segunda_Liquidacion" required>
+                <input type="text" id="movilidad" name="Movilidad_Segunda_Liquidacion">
             </div>
 
             <div class="form-group">
                 <label for="haber_alta">Haber de Alta Segunda Liquidacion:</label>
-                <input type="text" id="haber_alta" name="Haber_de_Alta_Segunda_Liquidacion" required>
+                <input type="text" id="haber_alta" name="Haber_de_Alta_Segunda_Liquidacion">
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_descontado_2">Capital Segunda Liquidacion:</label>
-                    <input type="text" id="Capital" name="Capital_Segunda_Liquidacion" required>
+                    <input type="text" id="Capital" name="Capital_Segunda_Liquidacion">
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_2">Intereses Segunda Liquidacion:</label>
-                    <input type="text" id="Intereses" name="Intereses_Segunda_Liquidacion" required>
+                    <input type="text" id="Intereses" name="Intereses_Segunda_Liquidacion">
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_2">Total Segunda Liquidacion:</label>
-                    <input type="text" id="Total" name="Total_Segunda_Liquidacion" required>
+                    <input type="text" id="Total" name="Total_Segunda_Liquidacion">
                 </div>
             </div>
         </div>
@@ -443,49 +547,49 @@
         <div id="Liquidacion_IPC_section" class="conditional-section">
             <div class="form-group">
                 <label for="movilidad">Movilidad:</label>
-                <input type="text" id="movilidad" name="Movilidad_Primera_Liquidacion_IPC" required>
+                <input type="text" id="movilidad" name="Movilidad_Primera_Liquidacion_IPC">
             </div>
 
             <div class="form-group">
                 <label for="haber_alta">Haber de Alta:</label>
-                <input type="text" id="haber_alta_segunda_liquidacon" name="Haber_de_Alta_Primera_Liquidacion_IPC" required>
+                <input type="text" id="haber_alta_segunda_liquidacon" name="Haber_de_Alta_Primera_Liquidacion_IPC">
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_descontado_2">Capital:</label>
-                    <input type="text" id="Capital" name="Capital_Primera_Liquidacion_IPC" required>
+                    <input type="text" id="Capital" name="Capital_Primera_Liquidacion_IPC">
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_2">Intereses:</label>
-                    <input type="text" id="Intereses" name="Intereses_Primera_Liquidacion_IPC" required>
+                    <input type="text" id="Intereses" name="Intereses_Primera_Liquidacion_IPC" >
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_2">Total:</label>
-                    <input type="text" id="Total" name="Total_Primera_Liquidacion_IPC" required>
+                    <input type="text" id="Total" name="Total_Primera_Liquidacion_IPC">
                 </div>
             </div>
             <div id="Segunda_Liquidacion_IPC_section" class="conditional-section">
                 <div class="form-group">
                     <label for="movilidad">Movilidad Segunda Liquidacion:</label>
-                    <input type="text" id="movilidad" name="Movilidad_Segunda_Liquidacion_IPC" required>
+                    <input type="text" id="movilidad" name="Movilidad_Segunda_Liquidacion_IPC">
                 </div>
 
                 <div class="form-group">
                     <label for="haber_alta">Haber de Alta Segunda Liquidacion:</label>
-                    <input type="text" id="haber_alta_segunda_liquidacon" name="Haber_de_Alta_Segunda_Liquidacion_IPC" required>
+                    <input type="text" id="haber_alta_segunda_liquidacon" name="Haber_de_Alta_Segunda_Liquidacion_IPC">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="monto_descontado_2">Capital Segunda Liquidacion:</label>
-                        <input type="text" id="Capital" name="Capital_Segunda_Liquidacion_IPC" required>
+                        <input type="text" id="Capital" name="Capital_Segunda_Liquidacion_IPC">
                     </div>
                     <div class="form-group">
                         <label for="fecha_descuento_2">Intereses Segunda Liquidacion:</label>
-                        <input type="text" id="Intereses" name="Intereses_Segunda_Liquidacion_IPC" required>
+                        <input type="text" id="Intereses" name="Intereses_Segunda_Liquidacion_IPC">
                     </div>
                     <div class="form-group">
                         <label for="fecha_descuento_2">Total Segunda Liquidacion:</label>
-                        <input type="text" id="Total" name="Total_Segunda_Liquidacion_IPC" required>
+                        <input type="text" id="Total" name="Total_Segunda_Liquidacion_IPC">
                     </div>
                 </div>
             </div>
@@ -500,7 +604,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('liquidacionForm');
             const checkboxes = {
+                ampliacion : document.getElementById('ampliacion'),
+                ampliacion_inconstitucionalidad : document.getElementById('ampliacion_inconstitucionalidad'),
                 Sentencia_2da_Si: document.getElementById('Sentencia_2da_Si'),
+                Pension_Si: document.getElementById('Pension_Si'),
                 Error_Material_Si: document.getElementById('Error_Material_Si'),
                 PBU_Si: document.getElementById('PBU_Si'),
                 RH_Si: document.getElementById('RH_Si'),
@@ -510,7 +617,9 @@
                 IPC_Liquidacion_Si: document.getElementById('IPC_Liquidacion_Si')
             };
             const sections = {
+                ampliacion_section : document.getElementById('ampliacion_section'),
                 Sentencia_de_Segunda: document.getElementById('Sentencia_de_Segunda'),
+                Pension_section: document.getElementById('Pension_Section'),
                 Error_Material_section: document.getElementById('Error_Material_section'),
                 PBU_section: document.getElementById('PBU_section'),
                 RH_section: document.getElementById('RH_section'),
@@ -528,7 +637,10 @@
                 });
             }
 
+            toggleSection(checkboxes.ampliacion,sections.ampliacion_section);
+            toggleSection(checkboxes.ampliacion_inconstitucionalidad, sections.ampliacion_section);
             toggleSection(checkboxes.Sentencia_2da_Si, sections.Sentencia_de_Segunda);
+            toggleSection(checkboxes.Pension_Si, sections.Pension_section);
             toggleSection(checkboxes.Error_Material_Si, sections.Error_Material_section);
             toggleSection(checkboxes.PBU_Si, sections.PBU_section);
             toggleSection(checkboxes.RH_Si, sections.RH_section);
