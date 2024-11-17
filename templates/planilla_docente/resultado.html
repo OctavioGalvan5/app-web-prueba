@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado de la Suma</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .resultado {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        a {
+            text-decoration: none;
+            color: #4CAF50;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="resultado">
+        <h1>Resultado de la Suma</h1>
+        <p>El total de la fila 1 (desde la columna 2 en adelante) es:</p>
+        <h2>{{ total_1 }}</h2>
+        <p>El total de la fila 2 (desde la columna 2 en adelante) es:</p>
+        <h2>{{ total_2 }}</h2>
+        <p>El total de la fila 3 (desde la columna 2 en adelante) es:</p>
+        <h2>{{ total_3 }}</h2>
+        <p>El total de la fila 4 (desde la columna 2 en adelante) es:</p>
+        <h2>{{ total_4 }}</h2>
+        <a href="/">Volver al formulario</a>
+    </div>
+</body>
+</html>

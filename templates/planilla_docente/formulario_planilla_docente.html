@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planilla Docente</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-hover: #2980b9;
+            --text-color: #333;
+            --background-color: #f4f4f4;
+            --form-background: #fff;
+            --border-color: #ddd;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        form {
+            background-color: var(--form-background);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 50px auto;
+        }
+        h1, h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            flex: 1;
+        }
+        .file-drop-area {
+            border: 2px dashed var(--primary-color);
+            border-radius: 8px;
+            padding: 30px; /* Reduced from 30px */
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            max-width: 90%; /* Added to make it slightly less wide */
+            margin: 0 auto; /* Center the drop area */
+            margin-bottom: 20px;
+        }
+        .file-drop-area.dragover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        .file-input-wrapper {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        .file-input-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .file-input-button:hover {
+            background-color: var(--primary-hover);
+        }
+        .file-name {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+        button[type="submit"] {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 30px auto 0;
+        }
+        button[type="submit"]:hover {
+            background-color: var(--primary-hover);
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        .inline-checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .inline-checkbox-container h4 {
+            margin: 0;
+            margin-right: 10px;
+        }
+        .inline-checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        .inline-checkbox-group input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .conditional-section {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navs/nav.html' %}
+    <form id="liquidacionForm" action="{{ url_for('procesar') }}" method="POST" enctype="multipart/form-data">
+        <h1>Planilla Docente</h1>
+        <h3>Datos del Escrito</h3>    
+        <div class="form-row">
+            <div class="form-group">
+                <label for="cliente">Autos:</label>
+                <input type="text" id="cliente" name="cliente" required>
+            </div>
+            <div class="form-group">
+                <label for="expediente">Expediente:</label>
+                <input type="text" id="expediente" name="expediente" required>
+            </div>
+            <div class="form-group">
+                <label for="Nro_Beneficio">Número de Beneficio:</label>
+                <input type="text" id="Nro_Beneficio" name="Nro_Beneficio" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="excelFile">Subir Planilla de Percibido:</label>
+            <div id="drop-area" class="file-drop-area">
+                <p>Arrastra y suelta tu archivo Excel aquí o</p>
+                <div class="file-input-wrapper">
+                    <button type="button" class="file-input-button">Seleccionar archivo</button>
+                    <input type="file" id="excelFile" name="excelFile" accept=".xlsx,.xls" required>
+                </div>
+                <div id="file-name" class="file-name"></div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="Cargo_1">Cargo 1:</label>
+                <input type="text" id="Cargo_1" name="Cargo_1" required>
+            </div>
+            <div class="form-group">
+                <label for="Porcentaje_Cargo_1">Porcentaje:</label>
+                <input type="number" id="Porcentaje_Cargo_1" name="Porcentaje_Cargo_1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="excelFile">Subir Planilla de Percibido:</label>
+            <div id="drop-area_2" class="file-drop-area">
+                <p>Arrastra y suelta tu archivo Excel aquí o</p>
+                <div class="file-input-wrapper">
+                    <button type="button" class="file-input-button">Seleccionar archivo</button>
+                    <input type="file" id="excelFile_2" name="excelFile_2" accept=".xlsx,.xls" required>
+                </div>
+                <div id="file-name_2" class="file-name"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="inline-checkbox-container">
+                <h4>¿Tiene Cargo 2?:</h4>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Cargo_2_Si" name="Cargo_2_Si">
+                    <label for="Cargo_2_Si">Si</label>
+                </div>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Cargo_2_No" name="Cargo_2_No">
+                    <label for="Cargo_2_No">No</label>
+                </div>
+            </div>
+        </div>
+        <div id="Cargo_2_section" class="conditional-section">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="Cargo_2">Cargo 2:</label>
+                    <input type="text" id="Cargo_2" name="Cargo_2">
+                </div>
+                <div class="form-group">
+                    <label for="Porcentaje_Cargo_2">Porcentaje:</label>
+                    <input type="number" id="Porcentaje_Cargo_2" name="Porcentaje_Cargo_2">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="excelFile">Subir Planilla de Percibidos Cargo 2:</label>
+                <div id="drop-area_3" class="file-drop-area">
+                    <p>Arrastra y suelta tu archivo Excel aquí o</p>
+                    <div class="file-input-wrapper">
+                        <button type="button" class="file-input-button">Seleccionar archivo</button>
+                        <input type="file" id="excelFile_3" name="excelFile_3" accept=".xlsx,.xls" required>
+                    </div>
+                    <div id="file-name_3" class="file-name"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="inline-checkbox-container">
+                    <h4>¿Tiene Cargo 3?:</h4>
+                    <div class="inline-checkbox-group">
+                        <input type="checkbox" id="Cargo_3_Si" name="Cargo_3_Si">
+                        <label for="Cargo_3_Si">Si</label>
+                    </div>
+                    <div class="inline-checkbox-group">
+                        <input type="checkbox" id="Cargo_3_No" name="Cargo_3_No">
+                        <label for="Cargo_3_No">No</label>
+                    </div>
+                </div>
+            </div>
+            <div id="Cargo_3_section" class="conditional-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Cargo_3">Cargo 3:</label>
+                        <input type="text" id="Cargo_3" name="Cargo_3">
+                    </div>
+                    <div class="form-group">
+                        <label for="Porcentaje_Cargo_3">Porcentaje:</label>
+                        <input type="number" id="Porcentaje_Cargo_3" name="Porcentaje_Cargo_3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="excelFile">Subir Planilla de Percibidos Cargo 3:</label>
+                    <div id="drop-area_4" class="file-drop-area">
+                        <p>Arrastra y suelta tu archivo Excel aquí o</p>
+                        <div class="file-input-wrapper">
+                            <button type="button" class="file-input-button">Seleccionar archivo</button>
+                            <input type="file" id="excelFile_4" name="excelFile_4" accept=".xlsx,.xls" required>
+                        </div>
+                        <div id="file-name_4" class="file-name"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit">Crear</button>
+    </form>
+    {% include 'footers/footer.html' %}
+
+    <script>
+        function setupDropArea(dropAreaId, fileInputId, fileNameId) {
+            const dropArea = document.getElementById(dropAreaId);
+            const fileInput = document.getElementById(fileInputId);
+            const fileName = document.getElementById(fileNameId);
+
+            // Evitar comportamiento predeterminado
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Añadir y quitar clase de resaltado
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                dropArea.classList.add('dragover');
+            }
+
+            function unhighlight() {
+                dropArea.classList.remove('dragover');
+            }
+
+            // Manejar el evento de "drop"
+            dropArea.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                fileInput.files = files;
+                updateFileName();
+            }
+
+            // Actualizar el nombre del archivo seleccionado
+            fileInput.addEventListener('change', updateFileName);
+
+            function updateFileName() {
+                if (fileInput.files.length > 0) {
+                    fileName.textContent = `Archivo seleccionado: ${fileInput.files[0].name}`;
+                } else {
+                    fileName.textContent = '';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('liquidacionForm');
+            const checkboxes = {
+                Cargo_2 : document.getElementById('Cargo_2_Si'),
+                Cargo_3 : document.getElementById('Cargo_3_Si')
+
+            };
+            const sections = {
+                Cargo_2_section: document.getElementById('Cargo_2_section'),
+                Cargo_3_section: document.getElementById('Cargo_3_section')
+
+            };
+
+            function toggleSection(checkbox, section) {
+                checkbox.addEventListener('change', function() {
+                    section.style.display = this.checked ? 'block' : 'none';
+                });
+            }
+
+            toggleSection(checkboxes.Cargo_2,sections.Cargo_2_section);
+            toggleSection(checkboxes.Cargo_3,sections.Cargo_3_section);
+
+
+        });
+        
+        // Configurar múltiples zonas de arrastre
+        setupDropArea('drop-area', 'excelFile', 'file-name');
+        setupDropArea('drop-area_2', 'excelFile_2', 'file-name_2');
+        setupDropArea('drop-area_3', 'excelFile_3', 'file-name_3');
+        setupDropArea('drop-area_4', 'excelFile_4', 'file-name_4');
+
+    </script>
+</body>
+</html>

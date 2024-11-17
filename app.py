@@ -12,6 +12,8 @@ from config import config
 from xhtml2pdf import pisa
 from io import BytesIO
 from decimal import Decimal
+import pandas as pd
+import openpyxl
 #Models
 from models.ModelUser import ModelUser
 #Services
@@ -635,6 +637,39 @@ def resultado_escrito_liquidacion():
     resultado = escrito.crear_documento()
     
     return resultado
+
+@app.route('/planilla_docente')
+@login_required
+def planilla_docente():
+    return render_template('planilla_docente/formulario_planilla_docente.html')
+
+@app.route("/procesar", methods=["POST"])
+def procesar():
+    # Verificar si el archivo fue subido
+    if "excelFile" not in request.files:
+        return "No se encontró el archivo", 400
+
+    file = request.files["excelFile"]
+
+    # Verificar que se seleccionó un archivo
+    if file.filename == "":
+        return "No se seleccionó ningún archivo", 400
+
+    try:
+        # Leer el archivo Excel con pandas
+        df = pd.read_excel(file)
+
+        # Sumar los valores de la fila 2 (índice 1) desde la columna 2 (índice 1) en adelante
+        total_1 = df.iloc[0, 1:].sum()
+        total_2 = df.iloc[1, 1:].sum()
+        total_3 = df.iloc[2, 1:].sum()
+        total_4 = df.iloc[3, 1:].sum()
+
+        # Renderizar el resultado en una página HTML
+        return render_template("planilla_docente/resultado.html", total_1=total_1,total_2=total_2,total_3=total_3, total_4 = total_4)
+
+    except Exception as e:
+        return f"Error al procesar el archivo: {str(e)}", 500
 
 if __name__ == '__main__':
     app.run(debug=True)
