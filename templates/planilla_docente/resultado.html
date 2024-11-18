@@ -3,49 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado de la Suma</title>
+    <title>Resultado {{autos}} {{expediente}}</title>
     <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+            background-image: url('static/logoestudiomarca.jpg');
+            background-repeat: no-repeat;
+            background-object-position: 130 270px;
+            background-height: 500px;
+            background-width: 500px;
+            background-opacity: 0.1;
+        }
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
         }
-        .resultado {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+        hr {
+            border: none;
+            height: 2px; /* Grosor de la línea */
+            background-color: #D3D3D3; /* Color de la línea */
         }
         h1 {
-            color: #4CAF50;
+            font-size: 24px;
+            color: #845EC2;
+            text-align: center;
         }
-        a {
-            text-decoration: none;
-            color: #4CAF50;
+        h6 {
+            font-size: 16px;
+            color: #8400DA;
+            margin-top: 30px;
+            margin-bottom: 10px;
         }
-        a:hover {
-            text-decoration: underline;
+        p {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: avoid;
+            margin-bottom: 20px;
+        }
+        table td {
+            text-align: left;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 6px; /* Menos espacio en la parte superior */
+            text-align: left;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        table.benefits-comparison td {
+            text-align: left;
+            padding-left: 1px;
+            padding-bottom: 1px;
+            padding-top: 1;
+        }
+        .negrita {
+            font-weight: bold;
+        }
+        .font-large {
+            font-size: 12px;
+        }
+
+        .font-pequeña {
+            font-size: 8px;
+        }
+
+        .first-column-cell2 {
+            background-color: #e2e8f0;
+            font-weight: bold;
+            width: auto;
+        }
+        .first-column-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .first-column-cell3 {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            width: auto;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .info-section {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .graph-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .graph-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        .confiscatoriedad {
+            color: #e53e3e;
+        }
+        .haber {
+            color: #2b6cb0;
+        }
+        hr {
+            border: none;               /* Elimina el estilo predeterminado */
+            border-top: 1px solid #000; /* Define la línea */
+            margin: 0;                  /* Quita los márgenes del <hr> */
+        }
+
+        h1 {
+            margin: 0;                  /* Quita los márgenes del <h1> */
+            padding-bottom: 1px;        /* Espacio interno para acercarse al <hr> */
+            font-size: 24px;            /* Tamaño del texto, ajustable según diseño */
+        }
+        .image-container {
+            text-align: center; /* Centra el contenido */
+        }
+        .image-container img {
+            width: 300px; /* Ajusta el ancho de la imagen */
+            height: auto; /* Mantiene la proporción de la imagen */
         }
     </style>
 </head>
 <body>
-    <div class="resultado">
-        <h1>Resultado de la Suma</h1>
-        <p>El total de la fila 1 (desde la columna 2 en adelante) es:</p>
-        <h2>{{ total_1 }}</h2>
-        <p>El total de la fila 2 (desde la columna 2 en adelante) es:</p>
-        <h2>{{ total_2 }}</h2>
-        <p>El total de la fila 3 (desde la columna 2 en adelante) es:</p>
-        <h2>{{ total_3 }}</h2>
-        <p>El total de la fila 4 (desde la columna 2 en adelante) es:</p>
-        <h2>{{ total_4 }}</h2>
-        <a href="/">Volver al formulario</a>
+    <hr>
+    <h1 style="margin-top: 10px;">Planilla Docente</h1>
+    <hr style="margin-bottom: 20px;">
+
+    <div class="image-container">
+        <img src="static/logoestudio.jpg" alt="Descripción de la imagen">
     </div>
+
+    <div class="info-section">
+        <p><strong>Datos del actor:</strong> {{datos.autos}}&nbsp;&nbsp;&nbsp;
+           <strong>Expediente:</strong> {{datos.expediente}}
+        </p>
+        <p>
+           <strong>Numero de Beneficio:</strong> {{datos.Nro_Beneficio}}
+        </p>
+        <p>
+           <strong>Cargo 1:</strong> {{datos.Cargo_1}}&nbsp;&nbsp;&nbsp;
+            <strong>Porcentaje:</strong> {{datos.Porcentaje_Cargo_1}}%
+        </p>
+        {% if datos.Cargo_2_Si %}
+        <p>
+           <strong>Cargo 2:</strong> {{datos.Cargo_2}}&nbsp;&nbsp;&nbsp;
+            <strong>Porcentaje:</strong> {{datos.Porcentaje_Cargo_2}}%
+        </p>
+        {% endif %}
+        {% if datos.Cargo_3_Si %}
+        <p>
+           <strong>Cargo 3:</strong> {{datos.Cargo_3}}&nbsp;&nbsp;&nbsp;
+            <strong>Porcentaje:</strong> {{datos.Porcentaje_Cargo_3}}%
+        </p>
+        {% endif %}
+    </div>
+    <h6>DETERMINACION DEL HABER RECLAMADO:</h6>
+    <table class="benefits-comparison">
+        <thead>
+            <tr class="font-large first-column-cell2">
+                <td class="negrita" style="width: 80px;">Periodo</td>
+                <td class="negrita">Haber Percibido</td>
+                <td class="negrita">Cargo 1</td>
+                {% if datos.Cargo_2_Si %}
+                <td class="negrita">Cargo 2</td>
+                {% endif %}
+                {% if datos.Cargo_3_Si %}
+                <td class="negrita">Cargo 3</td>
+                {% endif %}
+                <td class="negrita">Total Reclamado</td>
+                <td class="negrita">Total Reclamado Actualizado</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fecha, Percibido, Cargo_1, Cargo_2, Cargo_3, Total_Reclamado, Total_Reclamado_Actualizado in filas %}
+            <tr class="font-large">
+                <td class="first-column-cell2" style="padding-top: 1px; padding-bottom: 1px;">{{ fecha }}</td>
+                 <td class="haber">{{ Percibido }}</td>
+                 <td class="haber">{{ Cargo_1 }}</td>
+                {% if datos.Cargo_2_Si %}
+                 <td class="haber">{{ Cargo_2 }}</td>
+                {% endif %}
+                {% if datos.Cargo_3_Si %}
+                 <td class="haber">{{ Cargo_3 }}</td>
+                {% endif %}
+                 <td class="haber">{{ Total_Reclamado }}</td>
+                 <td class="haber">{{ Total_Reclamado_Actualizado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

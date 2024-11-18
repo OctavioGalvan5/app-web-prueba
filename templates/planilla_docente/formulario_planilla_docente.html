@@ -191,17 +191,34 @@
         .checkbox-item input[type="checkbox"] {
             margin-right: 5px;
         }
+        .download-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3f51b5;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s, transform 0.2s;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+        }
+
+        .download-link:hover {
+            background-color: #303f9f;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
     {% include 'navs/nav.html' %}
     <form id="liquidacionForm" action="{{ url_for('procesar') }}" method="POST" enctype="multipart/form-data">
         <h1>Planilla Docente</h1>
+        <a href="{{ url_for('descargar_planilla_docente') }}" class="download-link" style="margin-bottom: 10px;">Descargar Planilla Excel</a>
         <h3>Datos del Escrito</h3>    
         <div class="form-row">
             <div class="form-group">
-                <label for="cliente">Autos:</label>
-                <input type="text" id="cliente" name="cliente" required>
+                <label for="autos">Autos:</label>
+                <input type="text" id="autos" name="autos" required>
             </div>
             <div class="form-group">
                 <label for="expediente">Expediente:</label>
@@ -234,12 +251,12 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="excelFile">Subir Planilla de Percibido:</label>
+            <label for="excelFile">Subir Planilla de Cargo 1:</label>
             <div id="drop-area_2" class="file-drop-area">
                 <p>Arrastra y suelta tu archivo Excel aquí o</p>
                 <div class="file-input-wrapper">
                     <button type="button" class="file-input-button">Seleccionar archivo</button>
-                    <input type="file" id="excelFile_2" name="excelFile_2" accept=".xlsx,.xls" required>
+                    <input type="file" id="excelFile_2" name="excelFile_2" accept=".xlsx,.xls">
                 </div>
                 <div id="file-name_2" class="file-name"></div>
             </div>
@@ -274,7 +291,7 @@
                     <p>Arrastra y suelta tu archivo Excel aquí o</p>
                     <div class="file-input-wrapper">
                         <button type="button" class="file-input-button">Seleccionar archivo</button>
-                        <input type="file" id="excelFile_3" name="excelFile_3" accept=".xlsx,.xls" required>
+                        <input type="file" id="excelFile_3" name="excelFile_3" accept=".xlsx,.xls">
                     </div>
                     <div id="file-name_3" class="file-name"></div>
                 </div>
@@ -309,14 +326,14 @@
                         <p>Arrastra y suelta tu archivo Excel aquí o</p>
                         <div class="file-input-wrapper">
                             <button type="button" class="file-input-button">Seleccionar archivo</button>
-                            <input type="file" id="excelFile_4" name="excelFile_4" accept=".xlsx,.xls" required>
+                            <input type="file" id="excelFile_4" name="excelFile_4" accept=".xlsx,.xls">
                         </div>
                         <div id="file-name_4" class="file-name"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <button type="submit">Crear</button>
+    <button type="submit">Crear</button>
     </form>
     {% include 'footers/footer.html' %}
 

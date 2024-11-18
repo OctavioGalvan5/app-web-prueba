@@ -26,6 +26,7 @@ from services.generador_regulacion.generador_regulacion import Regulacion
 from services.generador_escritos_liquidacion.generador_escritos_liquidacion import Escrito_liquidacion
 from services.calculadora_tope_maximo.generador_pdf import Comparativa
 from services.movilizador_de_haber.movilizador_de_haber import calculo_retroactivo
+from services.planilla_docente.planilla_docente import Planilla_Docente
 # Entities
 from models.entities.User import User
 
@@ -643,33 +644,37 @@ def resultado_escrito_liquidacion():
 def planilla_docente():
     return render_template('planilla_docente/formulario_planilla_docente.html')
 
+@app.route('/descargar_planilla_docente')
+def descargar_planilla_docente():
+    excel_file = 'datos/planilla_docente/Excel_planilla_planilla_docente.xlsx'
+    # Enviar el archivo como respuesta para que el usuario lo descargue
+    return send_file(excel_file, as_attachment=True)
+
 @app.route("/procesar", methods=["POST"])
 def procesar():
-    # Verificar si el archivo fue subido
-    if "excelFile" not in request.files:
-        return "No se encontró el archivo", 400
+    datos = {}
+    datos['autos'] = request.form.get("autos")
+    datos['expediente']= request.form.get("expediente")
+    datos['Nro_Beneficio']= request.form.get("Nro_Beneficio")
+    datos['planilla_percibidos'] = request.files["excelFile"]
+    datos['Cargo_1'] = request.form.get("Cargo_1")
+    datos['Porcentaje_Cargo_1'] = request.form.get("Porcentaje_Cargo_1")
+    datos['planilla_Cargo_1'] = request.files["excelFile_2"]
+    datos['Cargo_2_Si'] = request.form.get('Cargo_2_Si', False) == 'on'
+    datos['Cargo_2'] = request.form.get("Cargo_2")
+    datos['Porcentaje_Cargo_2'] = request.form.get("Porcentaje_Cargo_2")
+    datos['planilla_Cargo_2'] = request.files["excelFile_3"]
+    datos['Cargo_3_Si'] = request.form.get('Cargo_3_Si', False) == 'on'
+    datos['Cargo_3'] = request.form.get("Cargo_3")
+    datos['Porcentaje_Cargo_3'] = request.form.get("Porcentaje_Cargo_3")
+    datos['planilla_Cargo_3'] = request.files["excelFile_3"]
 
-    file = request.files["excelFile"]
+    
+    planilla_docente = Planilla_Docente(datos)
+    resultado = planilla_docente.crear_documento('planilla_percibidos')
 
-    # Verificar que se seleccionó un archivo
-    if file.filename == "":
-        return "No se seleccionó ningún archivo", 400
+    return resultado
 
-    try:
-        # Leer el archivo Excel con pandas
-        df = pd.read_excel(file)
-
-        # Sumar los valores de la fila 2 (índice 1) desde la columna 2 (índice 1) en adelante
-        total_1 = df.iloc[0, 1:].sum()
-        total_2 = df.iloc[1, 1:].sum()
-        total_3 = df.iloc[2, 1:].sum()
-        total_4 = df.iloc[3, 1:].sum()
-
-        # Renderizar el resultado en una página HTML
-        return render_template("planilla_docente/resultado.html", total_1=total_1,total_2=total_2,total_3=total_3, total_4 = total_4)
-
-    except Exception as e:
-        return f"Error al procesar el archivo: {str(e)}", 500
 
 if __name__ == '__main__':
     app.run(debug=True)
