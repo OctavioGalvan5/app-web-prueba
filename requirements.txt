@@ -9,3 +9,5 @@ flask_login
 Flask-WTF
 pandas
 openpyxl
+plotly
+kaleido
