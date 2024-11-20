@@ -21,3 +21,4 @@ class User(UserMixin):
 #password= "Belgrano1188"
 #hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=16)
 #print(hashed_password)
+# python models/entities/User.py

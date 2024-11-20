@@ -7,7 +7,5 @@ babel
 docxtpl
 flask_login
 Flask-WTF
-plotly
-kaleido
 pandas
 openpyxl
