@@ -65,7 +65,12 @@ def procesar_tuplas(tuplas):
 class Escrito_liquidacion:
   def __init__(self, datos):
       self.datos = datos
-
+      self.datos['Valor_UMA'] = obtener_valor_uma(self.datos['Fecha_de_cierre_de_intereses'])
+      self.datos['total_liquidacion'] = transformar_a_float(self.datos['total_liquidacion'])
+      self.datos['total_liquidacion_en_UMA'] = round(float(self.datos['total_liquidacion']) / float(self.datos['Valor_UMA']),2)
+      self.datos['total_liquidacion'] = formatear_dinero(self.datos['total_liquidacion'])
+      self.datos['Valor_UMA'] = formatear_dinero(self.datos['Valor_UMA'])
+      
       self.datos['Percibido'] = modificar_montos(self.datos['Percibido'])
       self.datos['Reclamado'] = modificar_montos(self.datos['Reclamado'])
 
@@ -76,10 +81,12 @@ class Escrito_liquidacion:
 
       self.datos['Fecha_Sentencia_Primera'] = transformar_fecha(self.datos['Fecha_Sentencia_Primera'])
       self.datos['Sentencia_de_Segunda'] = transformar_fecha(self.datos['Sentencia_de_Segunda'])
+      
       self.datos['Fecha_Inicial_de_Pago'] = transformar_fecha(self.datos['Fecha_Inicial_de_Pago'])
       self.datos['Fecha_de_cierre_de_liquidación'] = transformar_fecha(self.datos['Fecha_de_cierre_de_liquidación'])
       self.datos['Fecha_de_cierre_de_intereses'] = transformar_fecha(self.datos['Fecha_de_cierre_de_intereses'])
       self.datos['fecha_aprobacion_planilla'] = transformar_fecha(self.datos['fecha_aprobacion_planilla'])
+      
       self.datos['fecha_fallecimiento'] = transformar_fecha(self.datos['fecha_fallecimiento'])
       self.datos['Error_Material_primer_fecha'] = transformar_fecha(self.datos['Error_Material_primer_fecha'])
       self.datos['Error_Material_ultima_fecha'] = transformar_fecha(self.datos['Error_Material_ultima_fecha'])
@@ -87,11 +94,14 @@ class Escrito_liquidacion:
       self.datos['ultima_fecha_RH'] = transformar_fecha(self.datos['ultima_fecha_RH'])
       self.datos['primer_fecha_AC'] = transformar_fecha(self.datos['primer_fecha_AC'])
       self.datos['ultima_fecha_AC'] = transformar_fecha(self.datos['ultima_fecha_AC'])
+      
       self.datos['fecha_descuento_1'] = transformar_fecha(self.datos['fecha_descuento_1'])
       self.datos['fecha_descuento_2'] = transformar_fecha(self.datos['fecha_descuento_2'])
       self.datos['fecha_descuento_3'] = transformar_fecha(self.datos['fecha_descuento_3'])
       self.datos['fecha_descuento_4'] = transformar_fecha(self.datos['fecha_descuento_4'])
       self. datos['parrafo_descuentos'] = procesar_tuplas(datos['tupla_descuentos'])
+
+      
 
       self.datos['Haber_de_Alta'] = transformar_a_float(self.datos['Haber_de_Alta'])
       self.datos['Haber_de_Alta_Segunda_Liquidacion'] = transformar_a_float(self.datos['Haber_de_Alta_Segunda_Liquidacion'])
