@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from flask import Flask, render_template, request, make_response, send_file, redirect, url_for, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
+from sqlalchemy.exc import OperationalError
 from docxtpl import DocxTemplate
 from werkzeug.wrappers import response
 from config import config
@@ -53,13 +54,20 @@ def index():
 def login():
     if request.method == 'POST':
         user = User(0, request.form['username'], request.form['password'])
-        logged_user = ModelUser.login(user)
-        if logged_user is not None and logged_user.password:  # Verifica que la contraseña sea correcta
-            login_user(logged_user)
-            return redirect(url_for('home'))
-        else:
-            flash("Usuario o contraseña incorrectos")
-            return render_template('auth/login.html')
+        try:
+            logged_user = ModelUser.login(user)
+            if logged_user is not None and logged_user.password:  # Verifica que la contraseña sea correcta
+                login_user(logged_user)
+                return redirect(url_for('home'))
+            else:
+                flash("Usuario o contraseña incorrectos")
+                return render_template('auth/login.html')
+        except OperationalError as e:
+            flash("Error al conectar con la base de datos. Por favor, inténtelo nuevamente.")
+            return redirect(url_for('login'))
+        except Exception as e:
+            flash("Ocurrió un error inesperado. Por favor, inténtelo nuevamente.")
+            return redirect(url_for('login'))
     else:
         return render_template('auth/login.html')
 
