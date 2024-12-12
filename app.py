@@ -643,6 +643,9 @@ def resultado_escrito_liquidacion():
     datos['Diferencias_2'] = ""
     datos['Porcentaje_2'] = ""
 
+    datos['Daños_Si'] = request.form.get('Daños_Si', False) == 'on'
+    datos['Sancionatorios_Si'] = request.form.get('Sancionatorios_Si', False) == 'on'
+    
     escrito = Escrito_liquidacion(datos)
     resultado = escrito.crear_documento()
     
