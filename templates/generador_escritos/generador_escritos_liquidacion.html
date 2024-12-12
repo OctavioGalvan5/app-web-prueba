@@ -108,6 +108,48 @@
         .checkbox-item input[type="checkbox"] {
             margin-right: 5px;
         }
+        .label-with-icon {
+            display: flex;
+            align-items: center;
+        }
+        .info-icon {
+            margin-left: 5px;
+            cursor: help;
+            position: relative;
+        }
+        .info-icon::after {
+            content: "?";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #6a1b9a;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .info-icon .tooltip {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .info-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -393,11 +435,21 @@
         </div>
 
         <div class="form-group">
-            <label for="percibido">Percibido:</label>
+            <label for="percibido" class="label-with-icon">
+                Percibido:
+                <span class="info-icon">
+                    <div class="tooltip">En esta seccion se debe ingresar el parrafo de percibido del retroactivo, para hacerlo se marca el parrafo que desea copiar y luego click derecho en la parte seleccionada, luego selecciona la opcion "Buscar ... en Google" y una vez en el navegador puedes copiarlo normalmente</div>
+                </span>
+            </label>
             <input type="text" id="percibido" name="Percibido">
         </div>
         <div class="form-group">
-            <label for="reclamado">Reclamado:</label>
+            <label for="reclamado" class="label-with-icon">
+                Reclamado:
+                <span class="info-icon">
+                    <div class="tooltip">En esta seccion se debe ingresar el parrafo de reclamado del retroactivo, para hacerlo se marca el parrafo que desea copiar y luego click derecho en la parte seleccionada, luego selecciona la opcion "Buscar ... en Google" y una vez en el navegador puedes copiarlo normalmente</div>
+                </span>
+            </label>
             <input type="text" id="reclamado" name="Reclamado">
         </div>
 
@@ -476,7 +528,13 @@
 
         <div class="form-group">
             <label for="haber_alta">Haber de Alta:</label>
-            <input type="text" id="haber_alta" name="Haber_de_Alta" required>
+            <input 
+                type="text" 
+                id="haber_alta" 
+                name="Haber_de_Alta" 
+                required 
+                pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
+                title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77">
         </div>
 
         <div class="form-group">
@@ -572,8 +630,13 @@
             </div>
 
             <div class="form-group">
-                <label for="haber_alta">Haber de Alta Segunda Liquidacion:</label>
-                <input type="text" id="haber_alta" name="Haber_de_Alta_Segunda_Liquidacion">
+                <label for="haber_alta_segunda_liquidacion">Haber de Alta Segunda Liquidación:</label>
+                <input 
+                    type="text" 
+                    id="haber_alta_segunda_liquidacion" 
+                    name="Haber_de_Alta_Segunda_Liquidacion" 
+                    pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
+                    title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77">
             </div>
             <div class="form-row">
                 <div class="form-group">
@@ -613,7 +676,8 @@
 
             <div class="form-group">
                 <label for="haber_alta">Haber de Alta:</label>
-                <input type="text" id="haber_alta_segunda_liquidacon" name="Haber_de_Alta_Primera_Liquidacion_IPC">
+                <input type="text" id="haber_alta_segunda_liquidacon" name="Haber_de_Alta_Primera_Liquidacion_IPC"                     pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
+                    title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77">
             </div>
             <div class="form-row">
                 <div class="form-group">
@@ -637,7 +701,8 @@
 
                 <div class="form-group">
                     <label for="haber_alta">Haber de Alta Segunda Liquidacion:</label>
-                    <input type="text" id="haber_alta_segunda_liquidacon" name="Haber_de_Alta_Segunda_Liquidacion_IPC">
+                    <input type="text" id="haber_alta_segunda_liquidacon" name="Haber_de_Alta_Segunda_Liquidacion_IPC"                     pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
+                        title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
