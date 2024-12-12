@@ -4,7 +4,64 @@ from datetime import datetime
 from services.calculadora_uma.generador_pdf import obtener_acordada, obtener_valor_uma
 from services.calculos import formatear_dinero
 import re
+import plotly.graph_objects as go
+import base64
+from docx.shared import Inches
+import tempfile
+from babel.numbers import format_currency
 
+
+def replace_pic(doc, marker, img_path):
+    """Reemplaza un marcador en un documento Word por una imagen."""
+    for paragraph in doc.paragraphs:
+        if marker in paragraph.text:
+            run = paragraph.runs[0]
+            run.clear()
+            run.add_picture(img_path, width=Inches(5))  # Ajusta el tamaño
+            break
+            
+def crear_graficos(datos, etiquetas):
+    """Crea un gráfico de barras y lo guarda como imagen temporal."""
+    etiquetas = etiquetas
+    valores = datos
+    resultados = list(map(formatear_dinero, valores))
+
+    # Crear el gráfico de barras
+    fig = go.Figure(data=go.Bar(
+        x=etiquetas, 
+        y=valores, 
+        marker_color=['#0000FF', '#008000'],
+        text=resultados, textposition='auto',
+        textfont=dict(size=14)
+    ))
+
+    # Agregar la línea horizontal en el nivel de la primera columna
+    valor_primera_columna = valores[0]
+    fig.add_shape(
+        type="line",
+        x0=-0.5, 
+        x1=len(etiquetas) - 0.5, 
+        y0=valor_primera_columna,
+        y1=valor_primera_columna,
+        line=dict(color="red", width=3, dash="solid")
+    )
+
+    fig.update_layout(
+        title='', 
+        xaxis_title='', 
+        yaxis_title='',
+        plot_bgcolor='white',  # Fondo del área de trazado
+        paper_bgcolor='white',  # Fondo del papel
+        margin=dict(l=40, r=40, t=40, b=40),
+        width=800, height=600
+    )
+
+    # Guardar el gráfico como archivo temporal
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
+    fig.write_image(temp_file.name)  # Usar Kaleido para guardar la imagen
+
+    return temp_file.name
+    
 def calcular_diferencia_y_porcentaje(monto, monto_ipc):
   # Calcular la diferencia
   diferencia = round(monto_ipc - monto, 2)
@@ -104,9 +161,15 @@ class Escrito_liquidacion:
       
 
       self.datos['Haber_de_Alta'] = transformar_a_float(self.datos['Haber_de_Alta'])
+      etiquetas = ['Haber con 27609', 'Haber con IPC']
       self.datos['Haber_de_Alta_Segunda_Liquidacion'] = transformar_a_float(self.datos['Haber_de_Alta_Segunda_Liquidacion'])
       self.datos['Haber_de_Alta_Primera_Liquidacion_IPC'] = transformar_a_float(self.datos['Haber_de_Alta_Primera_Liquidacion_IPC'])
       self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC'] = transformar_a_float(self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC'])
+      datos_primer_grafico= [self.datos['Haber_de_Alta'], self.datos['Haber_de_Alta_Primera_Liquidacion_IPC']]
+      datos_segundo_grafico= [self.datos['Haber_de_Alta_Segunda_Liquidacion'], self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC']]
+
+      self.datos['grafico_1'] = crear_graficos(datos_primer_grafico, etiquetas)
+      self.datos['grafico_2'] = crear_graficos(datos_segundo_grafico, etiquetas)
 
       self.datos['Diferencias'], self.datos['Porcentaje']= calcular_diferencia_y_porcentaje(self.datos['Haber_de_Alta'],self.datos['Haber_de_Alta_Primera_Liquidacion_IPC'])
       self.datos['Diferencias_2'], self.datos['Porcentaje_2'] = calcular_diferencia_y_porcentaje(self.datos['Haber_de_Alta_Segunda_Liquidacion'],self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC'])
@@ -134,6 +197,10 @@ class Escrito_liquidacion:
 
         # Renderizar el documento con los datos
         doc.render(self.datos)
+      # Reemplazar el marcador con la imagen del gráfico
+        replace_pic(doc, 'Comparacion_1', self.datos['grafico_1'])
+        replace_pic(doc, 'Comparacion_2', self.datos['grafico_2'])
+
 
       # Guardar el documento renderizado
         doc.save(output_path)
