@@ -119,18 +119,16 @@ class Escrito_liquidacion:
 
   def crear_documento(self):
         plantilla_path = 'datos/escritos_liquidacion/plantilla_liquidacion_1ra_vez.docx'
-        if self.datos['liquidacion_1ra_vez']:
+        if self.datos['tipo_escrito'] == 'liquidacion_1ra_vez':
             plantilla_path = "datos/escritos_liquidacion/plantilla_liquidacion_1ra_vez.docx"
-        if self.datos['liquidacion_1ra_vez_inconstitucionalidad']:
+        if self.datos['tipo_escrito']=='liquidacion_1ra_vez_inconstitucionalidad':
             plantilla_path = "datos/escritos_liquidacion/plantilla_liquidacion_1ra_vez_inco.docx"
-        if self.datos['descuento_pago']:
+        if self.datos['tipo_escrito']=='descuento_pago':
             plantilla_path = "datos/escritos_liquidacion/plantilla_liquidacion_descuento.docx"
-        if self.datos['descuento_pago_inconstitucionalidad']:
+        if self.datos['tipo_escrito']=='descuento_pago_inconstitucionalidad':
             plantilla_path = "datos/escritos_liquidacion/plantilla_liquidacion_descuento_inco.docx"
-        if self.datos['ampliacion']:
+        if self.datos['tipo_escrito']=='ampliacion':
             plantilla_path = "datos/escritos_liquidacion/plantilla_liquidacion_ampliacion.docx"
-        if self.datos['ampliacion_inconstitucionalidad']:
-            plantilla_path = "datos/escritos_liquidacion/plantilla_liquidacion_ampliacion_inco.docx"
         output_path = "datos/escritos_liquidacion/liquidacion_final.docx"
         doc = DocxTemplate(plantilla_path)
 

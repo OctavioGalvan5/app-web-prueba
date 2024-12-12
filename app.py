@@ -527,13 +527,14 @@ def resultado_escrito_liquidacion():
     datos = {}
 
     #Tipo de liquidacion
-    datos['liquidacion_1ra_vez'] = request.form.get('liquidacion_1ra_vez', False) == 'on'
-    datos['liquidacion_1ra_vez_inconstitucionalidad'] = request.form.get('liquidacion_1ra_vez_inconstitucionalidad', False) == 'on'
-    datos['descuento_pago'] = request.form.get('descuento_pago', False) == 'on'
-    datos['descuento_pago_inconstitucionalidad'] = request.form.get('descuento_pago_inconstitucionalidad', False) == 'on'
-    datos['ampliacion'] = request.form.get('ampliacion', False) == 'on'
-    datos['ampliacion_inconstitucionalidad'] = request.form.get('ampliacion_inconstitucionalidad', False) == 'on'
+    datos['tipo_escrito'] = request.form.get('tipo_escrito')
 
+    #Inconstitucionalidades
+    datos['ley_27609_Si'] = request.form.get('27.609_Si', False) == 'on'
+    datos['ley_27541_Si'] = request.form.get('27.541_Si', False) == 'on'
+    datos['ley_27426_Si'] = request.form.get('27.426_Si', False) == 'on'
+
+    
     #Datos Cliente
     datos['cliente'] = request.form.get('cliente')
     datos['expediente'] = request.form.get('expediente')
