@@ -22,7 +22,6 @@ def replace_pic(doc, marker, img_path):
             
 def crear_graficos(datos, etiquetas):
     """Crea un gráfico de barras y lo guarda como imagen temporal."""
-    etiquetas = etiquetas
     valores = datos
     resultados = list(map(formatear_dinero, valores))
 
@@ -30,9 +29,9 @@ def crear_graficos(datos, etiquetas):
     fig = go.Figure(data=go.Bar(
         x=etiquetas, 
         y=valores, 
-        marker_color=['#0000FF', '#008000'],
+        marker_color=['#6BAED6', '#74C476'],  # Colores personalizados
         text=resultados, textposition='auto',
-        textfont=dict(size=14)
+        textfont=dict(size=14, color='black', family='Verdana')
     ))
 
     # Agregar la línea horizontal en el nivel de la primera columna
@@ -46,22 +45,28 @@ def crear_graficos(datos, etiquetas):
         line=dict(color="red", width=3, dash="solid")
     )
 
+    # Configurar diseño
     fig.update_layout(
-        title='', 
-        xaxis_title='', 
-        yaxis_title='',
-        plot_bgcolor='white',  # Fondo del área de trazado
-        paper_bgcolor='white',  # Fondo del papel
-        margin=dict(l=40, r=40, t=40, b=40),
+        title=dict(text="Comparacion de Haberes", font=dict(size=24, color="#333")),
+        xaxis_title="Movilidad",
+        yaxis_title="Monto",
+        plot_bgcolor='whitesmoke',
+        paper_bgcolor='#f8f8f8',
+        margin=dict(l=40, r=40, t=60, b=40),
+        font=dict(family="Arial", size=16, color="#333"),
         width=800, height=600
     )
+
+    # Líneas de cuadrícula suaves
+    fig.update_xaxes(showgrid=True, gridcolor='lightgrey', gridwidth=0.5)
+    fig.update_yaxes(showgrid=True, gridcolor='lightgrey', gridwidth=0.5)
 
     # Guardar el gráfico como archivo temporal
     temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
     fig.write_image(temp_file.name)  # Usar Kaleido para guardar la imagen
 
     return temp_file.name
-    
+
 def calcular_diferencia_y_porcentaje(monto, monto_ipc):
   # Calcular la diferencia
   diferencia = round(monto_ipc - monto, 2)
