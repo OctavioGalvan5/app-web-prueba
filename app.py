@@ -551,7 +551,10 @@ def resultado_escrito_liquidacion():
     datos['Fecha_de_cierre_de_liquidación'] = request.form.get('Fecha_de_cierre_de_liquidación') or "2022-02-01"
     datos['Fecha_de_cierre_de_intereses'] = request.form.get('Fecha_de_cierre_de_intereses') or "2022-02-01"
     datos['fecha_aprobacion_planilla'] = request.form.get('fecha_aprobacion_planilla') or "2022-02-01"
-
+    
+    #Badaro
+    datos['Badaro_Si'] = request.form.get('Badaro_Si', False) == 'on'
+    
     #Honorarios
     datos['Honorarios_No'] = request.form.get('Honorarios_No', False) == 'on'
 
