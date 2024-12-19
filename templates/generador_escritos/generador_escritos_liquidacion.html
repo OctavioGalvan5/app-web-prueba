@@ -168,10 +168,6 @@
                 <label for="descuento_pago">Descuento de pago</label>
             </div>
             <div class="checkbox-item">
-                <input type="radio" id="descuento_pago_inconstitucionalidad" name="tipo_escrito" value="descuento_pago_inconstitucionalidad">
-                <label for="descuento_pago_inconstitucionalidad">Descuento de pago con inconstitucionalidad</label>
-            </div>
-            <div class="checkbox-item">
                 <input type="radio" id="ampliacion" name="tipo_escrito" value="ampliacion">
                 <label for="ampliacion">Ampliacion</label>
             </div>
@@ -182,6 +178,10 @@
             <div class="checkbox-item" style="visibility: hidden;">
                 <input type="radio" id="liquidacion_1ra_vez_inconstitucionalidad" name="tipo_escrito" value="liquidacion_1ra_vez_inconstitucionalidad">
                 <label for="liquidacion_1ra_vez_inconstitucionalidad">Liquidacion 1ra vez con inconstitucionalidad</label>
+            </div>
+            <div class="checkbox-item" style="visibility: hidden;">
+                <input type="radio" id="descuento_pago_inconstitucionalidad" name="tipo_escrito" value="descuento_pago_inconstitucionalidad">
+                <label for="descuento_pago_inconstitucionalidad">Descuento de pago con inconstitucionalidad</label>
             </div>
         </div>
 
@@ -730,6 +730,20 @@
                         <label for="Total_Segunda_Liquidacion_IPC">Total Segunda Liquidacion:</label>
                         <input type="text" id="Total_Segunda_Liquidacion_IPC" name="Total_Segunda_Liquidacion_IPC">
                     </div>
+                </div>
+            </div>
+        </div>
+        <h3 style="color: blueviolet;">Parrafos a agregar</h3>
+        <div class="form-group">
+            <div class="inline-checkbox-container">
+                <h4>¿Tope de Haber Maximo?:</h4>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Tope_Haber_Maximo_Si" name="Tope_Haber_Maximo_Si">
+                    <label for="Tope_Haber_Maximo_Si">Si</label>
+                </div>
+                <div class="inline-checkbox-group">
+                    <input type="checkbox" id="Tope_Haber_Maximo_No" name="Tope_Haber_Maximo_No">
+                    <label for="Tope_Haber_Maximo_No">No</label>
                 </div>
             </div>
         </div>
