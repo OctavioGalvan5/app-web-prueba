@@ -111,6 +111,13 @@
             font-size: 12px;
             white-space: nowrap;
         }
+        .conditional-section {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
         @media (max-width: 600px) {
             .checkbox-group {
                 grid-template-columns: 1fr;
@@ -190,7 +197,7 @@
                     <input type="number" id="monto" name="monto" step="0.01" required placeholder="Ingrese el monto del haber a la fecha">
                 </div>
                 <div class="form-group">
-                    <label>Comparación con Haber de Sentencia (Caliva)</label>
+                    <label>Comparación con Haber de Sentencia</label>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="comparacion_mov_sentencia_si" name="comparacion_mov_sentencia_si" value="true">
@@ -199,6 +206,18 @@
                         <div class="checkbox-item">
                             <input type="checkbox" id="comparacion_mov_sentencia_no" name="comparacion_mov_sentencia_no" value="true">
                             <label for="comparacion_mov_sentencia_no">No</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="comparacion_mov_sentencia_si_section" class="conditional-section">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="comparacion_mov_alanis" name="comparacion_mov_alanis" value="true">
+                            <label for="comparacion_mov_alanis">Alanis</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="comparacion_mov_caliva" name="comparacion_mov_caliva" value="true">
+                            <label for="comparacion_mov_caliva">Caliva</label>
                         </div>
                     </div>
                 </div>
@@ -216,10 +235,6 @@
                         <div class="checkbox-item">
                             <input type="checkbox" id="uma" name="uma" value="true">
                             <label for="uma">UMA</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="movilidad_sentencia" name="movilidad_sentencia" value="true">
-                            <label for="movilidad_sentencia">Movilidad Sentencia (Caliva Marquez)</label>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="Ley_27426_rezago" name="Ley_27426_rezago" value="true">
@@ -245,6 +260,10 @@
                             <input type="checkbox" id="Caliva_Marquez_con_27551_con_6_rezago" name="Caliva_Marquez_con_27551_con_6_rezago" value="true">
                             <label for="Caliva_Marquez_con_27551_con_6_rezago">Caliva Marquez con 27551 con 6 rezago</label>
                         </div>
+                        <div class="checkbox-item" style="visibility: hidden;">
+                            <input type="checkbox" id="movilidad_sentencia" name="movilidad_sentencia" value="true">
+                            <label for="movilidad_sentencia">Movilidad Sentencia (Caliva Marquez)</label>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" class="submit-button">Calcular Diferencias</button>
@@ -252,5 +271,25 @@
         </div>
     </div>
     {% include 'footers/footer.html' %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('liquidacionForm');
+            const checkboxes = {
+                comparacion_mov_sentencia_si: document.getElementById('comparacion_mov_sentencia_si')
+            };
+            const sections = {
+                comparacion_mov_sentencia_si_section: document.getElementById('comparacion_mov_sentencia_si_section')
+
+            };
+
+            function toggleSection(checkbox, section) {
+                checkbox.addEventListener('change', function() {
+                    section.style.display = this.checked ? 'block' : 'none';
+                });
+            }
+            toggleSection(checkboxes.comparacion_mov_sentencia_si, sections.comparacion_mov_sentencia_si_section);
+
+        });
+    </script>
 </body>
 </html>

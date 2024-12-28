@@ -220,7 +220,7 @@
         {% endif %}
         {% if Caliva_Marquez_con_27551_con_3_rezago  %}
         <tr class="font-large">
-            <td class="negrita first-column-cell">Caliva Marquez con 27551 con 3 rezago </td>
+            <td class="negrita first-column-cell">Caliva Marquez + fallo Cendan </td>
             <td>{{valor_Caliva_Marquez_con_27551_con_3_rezago}}</td>
             <td>{{ comparacion.dif_anses_Caliva_Marquez_con_27551_con_3_rezago }}</td>
             <td class="confiscatoriedad">{{ comparacion.conf_anses_Caliva_Marquez_con_27551_con_3_rezago }}</td>
@@ -257,7 +257,86 @@
     </div>
 
 
-    {% if comparacion_mov_sentencia_si %}
+    {% if comparacion_mov_alanis %}
+    <h6>Diferencias de Movilidad con Haber de Sentencia segun Jurisdiccion:</h6>
+    <table>
+        <tr class="font-large first-column-cell2";>
+            <td rowspan="1" class="negrita">Movilidad</td>
+            <td rowspan="2" class="negrita">Haber al {{fecha_fin}} </td>
+            <td colspan="2" class="negrita" style="text-align: center;">Daño en el haber</td>
+        </tr>
+        <tr class="font-large first-column-cell2";>
+            <td class="negrita">Variables comparativas</td>
+            <td class="negrita">Diferencia mensual en $</td>
+            <td class="negrita">Porcentaje de quita respecto del haber de sentencia</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Mov. Sentencia (Alanis)</td>
+            <td>{{valor_Alanis_mas_Anses}}</td>
+        </tr>
+        {% if ipc %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Ipc</td>
+            <td> {{ valor_ipc }} </td>
+            <td>{{ comparacion.dif_alanis_ipc }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_ipc }}</td>
+        </tr>
+        {% endif %}
+        {% if ripte %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">RIPTE</td>
+            <td> {{valor_ripte}} </td>
+            <td>{{ comparacion.dif_alanis_ripte }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_ripte }}</td>
+        </tr>
+        {% endif %}
+        {% if uma %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">UMA</td>
+            <td>{{valor_uma}} </td>
+            <td>{{ comparacion.dif_alanis_UMA }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_UMA }}</td>
+        </tr>
+        {% endif %}
+        {% if Ley_27426_rezago %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Ley 27426 con rezago</td>
+            <td>{{valor_Ley_27426_rezago}}</td>
+            <td>{{ comparacion.dif_alanis_ley27426 }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_ley27426 }}</td>
+        </tr>
+        {% endif %}
+        {% if Caliva_Marquez_con_27551_con_3_rezago %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Caliva Marquez + fallo Cendan </td>
+            <td>{{valor_Caliva_Marquez_con_27551_con_3_rezago}}</td>
+            <td>{{ comparacion.dif_alanis_Caliva_Marquez_con_27551_con_3_rezago }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_Caliva_Marquez_con_27551_con_3_rezago }}</td>
+        </tr>
+        {% endif %}
+        {% if Alanis_con_27551_con_3_meses_rezago  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con 27551 con 3 meses rezago</td>
+            <td>{{valor_Alanis_con_27551_con_3_rezago}}</td>
+            <td>{{ comparacion.dif_alanis_Alanis_con_27551_con_3_rezago}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_Alanis_con_27551_con_3_rezago }}</td>
+        </tr>
+        {% endif %}
+        {% if caliva_mas_anses  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Caliva mas Anses</td>
+            <td>{{valor_Caliva_mas_Anses}}</td>
+            <td>{{ comparacion.dif_alanis_caliva_mas_anses}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_caliva_mas_anses }}</td>
+        </tr>
+        {% endif %}
+    </table>
+    <div class="graph-container">
+        <img src="data:image/png;base64,{{ grafico3 }}" alt="Gráfico comparativo de haberes de Sentencia">
+    </div>
+    {% endif %}
+
+    {% if comparacion_mov_caliva %}
     <h6>Diferencias de Movilidad con Haber de Sentencia segun Jurisdiccion:</h6>
     <table>
         <tr class="font-large first-column-cell2";>
@@ -272,78 +351,54 @@
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Mov. Sentencia (Caliva)</td>
-            <td>{{valor_mov_sentencia}}</td>
+            <td>{{valor_Caliva_mas_Anses}}</td>
         </tr>
         {% if ipc %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Ipc</td>
             <td> {{ valor_ipc }} </td>
-            <td>{{ comparacion.dif_sent_ipc }}</td>
-            <td class="confiscatoriedad">{{ comparacion.conf_sent_ipc }}</td>
+            <td>{{ comparacion.dif_caliva_ipc }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_ipc }}</td>
         </tr>
         {% endif %}
         {% if ripte %}
         <tr class="font-large">
             <td class="negrita first-column-cell">RIPTE</td>
             <td> {{valor_ripte}} </td>
-            <td>{{ comparacion.dif_sent_ripte }}</td>
-            <td class="confiscatoriedad">{{ comparacion.conf_sent_ripte }}</td>
+            <td>{{ comparacion.dif_caliva_ripte }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_ripte }}</td>
         </tr>
         {% endif %}
         {% if uma %}
         <tr class="font-large">
             <td class="negrita first-column-cell">UMA</td>
             <td>{{valor_uma}} </td>
-            <td>{{ comparacion.dif_sent_UMA }}</td>
-            <td class="confiscatoriedad">{{ comparacion.conf_sent_UMA }}</td>
+            <td>{{ comparacion.dif_caliva_UMA }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_UMA }}</td>
         </tr>
         {% endif %}
         {% if Ley_27426_rezago %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Ley 27426 con rezago</td>
             <td>{{valor_Ley_27426_rezago}}</td>
-            <td>{{ comparacion.dif_sent_ley27426 }}</td>
-            <td class="confiscatoriedad">{{ comparacion.conf_sent_ley27426 }}</td>
-        </tr>
-        {% endif %}
-        {% if caliva_mas_anses %}
-        <tr class="font-large">
-            <td class="negrita first-column-cell">Caliva Marquez mas Anses </td>
-            <td>{{valor_Caliva_mas_Anses}}</td>
-            <td>{{ comparacion.dif_sent_caliva_mas_anses }}</td>
-            <td class="confiscatoriedad">{{ comparacion.conf_sent_caliva_mas_anses }}</td>
+            <td>{{ comparacion.dif_caliva_ley27426 }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_ley27426 }}</td>
         </tr>
         {% endif %}
         {% if Caliva_Marquez_con_27551_con_3_rezago %}
         <tr class="font-large">
-            <td class="negrita first-column-cell">Caliva Marquez con 27551 con 3 rezago </td>
+            <td class="negrita first-column-cell">Caliva Marquez + fallo Cendan </td>
             <td>{{valor_Caliva_Marquez_con_27551_con_3_rezago}}</td>
-            <td>{{ comparacion.dif_sent_Caliva_Marquez_con_27551_con_3_rezago }}</td>
-            <td class="confiscatoriedad">{{ comparacion.conf_sent_Caliva_Marquez_con_27551_con_3_rezago }}</td>
-        </tr>
-        {% endif %}
-        {% if Caliva_Marquez_con_27551_con_6_rezago %}
-        <tr class="font-large">
-            <td class="negrita first-column-cell">Caliva Marquez con 27551 con 6 rezago </td>
-            <td>{{valor_Caliva_Marquez_con_27551_con_6_rezago}}</td>
-            <td>{{ comparacion.dif_sent_Caliva_Marquez_con_27551_con_6_rezago }}</td>
-            <td class="confiscatoriedad">{{ comparacion.conf_sent_Caliva_Marquez_con_27551_con_6_rezago }}</td>
-        </tr>
-        {% endif %}
-        {% if Alanis_Mas_Anses  %}
-        <tr class="font-large">
-            <td class="negrita first-column-cell">Alanis mas Anses </td>
-            <td>{{valor_Alanis_mas_Anses}}</td>
-            <td>{{ comparacion.dif_sent_alanis_mas_anses }}</td>
-            <td class="confiscatoriedad">{{ comparacion.conf_sent_alanis_mas_anses}}</td>
+            <td>{{ comparacion.dif_caliva_Caliva_Marquez_con_27551_con_3_rezago }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_Caliva_Marquez_con_27551_con_3_rezago }}</td>
         </tr>
         {% endif %}
         {% if Alanis_con_27551_con_3_meses_rezago  %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Alanis con 27551 con 3 meses rezago</td>
             <td>{{valor_Alanis_con_27551_con_3_rezago}}</td>
-            <td>{{ comparacion.dif_sent_Alanis_con_27551_con_3_rezago}}</td>
-            <td class="confiscatoriedad">{{ comparacion.conf_sent_Alanis_con_27551_con_3_rezago }}</td>
+            <td>{{ comparacion.dif_caliva_Alanis_con_27551_con_3_rezago}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_Alanis_con_27551_con_3_rezago }}</td>
         </tr>
         {% endif %}
     </table>
@@ -370,9 +425,6 @@
                 {% if uma %}
                 <td class="negrita">Haber con UMA</td>
                 {% endif %}
-                {% if movilidad_sentencia %}
-                <td class="negrita">Haber con Movilidad de Sentencia (Caliva)</td>
-                {% endif %}
                 {% if Ley_27426_rezago %}
                 <td class="negrita">Haber con Ley 27426 con rezago</td>
                 {% endif %}
@@ -380,7 +432,7 @@
                 <td class="negrita">Haber con Caliva Marquez mas Anses </td>
                 {% endif %}
                 {% if Caliva_Marquez_con_27551_con_3_rezago %}
-                <td class="negrita">Haber con Caliva Marquez con 27551 con 3 rezago </td>
+                <td class="negrita">Haber con Caliva Marquez + fallo Cendan </td>
                 {% endif %}
                 {% if Caliva_Marquez_con_27551_con_6_rezago %}
                 <td class="negrita">Haber con Caliva Marquez con 27551 con 6 rezago </td>
@@ -406,9 +458,6 @@
                 {% endif %}
                 {% if uma %}
                 <td class="haber">{{ fila[4] }}</td>
-                {% endif %}
-                {% if movilidad_sentencia %}
-                <td class="haber">{{ fila[5] }}</td>
                 {% endif %}
                 {% if Ley_27426_rezago %}
                 <td class="haber">{{ fila[6] }}</td>
