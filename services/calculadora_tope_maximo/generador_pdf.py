@@ -45,15 +45,25 @@ def crear_grafico_tope_haber_maximo(datos, nombre_grafico):
     etiquetas = ['Anses', 'Caliva Marquez', 'Badaro', 'Badaro C+M', '82% de la Rem Max', 'Rem Max', 'Rem Max Imponible C+M']
     valores = datos
     resultados = list(map(formatear_dinero, valores))
+
     # Crear el gráfico
     fig = go.Figure(data=go.Bar(
         x=etiquetas, 
         y=valores, 
-         marker_color=['#38225b', '#18488a', '#006faf', '#0096c6', '#7E7F9C', '#00bccb', '#00e0c4'],
+        marker_color=['#38225b', '#18488a', '#006faf', '#0096c6', '#7E7F9C', '#00bccb', '#00e0c4'],
         text=resultados, textposition='auto',
         textfont=dict(size=14)
-
     ))
+
+    # Agregar línea roja horizontal al nivel del valor de "Anses"
+    fig.add_shape(
+        type='line',
+        x0=-0.5,  # Extiende la línea desde antes de la primera barra
+        x1=len(etiquetas) - 0.5,  # Hasta después de la última barra
+        y0=valores[0],  # Altura del valor de "Anses"
+        y1=valores[0],
+        line=dict(color='red', width=3, dash='dash')
+    )
 
     # Actualizar el diseño del gráfico
     fig.update_layout(
@@ -75,6 +85,7 @@ def crear_grafico_tope_haber_maximo(datos, nombre_grafico):
     grafico_base64 = base64.b64encode(img_bytes).decode('utf-8')
 
     return grafico_base64
+
 class Comparativa:
   def __init__(self, autos, expediente, periodo_desde, periodo_hasta):
       self.autos = autos
