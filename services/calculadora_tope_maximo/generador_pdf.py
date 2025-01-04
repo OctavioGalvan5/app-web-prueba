@@ -213,7 +213,7 @@ class Comparativa:
       datos_grafico = [datos['anses_2'],datos['caliva_ext_27551_2'],datos['badaro_2'],datos['badaro_cm_2'],datos['ocheintados_rem_max_2'], datos['rem_max_2'],datos['rem_max_imponible_cm_extendido_27551_2'] ]
       datos_grafico_2 = [datos['dif_haber_reclamado_anses_graf'],datos['dif_haber_reclamado_Caliva_graf'],datos['dif_haber_reclamado_Badaro_graf'],datos['dif_haber_reclamado_Badaro_CM_graf'],datos['dif_haber_reclamado_ocheintados_rem_max_2_graf'], datos['dif_haber_reclamado_rem_max_2_graf'],datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'] ]
       grafico = crear_grafico_tope_haber_maximo(datos_grafico, "")
-      grafico_2 = crear_grafico_tope_haber_maximo_2(datos_grafico_2, "")
+      grafico_2 = crear_grafico_tope_haber_maximo_2(datos_grafico_2, "Diferencias en $ aplicando los Topes")
 
       rendered = render_template(
           'calculadora_tope_maximo/resultado.html',
