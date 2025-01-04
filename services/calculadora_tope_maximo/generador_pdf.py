@@ -92,6 +92,9 @@ def crear_grafico_tope_haber_maximo_2(datos, nombre_grafico):
     valores = datos
     resultados = list(map(formatear_dinero, valores))
 
+    # Encontrar el valor menor de los valores
+    valor_minimo = min(valores)
+
     # Crear el gráfico
     fig = go.Figure(data=go.Bar(
         x=etiquetas, 
@@ -101,13 +104,13 @@ def crear_grafico_tope_haber_maximo_2(datos, nombre_grafico):
         textfont=dict(size=14)
     ))
 
-    # Agregar línea roja horizontal al nivel del valor de "Anses"
+    # Agregar línea roja horizontal al nivel del valor mínimo
     fig.add_shape(
         type='line',
         x0=-0.5,  # Extiende la línea desde antes de la primera barra
         x1=len(etiquetas) - 0.5,  # Hasta después de la última barra
-        y0=valores[6],  # Altura del valor de "Anses"
-        y1=valores[6],
+        y0=valor_minimo,  # Altura del valor mínimo
+        y1=valor_minimo,
         line=dict(color='red', width=3, dash='dash')
     )
 
@@ -131,6 +134,7 @@ def crear_grafico_tope_haber_maximo_2(datos, nombre_grafico):
     grafico_base64 = base64.b64encode(img_bytes).decode('utf-8')
 
     return grafico_base64
+    
 class Comparativa:
   def __init__(self, autos, expediente, periodo_hasta, haber_reclamado):
       self.autos = autos
