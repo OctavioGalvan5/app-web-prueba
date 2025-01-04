@@ -87,6 +87,14 @@
             margin-bottom: 30px;
         }
         .graph-container img {
+            width: auto;      /* Mantiene el ancho proporcional */
+            height: 300px;    /* Ajusta el alto a 300px (puedes modificar este valor según lo necesites) */
+        }
+        .graph-container_2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .graph-container_2 img {
             max-width: 100%;
             height: auto;
         }
@@ -115,8 +123,11 @@
     </div>
 
     <div class="info-section">
-        <p><strong>Datos del actor:</strong> {{autos}}</p>
-        <p><strong>Expediente:</strong> {{expediente}}</p>
+        <p><strong>Datos del actor:</strong> {{autos}} &nbsp;&nbsp;&nbsp;
+        <strong>Expediente:</strong> {{expediente}}</p>
+        <p><strong>Haber Reclamado:</strong> {{haber_reclamado}} &nbsp;&nbsp;&nbsp;
+        <strong>Fecha del haber reclamado:</strong> {{periodo_hasta}}</p>
+
     </div>
     <h6>Comparacion Topes: </h6>
     <table>
@@ -130,17 +141,6 @@
             <td class="negrita">Rem. Maxima</td>
             <td class="negrita">Rem Max Imponible C+M extendido 27551</td>
 
-
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">{{periodo_desde}}</td>
-            <td>{{ anses_1 }}</td>
-            <td>{{caliva_ext_27551_1}}</td>
-            <td>{{ badaro_1 }}</td>
-            <td>{{ badaro_cm_1 }}</td>
-            <td>{{ ocheintados_rem_max_1 }}</td>
-            <td>{{ rem_max_1 }}</td>
-            <td>{{ rem_max_imponible_cm_extendido_27551_1 }}</td>
 
         </tr>
         <tr class="font-large">
@@ -175,6 +175,68 @@
 
     <div class="graph-container">
         <img src="data:image/png;base64,{{ grafico }}" alt="Gráfico comparativo de haberes Anses">
+    </div>
+
+    <h6>Comparacion Topes con Haber Reclamado: </h6>
+    <div class="info-section">
+        <p><strong>Haber Reclamado:</strong> {{haber_reclamado}}  &nbsp;&nbsp;&nbsp;
+        <strong>Fecha de Comparacion:</strong> {{periodo_hasta}}</p>
+    </div>
+
+    <table>
+        <tr class="font-large first-column-cell2";>
+            <td>Fecha</td>
+            <td class="negrita">Tope</td>
+            <td class="negrita">Diferencia en $ </td>
+            <td class="negrita">Quita en %</td>
+
+
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Tope Anses</td>
+            <td>{{ anses_2 }}</td>
+            <td>{{ dif_haber_reclamado_anses }}</td>
+            <td class="confiscatoriedad">{{ porc_haber_reclamado_anses }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Tope Caliva Marquez</td>
+            <td>{{ calivas_ext_27551_2 }}</td>
+            <td>{{ dif_haber_reclamado_Caliva }}</td>
+            <td class="confiscatoriedad">{{ porc_haber_reclamado_Caliva }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Tope Badaro</td>
+            <td>{{ badaro_2 }}</td>
+            <td>{{ dif_haber_reclamado_Badaro }}</td>
+            <td class="confiscatoriedad">{{ porc_haber_reclamado_Badaro }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Tope Badaro C+M</td>
+            <td>{{ badaro_cm_2 }}</td>
+            <td>{{ dif_haber_reclamado_Badaro_CM }}</td>
+            <td class="confiscatoriedad">{{ porc_haber_reclamado_Badaro_CM }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">82% de la Rem Max</td>
+            <td>{{ ocheintados_rem_max_2 }}</td>
+            <td>{{ dif_haber_reclamado_ocheintados_rem_max_2 }}</td>
+            <td class="confiscatoriedad">{{ porc_haber_reclamado_ocheintados_rem_max_2 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Rem. Maxima</td>
+            <td>{{ rem_max_2 }}</td>
+            <td>{{ dif_haber_reclamado_rem_max_2 }}</td>
+            <td class="confiscatoriedad">{{ porc_haber_reclamado_rem_max_2 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Rem Max Imponible C+M extendido 27551</td>
+            <td>{{ rem_max_imponible_cm_extendido_27551_2 }}</td>
+            <td>{{ dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 }}</td>
+            <td class="confiscatoriedad">{{ porc_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 }}</td>
+        </tr>
+    </table>
+    <div class="graph-container_2">
+        <img src="data:image/png;base64,{{ grafico_2 }}" alt="Gráfico comparativo de haberes Anses">
     </div>
  </body>
 </html>

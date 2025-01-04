@@ -463,11 +463,11 @@ def resultado_comparativa_tope_maximo():
     # Recoge los datos enviados desde el formulario
     autos = request.form.get("Autos")
     expediente = request.form.get("Expediente")
-    primera_fecha = request.form.get("primera_fecha")
+    haber_reclamado = request.form.get("haber_reclamado")
     segunda_fecha = request.form.get("segunda_fecha")
 
     pdf_generator = Comparativa(
-        autos, expediente, primera_fecha, segunda_fecha
+        autos, expediente, segunda_fecha, haber_reclamado
     )
     pdf = pdf_generator.generar_pdf()
 

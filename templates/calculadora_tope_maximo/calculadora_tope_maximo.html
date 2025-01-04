@@ -47,6 +47,7 @@
         }
         input[type="text"],
         input[type="date"],
+        input[type="number"],
         select {
             width: 100%;
             padding: 10px;
@@ -126,13 +127,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="autos">Haber reclamado:</label>
-                        <input type="text" id="autos" name="Autos" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="primera_fecha">Primera fecha a comparar:</label>
-                        <input type="date" id="primera_fecha" name="primera_fecha" required min="2018-01-01">
+                        <input type="number" id="haber_reclamado" name="haber_reclamado" step="0.01" required>
                     </div>
                     <div class="form-group">
                         <label for="segunda_fecha">Segunda fecha a comparar:</label>
