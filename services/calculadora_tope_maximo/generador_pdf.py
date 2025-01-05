@@ -87,8 +87,8 @@ def crear_grafico_tope_haber_maximo(datos, nombre_grafico):
 
     return grafico_base64
 
-def crear_grafico_tope_haber_maximo_2(datos, nombre_grafico):
-    etiquetas = ['Anses', 'Caliva Marquez', 'Badaro', 'Badaro C+M', '82% de la Rem Max', 'Rem Max', 'Rem Max Imponible C+M']
+def crear_grafico_tope_haber_maximo_2(datos, nombre_grafico, etiquetas):
+    etiquetas = etiquetas
     valores = datos
     resultados = list(map(formatear_dinero, valores))
 
@@ -211,9 +211,34 @@ class Comparativa:
   def generar_pdf(self):
       datos = self.obtener_datos()
       datos_grafico = [datos['anses_2'],datos['caliva_ext_27551_2'],datos['badaro_2'],datos['badaro_cm_2'],datos['ocheintados_rem_max_2'], datos['rem_max_2'],datos['rem_max_imponible_cm_extendido_27551_2'] ]
-      datos_grafico_2 = [datos['dif_haber_reclamado_anses_graf'],datos['dif_haber_reclamado_Caliva_graf'],datos['dif_haber_reclamado_Badaro_graf'],datos['dif_haber_reclamado_Badaro_CM_graf'],datos['dif_haber_reclamado_ocheintados_rem_max_2_graf'], datos['dif_haber_reclamado_rem_max_2_graf'],datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'] ]
+      datos_grafico_2 = []
+      etiquetas = []
+
+      if datos['dif_haber_reclamado_anses_graf'] >= 0:
+          datos_grafico_2.append(datos['dif_haber_reclamado_anses_graf'])
+          etiquetas.append('Tope Anses')
+      if datos['dif_haber_reclamado_Caliva_graf'] >= 0:
+          datos_grafico_2.append(datos['dif_haber_reclamado_Caliva_graf'])
+          etiquetas.append('Tope Caliva Marquez')
+      if datos['dif_haber_reclamado_Badaro_graf'] >= 0:
+            datos_grafico_2.append(datos['dif_haber_reclamado_Badaro_graf'])
+            etiquetas.append('Tope Badaro')
+      if datos['dif_haber_reclamado_Badaro_CM_graf'] >= 0:
+             datos_grafico_2.append(datos['dif_haber_reclamado_Badaro_CM_graf'])
+             etiquetas.append('Tope Badaro C+M')
+      if datos['dif_haber_reclamado_ocheintados_rem_max_2_graf'] >= 0:
+            datos_grafico_2.append(datos['dif_haber_reclamado_ocheintados_rem_max_2_graf'])
+            etiquetas.append('82% de la Rem Max')
+      if datos['dif_haber_reclamado_rem_max_2_graf'] >= 0:
+           datos_grafico_2.append(datos['dif_haber_reclamado_rem_max_2_graf'])
+           etiquetas.append('Rem. Maxima')
+      if datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'] >= 0:
+              datos_grafico_2.append(datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'])
+              etiquetas.append('Rem Max Imponible C+M extendido 27551')
+
+      
       grafico = crear_grafico_tope_haber_maximo(datos_grafico, "")
-      grafico_2 = crear_grafico_tope_haber_maximo_2(datos_grafico_2, "Diferencias en $ aplicando los Topes")
+      grafico_2 = crear_grafico_tope_haber_maximo_2(datos_grafico_2, "Diferencias en $ aplicando los Topes", etiquetas)
 
       rendered = render_template(
           'calculadora_tope_maximo/resultado.html',
@@ -267,6 +292,14 @@ class Comparativa:
 
           dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 = datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2'],
           porc_haber_reclamado_rem_max_imponible_cm_extendido_27551_2= datos['porc_haber_reclamado_rem_max_imponible_cm_extendido_27551_2'],
+          dif_haber_reclamado_anses_graf = datos['dif_haber_reclamado_anses_graf'],
+          dif_haber_reclamado_Caliva_graf = datos['dif_haber_reclamado_Caliva_graf'],
+          dif_haber_reclamado_Badaro_graf = datos['dif_haber_reclamado_Badaro_graf'],
+          dif_haber_reclamado_Badaro_CM_graf = datos['dif_haber_reclamado_Badaro_CM_graf'],
+          dif_haber_reclamado_ocheintados_rem_max_2_graf = datos['dif_haber_reclamado_ocheintados_rem_max_2_graf'],
+          dif_haber_reclamado_rem_max_2_graf = datos['dif_haber_reclamado_rem_max_2_graf'],
+          dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf = datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'],
+          
           grafico = grafico,
           grafico_2 = grafico_2
          
