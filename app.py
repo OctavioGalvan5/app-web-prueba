@@ -657,7 +657,12 @@ def resultado_escrito_liquidacion():
     resultado = escrito.crear_documento()
     
     return resultado
-
+    
+@app.route('/comparador_productos')
+@login_required
+def comparador_productos():
+    return render_template('comparador_productos/comparador_productos.html')
+    
 @app.route('/planilla_docente')
 @login_required
 def planilla_docente():
