@@ -106,11 +106,14 @@
                 gap: 0;
             }
         }
+        footer {
+            margin-top: 100px; /* Ajusta el valor según sea necesario */
+        }
     </style>
 </head>
 <body>
     {% include 'navs/nav.html' %}
-    <div class="container" style="margin-top: 70px;">
+    <div class="container" style="margin-top: 100px;">
         <div class="form-container">
             <h1>Calculadora Topes</h1>
             <form action="/resultado_comparativa_tope_maximo" method="POST">

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado {{autos}} {{expediente}}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+            background-image: url('static/logoestudiomarca.jpg');
+            background-repeat: no-repeat;
+            background-object-position: 130 270px;
+            background-height: 500px;
+            background-width: 500px;
+            background-opacity: 0.1;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+        hr {
+            border: none;
+            height: 2px; /* Grosor de la línea */
+            background-color: #D3D3D3; /* Color de la línea */
+        }
+        h1 {
+            font-size: 24px;
+            color: #1a365d;
+            text-align: center;
+        }
+        h6 {
+            font-size: 16px;
+            color: #2c5282;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: avoid;
+            margin-bottom: 20px;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        .negrita {
+            font-weight: bold;
+        }
+        .font-large {
+            font-size: 12px;
+        }
+        .first-column-cell2 {
+            background-color: #e2e8f0;
+            font-weight: bold;
+            width: 25%;
+        }
+        .first-column-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .first-column-cell3 {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .info-section {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .graph-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .graph-container img {
+            width: auto;      /* Mantiene el ancho proporcional */
+            height: 300px;    /* Ajusta el alto a 300px (puedes modificar este valor según lo necesites) */
+        }
+        .graph-container_2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .graph-container_2 img {
+            max-width: 100%;
+            height: auto;
+        }
+        .confiscatoriedad {
+            color: blue;
+        }
+        .haber {
+            color: #2b6cb0;
+        }
+        .image-container {
+            text-align: center; /* Centra el contenido */
+        }
+        .image-container img {
+            width: 300px; /* Ajusta el ancho de la imagen */
+            height: auto; /* Mantiene la proporción de la imagen */
+        }
+        /* Estilo para hacer las columnas de fecha más anchas */
+        .col-fecha {
+            width: 13%;  /* Ajusta el ancho de las columnas de fecha como lo desees */
+        }
+
+        .perdida-poder-adquisitivo {
+            color: red;
+            font-size: 1.8em; /* Tamaño de la fuente mayor */
+        }
+    </style>
+</head>
+<body>
+    <hr>
+    <h1>Comparativa de Poder Adquisitivo</h1>
+    <hr style="margin-bottom: 20px;">
+    <div class="image-container">
+        <img src="static/logoestudio.jpg" alt="Descripción de la imagen">
+    </div>
+
+    <div class="info-section">
+        <p><strong>Datos del actor:</strong> {{datos.autos}} &nbsp;&nbsp;&nbsp;
+        <strong>Expediente:</strong> {{datos.expediente}}</p>
+        <p><strong>Primer Haber:</strong> {{datos.primer_haber_reclamado}} &nbsp;&nbsp;&nbsp;
+        <strong>Primera Fecha:</strong> {{datos.primer_fecha}}</p>
+        <p><strong>Segundo Haber:</strong> {{datos.segundo_haber_reclamado}} &nbsp;&nbsp;&nbsp;
+        <strong>Segunda Fecha:</strong> {{datos.segunda_fecha}}</p>
+    </div>
+
+    <!-- Primera tabla -->
+    <table>
+        <tr class="font-large first-column-cell2">
+            <td class="col-fecha">Productos</td>
+            <td class="negrita">Leche fresca entera en sachet (Litro)</td>
+            <td class="negrita">Leche en Polvo (800g)</td>
+            <td class="negrita">Pan Mesa (390g)</td>
+            <td class="negrita">Aceite Girasol (1,5 Litros)</td>
+            <td class="negrita">Arroz Blanco Simple (Kg)</td>
+            <td class="negrita">Huevos (Docena)</td>
+            <td class="negrita">Harina de trigo común 000 (Kg)</td>
+            <td class="negrita">Azucar (Kg)</td>
+            <td class="negrita">Café molido (500g)</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Precios al {{datos.primer_fecha}}</td>
+            <td>{{ datos.leche_sachet_1 }}</td>
+            <td>{{ datos.leche_polvo_1 }}</td>
+            <td>{{ datos.pan_mesa_1 }}</td>
+            <td>{{ datos.aceite_girasol_1 }}</td>
+            <td>{{ datos.arroz_1 }}</td>
+            <td>{{ datos.huevos_1 }}</td>
+            <td>{{ datos.harina_1 }}</td>
+            <td>{{ datos.azucar_1 }}</td>
+            <td>{{ datos.cafe_1 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Cantidad de productos comprados con {{datos.primer_haber_reclamado}}</td>
+            <td>{{ datos.cantidad_leche_1 }}</td>
+            <td>{{ datos.cantidad_leche_polvo_1 }}</td>
+            <td>{{ datos.cantidad_pan_mesa_1 }}</td>
+            <td>{{ datos.cantidad_aceite_girasol_1 }}</td>
+            <td>{{ datos.cantidad_arroz_1 }}</td>
+            <td>{{ datos.cantidad_huevos_1 }}</td>
+            <td>{{ datos.cantidad_harina_1 }}</td>
+            <td>{{ datos.cantidad_azucar_1 }}</td>
+            <td>{{ datos.cantidad_cafe_1 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Precios al {{datos.segunda_fecha}}</td>
+            <td>{{ datos.leche_sachet_2 }}</td>
+            <td>{{ datos.leche_polvo_2 }}</td>
+            <td>{{ datos.pan_mesa_2 }}</td>
+            <td>{{ datos.aceite_girasol_2 }}</td>
+            <td>{{ datos.arroz_2 }}</td>
+            <td>{{ datos.huevos_2 }}</td>
+            <td>{{ datos.harina_2 }}</td>
+            <td>{{ datos.azucar_2 }}</td>
+            <td>{{ datos.cafe_2 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Cantidad de productos comprados con {{datos.segundo_haber_reclamado}}</td>
+            <td>{{ datos.cantidad_leche_2 }}</td>
+            <td>{{ datos.cantidad_leche_polvo_2 }}</td>
+            <td>{{ datos.cantidad_pan_mesa_2 }}</td>
+            <td>{{ datos.cantidad_aceite_girasol_2 }}</td>
+            <td>{{ datos.cantidad_arroz_2 }}</td>
+            <td>{{ datos.cantidad_huevos_2 }}</td>
+            <td>{{ datos.cantidad_harina_2 }}</td>
+            <td>{{ datos.cantidad_azucar_2 }}</td>
+            <td>{{ datos.cantidad_cafe_2 }}</td>
+        </tr>
+    </table>
+    
+    <div class="page-break"></div>
+    
+    <table>
+        <tr class="font-large first-column-cell2">
+            <td class="col-fecha">Fecha</td>
+            <td class="negrita">Media de Productos con Haber</td>
+            <td class="negrita">Perdida del Poder Adquisitivo</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">{{datos.primer_fecha}}</td>
+            <td>{{ datos.media_1 }}</td>
+            <td rowspan="2">
+                <span class="negrita">Poder adquisitivo perdido: </span>
+                <span class="perdida-poder-adquisitivo">{{datos.perdida_poder_adquisitivo}}%</span>
+            </td> 
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">{{datos.segunda_fecha}}</td>
+            <td>{{ datos.media_2 }}</td>
+        </tr>
+    </table>
+
+    <div class="graph-container_2">
+        <img src="data:image/png;base64,{{ grafico }}" alt="Gráfico comparativo de haberes Anses">
+    </div>
+
+    <div class="fuentes">
+        <h6>Fuentes:</h6>
+        <p>
+            <a href="{{datos.link_1}}" target="_blank">{{datos.link_1}}</a><br>
+            <a href="{{datos.link_2}}" target="_blank">{{datos.link_2}}</a><br>
+        </p>
+    </div>
+</body>
+</html>

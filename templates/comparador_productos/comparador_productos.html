@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Topes</title>
+    <title>Comparativa Poder Adquisitivo</title>
     <style>
         body, html {
             margin: 0;
@@ -106,14 +106,17 @@
                 gap: 0;
             }
         }
+        footer {
+            margin-top: 50px; /* Ajusta el valor según sea necesario */
+        }
     </style>
 </head>
 <body>
     {% include 'navs/nav.html' %}
-    <div class="container" style="margin-top: 70px;">
+    <div class="container" style="margin-top: 100px;">
         <div class="form-container">
             <h1>Comparador Poder Adquisitivo</h1>
-            <form action="/resultado_comparativa_tope_maximo" method="POST">
+            <form action="/comparador_productos_resultado" method="POST">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="autos">Autos:</label>

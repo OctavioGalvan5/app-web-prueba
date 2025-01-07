@@ -26,6 +26,7 @@ from services.calculos import formatear_dinero, transformar_fecha
 from services.generador_regulacion.generador_regulacion import Regulacion
 from services.generador_escritos_liquidacion.generador_escritos_liquidacion import Escrito_liquidacion
 from services.calculadora_tope_maximo.generador_pdf import Comparativa
+from services.comparador_productos.comparador_productos import Comparador_productos
 from services.movilizador_de_haber.movilizador_de_haber import calculo_retroactivo
 from services.planilla_docente.planilla_docente import Planilla_Docente
 # Entities
@@ -662,6 +663,28 @@ def resultado_escrito_liquidacion():
 @login_required
 def comparador_productos():
     return render_template('comparador_productos/comparador_productos.html')
+
+@app.route('/comparador_productos_resultado', methods=['POST'])
+@login_required
+def comparador_productos_resultado():
+    # Recoge los datos enviados desde el formulario
+    autos = request.form.get("Autos")
+    expediente = request.form.get("Expediente")
+    primer_haber_reclamado= request.form.get("primer_haber_reclamado")
+    primer_fecha= request.form.get("primer_fecha")
+    segundo_haber_reclamado = request.form.get("segundo_haber_reclamado")
+    segunda_fecha= request.form.get("segunda_fecha")
+
+    pdf_generator = Comparador_productos(
+        autos, expediente, primer_haber_reclamado, primer_fecha, segundo_haber_reclamado, segunda_fecha
+    )
+    pdf = pdf_generator.generar_pdf()
+
+    # Devolver el PDF para descarga
+    responsee = make_response(pdf)
+    responsee.headers['Content-Type'] = 'application/pdf'
+    responsee.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
+    return responsee
     
 @app.route('/planilla_docente')
 @login_required
