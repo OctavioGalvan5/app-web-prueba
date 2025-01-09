@@ -8,9 +8,9 @@ import plotly.graph_objects as go
 import io
 import base64
 from decimal import Decimal
+from models.database import engine
 
 # Configura tu engine
-engine = create_engine('mysql+pymysql://admin:root2024@database-2.c3yosi408f5f.us-east-2.rds.amazonaws.com:3306/calculadoras')
 
 def obtener_precios(fecha_ingresada):
     """

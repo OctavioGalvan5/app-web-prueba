@@ -3,7 +3,7 @@ from datetime import datetime
 from babel.numbers import format_currency
 
 # Configuración de la conexión a la base de datos
-db_connection_string = "mysql+pymysql://admin:root2024@database-2.c3yosi408f5f.us-east-2.rds.amazonaws.com:3306/calculadoras"
+db_connection_string = "mysql+pymysql://admin:root2025@database-1.cly8coaeo7ek.us-east-2.rds.amazonaws.com:3306/calculadoras"
 
 engine = create_engine(
     db_connection_string,
