@@ -356,6 +356,8 @@ def resultado_calculado_movilidad():
         Caliva_Marquez_con_27551_con_6_rezago= request.form.get('Caliva_Marquez_con_27551_con_6_rezago', False)
         Alanis_Mas_Anses= request.form.get('Alanis_Mas_Anses', False)
         Alanis_con_27551_con_3_meses_rezago= request.form.get('Alanis_con_27551_con_3_meses_rezago', False)
+        fallo_martinez= request.form.get('fallo_martinez', False)
+
 
         comparacion_mov_sentencia_si = request.form.get('comparacion_mov_sentencia_si', False)
         comparacion_mov_sentencia_no = request.form.get('comparacion_mov_sentencia_no', False)
@@ -363,7 +365,7 @@ def resultado_calculado_movilidad():
         comparacion_mov_caliva= request.form.get('comparacion_mov_caliva', False)
         comparacion_mov_alanis= request.form.get('comparacion_mov_alanis', False)
 
-        calculo = CalculadorMovilidad(datos_del_actor, expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis)
+        calculo = CalculadorMovilidad(datos_del_actor, expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, fallo_martinez, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis)
 
         resultado = calculo.generar_pdf()
         return resultado

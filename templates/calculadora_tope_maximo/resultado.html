@@ -49,6 +49,8 @@
         td {
             border: 1px solid #ccc;
             padding: 6px;
+            padding-left: 1px;
+            font-size: 11px;
             text-align: left;
             word-wrap: break-word;
             white-space: normal;
@@ -136,10 +138,12 @@
             <td class="negrita">Anses</td>
             <td class="negrita">Caliva Marquez</td>
             <td class="negrita">Badaro</td>
-            <td class="negrita">Badaro C+M</td>
+            <td class="negrita">Badaro Caliva Marquez</td>
             <td class="negrita">82% de la Rem Max</td>
             <td class="negrita">Rem. Maxima</td>
-            <td class="negrita">Rem Max Imponible C+M extendido 27551</td>
+            <td class="negrita">Rem Max Imponible Caliva Marquez extendido 27551</td>
+            <td class="negrita">Fallo Martinez</td>
+
 
 
         </tr>
@@ -152,6 +156,7 @@
             <td>{{ ocheintados_rem_max_2 }}</td>
             <td>{{ rem_max_2 }}</td>
             <td>{{ rem_max_imponible_cm_extendido_27551_2 }}</td>
+            <td>{{ martinez_2 }}</td>
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell" colspan="2">Diferencia con Haber maximo Anses</td>
@@ -161,6 +166,7 @@
             <td class="confiscatoriedad">{{ dif_monto_ocheintados_rem_max_anses }}</td>
             <td class="confiscatoriedad">{{ dif_monto_rem_max_anses }}</td>
             <td class="confiscatoriedad">{{ dif_monto_rem_max_imponible_cm_extendido_27551_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_monto_martinez_anses }}</td>
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell" colspan="2">Porcentaje de Diferencia con Haber maximo Anses</td>
@@ -170,6 +176,8 @@
             <td class="confiscatoriedad">{{ dif_ocheintados_rem_max_anses }}</td>
             <td class="confiscatoriedad">{{ dif_rem_max_anses }}</td>
             <td class="confiscatoriedad">{{ dif_rem_max_imponible_cm_extendido_27551_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_martinez_anses }}</td>
+
         </tr>
     </table>
 
@@ -242,10 +250,18 @@
         {% endif %}
         {% if dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf >= 0 %}
         <tr class="font-large">
-            <td class="negrita first-column-cell">Rem Max Imponible C+M extendido 27551</td>
+            <td class="negrita first-column-cell">Rem Max Imponible Caliva Marquez extendido 27551</td>
             <td>{{ rem_max_imponible_cm_extendido_27551_2 }}</td>
             <td>{{ dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 }}</td>
             <td class="confiscatoriedad">{{ porc_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 }}</td>
+        </tr>
+        {% endif %}
+        {% if dif_haber_reclamado_martinez_2_graf >= 0 %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Fallo Martinez</td>
+            <td>{{ martinez_2 }}</td>
+            <td>{{ dif_haber_reclamado_martinez_2 }}</td>
+            <td class="confiscatoriedad">{{ porc_haber_reclamado_martinez_2 }}</td>
         </tr>
         {% endif %}
     </table>

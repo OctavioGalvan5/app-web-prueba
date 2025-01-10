@@ -250,6 +250,14 @@
             <td class="confiscatoriedad">{{ comparacion.conf_anses_Alanis_con_27551_con_3_rezago }}</td>
         </tr>
         {% endif %}
+        {% if fallo_martinez  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Fallo Martinez</td>
+            <td>{{valor_fallo_martinez}}</td>
+            <td>{{ comparacion.dif_anses_martinez }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_martinez }}</td>
+        </tr>
+        {% endif %}
     </table>
 
     <div class="graph-container">
@@ -330,6 +338,14 @@
             <td class="confiscatoriedad">{{ comparacion.conf_alanis_caliva_mas_anses }}</td>
         </tr>
         {% endif %}
+        {% if fallo_martinez  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Fallo Martinez</td>
+            <td>{{valor_fallo_martinez}}</td>
+            <td>{{ comparacion.dif_alanis_martinez}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_martinez }}</td>
+        </tr>
+        {% endif %}
     </table>
     <div class="graph-container">
         <img src="data:image/png;base64,{{ grafico3 }}" alt="Gráfico comparativo de haberes de Sentencia">
@@ -401,6 +417,14 @@
             <td class="confiscatoriedad">{{ comparacion.conf_caliva_Alanis_con_27551_con_3_rezago }}</td>
         </tr>
         {% endif %}
+        {% if fallo_martinez  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Fallo Martinez</td>
+            <td>{{valor_fallo_martinez}}</td>
+            <td>{{ comparacion.dif_caliva_martinez}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_martinez }}</td>
+        </tr>
+        {% endif %}
     </table>
 
     <div class="graph-container">
@@ -443,6 +467,9 @@
                 {% if Alanis_con_27551_con_3_meses_rezago %}
                 <td class="negrita">Haber con Alanis con 27551 con 3 rezago </td>
                 {% endif %}
+                {% if fallo_martinez %}
+                <td class="negrita">Fallo Martinez </td>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -476,6 +503,9 @@
                 {% endif %}
                 {% if Alanis_con_27551_con_3_meses_rezago %}
                 <td class="haber">{{ fila[11] }}</td>
+                {% endif %}
+                {% if fallo_martinez %}
+                <td class="haber">{{ fila[12] }}</td>
                 {% endif %}
             </tr>
             {% endfor %}

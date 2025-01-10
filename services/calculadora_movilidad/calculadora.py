@@ -66,7 +66,7 @@ def crear_graficos(datos, etiquetas):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis ):
+    def __init__(self, datos_del_actor, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis ):
         self.datos_del_actor = datos_del_actor
         self.expediente = expediente
         self.cuil_expediente = cuil_expediente
@@ -86,6 +86,7 @@ class CalculadorMovilidad:
         self.Caliva_Marquez_con_27551_con_6_rezago = Caliva_Marquez_con_27551_con_6_rezago
         self.Alanis_Mas_Anses = Alanis_Mas_Anses
         self.Alanis_con_27551_con_3_meses_rezago = Alanis_con_27551_con_3_meses_rezago
+        self.fallo_martinez = fallo_martinez
         self.comparacion_mov_sentencia_si = comparacion_mov_sentencia_si
         self.comparacion_mov_sentencia_no = comparacion_mov_sentencia_no
         self.comparacion_mov_caliva = comparacion_mov_caliva
@@ -169,6 +170,13 @@ class CalculadorMovilidad:
                 'dif_alanis_Alanis_con_27551_con_3_rezago': formatear_dinero(ultimos_valores[10] - ultimos_valores[9]),
                 'conf_alanis_Alanis_con_27551_con_3_rezago': str(round((ultimos_valores[10] - ultimos_valores[9]) / ultimos_valores[9] * 100, 2)) + "%",
                 #
+            'dif_anses_martinez': formatear_dinero(ultimos_valores[11] - ultimos_valores[0]),
+               'conf_anses_martinez': str(round((ultimos_valores[11] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+
+               'dif_caliva_martinez': formatear_dinero(ultimos_valores[11] - ultimos_valores[7]),
+               'conf_caliva_martinez': str(round((ultimos_valores[11] - ultimos_valores[7]) / ultimos_valores[7] * 100, 2)) + "%",
+               'dif_alanis_martinez': formatear_dinero(ultimos_valores[11] - ultimos_valores[9]),
+               'conf_alanis_martinez': str(round((ultimos_valores[11] - ultimos_valores[9]) / ultimos_valores[9] * 100, 2)) + "%",
            }    
         datos = [ultimos_valores[0]]
         etiquetas = ['Anses']
@@ -212,6 +220,10 @@ class CalculadorMovilidad:
             datos.append(ultimos_valores[10])
             #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
             etiquetas.append('Alanis con 27551 con 3 rezago')
+        if self.fallo_martinez:
+            datos.append(ultimos_valores[11])
+            #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+            etiquetas.append('Fallo Martinez')
         grafico1 = crear_graficos(datos,etiquetas)
 
         if self.comparacion_mov_caliva:
@@ -249,6 +261,10 @@ class CalculadorMovilidad:
                     datos_2.append(ultimos_valores[10])
                     #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
                     etiquetas_2.append('Alanis con 27551 con 3 rezago')
+                if self.fallo_martinez:
+                    datos_2.append(ultimos_valores[11])
+                    #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
+                    etiquetas_2.append('Fallo Martinez')
                 grafico2 = crear_graficos(datos_2, etiquetas_2)
         else:
             grafico2 = None
@@ -287,6 +303,11 @@ class CalculadorMovilidad:
                     datos_3.append(ultimos_valores[10])
                     #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
                     etiquetas_3.append('Alanis con 27551 con 3 rezago')
+                etiquetas_2.append('Alanis con 27551 con 3 rezago')
+                if self.fallo_martinez:
+                    datos_2.append(ultimos_valores[11])
+                    #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
+                    etiquetas_2.append('Fallo Martinez')
                 grafico3 = crear_graficos(datos_3, etiquetas_3)
         else:
             grafico3 = None
@@ -321,6 +342,7 @@ class CalculadorMovilidad:
             Caliva_Marquez_con_27551_con_6_rezago = self.Caliva_Marquez_con_27551_con_6_rezago,
             Alanis_Mas_Anses = self.Alanis_Mas_Anses,
             Alanis_con_27551_con_3_meses_rezago = self.Alanis_con_27551_con_3_meses_rezago,
+            fallo_martinez = self.fallo_martinez,
             comparacion_mov_sentencia_si = self.comparacion_mov_sentencia_si,
             comparacion_mov_caliva= self.comparacion_mov_caliva,
             comparacion_mov_alanis= self.comparacion_mov_alanis,
@@ -334,7 +356,9 @@ class CalculadorMovilidad:
             valor_Caliva_mas_Anses = formatear_dinero(montos_a_fecha_cierre[7]),
             valor_Caliva_Marquez_con_27551_con_6_rezago = formatear_dinero(montos_a_fecha_cierre[8]),
             valor_Alanis_mas_Anses = formatear_dinero(montos_a_fecha_cierre[9]),
-            valor_Alanis_con_27551_con_3_rezago = formatear_dinero(montos_a_fecha_cierre[10])
+            valor_Alanis_con_27551_con_3_rezago = formatear_dinero(montos_a_fecha_cierre[10]),
+            valor_fallo_martinez = formatear_dinero(montos_a_fecha_cierre[11])
+
 
         )
         # Crear el PDF en memoria

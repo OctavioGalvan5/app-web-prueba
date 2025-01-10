@@ -45,9 +45,10 @@ def obtener_precios(fecha_ingresada):
             harina = fila_cercana['harina']
             azucar = fila_cercana['azucar']
             cafe = fila_cercana['cafe']
+            asado = fila_cercana['asado']
             link = fila_cercana['link']
 
-            return leche_sachet, leche_polvo, pan_mesa, aceite_girasol, arroz, huevos, harina, azucar, cafe, link
+            return leche_sachet, leche_polvo, pan_mesa, aceite_girasol, arroz, huevos, harina, azucar, cafe, asado, link
         else:
             return None
 
@@ -109,9 +110,9 @@ class Comparador_productos:
         self.segunda_fecha = segunda_fecha
 
     def obtener_datos(self):
-        (leche_sachet_1, leche_polvo_1, pan_mesa_1, aceite_girasol_1, arroz_1, huevos_1, harina_1, azucar_1, cafe_1, link_1) = obtener_precios(self.primer_fecha)
+        (leche_sachet_1, leche_polvo_1, pan_mesa_1, aceite_girasol_1, arroz_1, huevos_1, harina_1, azucar_1, cafe_1,asado_1, link_1) = obtener_precios(self.primer_fecha)
 
-        (leche_sachet_2, leche_polvo_2, pan_mesa_2, aceite_girasol_2, arroz_2, huevos_2, harina_2, azucar_2, cafe_2, link_2) = obtener_precios(self.segunda_fecha)
+        (leche_sachet_2, leche_polvo_2, pan_mesa_2, aceite_girasol_2, arroz_2, huevos_2, harina_2, azucar_2, cafe_2,asado_2, link_2) = obtener_precios(self.segunda_fecha)
 
         datos = {}
 
@@ -131,6 +132,7 @@ class Comparador_productos:
         datos['harina_1'] = formatear_dinero(harina_1)
         datos['azucar_1'] = formatear_dinero(azucar_1)
         datos['cafe_1'] = formatear_dinero(cafe_1)
+        datos['asado_1'] = formatear_dinero(asado_1)
         datos['link_1'] = link_1  # Los links no necesitan formateo de dinero
 
         datos['leche_sachet_2'] = formatear_dinero(leche_sachet_2)
@@ -142,6 +144,7 @@ class Comparador_productos:
         datos['harina_2'] = formatear_dinero(harina_2)
         datos['azucar_2'] = formatear_dinero(azucar_2)
         datos['cafe_2'] = formatear_dinero(cafe_2)
+        datos['asado_2'] = formatear_dinero(asado_2)
         datos['link_2'] = link_2  # Los links no necesitan formateo de dinero
 
 
@@ -163,6 +166,8 @@ class Comparador_productos:
         datos['cantidad_azucar_2'] = round(Decimal(self.segundo_haber_reclamado) / azucar_2, 2)
         datos['cantidad_cafe_1'] = round(Decimal(self.primer_haber_reclamado) / cafe_1, 2)
         datos['cantidad_cafe_2'] = round(Decimal(self.segundo_haber_reclamado) / cafe_2, 2)
+        datos['cantidad_asado_1'] = round(Decimal(self.primer_haber_reclamado) / asado_1, 2)
+        datos['cantidad_asado_2'] = round(Decimal(self.segundo_haber_reclamado) / asado_2, 2)
 
 
         datos['media_1'] = (
@@ -174,7 +179,8 @@ class Comparador_productos:
             datos['cantidad_huevos_1'] +
             datos['cantidad_harina_1'] +
             datos['cantidad_azucar_1'] +
-            datos['cantidad_cafe_1']
+            datos['cantidad_cafe_1'] +
+            datos['cantidad_asado_1']
         )
         datos['media_2'] = (
             datos['cantidad_leche_2'] +
@@ -185,7 +191,8 @@ class Comparador_productos:
             datos['cantidad_huevos_2'] +
             datos['cantidad_harina_2'] +
             datos['cantidad_azucar_2'] +
-            datos['cantidad_cafe_2']
+            datos['cantidad_cafe_2'] +
+            datos['cantidad_asado_2']
         )
 
         datos['perdida_poder_adquisitivo'] = round(-(1-datos['media_1']/datos['media_2'])*100, 2)

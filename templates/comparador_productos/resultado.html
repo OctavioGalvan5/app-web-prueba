@@ -49,9 +49,10 @@
         td {
             border: 1px solid #ccc;
             padding: 6px;
-            text-align: left;
+            text-align: left !important; /* Asegura que el texto esté alineado a la izquierda */
             word-wrap: break-word;
             white-space: normal;
+            font-size: 11px; /* Ajusta el tamaño de la fuente a tu preferencia */
         }
         .negrita {
             font-weight: bold;
@@ -152,6 +153,7 @@
             <td class="negrita">Harina de trigo común 000 (Kg)</td>
             <td class="negrita">Azucar (Kg)</td>
             <td class="negrita">Café molido (500g)</td>
+            <td class="negrita">Asado (Kg)</td>
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Precios al {{datos.primer_fecha}}</td>
@@ -164,6 +166,7 @@
             <td>{{ datos.harina_1 }}</td>
             <td>{{ datos.azucar_1 }}</td>
             <td>{{ datos.cafe_1 }}</td>
+            <td>{{ datos.asado_1 }}</td>
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Cantidad de productos comprados con {{datos.primer_haber_reclamado}}</td>
@@ -176,6 +179,7 @@
             <td>{{ datos.cantidad_harina_1 }}</td>
             <td>{{ datos.cantidad_azucar_1 }}</td>
             <td>{{ datos.cantidad_cafe_1 }}</td>
+            <td>{{ datos.cantidad_asado_1 }}</td>
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Precios al {{datos.segunda_fecha}}</td>
@@ -188,6 +192,7 @@
             <td>{{ datos.harina_2 }}</td>
             <td>{{ datos.azucar_2 }}</td>
             <td>{{ datos.cafe_2 }}</td>
+            <td>{{ datos.asado_2 }}</td>
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Cantidad de productos comprados con {{datos.segundo_haber_reclamado}}</td>
@@ -200,6 +205,7 @@
             <td>{{ datos.cantidad_harina_2 }}</td>
             <td>{{ datos.cantidad_azucar_2 }}</td>
             <td>{{ datos.cantidad_cafe_2 }}</td>
+            <td>{{ datos.cantidad_asado_2 }}</td>
         </tr>
     </table>
     

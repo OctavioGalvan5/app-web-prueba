@@ -11,39 +11,44 @@ import base64
 from decimal import Decimal
 
 def obtener_monto(fecha_ingresada):
-  # Convertir la fecha ingresada por el usuario a un objeto datetime.date
-  fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
+    # Convertir la fecha ingresada por el usuario a un objeto datetime.date
+    fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
 
-  with engine.connect() as conn:
-      result = conn.execute(text("SELECT * FROM topes_maximo"))
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM topes_maximo"))
 
-      # Variables para almacenar la fila más cercana
-      fila_cercana = None
-      fecha_cercana = None
+        # Variables para almacenar la fila más cercana
+        fila_cercana = None
+        fecha_cercana = None
 
-      for row in result:
-          fecha_fila = row[1]  # Asumiendo que la segunda columna es la fecha
-          if fecha_fila <= fecha_ingresada_dt:
-              # Comparar para encontrar la fecha más cercana
-              if fecha_cercana is None or fecha_fila > fecha_cercana:
-                  fecha_cercana = fecha_fila
-                  fila_cercana = row
+        for row in result:
+            fila_dict = dict(zip(result.keys(), row))  # Convertir la fila en un diccionario
+            fecha_fila = fila_dict['fecha']  # Asumiendo que la columna de la fecha se llama 'fecha'
 
-      if fila_cercana:
-          # Extraer el elemento 4
-          caliva_ext_27551 = fila_cercana[2]
-          anses = fila_cercana[3]
-          badaro = fila_cercana[4]
-          badaro_cm = fila_cercana[5]
-          ocheintados_rem_max = fila_cercana[6]
-          rem_max = fila_cercana [7]
-          rem_max_imponible_cm_extendido_27551 = fila_cercana[8]
-          
-          return caliva_ext_27551, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max,rem_max_imponible_cm_extendido_27551
-      else:
-          return None
+            if fecha_fila <= fecha_ingresada_dt:
+                # Comparar para encontrar la fecha más cercana
+                if fecha_cercana is None or fecha_fila > fecha_cercana:
+                    fecha_cercana = fecha_fila
+                    fila_cercana = fila_dict
+
+        if fila_cercana:
+            # Extraer los valores usando los nombres de las columnas
+            caliva_ext_27551 = fila_cercana['Caliva ext. 27551']
+            anses = fila_cercana['anses']
+            badaro = fila_cercana['badaro']
+            badaro_cm = fila_cercana['badaro c+m']
+            ocheintados_rem_max = fila_cercana['82% rem.max']
+            rem_max = fila_cercana['remuneracion maxima']
+            rem_max_imponible_cm_extendido_27551 = fila_cercana['rem max imponible c+m extendido 27551']
+            martinez = fila_cercana['martinez']
+
+
+            return caliva_ext_27551, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max, rem_max_imponible_cm_extendido_27551, martinez
+        else:
+            return None
+            
 def crear_grafico_tope_haber_maximo(datos, nombre_grafico):
-    etiquetas = ['Anses', 'Caliva Marquez', 'Badaro', 'Badaro C+M', '82% de la Rem Max', 'Rem Max', 'Rem Max Imponible C+M']
+    etiquetas = ['Anses', 'Caliva Marquez', 'Badaro', 'Badaro C+M', '82% de la Rem Max', 'Rem Max', 'Rem Max Imponible Caliva Marquez', 'Martinez']
     valores = datos
     resultados = list(map(formatear_dinero, valores))
 
@@ -90,6 +95,11 @@ def crear_grafico_tope_haber_maximo(datos, nombre_grafico):
 def crear_grafico_tope_haber_maximo_2(datos, nombre_grafico, etiquetas):
     etiquetas = etiquetas
     valores = datos
+
+    # Verificar si la lista de valores está vacía
+    if not valores:
+        return "No hay datos suficientes para generar el gráfico."
+
     resultados = list(map(formatear_dinero, valores))
 
     # Encontrar el valor menor de los valores
@@ -144,7 +154,7 @@ class Comparativa:
 
   def obtener_datos(self):
 
-      caliva_ext_27551_2, anses_2, badaro_2, badaro_cm_2, ocheintados_rem_max_2, rem_max_2,rem_max_imponible_cm_extendido_27551_2 = obtener_monto(self.periodo_hasta)
+      caliva_ext_27551_2, anses_2, badaro_2, badaro_cm_2, ocheintados_rem_max_2, rem_max_2,rem_max_imponible_cm_extendido_27551_2, martinez_2 = obtener_monto(self.periodo_hasta)
       
       datos = {}
       
@@ -160,6 +170,8 @@ class Comparativa:
       datos['ocheintados_rem_max_2'] = ocheintados_rem_max_2
       datos['rem_max_2'] = rem_max_2
       datos['rem_max_imponible_cm_extendido_27551_2'] = rem_max_imponible_cm_extendido_27551_2
+      datos['martinez_2'] = martinez_2
+
 
       datos['dif_caliva_anses']  = str(round((caliva_ext_27551_2 / anses_2 - 1) * 100 , 2)) + "%"
       datos['dif_monto_caliva_anses']  = formatear_dinero(caliva_ext_27551_2 - anses_2)
@@ -178,6 +190,9 @@ class Comparativa:
 
       datos['dif_rem_max_imponible_cm_extendido_27551_anses']  = str(round((rem_max_imponible_cm_extendido_27551_2 / anses_2 - 1) * 100 , 2)) + "%"
       datos['dif_monto_rem_max_imponible_cm_extendido_27551_anses']  = formatear_dinero(rem_max_imponible_cm_extendido_27551_2 - anses_2)
+
+      datos['dif_martinez_anses']  = str(round((martinez_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_martinez_anses']  = formatear_dinero(martinez_2 - anses_2)
 
       datos['dif_haber_reclamado_anses'] = formatear_dinero(Decimal(self.haber_reclamado) - anses_2)
       datos['dif_haber_reclamado_anses_graf'] = (Decimal(self.haber_reclamado) - anses_2)
@@ -205,12 +220,17 @@ class Comparativa:
       datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'] = (Decimal(self.haber_reclamado) - rem_max_imponible_cm_extendido_27551_2)
       datos['porc_haber_reclamado_rem_max_imponible_cm_extendido_27551_2'] = str(round((Decimal(self.haber_reclamado) / rem_max_imponible_cm_extendido_27551_2 - 1) * 100, 2)) + "%"
 
+      datos['dif_haber_reclamado_martinez_2'] = formatear_dinero(Decimal(self.haber_reclamado) - martinez_2)
+      datos['dif_haber_reclamado_martinez_2_graf'] = (Decimal(self.haber_reclamado) - martinez_2)
+      datos['porc_haber_reclamado_martinez_2'] = str(round((Decimal(self.haber_reclamado) / martinez_2 - 1) * 100, 2)) + "%"
+
+
 
       return datos
 
   def generar_pdf(self):
       datos = self.obtener_datos()
-      datos_grafico = [datos['anses_2'],datos['caliva_ext_27551_2'],datos['badaro_2'],datos['badaro_cm_2'],datos['ocheintados_rem_max_2'], datos['rem_max_2'],datos['rem_max_imponible_cm_extendido_27551_2'] ]
+      datos_grafico = [datos['anses_2'],datos['caliva_ext_27551_2'],datos['badaro_2'],datos['badaro_cm_2'],datos['ocheintados_rem_max_2'], datos['rem_max_2'],datos['rem_max_imponible_cm_extendido_27551_2'], datos['martinez_2'] ]
       datos_grafico_2 = []
       etiquetas = []
 
@@ -235,6 +255,9 @@ class Comparativa:
       if datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'] >= 0:
               datos_grafico_2.append(datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'])
               etiquetas.append('Rem Max Imponible C+M extendido 27551')
+      if datos['dif_haber_reclamado_martinez_2_graf'] >= 0:
+            datos_grafico_2.append(datos['dif_haber_reclamado_martinez_2_graf'])
+            etiquetas.append('Fallo Martinez')
 
       
       grafico = crear_grafico_tope_haber_maximo(datos_grafico, "")
@@ -254,6 +277,8 @@ class Comparativa:
           ocheintados_rem_max_2=formatear_dinero(datos['ocheintados_rem_max_2']),
           rem_max_2=formatear_dinero(datos['rem_max_2']),
           rem_max_imponible_cm_extendido_27551_2=formatear_dinero(datos['rem_max_imponible_cm_extendido_27551_2']),
+          martinez_2=formatear_dinero(datos['martinez_2']),
+
 
           dif_caliva_anses=datos['dif_caliva_anses'],
           dif_monto_caliva_anses=datos['dif_monto_caliva_anses'] ,
@@ -272,6 +297,10 @@ class Comparativa:
           
           dif_rem_max_imponible_cm_extendido_27551_anses= datos['dif_rem_max_imponible_cm_extendido_27551_anses'],
           dif_monto_rem_max_imponible_cm_extendido_27551_anses= datos['dif_monto_rem_max_imponible_cm_extendido_27551_anses'],
+
+          dif_martinez_anses=datos['dif_martinez_anses'],
+          dif_monto_martinez_anses=datos['dif_monto_martinez_anses'],
+          
           dif_haber_reclamado_anses = datos['dif_haber_reclamado_anses'],
           porc_haber_reclamado_anses = datos['porc_haber_reclamado_anses'],
           
@@ -292,6 +321,10 @@ class Comparativa:
 
           dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 = datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2'],
           porc_haber_reclamado_rem_max_imponible_cm_extendido_27551_2= datos['porc_haber_reclamado_rem_max_imponible_cm_extendido_27551_2'],
+
+          dif_haber_reclamado_martinez_2= datos['dif_haber_reclamado_martinez_2'],
+          porc_haber_reclamado_martinez_2 = datos['porc_haber_reclamado_martinez_2'],
+          
           dif_haber_reclamado_anses_graf = datos['dif_haber_reclamado_anses_graf'],
           dif_haber_reclamado_Caliva_graf = datos['dif_haber_reclamado_Caliva_graf'],
           dif_haber_reclamado_Badaro_graf = datos['dif_haber_reclamado_Badaro_graf'],
@@ -299,6 +332,7 @@ class Comparativa:
           dif_haber_reclamado_ocheintados_rem_max_2_graf = datos['dif_haber_reclamado_ocheintados_rem_max_2_graf'],
           dif_haber_reclamado_rem_max_2_graf = datos['dif_haber_reclamado_rem_max_2_graf'],
           dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf = datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'],
+          dif_haber_reclamado_martinez_2_graf = datos['dif_haber_reclamado_martinez_2_graf'],
           
           grafico = grafico,
           grafico_2 = grafico_2

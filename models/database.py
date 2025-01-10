@@ -49,6 +49,8 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
             monto_columna10 = fila_dict['Caliva_Marquez_con_27551_con_6_rezago'] * monto
             monto_columna11 = fila_dict['Alanis_Mas_Anses'] * monto
             monto_columna12 = fila_dict['Alanis_con_27551_con_3_meses_rezago'] * monto
+            monto_columna13 = fila_dict['martinez'] * monto
+
 
             # Agregar la primera tupla a la lista
             lista_filas.append((
@@ -63,10 +65,12 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
                 formatear_dinero(monto_columna9),
                 formatear_dinero(monto_columna10),
                 formatear_dinero(monto_columna11),
-                formatear_dinero(monto_columna12)
+                formatear_dinero(monto_columna12),
+                formatear_dinero(monto_columna13)
+
             ))
             lista_montos.append((monto_columna2, monto_columna3, monto_columna4, monto_columna5, monto_columna6, monto_columna7,
-                                 monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12))
+                                 monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13))
         else:
             print("No se encontró una fecha menor a la ingresada.")
             return []
@@ -98,6 +102,8 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
                 monto_columna10 *= fila_dict['Caliva_Marquez_con_27551_con_6_rezago']
                 monto_columna11 *= fila_dict['Alanis_Mas_Anses']
                 monto_columna12 *= fila_dict['Alanis_con_27551_con_3_meses_rezago']
+                monto_columna13 *= fila_dict['martinez']
+
 
                 lista_filas.append((
                     convertir_fecha_periodo(fila_dict['fechas']),
@@ -111,10 +117,12 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
                     formatear_dinero(monto_columna9),
                     formatear_dinero(monto_columna10),
                     formatear_dinero(monto_columna11),
-                    formatear_dinero(monto_columna12)
+                    formatear_dinero(monto_columna12),
+                    formatear_dinero(monto_columna13)
+
                 ))
                 lista_montos.append((monto_columna2, monto_columna3, monto_columna4, monto_columna5, monto_columna6, monto_columna7,
-                                     monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12))
+                                     monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13))
 
                 if fila_dict['fechas'].year == fecha_fin_dt.year and fila_dict['fechas'].month == fecha_fin_dt.month:
                     break
