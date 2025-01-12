@@ -46,53 +46,9 @@ def obtener_monto(fecha_ingresada):
             return caliva_anses, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max, rem_max_imponible_cm_extendido_27551, martinez
         else:
             return None
-            
-def crear_grafico_tope_haber_maximo(datos, nombre_grafico):
-    etiquetas = ['Anses', 'Caliva Marquez', 'Badaro', 'Badaro C+M', '82% de la Rem Max', 'Rem Max', 'Rem Max Imponible Caliva Marquez', 'Martinez']
-    valores = datos
-    resultados = list(map(formatear_dinero, valores))
 
-    # Crear el gráfico
-    fig = go.Figure(data=go.Bar(
-        x=etiquetas, 
-        y=valores, 
-        marker_color=['#38225b', '#18488a', '#006faf', '#0096c6', '#7E7F9C', '#00bccb', '#00e0c4'],
-        text=resultados, textposition='auto',
-        textfont=dict(size=14)
-    ))
 
-    # Agregar línea roja horizontal al nivel del valor de "Anses"
-    fig.add_shape(
-        type='line',
-        x0=-0.5,  # Extiende la línea desde antes de la primera barra
-        x1=len(etiquetas) - 0.5,  # Hasta después de la última barra
-        y0=valores[0],  # Altura del valor de "Anses"
-        y1=valores[0],
-        line=dict(color='red', width=3, dash='dash')
-    )
-
-    # Actualizar el diseño del gráfico
-    fig.update_layout(
-        title=nombre_grafico, 
-        xaxis_title='', 
-        yaxis_title='',
-        plot_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del área de trazado transparente
-        paper_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del gráfico transparente
-        margin=dict(l=40, r=40, t=40, b=40),
-        width=800, height=400,
-        xaxis=dict(title_font=dict(size=14), tickfont=dict(size=12)),
-        yaxis=dict(title_font=dict(size=14), tickfont=dict(size=12))
-    )
-
-    # Guardar el gráfico como imagen en un buffer
-    img_bytes = fig.to_image(format="png")  # Usar Kaleido para generar la imagen
-
-    # Codificar la imagen en base64
-    grafico_base64 = base64.b64encode(img_bytes).decode('utf-8')
-
-    return grafico_base64
-
-def crear_grafico_tope_haber_maximo_2(datos, nombre_grafico, etiquetas):
+def crear_grafico_tope_haber_maximo(datos, nombre_grafico, etiquetas):
     etiquetas = etiquetas
     valores = datos
 
@@ -146,12 +102,19 @@ def crear_grafico_tope_haber_maximo_2(datos, nombre_grafico, etiquetas):
     return grafico_base64
     
 class Comparativa:
-  def __init__(self, autos, expediente, periodo_hasta, haber_reclamado):
+  def __init__(self, autos, expediente, periodo_hasta, haber_reclamado, caliva_mas_anses,badaro_mas_anses, badaro_mas_caliva, remuneracion_maxima, ochentaidos_remuneracion_maxima, rem_max_caliva_27551, martinez_mas_anses):
       self.autos = autos
       self.expediente = expediente
       self.periodo_hasta = periodo_hasta
       self.haber_reclamado = haber_reclamado
-
+      self.caliva_mas_anses = caliva_mas_anses
+      self.badaro_mas_anses = badaro_mas_anses
+      self.badaro_mas_caliva = badaro_mas_caliva
+      self.remuneracion_maxima = remuneracion_maxima
+      self.ochenintados_remuneracion_maxima = ochentaidos_remuneracion_maxima
+      self.rem_max_caliva_27551 = rem_max_caliva_27551
+      self.martinez_mas_anses = martinez_mas_anses
+      
   def obtener_datos(self):
 
       caliva_anses, anses_2, badaro_2, badaro_cm_2, ocheintados_rem_max_2, rem_max_2,rem_max_imponible_cm_extendido_27551_2, martinez_2 = obtener_monto(self.periodo_hasta)
@@ -230,38 +193,63 @@ class Comparativa:
 
   def generar_pdf(self):
       datos = self.obtener_datos()
-      datos_grafico = [datos['anses_2'],datos['caliva_anses'],datos['badaro_2'],datos['badaro_cm_2'],datos['ocheintados_rem_max_2'], datos['rem_max_2'],datos['rem_max_imponible_cm_extendido_27551_2'], datos['martinez_2'] ]
-      datos_grafico_2 = []
+      datos_grafico = []
       etiquetas = []
-
-      if datos['dif_haber_reclamado_anses_graf'] >= 0:
-          datos_grafico_2.append(datos['dif_haber_reclamado_anses_graf'])
-          etiquetas.append('Tope Anses')
-      if datos['dif_haber_reclamado_Caliva_graf'] >= 0:
-          datos_grafico_2.append(datos['dif_haber_reclamado_Caliva_graf'])
-          etiquetas.append('Tope Caliva Marquez')
-      if datos['dif_haber_reclamado_Badaro_graf'] >= 0:
-            datos_grafico_2.append(datos['dif_haber_reclamado_Badaro_graf'])
-            etiquetas.append('Tope Badaro')
-      if datos['dif_haber_reclamado_Badaro_CM_graf'] >= 0:
-             datos_grafico_2.append(datos['dif_haber_reclamado_Badaro_CM_graf'])
-             etiquetas.append('Tope Badaro C+M')
-      if datos['dif_haber_reclamado_ocheintados_rem_max_2_graf'] >= 0:
-            datos_grafico_2.append(datos['dif_haber_reclamado_ocheintados_rem_max_2_graf'])
-            etiquetas.append('82% de la Rem Max')
-      if datos['dif_haber_reclamado_rem_max_2_graf'] >= 0:
-           datos_grafico_2.append(datos['dif_haber_reclamado_rem_max_2_graf'])
-           etiquetas.append('Rem. Maxima')
-      if datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'] >= 0:
-              datos_grafico_2.append(datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'])
-              etiquetas.append('Rem Max Imponible C+M extendido 27551')
-      if datos['dif_haber_reclamado_martinez_2_graf'] >= 0:
-            datos_grafico_2.append(datos['dif_haber_reclamado_martinez_2_graf'])
-            etiquetas.append('Fallo Martinez')
+      datos_grafico.append(datos['anses_2'])
+      etiquetas.append('Tope Anses')
+      if self.caliva_mas_anses:
+          datos_grafico.append(datos['caliva_anses'])
+          etiquetas.append('Tope Caliva Marquez mas Anses')
+      if self.badaro_mas_anses:
+          datos_grafico.append(datos['badaro_2'])
+          etiquetas.append('Tope Badaro mas Anses')
+      if self.badaro_mas_caliva:
+          datos_grafico.append(datos['badaro_cm_2'])
+          etiquetas.append('Tope Badaro mas Caliva Marquez')
+      if self.ochenintados_remuneracion_maxima:
+          datos_grafico.append(datos['ocheintados_rem_max_2'])
+          etiquetas.append('82% de la Rem Max')
+      if self.remuneracion_maxima:
+          datos_grafico.append(datos['rem_max_2'])
+          etiquetas.append('Rem. Maxima')
+      if self.rem_max_caliva_27551:
+          datos_grafico.append(datos['rem_max_imponible_cm_extendido_27551_2'])
+          etiquetas.append('Rem Max Imponible C+M extendido 27551')
+      if self.martinez_mas_anses:
+          datos_grafico.append(datos['martinez_2'])
+          etiquetas.append('Martinez mas Anses')
+      
 
       
-      grafico = crear_grafico_tope_haber_maximo(datos_grafico, "")
-      grafico_2 = crear_grafico_tope_haber_maximo_2(datos_grafico_2, "Diferencias en $ aplicando los Topes", etiquetas)
+      datos_grafico_2 = []
+      etiquetas_2 = []
+      datos_grafico_2.append(datos['dif_haber_reclamado_anses_graf'])
+      etiquetas_2.append('Tope Anses')
+      if self.caliva_mas_anses:
+          datos_grafico_2.append(datos['dif_haber_reclamado_Caliva_graf'])
+          etiquetas_2.append('Tope Caliva Marquez mas Anses')
+      if self.badaro_mas_anses:
+            datos_grafico_2.append(datos['dif_haber_reclamado_Badaro_graf'])
+            etiquetas_2.append('Tope Badaro mas Anses')
+      if self.badaro_mas_caliva:
+             datos_grafico_2.append(datos['dif_haber_reclamado_Badaro_CM_graf'])
+             etiquetas_2.append('Tope Badaro mas Caliva Marquez')
+      if self.ochenintados_remuneracion_maxima:
+            datos_grafico_2.append(datos['dif_haber_reclamado_ocheintados_rem_max_2_graf'])
+            etiquetas_2.append('82% de la Rem Max')
+      if self.remuneracion_maxima:
+           datos_grafico_2.append(datos['dif_haber_reclamado_rem_max_2_graf'])
+           etiquetas_2.append('Rem. Maxima')
+      if self.rem_max_caliva_27551:
+              datos_grafico_2.append(datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'])
+              etiquetas_2.append('Rem Max Imponible C+M extendido 27551')
+      if self.martinez_mas_anses:
+            datos_grafico_2.append(datos['dif_haber_reclamado_martinez_2_graf'])
+            etiquetas_2.append('Martinez mas Anses')
+
+      
+      grafico = crear_grafico_tope_haber_maximo(datos_grafico, "Diferencia en $ entre Topes", etiquetas)
+      grafico_2 = crear_grafico_tope_haber_maximo(datos_grafico_2, "Diferencias en $ aplicando los Topes", etiquetas_2)
 
       rendered = render_template(
           'calculadora_tope_maximo/resultado.html',
@@ -269,7 +257,14 @@ class Comparativa:
           expediente=self.expediente,
           periodo_hasta=transformar_fecha(self.periodo_hasta),
           haber_reclamado = formatear_dinero(self.haber_reclamado),
-
+          caliva_mas_anses = self.caliva_mas_anses,  
+          badaro_mas_anses = self.badaro_mas_anses,  
+          badaro_mas_caliva = self.badaro_mas_caliva,  
+          remuneracion_maxima = self.remuneracion_maxima,  
+          ochentaidos_remuneracion_maxima = self.ochenintados_remuneracion_maxima,  
+          rem_max_caliva_27551 = self.rem_max_caliva_27551,  
+          martinez_mas_anses = self.martinez_mas_anses,  
+          
           caliva_anses=formatear_dinero(datos['caliva_anses']),
           anses_2=formatear_dinero(datos['anses_2']),
           badaro_2=formatear_dinero(datos['badaro_2']),

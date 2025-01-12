@@ -136,13 +136,27 @@
         <tr class="font-large first-column-cell2";>
             <td>Fecha</td>
             <td class="negrita">Anses</td>
-            <td class="negrita">Caliva Marquez</td>
-            <td class="negrita">Badaro</td>
-            <td class="negrita">Badaro Caliva Marquez</td>
+            {% if caliva_mas_anses %}
+            <td class="negrita">Caliva Marquez mas Anses</td>
+            {% endif %}
+            {% if badaro_mas_anses %}
+            <td class="negrita">Badaro mas Anses</td>
+            {% endif %}
+            {% if badaro_mas_caliva %}
+            <td class="negrita">Badaro mas Caliva Marquez</td>
+            {% endif %}
+            {% if ochentaidos_remuneracion_maxima %}
             <td class="negrita">82% de la Rem Max</td>
+            {% endif %}
+            {% if remuneracion_maxima %}
             <td class="negrita">Rem. Maxima</td>
+            {% endif %}
+            {% if rem_max_caliva_27551 %}
             <td class="negrita">Rem Max Imponible Caliva Marquez extendido 27551</td>
-            <td class="negrita">Fallo Martinez</td>
+            {% endif %}
+            {% if martinez_mas_anses %}
+            <td class="negrita">Martinez mas Anses</td>
+            {% endif %}
 
 
 
@@ -150,34 +164,75 @@
         <tr class="font-large">
             <td class="negrita first-column-cell">{{periodo_hasta}}</td>
             <td>{{ anses_2 }}</td>
-            <td>{{ caliva_anses }}</td>
-            <td>{{ badaro_2 }}</td>
-            <td>{{ badaro_cm_2 }}</td>
-            <td>{{ ocheintados_rem_max_2 }}</td>
-            <td>{{ rem_max_2 }}</td>
-            <td>{{ rem_max_imponible_cm_extendido_27551_2 }}</td>
-            <td>{{ martinez_2 }}</td>
+            {% if caliva_mas_anses %}
+                <td>{{ caliva_anses }}</td>
+            {% endif %}
+            {% if badaro_mas_anses %}
+                <td>{{ badaro_2 }}</td>
+            {% endif %}
+            {% if badaro_mas_caliva %}
+                <td>{{ badaro_cm_2 }}</td>
+            {% endif %}
+            {% if ochentaidos_remuneracion_maxima %}
+                <td>{{ ocheintados_rem_max_2 }}</td>
+            {% endif %}
+            {% if remuneracion_maxima %}
+                <td>{{ rem_max_2 }}</td>
+            {% endif %}
+            {% if rem_max_caliva_27551 %}
+                <td>{{ rem_max_imponible_cm_extendido_27551_2 }}</td>
+            {% endif %}
+            {% if martinez_mas_anses %}
+                <td>{{ martinez_2 }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
-            <td class="negrita first-column-cell" colspan="2">Diferencia con Haber maximo Anses</td>
-            <td class="confiscatoriedad">{{ dif_monto_caliva_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_monto_badaro_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_monto_badaro_cm_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_monto_ocheintados_rem_max_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_monto_rem_max_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_monto_rem_max_imponible_cm_extendido_27551_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_monto_martinez_anses }}</td>
+                <td class="negrita first-column-cell" colspan="2">Diferencia con Haber maximo Anses</td>
+            {% if caliva_mas_anses %}
+                <td class="confiscatoriedad">{{ dif_monto_caliva_anses }}</td>
+            {% endif %}
+            {% if badaro_mas_anses %}
+                <td class="confiscatoriedad">{{ dif_monto_badaro_anses }}</td>
+            {% endif %}
+            {% if badaro_mas_caliva %}
+                <td class="confiscatoriedad">{{ dif_monto_badaro_cm_anses }}</td>
+            {% endif %}
+            {% if ochentaidos_remuneracion_maxima %}
+                <td class="confiscatoriedad">{{ dif_monto_ocheintados_rem_max_anses }}</td>
+            {% endif %}
+            {% if remuneracion_maxima %}
+                <td class="confiscatoriedad">{{ dif_monto_rem_max_anses }}</td>
+            {% endif %}
+            {% if rem_max_caliva_27551 %}
+                <td class="confiscatoriedad">{{ dif_monto_rem_max_imponible_cm_extendido_27551_anses }}</td>
+            {% endif %}
+            {% if martinez_mas_anses %}
+                <td class="confiscatoriedad">{{ dif_monto_martinez_anses }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell" colspan="2">Porcentaje de Diferencia con Haber maximo Anses</td>
-            <td class="confiscatoriedad">{{ dif_caliva_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_badaro_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_badaro_cm_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_ocheintados_rem_max_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_rem_max_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_rem_max_imponible_cm_extendido_27551_anses }}</td>
-            <td class="confiscatoriedad">{{ dif_martinez_anses }}</td>
-
+            {% if caliva_mas_anses %}
+                <td style="color: red;">{{ dif_caliva_anses }}</td>
+            {% endif %}
+            {% if badaro_mas_anses %}
+                <td style="color: red;">{{ dif_badaro_anses }}</td>
+            {% endif %}
+            {% if badaro_mas_caliva %}
+                <td style="color: red;">{{ dif_badaro_cm_anses }}</td>
+            {% endif %}
+            {% if ochentaidos_remuneracion_maxima %}
+                <td style="color: red;">{{ dif_ocheintados_rem_max_anses }}</td>
+            {% endif %}
+            {% if remuneracion_maxima %}
+                <td style="color: red;">{{ dif_rem_max_anses }}</td>
+            {% endif %}
+            {% if rem_max_caliva_27551 %}
+                <td style="color: red;">{{ dif_rem_max_imponible_cm_extendido_27551_anses }}</td>
+            {% endif %}
+            {% if martinez_mas_anses %}
+                <td style="color: red;">{{ dif_martinez_anses }}</td>
+            {% endif %}
         </tr>
     </table>
 
@@ -200,68 +255,66 @@
 
 
         </tr>
-         {% if dif_haber_reclamado_anses_graf >= 0 %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Tope Anses</td>
             <td>{{ anses_2 }}</td>
-            <td>{{ dif_haber_reclamado_anses }}</td>
-            <td class="confiscatoriedad">{{ porc_haber_reclamado_anses }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_anses }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_anses }}</td>
         </tr>
-        {% endif %}
-        {% if dif_haber_reclamado_Caliva_graf >= 0 %}
+        {% if caliva_mas_anses %}
         <tr class="font-large">
-            <td class="negrita first-column-cell">Tope Caliva Marquez</td>
+            <td class="negrita first-column-cell">Tope Caliva Marquez mas Anses</td>
             <td>{{ caliva_anses }}</td>
-            <td>{{ dif_haber_reclamado_Caliva }}</td>
-            <td class="confiscatoriedad">{{ porc_haber_reclamado_Caliva }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_Caliva }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_Caliva }}</td>
         </tr>
         {% endif %}
-        {% if dif_haber_reclamado_Badaro_graf >= 0 %}
+        {% if badaro_mas_anses %}
         <tr class="font-large">
-            <td class="negrita first-column-cell">Tope Badaro</td>
+            <td class="negrita first-column-cell">Tope Badaro mas Anses</td>
             <td>{{ badaro_2 }}</td>
-            <td>{{ dif_haber_reclamado_Badaro }}</td>
-            <td class="confiscatoriedad">{{ porc_haber_reclamado_Badaro }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_Badaro }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_Badaro }}</td>
         </tr>
         {% endif %}
-        {% if dif_haber_reclamado_Badaro_CM_graf >= 0 %}
+        {% if badaro_mas_caliva %}
         <tr class="font-large">
-            <td class="negrita first-column-cell">Tope Badaro C+M</td>
+            <td class="negrita first-column-cell">Tope Badaro mas Caliva Marquez</td>
             <td>{{ badaro_cm_2 }}</td>
-            <td>{{ dif_haber_reclamado_Badaro_CM }}</td>
-            <td class="confiscatoriedad">{{ porc_haber_reclamado_Badaro_CM }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_Badaro_CM }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_Badaro_CM }}</td>
         </tr>
         {% endif %}
-        {% if dif_haber_reclamado_ocheintados_rem_max_2_graf >= 0 %}
+        {% if ochentaidos_remuneracion_maxima %}
         <tr class="font-large">
             <td class="negrita first-column-cell">82% de la Rem Max</td>
             <td>{{ ocheintados_rem_max_2 }}</td>
-            <td>{{ dif_haber_reclamado_ocheintados_rem_max_2 }}</td>
-            <td class="confiscatoriedad">{{ porc_haber_reclamado_ocheintados_rem_max_2 }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_ocheintados_rem_max_2 }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_ocheintados_rem_max_2 }}</td>
         </tr>
         {% endif %}
-        {% if dif_haber_reclamado_rem_max_2_graf >= 0 %}
+        {% if remuneracion_maxima %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Rem. Maxima</td>
             <td>{{ rem_max_2 }}</td>
-            <td>{{ dif_haber_reclamado_rem_max_2 }}</td>
-            <td class="confiscatoriedad">{{ porc_haber_reclamado_rem_max_2 }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_rem_max_2 }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_rem_max_2 }}</td>
         </tr>
         {% endif %}
-        {% if dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf >= 0 %}
+        {% if rem_max_caliva_27551 %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Rem Max Imponible Caliva Marquez extendido 27551</td>
             <td>{{ rem_max_imponible_cm_extendido_27551_2 }}</td>
-            <td>{{ dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 }}</td>
-            <td class="confiscatoriedad">{{ porc_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_rem_max_imponible_cm_extendido_27551_2 }}</td>
         </tr>
         {% endif %}
-        {% if dif_haber_reclamado_martinez_2_graf >= 0 %}
+        {% if martinez_mas_anses %}
         <tr class="font-large">
-            <td class="negrita first-column-cell">Fallo Martinez</td>
+            <td class="negrita first-column-cell">Martinez mas Anses</td>
             <td>{{ martinez_2 }}</td>
-            <td>{{ dif_haber_reclamado_martinez_2 }}</td>
-            <td class="confiscatoriedad">{{ porc_haber_reclamado_martinez_2 }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_martinez_2 }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_martinez_2 }}</td>
         </tr>
         {% endif %}
     </table>

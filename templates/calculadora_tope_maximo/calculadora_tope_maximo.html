@@ -34,7 +34,6 @@
         .form-row {
             display: flex;
             gap: 20px;
-            align-items: flex-end;
         }
         .form-row .form-group {
             flex: 1;
@@ -62,6 +61,18 @@
             background-repeat: no-repeat;
             background-position: right 10px center;
             background-size: 20px;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 5px;
         }
         .submit-button {
             background-color: #2c5282;
@@ -100,14 +111,24 @@
             font-size: 12px;
             white-space: nowrap;
         }
+        .conditional-section {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
         @media (max-width: 600px) {
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
             .form-row {
                 flex-direction: column;
                 gap: 0;
             }
         }
         footer {
-            margin-top: 100px; /* Ajusta el valor según sea necesario */
+            margin-top: 100px;
         }
     </style>
 </head>
@@ -135,6 +156,40 @@
                     <div class="form-group">
                         <label for="segunda_fecha">Fecha a Comparar:</label>
                         <input type="date" id="segunda_fecha" name="segunda_fecha" required min="2018-01-01">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Seleccione Movilidades a comparar:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="caliva_mas_anses" name="caliva_mas_anses" value="true">
+                            <label for="caliva_mas_anses">Caliva mas Anses</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="badaro_mas_anses" name="badaro_mas_anses" value="true">
+                            <label for="badaro_mas_anses">Badaro mas Anses</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="badaro_mas_caliva" name="badaro_mas_caliva" value="true">
+                            <label for="badaro_mas_caliva">Badaro mas Caliva</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="remuneracion_maxima" name="remuneracion_maxima" value="true">
+                            <label for="remuneracion_maxima">Remuneracion Maxima</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ochentaidos_remuneracion_maxima" name="ochentaidos_remuneracion_maxima" value="true">
+                            <label for="ochentaidos_remuneracion_maxima">82% Remuneracion Maxima</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="rem_max_caliva_27551" name="rem_max_caliva_27551" value="true">
+                            <label for="rem_max_caliva_27551">Rem Max Imponible Caliva Marquez extendido 27551
+</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="martinez_mas_anses" name="martinez_mas_anses" value="true">
+                            <label for="martinez_mas_anses">Martinez mas Anses</label>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" class="submit-button" name="action" value="generar_pdf">Comparar</button>
