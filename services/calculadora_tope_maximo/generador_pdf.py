@@ -33,7 +33,7 @@ def obtener_monto(fecha_ingresada):
 
         if fila_cercana:
             # Extraer los valores usando los nombres de las columnas
-            caliva_ext_27551 = fila_cercana['Caliva ext. 27551']
+            caliva_anses = fila_cercana['Caliva_Anses']
             anses = fila_cercana['anses']
             badaro = fila_cercana['badaro']
             badaro_cm = fila_cercana['badaro c+m']
@@ -43,7 +43,7 @@ def obtener_monto(fecha_ingresada):
             martinez = fila_cercana['martinez']
 
 
-            return caliva_ext_27551, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max, rem_max_imponible_cm_extendido_27551, martinez
+            return caliva_anses, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max, rem_max_imponible_cm_extendido_27551, martinez
         else:
             return None
             
@@ -154,7 +154,7 @@ class Comparativa:
 
   def obtener_datos(self):
 
-      caliva_ext_27551_2, anses_2, badaro_2, badaro_cm_2, ocheintados_rem_max_2, rem_max_2,rem_max_imponible_cm_extendido_27551_2, martinez_2 = obtener_monto(self.periodo_hasta)
+      caliva_anses, anses_2, badaro_2, badaro_cm_2, ocheintados_rem_max_2, rem_max_2,rem_max_imponible_cm_extendido_27551_2, martinez_2 = obtener_monto(self.periodo_hasta)
       
       datos = {}
       
@@ -163,7 +163,7 @@ class Comparativa:
       datos['periodo_hasta'] = self.periodo_hasta
       datos['haber_reclamado'] = self.haber_reclamado
 
-      datos['caliva_ext_27551_2'] = caliva_ext_27551_2
+      datos['caliva_anses'] = caliva_anses
       datos['anses_2'] = anses_2
       datos['badaro_2'] = badaro_2
       datos['badaro_cm_2'] = badaro_cm_2
@@ -173,8 +173,8 @@ class Comparativa:
       datos['martinez_2'] = martinez_2
 
 
-      datos['dif_caliva_anses']  = str(round((caliva_ext_27551_2 / anses_2 - 1) * 100 , 2)) + "%"
-      datos['dif_monto_caliva_anses']  = formatear_dinero(caliva_ext_27551_2 - anses_2)
+      datos['dif_caliva_anses']  = str(round((caliva_anses / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_caliva_anses']  = formatear_dinero(caliva_anses - anses_2)
 
       datos['dif_badaro_anses']  = str(round((badaro_2 / anses_2 - 1) * 100 , 2)) + "%"
       datos['dif_monto_badaro_anses']  = formatear_dinero(badaro_2 - anses_2)
@@ -198,9 +198,9 @@ class Comparativa:
       datos['dif_haber_reclamado_anses_graf'] = (Decimal(self.haber_reclamado) - anses_2)
       datos['porc_haber_reclamado_anses'] = str(round((Decimal(self.haber_reclamado) / anses_2 - 1) * 100, 2)) + "%"
 
-      datos['dif_haber_reclamado_Caliva'] = formatear_dinero(Decimal(self.haber_reclamado) - caliva_ext_27551_2)
-      datos['dif_haber_reclamado_Caliva_graf'] = (Decimal(self.haber_reclamado) - caliva_ext_27551_2)
-      datos['porc_haber_reclamado_Caliva'] = str(round((Decimal(self.haber_reclamado) / caliva_ext_27551_2 - 1) * 100, 2)) + "%"
+      datos['dif_haber_reclamado_Caliva'] = formatear_dinero(Decimal(self.haber_reclamado) - caliva_anses)
+      datos['dif_haber_reclamado_Caliva_graf'] = (Decimal(self.haber_reclamado) - caliva_anses)
+      datos['porc_haber_reclamado_Caliva'] = str(round((Decimal(self.haber_reclamado) / caliva_anses - 1) * 100, 2)) + "%"
       datos['dif_haber_reclamado_Badaro'] = formatear_dinero(Decimal(self.haber_reclamado) - badaro_2)
       datos['dif_haber_reclamado_Badaro_graf'] = (Decimal(self.haber_reclamado) - badaro_2)
       datos['porc_haber_reclamado_Badaro'] = str(round((Decimal(self.haber_reclamado) / badaro_2 - 1) * 100, 2)) + "%"
@@ -230,7 +230,7 @@ class Comparativa:
 
   def generar_pdf(self):
       datos = self.obtener_datos()
-      datos_grafico = [datos['anses_2'],datos['caliva_ext_27551_2'],datos['badaro_2'],datos['badaro_cm_2'],datos['ocheintados_rem_max_2'], datos['rem_max_2'],datos['rem_max_imponible_cm_extendido_27551_2'], datos['martinez_2'] ]
+      datos_grafico = [datos['anses_2'],datos['caliva_anses'],datos['badaro_2'],datos['badaro_cm_2'],datos['ocheintados_rem_max_2'], datos['rem_max_2'],datos['rem_max_imponible_cm_extendido_27551_2'], datos['martinez_2'] ]
       datos_grafico_2 = []
       etiquetas = []
 
@@ -270,7 +270,7 @@ class Comparativa:
           periodo_hasta=transformar_fecha(self.periodo_hasta),
           haber_reclamado = formatear_dinero(self.haber_reclamado),
 
-          calivas_ext_27551_2=formatear_dinero(datos['caliva_ext_27551_2']),
+          caliva_anses=formatear_dinero(datos['caliva_anses']),
           anses_2=formatear_dinero(datos['anses_2']),
           badaro_2=formatear_dinero(datos['badaro_2']),
           badaro_cm_2=formatear_dinero(datos['badaro_cm_2']),
