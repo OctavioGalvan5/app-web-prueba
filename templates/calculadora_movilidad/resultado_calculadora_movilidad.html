@@ -128,6 +128,10 @@
             width: 300px; /* Ajusta el ancho de la imagen */
             height: auto; /* Mantiene la proporción de la imagen */
         }
+        .small-graph {
+            width: 600px; /* Ancho deseado */
+            height: auto; /* Mantiene la proporción */
+        }
     </style>
 </head>
 <body>
@@ -261,7 +265,11 @@
     </table>
 
     <div class="graph-container">
-        <img src="data:image/png;base64,{{ grafico1 }}" alt="Gráfico comparativo de haberes Anses">
+        <img class="small-graph" src="data:image/png;base64,{{ grafico1 }}" alt="Gráfico comparativo de haberes Anses">
+    </div>
+
+    <div class="graph-container">
+        <img src="data:image/png;base64,{{ grafico4 }}" alt="Gráfico comparativo de haberes de Sentencia">
     </div>
 
 
@@ -433,7 +441,8 @@
 
     {% endif %}
 
-
+    <div class="page-break"></div>
+    
     <h6>Comparativa de Haberes:</h6>
     <table class="benefits-comparison">
         <thead>

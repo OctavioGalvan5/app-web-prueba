@@ -18,10 +18,68 @@ def convertir_fecha_periodo(fecha):
     return fecha.strftime('%m/%Y')
 
 
+def generar_grafico_linea(lista_filas, ipc, uma, ripte, movilidad_sentencia, ley_27426_rezago, 
+                          caliva_mas_anses, caliva_marquez_con_27551_con_3_rezago, 
+                          caliva_marquez_con_27551_con_6_rezago, alanis_mas_anses, 
+                          alanis_con_27551_con_3_meses_rezago, fallo_martinez):
 
-def crear_graficos(datos, etiquetas):
+    fechas = [fila[0] for fila in lista_filas]  # Primer elemento de cada tupla (fecha)
+    montos_por_concepto = list(zip(*[fila[1:] for fila in lista_filas]))  # Montos desde el segundo elemento en adelante
+
+    # Nombres de los conceptos
+    conceptos = ['ANSES', 'IPC', 'RIPTE', 'UMA', 'Mov de Sentencia', 'Ley 27426', 
+                 'Caliva mas Cendan', 'Caliva mas Anses', 'Caliva 6 Rezago', 
+                 'Alanis mas Anses', 'Alanis con 3 meses Rezago', 'Martínez']
+
+    # Lista de booleanos y sus correspondientes conceptos
+    booleanos = [True, ipc, ripte, uma, movilidad_sentencia, ley_27426_rezago, 
+                 caliva_marquez_con_27551_con_3_rezago, caliva_mas_anses, 
+                 caliva_marquez_con_27551_con_6_rezago, alanis_mas_anses, 
+                 alanis_con_27551_con_3_meses_rezago, fallo_martinez]
+
+    # Crear una figura con una línea por cada concepto que tenga el booleano en True
+    fig = go.Figure()
+
+    for i, (monto, incluir) in enumerate(zip(montos_por_concepto, booleanos)):
+        if incluir:  # Solo agregar la línea si el booleano es True
+            fig.add_trace(go.Scatter(
+                x=fechas,
+                y=[float(m.replace('$', '').replace('.', '').replace(',', '.').replace(' ', '').strip()) for m in monto],
+                mode='lines',
+                name=conceptos[i]
+            ))
+
+    # Configurar el layout del gráfico
+    fig.update_layout(
+        title='Evolución de montos en el tiempo',
+        xaxis_title='Fecha',
+        yaxis_title='Monto ($)',
+        legend_title='Conceptos',
+        xaxis=dict(type='category'),
+        yaxis=dict(tickformat=',', title='Monto ($)'),  # Formato con separadores de miles
+        template='plotly_white',
+        plot_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del área de trazado transparente
+        paper_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del gráfico transparente
+    )
+
+    # Crear un buffer en memoria y guardar la imagen en formato PNG
+    buffer = io.BytesIO()
+    fig.write_image(buffer, format='png')
+    buffer.seek(0)
+
+    # Codificar la imagen en Base64
+    imagen_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    buffer.close()
+
+    return imagen_base64
+
+
+
+
+def crear_graficos(datos, etiquetas, titulo):
     etiquetas = etiquetas
     valores = datos
+    titulo = titulo
     resultados = list(map(formatear_dinero, valores))
 
     # Crear el gráfico de barras
@@ -44,17 +102,22 @@ def crear_graficos(datos, etiquetas):
         line=dict(color="red", width=3, dash="solid")
     )
 
-    # Actualizar el diseño del gráfico
+    # Actualizar el diseño del gráfico con título
     fig.update_layout(
-        title='', 
-        xaxis_title='', 
-        yaxis_title='',
+        title=dict(
+            text=titulo,  # Título del gráfico
+            font=dict(size=20),  # Tamaño del título
+            x=0,  # Alinea el título a la izquierda
+            xanchor='left'  # Ancla el título a la izquierda
+        ),
+        xaxis_title='Categorías',  # Título del eje X
+        yaxis_title='Monto ($)',  # Título del eje Y
         plot_bgcolor='rgba(0, 0, 0, 0)',
         paper_bgcolor='rgba(0, 0, 0, 0)',
-        margin=dict(l=40, r=40, t=40, b=40),
+        margin=dict(l=40, r=40, t=60, b=40),
         width=800, height=600,
         xaxis=dict(title_font=dict(size=14), tickfont=dict(size=10)),
-        yaxis=dict(title_font=dict(size=14), tickfont=dict(size=15))
+        yaxis=dict(title_font=dict(size=14), tickfont=dict(size=12))
     )
 
     # Guardar el gráfico como imagen en un buffer
@@ -224,7 +287,7 @@ class CalculadorMovilidad:
             datos.append(ultimos_valores[11])
             #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
             etiquetas.append('Fallo Martinez')
-        grafico1 = crear_graficos(datos,etiquetas)
+        grafico1 = crear_graficos(datos,etiquetas, "Haber a la fecha de cierre")
 
         if self.comparacion_mov_caliva:
                 datos_2 = [ultimos_valores[7]]
@@ -265,7 +328,7 @@ class CalculadorMovilidad:
                     datos_2.append(ultimos_valores[11])
                     #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
                     etiquetas_2.append('Fallo Martinez')
-                grafico2 = crear_graficos(datos_2, etiquetas_2)
+                grafico2 = crear_graficos(datos_2, etiquetas_2, "Haber a la fecha de cierre")
         else:
             grafico2 = None
         if self.comparacion_mov_alanis:
@@ -303,12 +366,11 @@ class CalculadorMovilidad:
                     datos_3.append(ultimos_valores[10])
                     #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
                     etiquetas_3.append('Alanis con 27551 con 3 rezago')
-                etiquetas_2.append('Alanis con 27551 con 3 rezago')
                 if self.fallo_martinez:
-                    datos_2.append(ultimos_valores[11])
+                    datos_3.append(ultimos_valores[11])
                     #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
-                    etiquetas_2.append('Fallo Martinez')
-                grafico3 = crear_graficos(datos_3, etiquetas_3)
+                    etiquetas_3.append('Fallo Martinez')
+                grafico3 = crear_graficos(datos_3, etiquetas_3, "Haber a la fecha de cierre")
         else:
             grafico3 = None
 
@@ -316,6 +378,10 @@ class CalculadorMovilidad:
 
     def generar_pdf(self):
         lista_filas, grafico1, grafico2,grafico3, diccionario_comparacion, montos_a_fecha_cierre = self.obtener_datos()
+
+        grafico_4 = generar_grafico_linea(lista_filas, self.ipc, self.ripte, self.uma, self.movilidad_sentencia, self.Ley_27426_rezago, self.caliva_mas_anses, self.Caliva_Marquez_con_27551_con_3_rezago, self.Caliva_Marquez_con_27551_con_6_rezago, self.Alanis_Mas_Anses, self.Alanis_con_27551_con_3_meses_rezago, self.fallo_martinez)
+        # Extraer fechas y montos de lista_fila
+        
         rendered = render_template(
             'calculadora_movilidad/resultado_calculadora_movilidad.html',
             filas=lista_filas, 
@@ -323,6 +389,7 @@ class CalculadorMovilidad:
             grafico1 = grafico1,
             grafico2 = grafico2,
             grafico3 = grafico3,
+            grafico4 = grafico_4,
             monto = formatear_dinero(self.monto),
             datos_del_actor = self.datos_del_actor,
             expediente = self.expediente,
