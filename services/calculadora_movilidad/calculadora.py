@@ -10,6 +10,30 @@ from xhtml2pdf import pisa
 from io import BytesIO
 from datetime import datetime
 
+def transformar_fecha_2(fecha):
+    """
+    Transforma una fecha en formato 'YYYY-MM-DD' o 'MM/YYYY' (string) a formato 'MM/YYYY'.
+
+    Args:
+    - fecha (str): Fecha en formato 'YYYY-MM-DD' o 'MM/YYYY'.
+
+    Returns:
+    - str: Fecha transformada en formato 'MM/YYYY'.
+    """
+    # Verifica si la fecha está en el formato 'YYYY-MM-DD'
+    try:
+        # Si la fecha está en formato 'YYYY-MM-DD'
+        fecha_obj = datetime.strptime(fecha, '%Y-%m-%d')
+    except ValueError:
+        try:
+            # Si la fecha está en formato 'MM/YYYY'
+            fecha_obj = datetime.strptime(fecha, '%m/%Y')
+        except ValueError:
+            raise ValueError(f"Formato de fecha no válido: {fecha}")
+
+    # Devolver la fecha en formato 'MM/YYYY'
+    return fecha_obj.strftime('%m/%Y')
+
 
 def convertir_fecha_periodo(fecha):
     # Convertir la fecha si es una cadena
@@ -21,9 +45,9 @@ def convertir_fecha_periodo(fecha):
 def generar_grafico_linea(lista_filas, ipc, uma, ripte, movilidad_sentencia, ley_27426_rezago, 
                           caliva_mas_anses, caliva_marquez_con_27551_con_3_rezago, 
                           caliva_marquez_con_27551_con_6_rezago, alanis_mas_anses, 
-                          alanis_con_27551_con_3_meses_rezago, fallo_martinez):
+                          alanis_con_27551_con_3_meses_rezago, fallo_martinez, titulo):
 
-    fechas = [fila[0] for fila in lista_filas]  # Primer elemento de cada tupla (fecha)
+    fechas = [transformar_fecha_2(fila[0]) for fila in lista_filas]  # Primer elemento de cada tupla (fecha)
     montos_por_concepto = list(zip(*[fila[1:] for fila in lista_filas]))  # Montos desde el segundo elemento en adelante
 
     # Nombres de los conceptos
@@ -51,7 +75,7 @@ def generar_grafico_linea(lista_filas, ipc, uma, ripte, movilidad_sentencia, ley
 
     # Configurar el layout del gráfico
     fig.update_layout(
-        title='Evolución de montos en el tiempo',
+        title=('Acreditacion del Daño del haber de ' + titulo),
         xaxis_title='Fecha',
         yaxis_title='Monto ($)',
         legend_title='Conceptos',
@@ -379,7 +403,7 @@ class CalculadorMovilidad:
     def generar_pdf(self):
         lista_filas, grafico1, grafico2,grafico3, diccionario_comparacion, montos_a_fecha_cierre = self.obtener_datos()
 
-        grafico_4 = generar_grafico_linea(lista_filas, self.ipc, self.ripte, self.uma, self.movilidad_sentencia, self.Ley_27426_rezago, self.caliva_mas_anses, self.Caliva_Marquez_con_27551_con_3_rezago, self.Caliva_Marquez_con_27551_con_6_rezago, self.Alanis_Mas_Anses, self.Alanis_con_27551_con_3_meses_rezago, self.fallo_martinez)
+        grafico_4 = generar_grafico_linea(lista_filas, self.ipc, self.ripte, self.uma, self.movilidad_sentencia, self.Ley_27426_rezago, self.caliva_mas_anses, self.Caliva_Marquez_con_27551_con_3_rezago, self.Caliva_Marquez_con_27551_con_6_rezago, self.Alanis_Mas_Anses, self.Alanis_con_27551_con_3_meses_rezago, self.fallo_martinez, self.datos_del_actor)
         # Extraer fechas y montos de lista_fila
         
         rendered = render_template(

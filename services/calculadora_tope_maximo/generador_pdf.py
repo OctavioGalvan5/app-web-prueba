@@ -10,6 +10,19 @@ import io
 import base64
 from decimal import Decimal
 
+
+def transformar_fecha_2(fecha):
+    """
+    Transforma un objeto datetime.date a un formato 'MM/YYYY'.
+
+    Args:
+    - fecha (datetime.date): Fecha en formato datetime.date.
+
+    Returns:
+    - str: Fecha transformada en formato 'MM/YYYY'.
+    """
+    return fecha.strftime('%m/%Y')  # '%m/%Y' devuelve 'mes/año' en formato numérico
+
 def obtener_monto(fecha_ingresada):
     # Convertir la fecha ingresada por el usuario a un objeto datetime.date
     fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
@@ -47,7 +60,42 @@ def obtener_monto(fecha_ingresada):
         else:
             return None
 
+def obtener_datos_para_grafico(fecha_ingresada):
+    # Convertir la fecha ingresada a un objeto datetime.date
+    fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
 
+    vector_resultado = []  # Lista para almacenar las tuplas con los datos
+
+    with engine.connect() as conn:
+        query = text("""
+            SELECT fecha, Caliva_Anses, anses, badaro, `badaro c+m`, 
+                   `82% rem.max`, `remuneracion maxima`, 
+                   `rem max imponible c+m extendido 27551`, martinez
+            FROM topes_maximo
+            WHERE fecha <= :fecha_ingresada
+            ORDER BY fecha ASC
+        """)
+
+        # Usar .mappings() para obtener un resultado como diccionario
+        result = conn.execute(query, {"fecha_ingresada": fecha_ingresada_dt}).mappings().all()
+
+        # Recorrer el resultado y guardar los datos en tuplas
+        for row in result:
+            fila = (
+                row['fecha'],
+                row['anses'],
+                row['Caliva_Anses'],
+                row['badaro'],
+                row['badaro c+m'],
+                row['82% rem.max'],
+                row['remuneracion maxima'],
+                row['rem max imponible c+m extendido 27551'],
+                row['martinez']
+            )
+            vector_resultado.append(fila)
+
+    return vector_resultado
+    
 def crear_grafico_tope_haber_maximo(datos, nombre_grafico, etiquetas):
     etiquetas = etiquetas
     valores = datos
@@ -100,7 +148,68 @@ def crear_grafico_tope_haber_maximo(datos, nombre_grafico, etiquetas):
     grafico_base64 = base64.b64encode(img_bytes).decode('utf-8')
 
     return grafico_base64
-    
+
+
+def generar_grafico_linea(lista_filas, anses, caliva_anses, badaro, badaro_cm, ochenta_dos_rem_max, 
+                          rem_max, rem_max_imponible_cm_extendido_27551, martinez, titulo):
+    """
+    Genera un gráfico de líneas en formato Base64 usando Plotly a partir de los datos proporcionados.
+
+    Args:
+    - lista_filas (list): Lista de tuplas donde cada tupla representa una fila (fecha y montos).
+    - anses, caliva_anses, ... (bool): Indicadores de inclusión de cada concepto en el gráfico.
+    - titulo (str): Título del gráfico.
+
+    Returns:
+    - str: Imagen del gráfico codificada en Base64.
+    """
+    fechas = [transformar_fecha_2(fila[0]) for fila in lista_filas]
+    montos_por_concepto = list(zip(*[fila[1:] for fila in lista_filas]))  # Extraer montos desde el segundo elemento
+
+    # Nombres de los conceptos a graficar
+    conceptos = ['ANSES', 'Caliva ANSES', 'Badaro', 'Badaro C+M', '82% Rem Max', 
+                 'Remuneración Máxima', 'Rem Max Imponible C+M Extendido 27551', 'Martínez']
+
+    # Lista de booleanos correspondientes a los conceptos
+    booleanos = [anses, caliva_anses, badaro, badaro_cm, ochenta_dos_rem_max, 
+                 rem_max, rem_max_imponible_cm_extendido_27551, martinez]
+
+    # Crear la figura con las líneas correspondientes
+    fig = go.Figure()
+
+    for i, (monto, incluir) in enumerate(zip(montos_por_concepto, booleanos)):
+        if incluir:  # Solo agregar la línea si el booleano es True
+            fig.add_trace(go.Scatter(
+                x=fechas,
+                y=[float(m) for m in monto],  # Convertir los montos a float
+                mode='lines',
+                name=conceptos[i]
+            ))
+
+    # Configurar el layout del gráfico
+    fig.update_layout(
+        title=titulo,
+        xaxis_title='Fecha',
+        yaxis_title='Monto ($)',
+        legend_title='Conceptos',
+        xaxis=dict(type='category'),
+        yaxis=dict(tickformat=',', title='Monto ($)'),  # Formato con separadores de miles
+        template='plotly_white',
+        plot_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del área de trazado transparente
+        paper_bgcolor='rgba(0, 0, 0, 0)'  # Fondo del gráfico transparente
+    )
+
+    # Crear un buffer en memoria y guardar la imagen en formato PNG
+    buffer = io.BytesIO()
+    fig.write_image(buffer, format='png')
+    buffer.seek(0)
+
+    # Codificar la imagen en Base64
+    imagen_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    buffer.close()
+
+    return imagen_base64
+
 class Comparativa:
   def __init__(self, autos, expediente, periodo_hasta, haber_reclamado, caliva_mas_anses,badaro_mas_anses, badaro_mas_caliva, remuneracion_maxima, ochentaidos_remuneracion_maxima, rem_max_caliva_27551, martinez_mas_anses):
       self.autos = autos
@@ -192,6 +301,9 @@ class Comparativa:
       return datos
 
   def generar_pdf(self):
+      vector_grafico = obtener_datos_para_grafico(self.periodo_hasta)
+      grafico_3 = generar_grafico_linea(vector_grafico, True, self.caliva_mas_anses, self.badaro_mas_anses, self.badaro_mas_caliva, self.ochenintados_remuneracion_maxima,self.remuneracion_maxima,self.rem_max_caliva_27551,self.martinez_mas_anses, ("Evolucion de los Topes a lo largo del periodo"))
+      
       datos = self.obtener_datos()
       datos_grafico = []
       etiquetas = []
@@ -330,7 +442,8 @@ class Comparativa:
           dif_haber_reclamado_martinez_2_graf = datos['dif_haber_reclamado_martinez_2_graf'],
           
           grafico = grafico,
-          grafico_2 = grafico_2
+          grafico_2 = grafico_2,
+          grafico_3 = grafico_3,
          
       )
 
