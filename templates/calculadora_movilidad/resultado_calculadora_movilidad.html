@@ -262,6 +262,22 @@
             <td class="confiscatoriedad">{{ comparacion.conf_anses_martinez }}</td>
         </tr>
         {% endif %}
+        {% if alanis_ipc  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con IPC</td>
+            <td>{{valor_alanis_ipc}}</td>
+            <td>{{ comparacion.dif_anses_alanis_ipc }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_alanis_ipc }}</td>
+        </tr>
+        {% endif %}
+        {% if alanis_ripte  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con RIPTE</td>
+            <td>{{valor_alanis_ripte}}</td>
+            <td>{{ comparacion.dif_anses_alanis_ripte }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_alanis_ripte }}</td>
+        </tr>
+        {% endif %}
     </table>
 
     <div class="graph-container">
@@ -354,6 +370,22 @@
             <td class="confiscatoriedad">{{ comparacion.conf_alanis_martinez }}</td>
         </tr>
         {% endif %}
+        {% if alanis_ipc  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con IPC</td>
+            <td>{{valor_alanis_ipc}}</td>
+            <td>{{ comparacion.dif_alanis_alanis_ipc}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_alanis_ipc }}</td>
+        </tr>
+        {% endif %}
+        {% if alanis_ripte  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con RIPTE</td>
+            <td>{{valor_alanis_ripte}}</td>
+            <td>{{ comparacion.dif_alanis_alanis_ripte}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_alanis_ripte }}</td>
+        </tr>
+        {% endif %}
     </table>
     <div class="graph-container">
         <img src="data:image/png;base64,{{ grafico3 }}" alt="Gráfico comparativo de haberes de Sentencia">
@@ -379,7 +411,7 @@
         </tr>
         {% if ipc %}
         <tr class="font-large">
-            <td class="negrita first-column-cell">Ipc</td>
+            <td class="negrita first-column-cell">IPC</td>
             <td> {{ valor_ipc }} </td>
             <td>{{ comparacion.dif_caliva_ipc }}</td>
             <td class="confiscatoriedad">{{ comparacion.conf_caliva_ipc }}</td>
@@ -433,6 +465,22 @@
             <td class="confiscatoriedad">{{ comparacion.conf_caliva_martinez }}</td>
         </tr>
         {% endif %}
+        {% if alanis_ipc  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con IPC</td>
+            <td>{{valor_alanis_ipc}}</td>
+            <td>{{ comparacion.dif_caliva_alanis_ipc}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_alanis_ipc }}</td>
+        </tr>
+        {% endif %}
+        {% if alanis_ipc  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con RIPTE</td>
+            <td>{{valor_alanis_ripte}}</td>
+            <td>{{ comparacion.dif_caliva_alanis_ripte}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_alanis_ripte }}</td>
+        </tr>
+        {% endif %}
     </table>
 
     <div class="graph-container">
@@ -479,6 +527,9 @@
                 {% if fallo_martinez %}
                 <td class="negrita">Fallo Martinez </td>
                 {% endif %}
+                {% if alanis_ipc %}
+                <td class="negrita">Alanis con IPC </td>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -515,6 +566,12 @@
                 {% endif %}
                 {% if fallo_martinez %}
                 <td class="haber">{{ fila[12] }}</td>
+                {% endif %}
+                {% if alanis_ipc %}
+                <td class="haber">{{ fila[13] }}</td>
+                {% endif %}
+                {% if alanis_ripte %}
+                <td class="haber">{{ fila[14] }}</td>
                 {% endif %}
             </tr>
             {% endfor %}
