@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado {{autos}} {{expediente}}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+            background-image: url('static/logoestudiomarca.jpg');
+            background-repeat: no-repeat;
+            background-object-position: 130 270px;
+            background-height: 500px;
+            background-width: 500px;
+            background-opacity: 0.1;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+        hr {
+            border: none;
+            height: 2px; /* Grosor de la línea */
+            background-color: #D3D3D3; /* Color de la línea */
+        }
+        h1 {
+            font-size: 24px;
+            color: #845EC2;
+            text-align: center;
+        }
+        h6 {
+            font-size: 16px;
+            color: #8400DA;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: avoid;
+            margin-bottom: 20px;
+        }
+        table td {
+            text-align: left;
+        }
+        td {
+            border: 1px solid #ccc;
+            padding: 6px; /* Menos espacio en la parte superior */
+            text-align: left;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        table.benefits-comparison td {
+            text-align: left;
+            padding-left: 1px;
+            padding-bottom: 1px;
+            padding-top: 1;
+        }
+        .negrita {
+            font-weight: bold;
+        }
+        .font-large {
+            font-size: 12px;
+        }
+
+        .font-pequeña {
+            font-size: 8px;
+        }
+
+        .first-column-cell2 {
+            background-color: #e2e8f0;
+            font-weight: bold;
+            width: 25%;
+        }
+        .first-column-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .first-column-cell3 {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        .info-section {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .graph-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .graph-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        .confiscatoriedad {
+            color: #e53e3e;
+        }
+        .total {
+            color: #e53e3e;
+            font-size: 20px;
+        }
+        .haber {
+            color: #2b6cb0;
+        }
+        hr {
+            border: none;               /* Elimina el estilo predeterminado */
+            border-top: 1px solid #000; /* Define la línea */
+            margin: 0;                  /* Quita los márgenes del <hr> */
+        }
+
+        h1 {
+            margin: 0;                  /* Quita los márgenes del <h1> */
+            padding-bottom: 1px;        /* Espacio interno para acercarse al <hr> */
+            font-size: 24px;            /* Tamaño del texto, ajustable según diseño */
+        }
+        .image-container {
+            text-align: center; /* Centra el contenido */
+        }
+        .image-container img {
+            width: 300px; /* Ajusta el ancho de la imagen */
+            height: auto; /* Mantiene la proporción de la imagen */
+        }
+        .small-graph {
+            width: 600px; /* Ancho deseado */
+            height: auto; /* Mantiene la proporción */
+        }
+    </style>
+</head>
+<body>
+    <hr>
+    <h1 style="margin-top: 10px;">Resultado de Herramientas</h1>
+    <hr style="margin-bottom: 20px;">
+
+    <div class="image-container">
+        <img src="static/logoestudio.jpg" alt="Descripción de la imagen">
+    </div>
+
+    <div class="info-section">
+        <p><strong>Datos del actor:</strong> {{datos_del_actor}}&nbsp;&nbsp;&nbsp;
+           <strong>{{cuil_expediente}}:</strong> {{expediente}}
+        </p>
+        <p><strong>Tipo de Beneficio:</strong> {{beneficio}}&nbsp;&nbsp;&nbsp;
+           <strong>Numero de Beneficio:</strong> {{num_beneficio}}
+        </p>
+    </div>
+    <h6>Comparacion Repa:</h6>
+    <table style="margin-top: 20px;">
+        <tr class="font-large first-column-cell2";>
+            <td colspan="4" class="negrita" style="text-align: center;">Fecha de comparacion: {{fecha_comparacion_repa}}</td>
+        </tr>
+        <tr class="font-large first-column-cell2";>
+            <td class="negrita">Variables</td>
+            <td class="negrita">Haber Percibido con Repa</td>
+            <td class="negrita">Haber Total Reclamado</td>
+            {% if comparacion_repa_movilizado %}
+            <td class="negrita">Haber con Repa Movilizado</td>
+            {% endif %}
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Total</td>
+            <td class="total"> {{ diccionario_repa.total_haber_con_repa }} </td>
+            <td class="total"> {{ diccionario_repa.total_haber_reclamado }} </td>
+            {% if comparacion_repa_movilizado %}
+            <td class="total">{{ diccionario_repa.total_haber_con_repa_movilizado }}</td>
+            {% endif %}
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">PBU</td>
+            <td> {{ PBU_repa }} </td>
+            <td> {{ PBU_reclamado }} </td>
+            {% if comparacion_repa_movilizado %}
+            <td>{{ PBU_repa_movilizado }}</td>
+            {% endif %}
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">PC</td>
+            <td> {{ PC_repa }} </td>
+            <td> {{ PC_reclamado }} </td>
+            {% if comparacion_repa_movilizado %}
+            <td>{{ PC_repa_movilizado }}</td>
+            {% endif %}
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">PAP</td>
+            <td> {{ PAP_repa }} </td>
+            <td> {{ PAP_reclamado }} </td>
+            {% if comparacion_repa_movilizado %}
+            <td>{{ PAP_repa_movilizado }}</td>
+            {% endif %}
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">REPA</td>
+            <td> {{ REPA_repa }} </td>
+            <td> {{ REPA_reclamado }} </td>
+            {% if comparacion_repa_movilizado %}
+            <td>{{ REPA_repa_movilizado }}</td>
+            {% endif %}
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">OTROS</td>
+            <td> {{ OTROS_repa }} </td>
+            <td> {{ OTROS_reclamado }} </td>
+            {% if comparacion_repa_movilizado %}
+            <td>{{ OTROS_repa_movilizado }}</td>
+            {% endif %}
+        </tr>
+    </table>
+
+    <table style="margin-top: 20px;">
+        <tr class="font-large first-column-cell2";>
+            <td class="negrita">Conceptos de Ajuste</td>
+            <td class="negrita">Comparacion Haber Reclamado con Haber con Repa</td>
+            {% if comparacion_repa_movilizado %}
+            <td class="negrita">Comparacion Haber con Repa movilizado con Haber con Repa</td>
+            {% endif %}
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Diferencia/Merma</td>
+            <td class="total"> {{ diccionario_repa.dif_reclamado_repa }} </td>
+            {% if comparacion_repa_movilizado %}
+            <td class="total">{{ diccionario_repa.dif_repa_movilizado_repa }}</td>
+            {% endif %}
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Incidencia en el Haber</td>
+            <td class="total"> {{ diccionario_repa.incidencia_reclamado_repa }} </td>
+            {% if comparacion_repa_movilizado %}
+            <td class="total">{{ diccionario_repa.incidencia_repa_movilizado_repa }}</td>
+            {% endif %}
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Quita con Confiscatoriedad</td>
+            <td class="total"> {{ diccionario_repa.quita_confis_reclamado_repa }} </td>
+            {% if comparacion_repa_movilizado %}
+            <td class="total">{{ diccionario_repa.quita_confis_repa_movilizado_repa }}</td>
+            {% endif %}
+        </tr>
+    </table>
+    
+    <div class="graph-container">
+        <img src="data:image/png;base64,{{ grafico_repa }}" alt="Gráfico comparativo de haberes de Sentencia">
+    </div>
+</body>
+</html>

@@ -29,6 +29,7 @@ from services.calculadora_tope_maximo.generador_pdf import Comparativa
 from services.comparador_productos.comparador_productos import Comparador_productos
 from services.movilizador_de_haber.movilizador_de_haber import calculo_retroactivo
 from services.planilla_docente.planilla_docente import Planilla_Docente
+from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
 # Entities
 from models.entities.User import User
 
@@ -738,6 +739,57 @@ def procesar():
 
     return resultado
 
+@app.route('/herramientas_demanda')
+@login_required
+def herramientas_demanda():
+    return render_template('herramientas_demanda/herramientas_demanda.html')
+
+
+@app.route('/resultado_herramientas_demandas', methods=['POST'])
+@login_required
+def resultado_herramientas_demandas():
+        if current_user.credito <= 0:
+            flash("No tienes suficientes créditos para realizar esta operación.")
+            return redirect(url_for('prueba'))
+        current_user.credito -= 1
+        ModelUser.update_credito(current_user.id, current_user.credito)
+        login_user(ModelUser.get_by_id(current_user.id))
+
+        datos_del_actor =  request.form['datos_del_actor']
+        expediente =  request.form['expediente']
+        cuil_expediente = request.form['cuil_expediente']
+        beneficio =  request.form['beneficio']
+        num_beneficio =  request.form['num_beneficio']    
+        fecha_comparacion_repa= transformar_fecha(request.form['fecha_comparacion_repa'])
+
+        # Extracción de valores con un valor predeterminado de 0 si están vacíos
+        PBU_repa = float(request.form.get('PBU_repa', 0))
+        PC_repa = float(request.form.get('PC_repa', 0))
+        PAP_repa = float(request.form.get('PAP_repa', 0))
+        REPA_repa = float(request.form.get('REPA_repa', 0))
+        OTROS_repa = float(request.form.get('OTROS_repa', 0))
+
+        PBU_reclamado = float(request.form.get('PBU_reclamado', 0))
+        PC_reclamado = float(request.form.get('PC_reclamado', 0))
+        PAP_reclamado = float(request.form.get('PAP_reclamado', 0))
+        REPA_reclamado = float(request.form.get('REPA_reclamado', 0))
+        OTROS_reclamado = float(request.form.get('OTROS_reclamado', 0))
+
+        comparacion_repa_movilizado = request.form.get('comparacion_repa_movilizado', False)
+        comparacion_repa_movilizado_No = request.form.get('comparacion_repa_movilizado_No', False)
+
+        PBU_repa_movilizado = float(request.form.get('PBU_repa_movilizado', 0))
+        PC_repa_movilizado = float(request.form.get('PC_repa_movilizado', 0))
+        PAP_repa_movilizado = float(request.form.get('PAP_repa_movilizado', 0))
+        REPA_repa_movilizado = float(request.form.get('REPA_repa_movilizado', 0))
+        OTROS_repa_movilizado = float(request.form.get('OTROS_repa_movilizado', 0))
+
+
+
+        pdf = HerramientasDemanda(datos_del_actor, expediente, cuil_expediente, beneficio, num_beneficio,fecha_comparacion_repa, PBU_repa, PC_repa, PAP_repa, REPA_repa,OTROS_repa, PBU_reclamado, PC_reclamado, PAP_reclamado,REPA_reclamado, OTROS_reclamado, comparacion_repa_movilizado,comparacion_repa_movilizado_No, PBU_repa_movilizado, PC_repa_movilizado,PAP_repa_movilizado, REPA_repa_movilizado, OTROS_repa_movilizado)
+
+        resultado = pdf.generar_pdf()
+        return resultado
 
 if __name__ == '__main__':
     app.run(debug=True)
