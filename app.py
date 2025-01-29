@@ -478,7 +478,7 @@ def resultado_comparativa_tope_maximo():
     badaro_mas_anses= request.form.get('badaro_mas_anses', False)
     badaro_mas_caliva= request.form.get('badaro_mas_caliva', False)
     remuneracion_maxima= request.form.get('remuneracion_maxima', False)
-    ochentaidos_remuneracion_maxima= request.form.get('82_remuneracion_maxima', False)
+    ochentaidos_remuneracion_maxima= request.form.get('ochentaidos_remuneracion_maxima', False)
     rem_max_caliva_27551= request.form.get('rem_max_caliva_27551', False)
     martinez_mas_anses= request.form.get('martinez_mas_anses', False)
 
