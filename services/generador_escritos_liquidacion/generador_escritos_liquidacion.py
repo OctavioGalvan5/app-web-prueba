@@ -2,6 +2,7 @@ from flask import send_file
 from docxtpl import DocxTemplate
 from datetime import datetime
 from services.calculadora_uma.generador_pdf import obtener_acordada, obtener_valor_uma
+from services.calculadora_tope_maximo.generador_pdf import obtener_monto
 from services.calculos import formatear_dinero
 import re
 import plotly.graph_objects as go
@@ -9,6 +10,7 @@ import base64
 from docx.shared import Inches
 import tempfile
 from babel.numbers import format_currency
+from decimal import Decimal
 
 
 def replace_pic(doc, marker, img_path):
@@ -169,7 +171,6 @@ class Escrito_liquidacion:
       
       self.datos['Fecha_Inicial_de_Pago'] = transformar_fecha(self.datos['Fecha_Inicial_de_Pago'])
       self.datos['Fecha_de_cierre_de_liquidación'] = transformar_fecha(self.datos['Fecha_de_cierre_de_liquidación'])
-      self.datos['Fecha_de_cierre_de_intereses'] = transformar_fecha(self.datos['Fecha_de_cierre_de_intereses'])
       self.datos['fecha_aprobacion_planilla'] = transformar_fecha(self.datos['fecha_aprobacion_planilla'])
       
       self.datos['fecha_fallecimiento'] = transformar_fecha(self.datos['fecha_fallecimiento'])
@@ -206,6 +207,15 @@ class Escrito_liquidacion:
       self.datos['Haber_de_Alta_Segunda_Liquidacion'] = formatear_dinero(str(self.datos['Haber_de_Alta_Segunda_Liquidacion']))
       self.datos['Haber_de_Alta_Primera_Liquidacion_IPC'] = formatear_dinero(str(self.datos['Haber_de_Alta_Primera_Liquidacion_IPC']))
       self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC'] = formatear_dinero(str(self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC']))
+
+      if self.datos['Tope_Si']:
+          caliva_anses, anses_2, badaro_2, badaro_cm_2, ocheintados_rem_max_2, rem_max_2,rem_max_imponible_cm_extendido_27551_2, martinez_2 = obtener_monto(self.datos['Fecha_de_cierre_de_intereses'])
+          self.datos['dif_haber_reclamado_anses'] = formatear_dinero(Decimal(self.datos['haber_tope_maximo']) - anses_2)
+          self.datos['porc_haber_reclamado_anses'] = str(round((Decimal(self.datos['haber_tope_maximo']) / anses_2 - 1) * 100, 2)) + "%"
+          self.datos['dif_ocheintados_rem_max_anses']  = str(round((ocheintados_rem_max_2 / anses_2 - 1) * 100 , 2)) + "%"
+          self.datos['tope_anses'] = formatear_dinero(anses_2)
+          self.datos['tope_ocheintados_rem_max'] = formatear_dinero(ocheintados_rem_max_2)
+      self.datos['Fecha_de_cierre_de_intereses'] = transformar_fecha(self.datos['Fecha_de_cierre_de_intereses'])
 
 
   def crear_documento(self):

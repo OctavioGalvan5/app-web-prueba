@@ -668,6 +668,7 @@ def resultado_escrito_liquidacion():
     datos['Porcentaje_2'] = ""
 
     datos['Tope_Si'] = request.form.get('Tope_Haber_Maximo_Si', False) == 'on'
+    datos['haber_tope_maximo'] = request.form.get('haber_tope_maximo') or 10
     datos['Daños_Si'] = request.form.get('Daños_Si', False) == 'on'
     datos['Sancionatorios_Si'] = request.form.get('Sancionatorios_Si', False) == 'on'
     
