@@ -127,11 +127,34 @@ def procesar_tuplas(tuplas):
 class Escrito_liquidacion:
   def __init__(self, datos):
       self.datos = datos
+      # UMA
+      liquidaciones = [
+        ]
       self.datos['Valor_UMA'] = obtener_valor_uma(self.datos['Fecha_de_cierre_de_intereses'])
       self.datos['total_liquidacion'] = transformar_a_float(self.datos['total_liquidacion'])
       self.datos['total_liquidacion_en_UMA'] = round(float(self.datos['total_liquidacion']) / float(self.datos['Valor_UMA']),2)
       self.datos['total_liquidacion'] = formatear_dinero(self.datos['total_liquidacion'])
+      liquidaciones.append({"monto": self.datos['total_liquidacion'], "monto_en_uma": self.datos['total_liquidacion_en_UMA'], "numero_liquidacion":"1ra"})
+      if self.datos['Total_Segunda_Liquidacion'] != "0":
+          self.datos['Total_Segunda_Liquidacion'] = transformar_a_float(self.datos['Total_Segunda_Liquidacion'])
+          self.datos['Total_Segunda_Liquidacion_en_UMA'] = round(float(self.datos['Total_Segunda_Liquidacion']) / float(self.datos['Valor_UMA']),2)
+          self.datos['Total_Segunda_Liquidacion'] = formatear_dinero(self.datos['Total_Segunda_Liquidacion'])
+          liquidaciones.append({"monto": self.datos['Total_Segunda_Liquidacion'], "monto_en_uma": self.datos['Total_Segunda_Liquidacion_en_UMA'], "numero_liquidacion":"2da"})
+
+      if self.datos['Total_Primera_Liquidacion_IPC'] != "0":
+          self.datos['Total_Primera_Liquidacion_IPC'] = transformar_a_float(self.datos['Total_Primera_Liquidacion_IPC'])
+          self.datos['Total_Primera_Liquidacion_IPC_en_UMA'] = round(float(self.datos['Total_Primera_Liquidacion_IPC']) / float(self.datos['Valor_UMA']),2)
+          self.datos['Total_Primera_Liquidacion_IPC'] = formatear_dinero(self.datos['Total_Primera_Liquidacion_IPC'])
+          liquidaciones.append({"monto": self.datos['Total_Primera_Liquidacion_IPC'], "monto_en_uma": self.datos['Total_Primera_Liquidacion_IPC_en_UMA'], "numero_liquidacion":"3ra"})
+
+      if self.datos['Total_Segunda_Liquidacion_IPC'] != "0":
+          self.datos['Total_Segunda_Liquidacion_IPC'] = transformar_a_float(self.datos['Total_Segunda_Liquidacion_IPC'])
+          self.datos['Total_Segunda_Liquidacion_IPC_en_UMA'] = round(float(self.datos['Total_Segunda_Liquidacion_IPC']) / float(self.datos['Valor_UMA']),2)
+          self.datos['Total_Segunda_Liquidacion_IPC'] = formatear_dinero(self.datos['Total_Segunda_Liquidacion_IPC'])
+          liquidaciones.append({"monto": self.datos['Total_Segunda_Liquidacion_IPC'], "monto_en_uma": self.datos['Total_Segunda_Liquidacion_IPC_en_UMA'], "numero_liquidacion":"4ta"})
       self.datos['Valor_UMA'] = formatear_dinero(self.datos['Valor_UMA'])
+      self.datos["liquidaciones"] = liquidaciones
+      
       
       self.datos['Percibido'] = modificar_montos(self.datos['Percibido'])
       self.datos['Reclamado'] = modificar_montos(self.datos['Reclamado'])

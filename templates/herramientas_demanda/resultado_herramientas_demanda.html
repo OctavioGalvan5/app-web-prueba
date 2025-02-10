@@ -155,17 +155,17 @@
            <strong>Numero de Beneficio:</strong> {{num_beneficio}}
         </p>
     </div>
-    <h6>Comparacion Repa:</h6>
+    <h6>Comparacion Reparacion Historica:</h6>
     <table style="margin-top: 20px;">
         <tr class="font-large first-column-cell2";>
             <td colspan="4" class="negrita" style="text-align: center;">Fecha de comparacion: {{fecha_comparacion_repa}}</td>
         </tr>
         <tr class="font-large first-column-cell2";>
             <td class="negrita">Variables</td>
-            <td class="negrita">Haber Percibido con Repa</td>
+            <td class="negrita">Haber Percibido con Reparacion Historica</td>
             <td class="negrita">Haber Total Reclamado</td>
             {% if comparacion_repa_movilizado %}
-            <td class="negrita">Haber con Repa Movilizado</td>
+            <td class="negrita">Haber con Reparacion Historica Movilizada</td>
             {% endif %}
         </tr>
         <tr class="font-large">
@@ -201,7 +201,7 @@
             {% endif %}
         </tr>
         <tr class="font-large">
-            <td class="negrita first-column-cell">REPA</td>
+            <td class="negrita first-column-cell">REPARACION HISTORICA</td>
             <td> {{ REPA_repa }} </td>
             <td> {{ REPA_reclamado }} </td>
             {% if comparacion_repa_movilizado %}
@@ -221,9 +221,9 @@
     <table style="margin-top: 20px;">
         <tr class="font-large first-column-cell2";>
             <td class="negrita">Conceptos de Ajuste</td>
-            <td class="negrita">Comparacion Haber Reclamado con Haber con Repa</td>
+            <td class="negrita">Comparacion Haber Reclamado con Haber con Reparacion Historica</td>
             {% if comparacion_repa_movilizado %}
-            <td class="negrita">Comparacion Haber con Repa movilizado con Haber con Repa</td>
+            <td class="negrita">Comparacion Haber con Repa movilizado con Haber con Reparacion Historica</td>
             {% endif %}
         </tr>
         <tr class="font-large">

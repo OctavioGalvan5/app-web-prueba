@@ -122,12 +122,12 @@ class HerramientasDemanda:
       diccionario['quita_confis_repa_movilizado_repa'] = str(round(diccionario['dif_repa_movilizado_repa'] / diccionario['total_haber_con_repa_movilizado'] * 100,2)) + "%"
 
     datos = [diccionario['total_haber_con_repa'], diccionario['total_haber_reclamado']]
-    etiquetas = ['Haber Percibido con Repa', 'Haber Reclamado']
+    etiquetas = ['Haber Percibido con Reparacion Historica', 'Haber Reclamado']
     if self.comparacion_repa_movilizado:
       datos.append(diccionario['total_haber_con_repa_movilizado'])
-      etiquetas.append('Haber con Repa Movilizado')
+      etiquetas.append('Haber con Reparacion Historica Movilizada')
 
-    grafico_repa = crear_graficos(datos,etiquetas, "Diferencia de Haber con Repa")
+    grafico_repa = crear_graficos(datos,etiquetas, "Diferencia de Haber con Reparacion Historica")
 
     diccionario['total_haber_con_repa'] = formatear_dinero(diccionario['total_haber_con_repa'])
     diccionario['total_haber_reclamado'] = formatear_dinero(diccionario['total_haber_reclamado'])
