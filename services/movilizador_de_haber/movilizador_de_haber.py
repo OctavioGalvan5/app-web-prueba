@@ -4,24 +4,15 @@ import plotly.graph_objects as go
 import io
 import base64
 from services.calculos import formatear_dinero
-from models.database import buscar_fechas
+from models.database import engine
 from flask import render_template, send_file
 from werkzeug.wrappers import response
 from config import config
 from xhtml2pdf import pisa
 from io import BytesIO
 
-# Configurar la conexión a la base de datos
-db_connection_string = "mysql+pymysql://admin:root2024@database-2.cp6ssaigs94q.us-east-2.rds.amazonaws.com:3306/calculadoras"
-engine = create_engine(
-    db_connection_string,
-    connect_args={
-        "ssl": {
-            "ssl_ca": "/etc/ssl/cert.pem"
-        }
-    }
-)
-        
+
+
 def convertir_fecha_periodo(fecha):
     # Convertir la fecha si es una cadena
     if isinstance(fecha, str):
@@ -82,14 +73,14 @@ def reajuste_movilidad(fecha_inicial, columna, monto, fecha_final, tupla_reajust
         for fecha, monto_final in resultados:
             print(f"Fecha: {fecha}, Monto: {monto_final}")
         return resultados
-        
+
 
 # Función para obtener la siguiente fecha en la tabla
 def siguiente_fecha(connection, tabla, fecha_actual):
     consulta = select(tabla.c.fechas).where(tabla.c.fechas > fecha_actual).order_by(tabla.c.fechas.asc()).limit(1)
     resultado = connection.execute(consulta).fetchone()
     return resultado[0] if resultado else None
-    
+
 def procesar_tuplas(tuplas, movilidad_1):
 
     diccionario = {
@@ -130,7 +121,7 @@ class calculo_retroactivo:
     def __init__(self, datos_del_actor, expediente, cuil_expediente, beneficio, 
          num_beneficio, fecha_inicio, fecha_fin, 
          fecha_adquisicion_del_derecho, monto, movilidad_1, tupla):
-        
+
         self.datos_del_actor = datos_del_actor
         self.expediente = expediente
         self.cuil_expediente = cuil_expediente

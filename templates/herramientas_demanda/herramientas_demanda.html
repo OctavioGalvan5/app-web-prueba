@@ -1499,9 +1499,6 @@
             const checkboxes = {
                 comparacion_reparacion_historica: document.getElementById('comparacion_reparacion_historica'),
                 sumas_remunerativas: document.getElementById('sumas_remunerativas'),
-                checkbox2: document.getElementById('checkbox2'),
-                checkbox3: document.getElementById('checkbox3'),
-                comparacion_repa_movilizado: document.getElementById('comparacion_repa_movilizado'),
                 municipalidad_salta: document.getElementById('municipalidad_salta'),
                 todo_obras_srl: document.getElementById('todo_obras_srl'),
                 hospital_materno_infantil: document.getElementById('hospital_materno_infantil'),
@@ -1539,9 +1536,6 @@
             const sections = {
                 comparacion_reparacion_historica_section: document.getElementById('comparacion_reparacion_historica_section'),
                 sumas_remunerativas_section: document.getElementById('sumas_remunerativas_section'),
-                checkbox2_section: document.getElementById('checkbox2_section'),
-                checkbox3_section: document.getElementById('checkbox3_section'),
-                comparacion_repa_movilizado_section: document.getElementById('comparacion_repa_movilizado_section'),
                 municipalidad_salta_section: document.getElementById('municipalidad_salta_section'),
                 todo_obras_srl_section: document.getElementById('todo_obras_srl_section'),
                 hospital_materno_infantil_section: document.getElementById('hospital_materno_infantil_section'),
@@ -1577,17 +1571,16 @@
             };
 
             function toggleSection(checkbox, section) {
-                checkbox.addEventListener('change', function() {
-                    section.style.display = this.checked ? 'block' : 'none';
-                });
+                if (checkbox && section) {
+                    checkbox.addEventListener('change', function() {
+                        section.style.display = this.checked ? 'block' : 'none';
+                    });
+                }
             }
 
             // Toggle para herramientas principales
             toggleSection(checkboxes.comparacion_reparacion_historica, sections.comparacion_reparacion_historica_section);
             toggleSection(checkboxes.sumas_remunerativas, sections.sumas_remunerativas_section);
-            toggleSection(checkboxes.checkbox2, sections.checkbox2_section);
-            toggleSection(checkboxes.checkbox3, sections.checkbox3_section);
-            toggleSection(checkboxes.comparacion_repa_movilizado, sections.comparacion_repa_movilizado_section);
 
             // Toggle para las nuevas secciones
             toggleSection(checkboxes.municipalidad_salta, sections.municipalidad_salta_section);
