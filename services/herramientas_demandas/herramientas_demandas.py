@@ -65,21 +65,22 @@ def crear_graficos(datos, etiquetas, titulo):
 class HerramientasDemanda:
   def __init__(self, 
                datos_del_actor, expediente, cuil_expediente, beneficio, 
-               num_beneficio, fecha_comparacion_repa, PBU_repa, PC_repa, 
+               num_beneficio,comparacion_reparacion_historica, fecha_comparacion_repa, PBU_repa, PC_repa, 
                PAP_repa, REPA_repa, OTROS_repa, 
                PBU_reclamado, PC_reclamado, PAP_reclamado, 
                REPA_reclamado, OTROS_reclamado,
                comparacion_repa_movilizado, comparacion_repa_movilizado_No,
                PBU_repa_movilizado, PC_repa_movilizado, 
                PAP_repa_movilizado, REPA_repa_movilizado, 
-               OTROS_repa_movilizado):
+               OTROS_repa_movilizado, diccionario_sumas):
     
       self.datos_del_actor = datos_del_actor
       self.expediente = expediente
       self.cuil_expediente = cuil_expediente
       self.beneficio = beneficio
       self.num_beneficio = num_beneficio
-    
+
+      self.comparacion_reparacion_historica = comparacion_reparacion_historica
       self.fecha_comparacion_repa = fecha_comparacion_repa
     
       self.PBU_repa = PBU_repa
@@ -102,6 +103,8 @@ class HerramientasDemanda:
       self.PAP_repa_movilizado = PAP_repa_movilizado
       self.REPA_repa_movilizado = REPA_repa_movilizado
       self.OTROS_repa_movilizado = OTROS_repa_movilizado
+
+      self.diccionario_sumas = diccionario_sumas
 
   def obtener_datos_repa(self):
     diccionario = {
@@ -150,6 +153,7 @@ class HerramientasDemanda:
       cuil_expediente = self.cuil_expediente,
       beneficio = self.beneficio,
       num_beneficio = self.num_beneficio,
+      comparacion_reparacion_historica = self.comparacion_reparacion_historica,
       fecha_comparacion_repa = self.fecha_comparacion_repa,
       PBU_repa = formatear_dinero(self.PBU_repa),
       PC_repa = formatear_dinero(self.PC_repa),
@@ -169,6 +173,7 @@ class HerramientasDemanda:
       OTROS_repa_movilizado = formatear_dinero(self.OTROS_repa_movilizado),
       diccionario_repa = diccionario_repa,
       grafico_repa = grafico_repa,
+      diccionario_sumas = self.diccionario_sumas,
     )
 
     pdf_buffer = BytesIO()

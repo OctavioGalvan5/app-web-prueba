@@ -761,20 +761,27 @@ def resultado_herramientas_demandas():
         cuil_expediente = request.form['cuil_expediente']
         beneficio =  request.form['beneficio']
         num_beneficio =  request.form['num_beneficio']    
-        fecha_comparacion_repa= transformar_fecha(request.form['fecha_comparacion_repa'])
+        fecha_comparacion_repa= request.form['fecha_comparacion_repa'] or "2022-02-01"
+        fecha_comparacion_repa = transformar_fecha(fecha_comparacion_repa)
 
         # Extracción de valores con un valor predeterminado de 0 si están vacíos
-        PBU_repa = float(request.form.get('PBU_repa', 0))
-        PC_repa = float(request.form.get('PC_repa', 0))
-        PAP_repa = float(request.form.get('PAP_repa', 0))
-        REPA_repa = float(request.form.get('REPA_repa', 0))
-        OTROS_repa = float(request.form.get('OTROS_repa', 0))
+        comparacion_reparacion_historica = request.form.get('comparacion_reparacion_historica', False)
+    
+        def obtener_valor(form_value):
+            valor = float(form_value)
+            return valor if valor != 0 else 1
 
-        PBU_reclamado = float(request.form.get('PBU_reclamado', 0))
-        PC_reclamado = float(request.form.get('PC_reclamado', 0))
-        PAP_reclamado = float(request.form.get('PAP_reclamado', 0))
-        REPA_reclamado = float(request.form.get('REPA_reclamado', 0))
-        OTROS_reclamado = float(request.form.get('OTROS_reclamado', 0))
+        PBU_repa = obtener_valor(request.form.get('PBU_repa', 1))
+        PC_repa = obtener_valor(request.form.get('PC_repa', 1))
+        PAP_repa = obtener_valor(request.form.get('PAP_repa', 1))
+        REPA_repa = obtener_valor(request.form.get('REPA_repa', 1))
+        OTROS_repa = obtener_valor(request.form.get('OTROS_repa', 1))
+
+        PBU_reclamado = obtener_valor(request.form.get('PBU_reclamado', 1))
+        PC_reclamado = obtener_valor(request.form.get('PC_reclamado', 1))
+        PAP_reclamado = obtener_valor(request.form.get('PAP_reclamado', 1))
+        REPA_reclamado = obtener_valor(request.form.get('REPA_reclamado', 1))
+        OTROS_reclamado = obtener_valor(request.form.get('OTROS_reclamado', 1))
 
         comparacion_repa_movilizado = request.form.get('comparacion_repa_movilizado', False)
         comparacion_repa_movilizado_No = request.form.get('comparacion_repa_movilizado_No', False)
@@ -785,9 +792,279 @@ def resultado_herramientas_demandas():
         REPA_repa_movilizado = float(request.form.get('REPA_repa_movilizado', 0))
         OTROS_repa_movilizado = float(request.form.get('OTROS_repa_movilizado', 0))
 
+        diccionario_sumas = {
+            "sumas_remunerativas": request.form.get('sumas_remunerativas', False),
+
+            "municipalidad_salta": request.form.get('municipalidad_salta', False),
+            "municipalidad_salta_47_hijo": request.form.get('municipalidad_salta_47_hijo', False),
+            "municipalidad_salta_52_conyuge": request.form.get('municipalidad_salta_52_conyuge', False),
+            "municipalidad_salta_54_escuela_secundaria": request.form.get('municipalidad_salta_54_escuela_secundaria', False),
+            "municipalidad_salta_147_acuerdo_salarial_2010": request.form.get('municipalidad_salta_147_acuerdo_salarial_2010', False),
+            "municipalidad_salta_163_acuerdo_salarial_2011": request.form.get('municipalidad_salta_163_acuerdo_salarial_2011', False),
+            "municipalidad_salta_165_acuerdo_salarial_2012": request.form.get('municipalidad_salta_165_acuerdo_salarial_2012', False),
+            "municipalidad_salta_166_acuerdo_salarial_2013": request.form.get('municipalidad_salta_166_acuerdo_salarial_2013', False),
+            "municipalidad_salta_297_suma_fija_sin_ap": request.form.get('municipalidad_salta_297_suma_fija_sin_ap', False),
+            "municipalidad_salta_324_ac_2011_12_13_s_ap": request.form.get('municipalidad_salta_324_ac_2011_12_13_s_ap', False),
+            "municipalidad_salta_326_ac_2_semestre_16_s_ap": request.form.get('municipalidad_salta_326_ac_2_semestre_16_s_ap', False),
+            "municipalidad_salta_517_presentismo": request.form.get('municipalidad_salta_517_presentismo', False),
+            "municipalidad_salta_decreto_768_04": request.form.get('municipalidad_salta_decreto_768_04', False),
+            "municipalidad_salta_decreto_0025_05": request.form.get('municipalidad_salta_decreto_0025_05', False),
+            "municipalidad_salta_dc_1208_025_1131_05": request.form.get('municipalidad_salta_dc_1208_025_1131_05', False),
+
+            "todo_obras_srl": request.form.get('todo_obras_srl', False),
+            "todo_obras_srl_507_viatico": request.form.get('todo_obras_srl_507_viatico', False),
+            "todo_obras_srl_511_bonif_uso_corr_electrica": request.form.get('todo_obras_srl_511_bonif_uso_corr_electrica', False),
+            "todo_obras_srl_514_compens_gas": request.form.get('todo_obras_srl_514_compens_gas', False),
+
+            "hospital_materno_infantil": request.form.get('hospital_materno_infantil', False),
+            "hospital_materno_infantil_328_adic_acu_sal_2010_remune": request.form.get('hospital_materno_infantil_328_adic_acu_sal_2010_remune', False),
+            "hospital_materno_infantil_370_ad_inc_d_2589_04_r_1893": request.form.get('hospital_materno_infantil_370_ad_inc_d_2589_04_r_1893', False),
+            "hospital_materno_infantil_612_equiparador_res_1474_11": request.form.get('hospital_materno_infantil_612_equiparador_res_1474_11', False),
+            "hospital_materno_infantil_627_adic_acu_sal_2010_remune": request.form.get('hospital_materno_infantil_627_adic_acu_sal_2010_remune', False),
+            "hospital_materno_infantil_628_adic_acu_sal_2010_no_remune": request.form.get('hospital_materno_infantil_628_adic_acu_sal_2010_no_remune', False),
+            "hospital_materno_infantil_632_adic_acu_sal_2010_no_remune": request.form.get('hospital_materno_infantil_632_adic_acu_sal_2010_no_remune', False),
+            "hospital_materno_infantil_645_nivelador_res_2665_07": request.form.get('hospital_materno_infantil_645_nivelador_res_2665_07', False),
+            "hospital_materno_infantil_657_adicional_extraordinario": request.form.get('hospital_materno_infantil_657_adicional_extraordinario', False),
+            "hospital_materno_infantil_696_ticket_alimentario": request.form.get('hospital_materno_infantil_696_ticket_alimentario', False),
+
+            "ministerio_salud_publica": request.form.get('ministerio_salud_publica', False),
+            "ministerio_salud_370": request.form.get('ministerio_salud_370', False),
+            "ministerio_salud_569": request.form.get('ministerio_salud_569', False),
+            "ministerio_salud_612": request.form.get('ministerio_salud_612', False),
+            "ministerio_salud_626": request.form.get('ministerio_salud_626', False),
+            "ministerio_salud_627_628_328": request.form.get('ministerio_salud_627_628_328', False),
+            "ministerio_salud_632": request.form.get('ministerio_salud_632', False),
+            "ministerio_salud_645": request.form.get('ministerio_salud_645', False),
+            "ministerio_salud_650": request.form.get('ministerio_salud_650', False),
+            "ministerio_salud_653": request.form.get('ministerio_salud_653', False),
+            "ministerio_salud_654": request.form.get('ministerio_salud_654', False),
+            "ministerio_salud_656": request.form.get('ministerio_salud_656', False),
+            "ministerio_salud_670": request.form.get('ministerio_salud_670', False),
+            "ministerio_salud_682": request.form.get('ministerio_salud_682', False),
+            "ministerio_salud_685": request.form.get('ministerio_salud_685', False),
+
+            "tomografia_computada": request.form.get('tomografia_computada', False),
+            "tomografia_400": request.form.get('tomografia_400', False),
+            "tomografia_405": request.form.get('tomografia_405', False),
+            "tomografia_406": request.form.get('tomografia_406', False),
+            "tomografia_2011": request.form.get('tomografia_2011', False),
+            "tomografia_2014": request.form.get('tomografia_2014', False),
+
+            "cruz_roja_salta": request.form.get('cruz_roja_salta', False),
+            "cruz_roja_301": request.form.get('cruz_roja_301', False),
+            "cruz_roja_307": request.form.get('cruz_roja_307', False),
+            "cruz_roja_351": request.form.get('cruz_roja_351', False),
+            "cruz_roja_399": request.form.get('cruz_roja_399', False),
+
+            "gobierno_provincia_salta": request.form.get('gobierno_provincia_salta', False),
+            "gobierno_628": request.form.get('gobierno_628', False),
+            "gobierno_680": request.form.get('gobierno_680', False),
+            "gobierno_690": request.form.get('gobierno_690', False),
 
 
-        pdf = HerramientasDemanda(datos_del_actor, expediente, cuil_expediente, beneficio, num_beneficio,fecha_comparacion_repa, PBU_repa, PC_repa, PAP_repa, REPA_repa,OTROS_repa, PBU_reclamado, PC_reclamado, PAP_reclamado,REPA_reclamado, OTROS_reclamado, comparacion_repa_movilizado,comparacion_repa_movilizado_No, PBU_repa_movilizado, PC_repa_movilizado,PAP_repa_movilizado, REPA_repa_movilizado, OTROS_repa_movilizado)
+            "ministerio_educacion_salta": request.form.get('ministerio_educacion_salta', False),
+            "ministerio_educacion_salta_627_adic_acu_sal_2010_no_remune": request.form.get('ministerio_educacion_salta_627_adic_acu_sal_2010_no_remune', False),
+
+            "hospital_senor_del_milagro": request.form.get('hospital_senor_del_milagro', False),
+            "hospital_senor_del_milagro_569_adic_hs_guardia_sin_aportes": request.form.get('hospital_senor_del_milagro_569_adic_hs_guardia_sin_aportes', False),
+            "hospital_senor_del_milagro_612_adic_equip_no_profesional": request.form.get('hospital_senor_del_milagro_612_adic_equip_no_profesional', False),
+            "hospital_senor_del_milagro_628_adic_acu_sal_2010_no_remune": request.form.get('hospital_senor_del_milagro_628_adic_acu_sal_2010_no_remune', False),
+            "hospital_senor_del_milagro_645_nivelador_res_2665_07": request.form.get('hospital_senor_del_milagro_645_nivelador_res_2665_07', False),
+            "hospital_senor_del_milagro_657_adicional_extraordinario_2011": request.form.get('hospital_senor_del_milagro_657_adicional_extraordinario_2011', False),
+            "hospital_senor_del_milagro_682_adicional_res_0460_16": request.form.get('hospital_senor_del_milagro_682_adicional_res_0460_16', False),
+            "hospital_senor_del_milagro_653_adic_dif_actividad_critica": request.form.get('hospital_senor_del_milagro_653_adic_dif_actividad_critica', False),
+            "hospital_senor_del_milagro_565_adic_hs_guardia_sin_aportes_4_2014": request.form.get('hospital_senor_del_milagro_565_adic_hs_guardia_sin_aportes_4_2014', False),
+            "hospital_senor_del_milagro_644_nivelador": request.form.get('hospital_senor_del_milagro_644_nivelador', False),
+
+            "edesa_sa": request.form.get('edesa_sa', False),
+            "edesa_sa_40004_art_31_bonif_uso_corriente_elec": request.form.get('edesa_sa_40004_art_31_bonif_uso_corriente_elec', False),
+            "edesa_sa_40006_compensacion_gas": request.form.get('edesa_sa_40006_compensacion_gas', False),
+            "edesa_sa_40007_viaticos": request.form.get('edesa_sa_40007_viaticos', False),
+            "edesa_sa_40095_gratif_ect_no_rem": request.form.get('edesa_sa_40095_gratif_ect_no_rem', False),
+            "edesa_sa_40100_40103_suma_fija_no_rem": request.form.get('edesa_sa_40100_40103_suma_fija_no_rem', False),
+
+            "hospital_san_bernardo": request.form.get('hospital_san_bernardo', False),
+            "hospital_san_bernardo_628_adic_acu_sal_2010": request.form.get('hospital_san_bernardo_628_adic_acu_sal_2010', False),
+            "hospital_san_bernardo_632_adic_fijo_no_rem_ni_bonif": request.form.get('hospital_san_bernardo_632_adic_fijo_no_rem_ni_bonif', False),
+            "hospital_san_bernardo_612_equiparador_res_1474_11": request.form.get('hospital_san_bernardo_612_equiparador_res_1474_11', False),
+            "hospital_san_bernardo_657_adic_extraordinario_2011": request.form.get('hospital_san_bernardo_657_adic_extraordinario_2011', False),
+            "hospital_san_bernardo_619_fdo_de_emer_adic_hs": request.form.get('hospital_san_bernardo_619_fdo_de_emer_adic_hs', False),
+            "hospital_san_bernardo_677_adic_dec_1922_14_gdias": request.form.get('hospital_san_bernardo_677_adic_dec_1922_14_gdias', False),
+            "hospital_san_bernardo_568_adic_hs_guardia_sin_aportes": request.form.get('hospital_san_bernardo_568_adic_hs_guardia_sin_aportes', False),
+            "hospital_san_bernardo_682_adic_acu_sal_2010_no_remune": request.form.get('hospital_san_bernardo_682_adic_acu_sal_2010_no_remune', False),
+            "hospital_san_bernardo_670_ad_inc_d_2589_04_r_1893": request.form.get('hospital_san_bernardo_670_ad_inc_d_2589_04_r_1893', False),
+            "hospital_san_bernardo_653_adic_dif_actividad_critica": request.form.get('hospital_san_bernardo_653_adic_dif_actividad_critica', False),
+            "hospital_san_bernardo_627_adic_acu_sal_2010": request.form.get('hospital_san_bernardo_627_adic_acu_sal_2010', False),
+            "hospital_san_bernardo_626_ad_acu_sal_guardia_10": request.form.get('hospital_san_bernardo_626_ad_acu_sal_guardia_10', False),
+            "hospital_san_bernardo_565_fondo_de_emer_adic_hs_guardia": request.form.get('hospital_san_bernardo_565_fondo_de_emer_adic_hs_guardia', False),
+            "hospital_san_bernardo_599_ad_incum_prescrip_y_certif": request.form.get('hospital_san_bernardo_599_ad_incum_prescrip_y_certif', False),
+            "hospital_san_bernardo_685_reintegro_imp_ganancias": request.form.get('hospital_san_bernardo_685_reintegro_imp_ganancias', False),
+
+            "ips_salta": request.form.get('ips_salta', False),
+            "ips_salta_402_cuo_dev_gcias_rg_5008": request.form.get('ips_salta_402_cuo_dev_gcias_rg_5008', False),
+            "ips_salta_470_ajuste_credito_no_rem": request.form.get('ips_salta_470_ajuste_credito_no_rem', False),
+            "ips_salta_482_acu_sal_2010_no_rem": request.form.get('ips_salta_482_acu_sal_2010_no_rem', False),
+            "ips_salta_483_gratif_d_4118_art_13": request.form.get('ips_salta_483_gratif_d_4118_art_13', False),
+            "ips_salta_499_aj_liqui_anual_imp_gana": request.form.get('ips_salta_499_aj_liqui_anual_imp_gana', False),
+            "ips_salta_decre_1055": request.form.get('ips_salta_decre_1055', False),
+            "ips_salta_decre_1587_04": request.form.get('ips_salta_decre_1587_04', False),
+            "ips_salta_decreto_2857_08": request.form.get('ips_salta_decreto_2857_08', False),
+            "ips_salta_decre_3718_08": request.form.get('ips_salta_decre_3718_08', False),
+            "ips_salta_decre_1579_08": request.form.get('ips_salta_decre_1579_08', False),
+            "ips_salta_acuerdo_salarial_2010": request.form.get('ips_salta_acuerdo_salarial_2010', False),
+
+            "alliance_one_tobacco": request.form.get('alliance_one_tobacco', False),
+            "alliance_one_tobacco_261_165_bono_no_reintegrable": request.form.get('alliance_one_tobacco_261_165_bono_no_reintegrable', False),
+            "alliance_one_tobacco_182_anticipo_acuerdo_sot": request.form.get('alliance_one_tobacco_182_anticipo_acuerdo_sot', False),
+            "alliance_one_tobacco_194_acuerdo_no_rem_retroactivo": request.form.get('alliance_one_tobacco_194_acuerdo_no_rem_retroactivo', False),
+            "alliance_one_tobacco_481_responsabilidad_gerencial": request.form.get('alliance_one_tobacco_481_responsabilidad_gerencial', False),
+            "alliance_one_tobacco_482_acuerdo_salarial_2010_no_rem": request.form.get('alliance_one_tobacco_482_acuerdo_salarial_2010_no_rem', False),
+
+            "servicios_privados_postales": request.form.get('servicios_privados_postales', False),
+            "servicios_privados_postales_500_sal_susp_art_221_lct": request.form.get('servicios_privados_postales_500_sal_susp_art_221_lct', False),
+            "servicios_privados_postales_513_item_4_1_12_comida": request.form.get('servicios_privados_postales_513_item_4_1_12_comida', False),
+            "servicios_privados_postales_514_item_4_1_13_viatico_especial": request.form.get('servicios_privados_postales_514_item_4_1_13_viatico_especial', False),
+            "servicios_privados_postales_535_item_4_1_12_comida": request.form.get('servicios_privados_postales_535_item_4_1_12_comida', False),
+            "servicios_privados_postales_549_item_4_1_13_viatico_especial": request.form.get('servicios_privados_postales_549_item_4_1_13_viatico_especial', False),
+            "servicios_privados_postales_588_adic_10_porc_s_4_1_12_y_4_1_13": request.form.get('servicios_privados_postales_588_adic_10_porc_s_4_1_12_y_4_1_13', False),
+            "servicios_privados_postales_40000_sal_susp_art_221_lct": request.form.get('servicios_privados_postales_40000_sal_susp_art_221_lct', False),
+            "servicios_privados_postales_40013_item_4_1_12_comida": request.form.get('servicios_privados_postales_40013_item_4_1_12_comida', False),
+            "servicios_privados_postales_40014_item_4_1_13_viatico_especial": request.form.get('servicios_privados_postales_40014_item_4_1_13_viatico_especial', False),
+            "servicios_privados_postales_40015_adic_10_porc_s_4_1_12_y_4_1_13": request.form.get('servicios_privados_postales_40015_adic_10_porc_s_4_1_12_y_4_1_13', False),
+
+            "banco_nacion_argentina": request.form.get('banco_nacion_argentina', False),
+            "banco_nacion_argentina_adicional_mensual_por_product": request.form.get('banco_nacion_argentina_adicional_mensual_por_product', False),
+            "banco_nacion_argentina_adicional_zona_desfavorable_no": request.form.get('banco_nacion_argentina_adicional_zona_desfavorable_no', False),
+            "banco_nacion_argentina_dif_unificacion_a_a_27_01_2011": request.form.get('banco_nacion_argentina_dif_unificacion_a_a_27_01_2011', False),
+            "banco_nacion_argentina_adicional_mensual_por_product_2": request.form.get('banco_nacion_argentina_adicional_mensual_por_product_2', False),
+            "banco_nacion_argentina_adicional_por_funcion": request.form.get('banco_nacion_argentina_adicional_por_funcion', False),
+            "banco_nacion_argentina_acta_acuerdo_29_03_07": request.form.get('banco_nacion_argentina_acta_acuerdo_29_03_07', False),
+            "banco_nacion_argentina_titulo_secundario": request.form.get('banco_nacion_argentina_titulo_secundario', False),
+            "banco_nacion_argentina_adicional_cajero_integral_p": request.form.get('banco_nacion_argentina_adicional_cajero_integral_p', False),
+            "banco_nacion_argentina_adic_fall_de_caja_mon_extr_per": request.form.get('banco_nacion_argentina_adic_fall_de_caja_mon_extr_per', False),
+            "banco_nacion_argentina_gratificacion_extraordinaria": request.form.get('banco_nacion_argentina_gratificacion_extraordinaria', False),
+
+            "ypf_sa": request.form.get('ypf_sa', False),
+            "ypf_sa_vianda_alimentaria": request.form.get('ypf_sa_vianda_alimentaria', False),
+
+            "camara_senadores_salta": request.form.get('camara_senadores_salta', False),
+            "camara_senadores_salta_510_retroact_ac_salarial": request.form.get('camara_senadores_salta_510_retroact_ac_salarial', False),
+            "camara_senadores_salta_511_ac_salarial_2010": request.form.get('camara_senadores_salta_511_ac_salarial_2010', False),
+            "camara_senadores_salta_516_sac_dcto_1922_14": request.form.get('camara_senadores_salta_516_sac_dcto_1922_14', False),
+            "camara_senadores_salta_900_retencion_de_imp_ganancias": request.form.get('camara_senadores_salta_900_retencion_de_imp_ganancias', False),
+
+            "hospital_onativia": request.form.get('hospital_onativia', False),
+            "hospital_onativia_328_adic_acu_sal_2010_remune": request.form.get('hospital_onativia_328_adic_acu_sal_2010_remune', False),
+            "hospital_onativia_370_ad_inc_d_2589_04_r_1893": request.form.get('hospital_onativia_370_ad_inc_d_2589_04_r_1893', False),
+            "hospital_onativia_612_equiparador_res_1474_11": request.form.get('hospital_onativia_612_equiparador_res_1474_11', False),
+            "hospital_onativia_628_adic_acu_sal_2010_no_remune": request.form.get('hospital_onativia_628_adic_acu_sal_2010_no_remune', False),
+            "hospital_onativia_670_ad_inc_d_2589_04_r_1893": request.form.get('hospital_onativia_670_ad_inc_d_2589_04_r_1893', False),
+            "hospital_onativia_682_adic_acu_sal_2010_no_remune": request.form.get('hospital_onativia_682_adic_acu_sal_2010_no_remune', False),
+
+            "politi_hector_armando": request.form.get('politi_hector_armando', False),
+            "politi_hector_armando_503_decreto_38": request.form.get('politi_hector_armando_503_decreto_38', False),
+            "politi_hector_armando_504_asig_no_rem": request.form.get('politi_hector_armando_504_asig_no_rem', False),
+            "politi_hector_armando_505_bono_ext_fin_de_ano": request.form.get('politi_hector_armando_505_bono_ext_fin_de_ano', False),
+            "politi_hector_armando_507_dia_de_la_sanidad": request.form.get('politi_hector_armando_507_dia_de_la_sanidad', False),
+            "politi_hector_armando_508_asig_no_rem_ant_38_porc": request.form.get('politi_hector_armando_508_asig_no_rem_ant_38_porc', False),
+            "politi_hector_armando_509_asig_no_rem_ant_8_porc": request.form.get('politi_hector_armando_509_asig_no_rem_ant_8_porc', False),
+            "politi_hector_armando_512_1_sac_no_rem_2020": request.form.get('politi_hector_armando_512_1_sac_no_rem_2020', False),
+
+            "hospital_campo_quijano": request.form.get('hospital_campo_quijano', False),
+            "hospital_campo_quijano_612_equiparador_res_1474_11": request.form.get('hospital_campo_quijano_612_equiparador_res_1474_11', False),
+            "hospital_campo_quijano_628_adic_acu_sal_2010": request.form.get('hospital_campo_quijano_628_adic_acu_sal_2010', False),
+            "hospital_campo_quijano_645_equiparador_res_2665_07": request.form.get('hospital_campo_quijano_645_equiparador_res_2665_07', False),
+            "hospital_campo_quijano_657_adicional_extraordinario_2011": request.form.get('hospital_campo_quijano_657_adicional_extraordinario_2011', False),
+            "hospital_campo_quijano_682_adicional_res_0460_16": request.form.get('hospital_campo_quijano_682_adicional_res_0460_16', False),
+
+            "hospital_la_poma": request.form.get('hospital_la_poma', False),
+            "hospital_la_poma_31_zona_desfavorable": request.form.get('hospital_la_poma_31_zona_desfavorable', False),
+            "hospital_la_poma_328_adic_acu_sal_2010_remune": request.form.get('hospital_la_poma_328_adic_acu_sal_2010_remune', False),
+            "hospital_la_poma_569_adic_hs_guardia_sin_aportes": request.form.get('hospital_la_poma_569_adic_hs_guardia_sin_aportes', False),
+            "hospital_la_poma_599_ad_incum_prescrip_y_certif": request.form.get('hospital_la_poma_599_ad_incum_prescrip_y_certif', False),
+            "hospital_la_poma_612_equiparador_res_1474_11": request.form.get('hospital_la_poma_612_equiparador_res_1474_11', False),
+            "hospital_la_poma_620_radic_prof_d_2075_10": request.form.get('hospital_la_poma_620_radic_prof_d_2075_10', False),
+            "hospital_la_poma_628_adic_acu_sal_2010": request.form.get('hospital_la_poma_628_adic_acu_sal_2010', False),
+            "hospital_la_poma_645_nivelador_res_2665_07": request.form.get('hospital_la_poma_645_nivelador_res_2665_07', False),
+            "hospital_la_poma_653_adic_dif_actividad_critica": request.form.get('hospital_la_poma_653_adic_dif_actividad_critica', False),
+            "hospital_la_poma_670_ad_inc_d_2589_04_r_1893": request.form.get('hospital_la_poma_670_ad_inc_d_2589_04_r_1893', False),
+            "hospital_la_poma_682_adicional_res_0460_16": request.form.get('hospital_la_poma_682_adicional_res_0460_16', False),
+
+            "hospital_nazareno": request.form.get('hospital_nazareno', False),
+            "hospital_nazareno_612_equiparador_res_1474_11": request.form.get('hospital_nazareno_612_equiparador_res_1474_11', False),
+            "hospital_nazareno_628_adic_acu_sal_2010": request.form.get('hospital_nazareno_628_adic_acu_sal_2010', False),
+            "hospital_nazareno_645_equiparador_res_2665_07": request.form.get('hospital_nazareno_645_equiparador_res_2665_07', False),
+            "hospital_nazareno_653_adic_dif_actividad_critica": request.form.get('hospital_nazareno_653_adic_dif_actividad_critica', False),
+            "hospital_nazareno_682_adicional_res_0460_16": request.form.get('hospital_nazareno_682_adicional_res_0460_16', False),
+
+            "ente_parques_industriales": request.form.get('ente_parques_industriales', False),
+            "ente_parques_industriales_202_adicional_628": request.form.get('ente_parques_industriales_202_adicional_628', False),
+            "ente_parques_industriales_600_adic_adm_publica_central": request.form.get('ente_parques_industriales_600_adic_adm_publica_central', False),
+            "ente_parques_industriales_628_adic_acu_sal_2010": request.form.get('ente_parques_industriales_628_adic_acu_sal_2010', False),
+            "ente_parques_industriales_639_adic_dif_compensatorio": request.form.get('ente_parques_industriales_639_adic_dif_compensatorio', False),
+            "ente_parques_industriales_680_adic_fijo_dto_2857_04": request.form.get('ente_parques_industriales_680_adic_fijo_dto_2857_04', False),
+            "ente_parques_industriales_690_adic_fijo_dto_1880_05": request.form.get('ente_parques_industriales_690_adic_fijo_dto_1880_05', False),
+
+            "hospital_la_caldera": request.form.get('hospital_la_caldera', False),
+            "hospital_la_caldera_569_adic_hs_guardia_sin_aportes": request.form.get('hospital_la_caldera_569_adic_hs_guardia_sin_aportes', False),
+            "hospital_la_caldera_612_equiparador_res_1474_11": request.form.get('hospital_la_caldera_612_equiparador_res_1474_11', False),
+            "hospital_la_caldera_628_adic_acu_sal_2010": request.form.get('hospital_la_caldera_628_adic_acu_sal_2010', False),
+            "hospital_la_caldera_682_adicional_res_0460_16": request.form.get('hospital_la_caldera_682_adicional_res_0460_16', False),
+
+            "hospital_san_antonio_cobres": request.form.get('hospital_san_antonio_cobres', False),
+            "hospital_san_antonio_cobres_612_equiparador_res_1474_11": request.form.get('hospital_san_antonio_cobres_612_equiparador_res_1474_11', False),
+            "hospital_san_antonio_cobres_628_adic_acu_sal_2010": request.form.get('hospital_san_antonio_cobres_628_adic_acu_sal_2010', False),
+            "hospital_san_antonio_cobres_645_nivelador_res_2665_07": request.form.get('hospital_san_antonio_cobres_645_nivelador_res_2665_07', False),
+            "hospital_san_antonio_cobres_682_adicional_res_0460_16": request.form.get('hospital_san_antonio_cobres_682_adicional_res_0460_16', False),
+
+            "hospital_general_guemes": request.form.get('hospital_general_guemes', False),
+            "hospital_general_guemes_573_adic_hs_guardia_sin_aportes": request.form.get('hospital_general_guemes_573_adic_hs_guardia_sin_aportes', False),
+            "hospital_general_guemes_599_ad_incum_prescrip_y_certif": request.form.get('hospital_general_guemes_599_ad_incum_prescrip_y_certif', False),
+            "hospital_general_guemes_619_fondo_de_emer_adic_guardia_sdf": request.form.get('hospital_general_guemes_619_fondo_de_emer_adic_guardia_sdf', False),
+            "hospital_general_guemes_628_adic_acu_sal_2010": request.form.get('hospital_general_guemes_628_adic_acu_sal_2010', False),
+            "hospital_general_guemes_653_ad_dif_actividad_critica": request.form.get('hospital_general_guemes_653_ad_dif_actividad_critica', False),
+            "hospital_general_guemes_656_dto_nac_651_19_art_4": request.form.get('hospital_general_guemes_656_dto_nac_651_19_art_4', False),
+            "hospital_general_guemes_670_ad_inc_d_2589_04_r_1893": request.form.get('hospital_general_guemes_670_ad_inc_d_2589_04_r_1893', False),
+            "hospital_general_guemes_682_adicional_res_0460_16": request.form.get('hospital_general_guemes_682_adicional_res_0460_16', False),
+
+            "merceria_salta": request.form.get('merceria_salta', False),
+            "merceria_salta_301_acuerdo_no_remune": request.form.get('merceria_salta_301_acuerdo_no_remune', False),
+            "merceria_salta_331_ant_s_no_remune": request.form.get('merceria_salta_331_ant_s_no_remune', False),
+            "merceria_salta_351_present_s_no_remune": request.form.get('merceria_salta_351_present_s_no_remune', False),
+            "merceria_salta_481_sac_s_no_remune": request.form.get('merceria_salta_481_sac_s_no_remune', False),
+
+            "trans_gol_srl": request.form.get('trans_gol_srl', False),
+            "trans_gol_srl_40510_asignacipn_por_cruce": request.form.get('trans_gol_srl_40510_asignacipn_por_cruce', False),
+            "trans_gol_srl_40511_viatico_po_km_recorrido": request.form.get('trans_gol_srl_40511_viatico_po_km_recorrido', False),
+            "trans_gol_srl_40513_permanencias": request.form.get('trans_gol_srl_40513_permanencias', False),
+            "trans_gol_srl_40609_adicional_carga_peligrosa": request.form.get('trans_gol_srl_40609_adicional_carga_peligrosa', False),
+
+            "el_sol_transporte": request.form.get('el_sol_transporte', False),
+            "el_sol_transporte_814_viaticos": request.form.get('el_sol_transporte_814_viaticos', False),
+
+            "provincia_salta_derechos_humanos": request.form.get('provincia_salta_derechos_humanos', False),
+            "provincia_salta_derechos_humanos_608_adic_fijo_no_rem_ni_bonif": request.form.get('provincia_salta_derechos_humanos_608_adic_fijo_no_rem_ni_bonif', False),
+            "provincia_salta_derechos_humanos_628_adic_acu_sal_2010": request.form.get('provincia_salta_derechos_humanos_628_adic_acu_sal_2010', False),
+            "provincia_salta_derechos_humanos_680_adic_fijo_dto_2857_04": request.form.get('provincia_salta_derechos_humanos_680_adic_fijo_dto_2857_04', False),
+            "provincia_salta_derechos_humanos_690_adic_fijo_dto_1880_05": request.form.get('provincia_salta_derechos_humanos_690_adic_fijo_dto_1880_05', False),
+            "provincia_salta_derechos_humanos_695_tickets_alimentarios": request.form.get('provincia_salta_derechos_humanos_695_tickets_alimentarios', False),
+
+            "hospital_del_milagro": request.form.get('hospital_del_milagro', False),
+            "hospital_del_milagro_612_equiparador_res_1474_11": request.form.get('hospital_del_milagro_612_equiparador_res_1474_11', False),
+            "hospital_del_milagro_627_adic_acu_sal_2010": request.form.get('hospital_del_milagro_627_adic_acu_sal_2010', False),
+            "hospital_del_milagro_628_adic_acu_sal_2010_no_remune": request.form.get('hospital_del_milagro_628_adic_acu_sal_2010_no_remune', False),
+            "hospital_del_milagro_632_adic_fijo_no_rem_ni_bonif": request.form.get('hospital_del_milagro_632_adic_fijo_no_rem_ni_bonif', False),
+            "hospital_del_milagro_645_nivelador_res_2665_07": request.form.get('hospital_del_milagro_645_nivelador_res_2665_07', False),
+            "hospital_del_milagro_657_adicional_extraordinario_2011": request.form.get('hospital_del_milagro_657_adicional_extraordinario_2011', False),
+
+            "hospital_nino_jesus": request.form.get('hospital_nino_jesus', False),
+            "hospital_nino_jesus_561_redondeo": request.form.get('hospital_nino_jesus_561_redondeo', False),
+            "hospital_nino_jesus_645_nivelador_res_2665_07": request.form.get('hospital_nino_jesus_645_nivelador_res_2665_07', False),
+        }
+
+
+
+        pdf = HerramientasDemanda(datos_del_actor, expediente, cuil_expediente, beneficio, num_beneficio,comparacion_reparacion_historica, fecha_comparacion_repa, PBU_repa, PC_repa, PAP_repa, REPA_repa,OTROS_repa, PBU_reclamado, PC_reclamado, PAP_reclamado,REPA_reclamado, OTROS_reclamado, comparacion_repa_movilizado,comparacion_repa_movilizado_No, PBU_repa_movilizado, PC_repa_movilizado,PAP_repa_movilizado, REPA_repa_movilizado, OTROS_repa_movilizado, diccionario_sumas)
 
         resultado = pdf.generar_pdf()
         return resultado
