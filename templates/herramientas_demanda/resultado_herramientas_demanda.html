@@ -1806,6 +1806,14 @@
             </tr>
             {% endif %}
         {% endif %}
+        {% for i in range(1, 6) %}
+            {% if diccionario_sumas.get('concepto_' ~ i) %}
+                <tr class="font-large_2">
+                    <td class="columna_sumas_codigo">{{ diccionario_sumas.get('codigo_' ~ i) }}</td>
+                    <td>{{ diccionario_sumas.get('concepto_' ~ i) }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
 
     </table>
 

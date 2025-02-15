@@ -137,6 +137,30 @@
                 gap: 0;
             }
         }
+
+        .form-row_2 {
+            display: grid;
+            grid-template-columns: 120px 1fr; /* Primera columna más angosta */
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group_2 {
+            display: block; /* Asegura que los inputs ocupen todo el ancho disponible */
+        }
+
+        /* Estilos específicos para inputs de código */
+        input[id^="codigo_"] {
+            width: 100%; /* Ocupará el 100% de la columna asignada (120px) */
+        }
+
+        /* Estilos para inputs de concepto */
+        input[id^="concepto_"] {
+            width: 100%; /* Ocupará todo el espacio restante */
+        }
+        
+
+        
     </style>
 </head>
 <body>
@@ -435,6 +459,10 @@
                             <input type="checkbox" id="hospital_nino_jesus" name="hospital_nino_jesus">
                             <label for="hospital_nino_jesus">HOSPITAL NIÑO JESÚS DE PRAGA</label>
                         </div>
+                        <div class="checkbox-item" style="display: none;">
+                            <input type="checkbox" id="extras" name="extras">
+                            <label for="extras">Agregar conceptos manualmente</label>
+                        </div>
                     </div>
 
                     <!-- Sección de Municipalidad de Salta -->
@@ -499,6 +527,9 @@
                                 <input type="checkbox" id="municipalidad_salta_dc_1208_025_1131_05" name="municipalidad_salta_dc_1208_025_1131_05">
                                 <label for="municipalidad_salta_dc_1208_025_1131_05">DC. 1208-025-1131/05</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -518,6 +549,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="todo_obras_srl_514_compens_gas" name="todo_obras_srl_514_compens_gas">
                                 <label for="todo_obras_srl_514_compens_gas">514 - Compens. Gas</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -562,6 +596,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="hospital_materno_infantil_696_ticket_alimentario" name="hospital_materno_infantil_696_ticket_alimentario">
                                 <label for="hospital_materno_infantil_696_ticket_alimentario">696 - Ticket alimentario</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -625,6 +662,9 @@
                                 <input type="checkbox" id="ministerio_salud_685" name="ministerio_salud_685">
                                 <label for="ministerio_salud_685">685 - Beneficio D. Nac 561/19</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -651,6 +691,9 @@
                                 <input type="checkbox" id="tomografia_2014" name="tomografia_2014">
                                 <label for="tomografia_2014">2014 - Increm. Basico No Remun.</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -673,6 +716,9 @@
                                 <input type="checkbox" id="cruz_roja_399" name="cruz_roja_399">
                                 <label for="cruz_roja_399">399 - COMPENS. REDONDEO</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
                     <div id="gobierno_provincia_salta_section" class="conditional-section" style="display: none;">
@@ -690,6 +736,9 @@
                                 <input type="checkbox" id="gobierno_690" name="gobierno_690">
                                 <label for="gobierno_690">690 - Adic. Fijo DTO 1880/05</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
                     <!-- Sección de MINISTERIO DE EDUCACIÓN, CULTURA, CIENCIA Y TECNOLOGÍA - PROVINCIA DE SALTA -->
@@ -700,6 +749,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="ministerio_educacion_salta_627_adic_acu_sal_2010_no_remune" name="ministerio_educacion_salta_627_adic_acu_sal_2010_no_remune">
                                 <label for="ministerio_educacion_salta_627_adic_acu_sal_2010_no_remune">627 - Adic. Acu. Sal. 2010 No Remune</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -745,6 +797,9 @@
                                 <input type="checkbox" id="hospital_senor_del_milagro_644_nivelador" name="hospital_senor_del_milagro_644_nivelador">
                                 <label for="hospital_senor_del_milagro_644_nivelador">644 - Nivelador</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -772,6 +827,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="edesa_sa_40100_40103_suma_fija_no_rem" name="edesa_sa_40100_40103_suma_fija_no_rem">
                                 <label for="edesa_sa_40100_40103_suma_fija_no_rem">40100/40103 - Suma Fija No Rem</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -841,6 +899,9 @@
                                 <input type="checkbox" id="hospital_san_bernardo_685_reintegro_imp_ganancias" name="hospital_san_bernardo_685_reintegro_imp_ganancias">
                                 <label for="hospital_san_bernardo_685_reintegro_imp_ganancias">685 - Reintegro Imp Ganancias</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -894,6 +955,9 @@
                                 <input type="checkbox" id="ips_salta_acuerdo_salarial_2010" name="ips_salta_acuerdo_salarial_2010">
                                 <label for="ips_salta_acuerdo_salarial_2010">Acuerdo Salarial 2010</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -921,6 +985,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="alliance_one_tobacco_482_acuerdo_salarial_2010_no_rem" name="alliance_one_tobacco_482_acuerdo_salarial_2010_no_rem">
                                 <label for="alliance_one_tobacco_482_acuerdo_salarial_2010_no_rem">482 - ACUERDO SALARIAL 2010-NO REM</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -970,6 +1037,9 @@
                                 <input type="checkbox" id="servicios_privados_postales_40015_adic_10_porc_s_4_1_12_y_4_1_13" name="servicios_privados_postales_40015_adic_10_porc_s_4_1_12_y_4_1_13">
                                 <label for="servicios_privados_postales_40015_adic_10_porc_s_4_1_12_y_4_1_13">40015 - Adic. 10% s/4.1.12 y 4.1.13</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1018,6 +1088,9 @@
                                 <input type="checkbox" id="banco_nacion_argentina_gratificacion_extraordinaria" name="banco_nacion_argentina_gratificacion_extraordinaria">
                                 <label for="banco_nacion_argentina_gratificacion_extraordinaria">Gratificacion Extraordinaria</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1029,6 +1102,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="ypf_sa_vianda_alimentaria" name="ypf_sa_vianda_alimentaria">
                                 <label for="ypf_sa_vianda_alimentaria">Vianda Alimentaria</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -1053,6 +1129,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="camara_senadores_salta_900_retencion_de_imp_ganancias" name="camara_senadores_salta_900_retencion_de_imp_ganancias">
                                 <label for="camara_senadores_salta_900_retencion_de_imp_ganancias">900 - Retencion de Imp. Ganancias</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -1085,6 +1164,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="hospital_onativia_682_adic_acu_sal_2010_no_remune" name="hospital_onativia_682_adic_acu_sal_2010_no_remune">
                                 <label for="hospital_onativia_682_adic_acu_sal_2010_no_remune">682 - ADIC. ACU. SAL. 2010 NO REMUNE</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -1122,6 +1204,9 @@
                                 <input type="checkbox" id="politi_hector_armando_512_1_sac_no_rem_2020" name="politi_hector_armando_512_1_sac_no_rem_2020">
                                 <label for="politi_hector_armando_512_1_sac_no_rem_2020">512 - 1º SAC NO REM. 2020</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1149,6 +1234,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="hospital_campo_quijano_682_adicional_res_0460_16" name="hospital_campo_quijano_682_adicional_res_0460_16">
                                 <label for="hospital_campo_quijano_682_adicional_res_0460_16">682 - Adicional Res. 0460/16</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -1202,6 +1290,9 @@
                                 <input type="checkbox" id="hospital_la_poma_682_adicional_res_0460_16" name="hospital_la_poma_682_adicional_res_0460_16">
                                 <label for="hospital_la_poma_682_adicional_res_0460_16">682 - Adicional Res. 0460/16</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1229,6 +1320,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="hospital_nazareno_682_adicional_res_0460_16" name="hospital_nazareno_682_adicional_res_0460_16">
                                 <label for="hospital_nazareno_682_adicional_res_0460_16">682 - Adicional Res. 0460/16</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -1262,6 +1356,9 @@
                                 <input type="checkbox" id="ente_parques_industriales_690_adic_fijo_dto_1880_05" name="ente_parques_industriales_690_adic_fijo_dto_1880_05">
                                 <label for="ente_parques_industriales_690_adic_fijo_dto_1880_05">690 - Adic. Fijo Dto. 1880/05</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1286,6 +1383,9 @@
                                 <input type="checkbox" id="hospital_la_caldera_682_adicional_res_0460_16" name="hospital_la_caldera_682_adicional_res_0460_16">
                                 <label for="hospital_la_caldera_682_adicional_res_0460_16">682 - Adicional Res. 0460/16</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1309,6 +1409,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="hospital_san_antonio_cobres_682_adicional_res_0460_16" name="hospital_san_antonio_cobres_682_adicional_res_0460_16">
                                 <label for="hospital_san_antonio_cobres_682_adicional_res_0460_16">682 - Adicional Res. 0460/16</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -1350,6 +1453,9 @@
                                 <input type="checkbox" id="hospital_general_guemes_682_adicional_res_0460_16" name="hospital_general_guemes_682_adicional_res_0460_16">
                                 <label for="hospital_general_guemes_682_adicional_res_0460_16">682 - Adicional Res. 0460/16</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1374,6 +1480,9 @@
                                 <input type="checkbox" id="merceria_salta_481_sac_s_no_remune" name="merceria_salta_481_sac_s_no_remune">
                                 <label for="merceria_salta_481_sac_s_no_remune">481 - Sac S/No Remune</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1397,6 +1506,9 @@
                             <div class="checkbox-item">
                                 <input type="checkbox" id="trans_gol_srl_40609_adicional_carga_peligrosa" name="trans_gol_srl_40609_adicional_carga_peligrosa">
                                 <label for="trans_gol_srl_40609_adicional_carga_peligrosa">40609 - 5,6,4 Adicional carga peligrosa</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
                             </div>
                         </div>
                     </div>
@@ -1438,6 +1550,9 @@
                                 <input type="checkbox" id="provincia_salta_derechos_humanos_695_tickets_alimentarios" name="provincia_salta_derechos_humanos_695_tickets_alimentarios">
                                 <label for="provincia_salta_derechos_humanos_695_tickets_alimentarios">695 - Tickets Alimentarios</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1470,6 +1585,9 @@
                                 <input type="checkbox" id="hospital_del_milagro_657_adicional_extraordinario_2011" name="hospital_del_milagro_657_adicional_extraordinario_2011">
                                 <label for="hospital_del_milagro_657_adicional_extraordinario_2011">657 - Adicional Extraordinario 2011</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1486,9 +1604,58 @@
                                 <input type="checkbox" id="hospital_nino_jesus_645_nivelador_res_2665_07" name="hospital_nino_jesus_645_nivelador_res_2665_07">
                                 <label for="hospital_nino_jesus_645_nivelador_res_2665_07">645 - Nivelador Res. 2665/07</label>
                             </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
+                        </div>
+                    </div>
+                <div id="extras_section" class="conditional-section" style="display: none;">
+                    <div class="form-row_2">
+                        <div class="form-group_2">
+                            <label for="codigo_1">Codigo:</label>
+                            <input type="text" id="codigo_1" name="codigo_1">
+                        </div>
+                        <div class="form-group_2">
+                            <label for="concepto_1">Concepto:</label>
+                            <input type="text" id="concepto_1" name="concepto_1">
+                        </div>
+                    </div>
+                    <div class="form-row_2">
+                        <div class="form-group_2">
+                            <input type="text" id="codigo_2" name="codigo_2">
+                        </div>
+                        <div class="form-group_2">
+                            <input type="text" id="concepto_2" name="concepto_2">
+                        </div>
+                    </div>
+                    <div class="form-row_2">
+                        <div class="form-group_2">
+                            <input type="text" id="codigo_3" name="codigo_3">
+                        </div>
+                        <div class="form-group_2">
+                            <input type="text" id="concepto_3" name="concepto_3">
+                        </div>
+                    </div>
+                    <div class="form-row_2">
+                        <div class="form-group_2">
+                            <input type="text" id="codigo_4" name="codigo_4">
+                        </div>
+                        <div class="form-group_2">
+                            <input type="text" id="concepto_4" name="concepto_4">
+                        </div>
+                    </div>
+                    <div class="form-row_2">
+                        <div class="form-group_2">
+                            <input type="text" id="codigo_5" name="codigo_5">
+                        </div>
+                        <div class="form-group_2">
+                            <input type="text" id="concepto_5" name="concepto_5">
                         </div>
                     </div>
                 </div>
+             </div>
+
+
                 <button type="submit" class="submit-button">Generar PDF</button>
             </form>
         </div>
@@ -1499,6 +1666,7 @@
             const checkboxes = {
                 comparacion_reparacion_historica: document.getElementById('comparacion_reparacion_historica'),
                 sumas_remunerativas: document.getElementById('sumas_remunerativas'),
+                extras: document.getElementById('extras'),
                 municipalidad_salta: document.getElementById('municipalidad_salta'),
                 todo_obras_srl: document.getElementById('todo_obras_srl'),
                 hospital_materno_infantil: document.getElementById('hospital_materno_infantil'),
@@ -1536,6 +1704,7 @@
             const sections = {
                 comparacion_reparacion_historica_section: document.getElementById('comparacion_reparacion_historica_section'),
                 sumas_remunerativas_section: document.getElementById('sumas_remunerativas_section'),
+                extras_section: document.getElementById('extras_section'),
                 municipalidad_salta_section: document.getElementById('municipalidad_salta_section'),
                 todo_obras_srl_section: document.getElementById('todo_obras_srl_section'),
                 hospital_materno_infantil_section: document.getElementById('hospital_materno_infantil_section'),
@@ -1583,6 +1752,7 @@
             toggleSection(checkboxes.sumas_remunerativas, sections.sumas_remunerativas_section);
 
             // Toggle para las nuevas secciones
+            toggleSection(checkboxes.extras, sections.extras_section);
             toggleSection(checkboxes.municipalidad_salta, sections.municipalidad_salta_section);
             toggleSection(checkboxes.todo_obras_srl, sections.todo_obras_srl_section);
             toggleSection(checkboxes.hospital_materno_infantil, sections.hospital_materno_infantil_section);

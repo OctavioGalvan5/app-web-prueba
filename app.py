@@ -786,11 +786,11 @@ def resultado_herramientas_demandas():
         comparacion_repa_movilizado = request.form.get('comparacion_repa_movilizado', False)
         comparacion_repa_movilizado_No = request.form.get('comparacion_repa_movilizado_No', False)
 
-        PBU_repa_movilizado = float(request.form.get('PBU_repa_movilizado', 0))
-        PC_repa_movilizado = float(request.form.get('PC_repa_movilizado', 0))
-        PAP_repa_movilizado = float(request.form.get('PAP_repa_movilizado', 0))
-        REPA_repa_movilizado = float(request.form.get('REPA_repa_movilizado', 0))
-        OTROS_repa_movilizado = float(request.form.get('OTROS_repa_movilizado', 0))
+        PBU_repa_movilizado = obtener_valor(request.form.get('PBU_repa_movilizado', 1))
+        PC_repa_movilizado = obtener_valor(request.form.get('PC_repa_movilizado', 1))
+        PAP_repa_movilizado = obtener_valor(request.form.get('PAP_repa_movilizado', 1))
+        REPA_repa_movilizado = obtener_valor(request.form.get('REPA_repa_movilizado', 1))
+        OTROS_repa_movilizado = obtener_valor(request.form.get('OTROS_repa_movilizado', 1))
 
         diccionario_sumas = {
             "sumas_remunerativas": request.form.get('sumas_remunerativas', False),
@@ -1060,6 +1060,20 @@ def resultado_herramientas_demandas():
             "hospital_nino_jesus": request.form.get('hospital_nino_jesus', False),
             "hospital_nino_jesus_561_redondeo": request.form.get('hospital_nino_jesus_561_redondeo', False),
             "hospital_nino_jesus_645_nivelador_res_2665_07": request.form.get('hospital_nino_jesus_645_nivelador_res_2665_07', False),
+            
+            "codigo_1" : request.form.get('codigo_1'),
+            "concepto_1" : request.form.get('concepto_1'),
+            "codigo_2" : request.form.get('codigo_2'),
+            "concepto_2" : request.form.get('concepto_2'),
+            "codigo_3" : request.form.get('codigo_3'),
+            "concepto_3" : request.form.get('concepto_3'),
+            "codigo_4" : request.form.get('codigo_4'),
+            "concepto_4" : request.form.get('concepto_4'),
+            "codigo_5" : request.form.get('codigo_5'),
+            "concepto_5" : request.form.get('concepto_5'),
+
+
+            
         }
 
 
