@@ -24,7 +24,7 @@ def reajuste_movilidad(fecha_inicial, columna, monto, fecha_final, tupla_reajust
     with engine.connect() as connection:
         # Cargar la tabla desde la base de datos
         metadata = MetaData()
-        tabla = Table('indices_calculadora_de_movilidad', metadata, autoload_with=engine)
+        tabla = Table('indices_de_movilidad', metadata, autoload_with=engine)
 
         # Inicializar variables y convertir fechas a tipo date si son datetime
         fecha_actual = fecha_inicial.date() if isinstance(fecha_inicial, datetime) else fecha_inicial
@@ -51,7 +51,7 @@ def reajuste_movilidad(fecha_inicial, columna, monto, fecha_final, tupla_reajust
                 monto *= valor  # Actualiza el monto acumulado multiplicando por el índice actual
 
             # Verificar si la fecha es 2020-03-01 y agregar 1500 al monto si coincide
-            if fecha_actual == datetime(2020, 3, 1).date() and columna_actual == 'ANSES':
+            if fecha_actual == datetime(2020, 3, 1).date() and columna_actual == 'Aumentos_Anses':
                 monto += 1500
 
             # Almacenar la fecha y el monto en resultados
@@ -84,10 +84,10 @@ def siguiente_fecha(connection, tabla, fecha_actual):
 def procesar_tuplas(tuplas, movilidad_1):
 
     diccionario = {
-        'ANSES': 'Aumentos Generales de la ANSeS por movilidad',
-        'Caliva_mas_Anses': 'Aumentos fallo Marquez, Raimundo por Ley 27551',
-        'Alanis_Mas_Anses': 'Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020',
-        'IPC': 'IPC',
+        'Aumentos_Anses': 'Aumentos Generales de la ANSeS por movilidad',
+        'Salarios_Nivel_General_INDEC': 'Salarios Nivel General INDEC',
+        'Aumento_de_Marzo_2018_Ley_26417_14': 'Aumento de Marzo 2018 Ley 26417 14%',
+        'Aumentos_fallo_Marquez_Raimundo_por_Ley_27551': 'Aumentos fallo Marquez, Raimundo por Ley 27551',
 
 
     }
