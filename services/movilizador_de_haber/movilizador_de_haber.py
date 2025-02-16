@@ -69,9 +69,6 @@ def reajuste_movilidad(fecha_inicial, columna, monto, fecha_final, tupla_reajust
             # Si no se encuentra una siguiente fecha, termina el bucle
             if fecha_actual is None:
                 break
-
-        for fecha, monto_final in resultados:
-            print(f"Fecha: {fecha}, Monto: {monto_final}")
         return resultados
 
 
