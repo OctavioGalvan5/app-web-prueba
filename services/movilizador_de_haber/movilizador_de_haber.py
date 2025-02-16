@@ -88,6 +88,13 @@ def procesar_tuplas(tuplas, movilidad_1):
         'Salarios_Nivel_General_INDEC': 'Salarios Nivel General INDEC',
         'Aumento_de_Marzo_2018_Ley_26417_14': 'Aumento de Marzo 2018 Ley 26417 14%',
         'Aumentos_fallo_Marquez_Raimundo_por_Ley_27551': 'Aumentos fallo Marquez, Raimundo por Ley 27551',
+        'Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020' : 'Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020',
+        'RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables' : 'RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)',
+        'RIPTE_Trimestral_Retrasado_3_Meses' : 'RIPTE trimestral retrasado 3 meses',
+        'RIPTE_Retrasado_2_Meses' : 'RIPTE retrasado 2 meses',
+        'IPC_Retrasado_2_Meses' : 'IPC retrasado 2 meses',
+        'IPC_Retrasado_3_Meses' : 'IPC retrasado 3 meses',
+        'Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses' : 'Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)',
 
 
     }
