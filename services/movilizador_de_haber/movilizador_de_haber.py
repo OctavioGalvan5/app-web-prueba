@@ -92,7 +92,10 @@ def procesar_tuplas(tuplas, movilidad_1):
         'IPC_Retrasado_2_Meses' : 'IPC retrasado 2 meses',
         'IPC_Retrasado_3_Meses' : 'IPC retrasado 3 meses',
         'Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses' : 'Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)',
-
+        'Sin_Movilidad' : 'Sin Movilidad',
+        'Aumentos_Poder_Judicial_de_la_Nacion' : 'Aumentos Poder Judicial de la Nacion',
+        'IPC_Precios_Consumidor' : 'Precios al Consumidor o Costo de Vida (I.P.C.)',
+        'Salarios_Nivel_General_INDEC_Anual' : 'Salarios Nivel General INDEC Anual',
 
     }
     resultado = diccionario[movilidad_1]

@@ -156,6 +156,9 @@
             <strong>Fecha del haber de partida:</strong> {{fecha_inicio}}&nbsp;&nbsp;&nbsp;
             <strong>Fecha de cierre del haber:</strong> {{fecha_fin}}
         </p>
+        {% if movilidad_personalizada %}
+        <p><strong>Movilidad Personalizada:</strong> {{movilidad_aplicada}} </p>
+        {% endif %}
     </div>
     <h6>Diferencias de Movilidad con Haber Anses segun Jurisdiccion:</h6>
     <table style="margin-top: 20px;">
@@ -278,6 +281,14 @@
             <td class="confiscatoriedad">{{ comparacion.conf_anses_alanis_ripte }}</td>
         </tr>
         {% endif %}
+        {% if movilidad_personalizada %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Movilidad Personalizada</td>
+            <td> {{ valor_mov_personalizada }} </td>
+            <td>{{ comparacion.dif_anses_movilidad_personalizada}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_movilidad_personalizada }}</td>
+        </tr>
+        {% endif %}
     </table>
 
     <div class="graph-container">
@@ -386,6 +397,14 @@
             <td class="confiscatoriedad">{{ comparacion.conf_alanis_alanis_ripte }}</td>
         </tr>
         {% endif %}
+        {% if movilidad_personalizada %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Movilidad Personalizada</td>
+            <td> {{ valor_mov_personalizada }} </td>
+            <td>{{ comparacion.dif_alanis_movilidad_personalizada}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_movilidad_personalizada }}</td>
+        </tr>
+        {% endif %}
     </table>
     <div class="graph-container">
         <img src="data:image/png;base64,{{ grafico3 }}" alt="Gráfico comparativo de haberes de Sentencia">
@@ -481,6 +500,14 @@
             <td class="confiscatoriedad">{{ comparacion.conf_caliva_alanis_ripte }}</td>
         </tr>
         {% endif %}
+        {% if movilidad_personalizada %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Movilidad Personalizada</td>
+            <td> {{ valor_mov_personalizada }} </td>
+            <td>{{ comparacion.dif_caliva_movilidad_personalizada}}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_movilidad_personalizada }}</td>
+        </tr>
+        {% endif %}
     </table>
 
     <div class="graph-container">
@@ -530,6 +557,9 @@
                 {% if alanis_ipc %}
                 <td class="negrita">Alanis con IPC </td>
                 {% endif %}
+                {% if movilidad_personalizada %}
+                <td class="negrita">Movilidad Personalizada</td>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -572,6 +602,9 @@
                 {% endif %}
                 {% if alanis_ripte %}
                 <td class="haber">{{ fila[14] }}</td>
+                {% endif %}
+                {% if movilidad_personalizada %}
+                <td class="haber">{{ fila[15] }}</td>
                 {% endif %}
             </tr>
             {% endfor %}

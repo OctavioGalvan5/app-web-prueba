@@ -9,7 +9,111 @@ from config import config
 from xhtml2pdf import pisa
 from io import BytesIO
 from datetime import datetime
-from sqlalchemy import text
+from sqlalchemy import create_engine, MetaData, Table, select, extract, text
+from decimal import Decimal
+
+def convertir_fecha_periodo(fecha):
+    # Convertir la fecha si es una cadena
+    if isinstance(fecha, str):
+        fecha = datetime.strptime(fecha, '%Y-%m-%d')  # Ajusta el formato a como esté tu fecha
+    return fecha.strftime('%m/%Y')
+
+
+def reajuste_movilidad(fecha_inicial, columna, monto, fecha_final, tupla_reajuste):
+    with engine.connect() as connection:
+        # Cargar la tabla desde la base de datos
+        metadata = MetaData()
+        tabla = Table('indices_de_movilidad', metadata, autoload_with=engine)
+
+        # Inicializar variables y convertir fechas a tipo date si son datetime
+        fecha_actual = datetime.strptime(fecha_inicial, "%Y-%m-%d").date() if isinstance(fecha_inicial, str) else fecha_inicial.date() if isinstance(fecha_inicial, datetime) else fecha_inicial
+        fecha_final = datetime.strptime(fecha_final, "%Y-%m-%d").date() if isinstance(fecha_final, str) else fecha_final.date() if isinstance(fecha_final, datetime) else fecha_final
+        fecha_final = fecha_final.date() if isinstance(fecha_final, datetime) else fecha_final
+        resultados = []
+        resultado_dinero=[]
+        columna_actual = columna
+
+        # Iterar hasta alcanzar la fecha final
+        while fecha_actual <= fecha_final:
+            # Seleccionar el valor de la columna para el año y mes actuales
+            consulta = select(tabla.c[columna_actual]).where(
+                extract('year', tabla.c.fechas) == fecha_actual.year,
+                extract('month', tabla.c.fechas) == fecha_actual.month
+            )
+            resultado = connection.execute(consulta).fetchone()
+
+            # Si no hay datos, salir del bucle
+            if not resultado:
+                break
+
+            # Multiplicar el monto por el valor de la columna y actualizar el monto acumulado
+            valor = resultado[0]
+            if valor is not None:
+                monto *= valor  # Actualiza el monto acumulado multiplicando por el índice actual
+
+            # Verificar si la fecha es 2020-03-01 y agregar 1500 al monto si coincide
+            if fecha_actual == datetime(2020, 3, 1).date() and columna_actual == 'Aumentos_Anses':
+                monto += 1500
+
+            # Almacenar la fecha y el monto en resultados
+            resultados.append(monto)
+            resultado_dinero.append(formatear_dinero(monto))
+
+            # Verificar si el mes y año de fecha_actual coinciden con alguna fecha en la tupla para cambiar de columna
+            for ajuste in tupla_reajuste:
+                if ajuste[0] is not None and fecha_actual.year == ajuste[0].year and fecha_actual.month == ajuste[0].month:
+                    columna_actual = ajuste[1]  # Cambiar a la columna de ajuste
+                    break
+
+            # Incrementar fecha_actual a la siguiente fecha en la tabla
+            fecha_actual = siguiente_fecha(connection, tabla, fecha_actual)
+
+            # Si no se encuentra una siguiente fecha, termina el bucle
+            if fecha_actual is None:
+                break
+        return resultados, resultado_dinero
+
+
+# Función para obtener la siguiente fecha en la tabla
+def siguiente_fecha(connection, tabla, fecha_actual):
+    consulta = select(tabla.c.fechas).where(tabla.c.fechas > fecha_actual).order_by(tabla.c.fechas.asc()).limit(1)
+    resultado = connection.execute(consulta).fetchone()
+    return resultado[0] if resultado else None
+
+def procesar_tuplas(tuplas, movilidad_1):
+
+    diccionario = {
+        'Aumentos_Anses': 'Aumentos Generales de la ANSeS por movilidad',
+        'Salarios_Nivel_General_INDEC': 'Salarios Nivel General INDEC',
+        'Aumento_de_Marzo_2018_Ley_26417_14': 'Aumento de Marzo 2018 Ley 26417 14%',
+        'Aumentos_fallo_Marquez_Raimundo_por_Ley_27551': 'Aumentos fallo Marquez, Raimundo por Ley 27551',
+        'Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020' : 'Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020',
+        'RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables' : 'RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)',
+        'RIPTE_Trimestral_Retrasado_3_Meses' : 'RIPTE trimestral retrasado 3 meses',
+        'RIPTE_Retrasado_2_Meses' : 'RIPTE retrasado 2 meses',
+        'IPC_Retrasado_2_Meses' : 'IPC retrasado 2 meses',
+        'IPC_Retrasado_3_Meses' : 'IPC retrasado 3 meses',
+        'Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses' : 'Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)',
+        'Sin_Movilidad' : 'Sin Movilidad',
+        'Aumentos_Poder_Judicial_de_la_Nacion' : 'Aumentos Poder Judicial de la Nacion',
+        'IPC_Precios_Consumidor' : 'Precios al Consumidor o Costo de Vida (I.P.C.)',
+        'Salarios_Nivel_General_INDEC_Anual' : 'Salarios Nivel General INDEC Anual',
+
+    }
+    resultado = diccionario[movilidad_1]
+
+    for elemento in tuplas:
+        # Verifica si el primer elemento no es nulo
+        if elemento[0] is not None:
+            # Obtiene el string del segundo elemento
+            clave = elemento[1]
+            fecha = elemento[0]
+            if clave in diccionario:
+                if resultado != "":
+                    resultado += " hasta el " + fecha.strftime('%d/%m/%Y') + " y desde ahi " + diccionario[clave] 
+
+
+    return resultado.strip()  # Elimina espacios al final
 
 def buscar_fechas(fecha_inicio, fecha_fin, monto):
     # Convertir las fechas ingresadas a objetos datetime.date en formato 'yyyy-mm-dd'
@@ -33,21 +137,20 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
             fila_dict = dict(zip(columnas, fila_menor))  # Convertir la fila a diccionario
 
             # Acceder a las columnas por nombre y calcular los montos
-            monto_columna2 = fila_dict['ANSES'] * monto
-            monto_columna3 = fila_dict['IPC'] * monto
-            monto_columna4 = fila_dict['RIPTE'] * monto
-            monto_columna5 = fila_dict['UMA'] * monto
-            monto_columna6 = fila_dict['alanis_ipc'] * monto
-            monto_columna7 = fila_dict['ley_27426_sin_rezago'] * monto
-            monto_columna8 = fila_dict['Caliva_Marquez_con_27551_con_3_rezago'] * monto
-            monto_columna9 = fila_dict['Caliva_mas_Anses'] * monto
-            monto_columna10 = fila_dict['alanis_ripte'] * monto
-            monto_columna11 = fila_dict['Alanis_Mas_Anses'] * monto
-            monto_columna12 = fila_dict['Alanis_con_27551_con_3_meses_rezago'] * monto
-            monto_columna13 = fila_dict['martinez'] * monto
-            monto_columna14 = fila_dict['alanis_ipc'] * monto
-            monto_columna15 = fila_dict['alanis_ripte'] * monto
-
+            monto_columna2 = Decimal(fila_dict['ANSES']) * Decimal(monto)
+            monto_columna3 = Decimal(fila_dict['IPC']) * Decimal(monto)
+            monto_columna4 = Decimal(fila_dict['RIPTE']) * Decimal(monto)
+            monto_columna5 = Decimal(fila_dict['UMA']) * Decimal(monto)
+            monto_columna6 = Decimal(fila_dict['alanis_ipc']) * Decimal(monto)
+            monto_columna7 = Decimal(fila_dict['ley_27426_sin_rezago']) * Decimal(monto)
+            monto_columna8 = Decimal(fila_dict['Caliva_Marquez_con_27551_con_3_rezago']) * Decimal(monto)
+            monto_columna9 = Decimal(fila_dict['Caliva_mas_Anses']) * Decimal(monto)
+            monto_columna10 = Decimal(fila_dict['alanis_ripte']) * Decimal(monto)
+            monto_columna11 = Decimal(fila_dict['Alanis_Mas_Anses']) * Decimal(monto)
+            monto_columna12 = Decimal(fila_dict['Alanis_con_27551_con_3_meses_rezago']) * Decimal(monto)
+            monto_columna13 = Decimal(fila_dict['martinez']) * Decimal(monto)
+            monto_columna14 = Decimal(fila_dict['alanis_ipc']) * Decimal(monto)
+            monto_columna15 = Decimal(fila_dict['alanis_ripte']) * Decimal(monto)
 
 
 
@@ -91,24 +194,23 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
                 fila_dict = dict(zip(result_mayores.keys(), fila))  # Convertir la fila a diccionario
 
                 if fila_dict['id'] == 33:
-                    monto_columna2 = monto_columna2 * fila_dict['ANSES'] + 1500
+                    monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)
                 else:
-                    monto_columna2 = monto_columna2 * fila_dict['ANSES']
+                    monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES'])
 
-                monto_columna3 *= fila_dict['IPC']
-                monto_columna4 *= fila_dict['RIPTE']
-                monto_columna5 *= fila_dict['UMA']
-                monto_columna6 *= fila_dict['alanis_ipc']
-                monto_columna7 *= fila_dict['ley_27426_sin_rezago']
-                monto_columna8 *= fila_dict['Caliva_Marquez_con_27551_con_3_rezago']
-                monto_columna9 *= fila_dict['Caliva_mas_Anses']
-                monto_columna10 *= fila_dict['alanis_ripte']
-                monto_columna11 *= fila_dict['Alanis_Mas_Anses']
-                monto_columna12 *= fila_dict['Alanis_con_27551_con_3_meses_rezago']
-                monto_columna13 *= fila_dict['martinez']
-                monto_columna14 *= fila_dict['alanis_ipc']
-                monto_columna15 *= fila_dict['alanis_ripte']
-
+                monto_columna3 *= Decimal(fila_dict['IPC'])
+                monto_columna4 *= Decimal(fila_dict['RIPTE'])
+                monto_columna5 *= Decimal(fila_dict['UMA'])
+                monto_columna6 *= Decimal(fila_dict['alanis_ipc'])
+                monto_columna7 *= Decimal(fila_dict['ley_27426_sin_rezago'])
+                monto_columna8 *= Decimal(fila_dict['Caliva_Marquez_con_27551_con_3_rezago'])
+                monto_columna9 *= Decimal(fila_dict['Caliva_mas_Anses'])
+                monto_columna10 *= Decimal(fila_dict['alanis_ripte'])
+                monto_columna11 *= Decimal(fila_dict['Alanis_Mas_Anses'])
+                monto_columna12 *= Decimal(fila_dict['Alanis_con_27551_con_3_meses_rezago'])
+                monto_columna13 *= Decimal(fila_dict['martinez'])
+                monto_columna14 *= Decimal(fila_dict['alanis_ipc'])
+                monto_columna15 *= Decimal(fila_dict['alanis_ripte'])
 
 
                 lista_filas.append((
@@ -176,21 +278,23 @@ def convertir_fecha_periodo(fecha):
 def generar_grafico_linea(lista_filas, ipc, ripte, uma, movilidad_sentencia, ley_27426_rezago, 
                           caliva_mas_anses, caliva_marquez_con_27551_con_3_rezago, 
                           caliva_marquez_con_27551_con_6_rezago, alanis_mas_anses, 
-                          alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, titulo):
+                          alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, movilidad_personalizada, titulo, filas_dinero):
 
+
+    lista_filas = [fila + (dinero,) for fila, dinero in zip(lista_filas, filas_dinero)]
     fechas = [transformar_fecha_2(fila[0]) for fila in lista_filas]  # Primer elemento de cada tupla (fecha)
     montos_por_concepto = list(zip(*[fila[1:] for fila in lista_filas]))  # Montos desde el segundo elemento en adelante
 
     # Nombres de los conceptos
     conceptos = ['ANSES', 'IPC', 'RIPTE', 'UMA', 'Mov de Sentencia', 'Ley 27426', 
                  'Caliva mas Cendan', 'Caliva mas Anses', 'Caliva 6 Rezago', 
-                 'Alanis mas Anses', 'Alanis con 3 meses Rezago', 'Martínez', 'Alanis con IPC', 'Alanis con RIPTE']
+                 'Alanis mas Anses', 'Alanis con 3 meses Rezago', 'Martínez', 'Alanis con IPC', 'Alanis con RIPTE', 'Movilidad Personalizada']
 
     # Lista de booleanos y sus correspondientes conceptos
     booleanos = [True, ipc, ripte, uma, movilidad_sentencia, ley_27426_rezago, 
                  caliva_marquez_con_27551_con_3_rezago, caliva_mas_anses, 
                  caliva_marquez_con_27551_con_6_rezago, alanis_mas_anses, 
-                 alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte]
+                 alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, movilidad_personalizada]
 
     # Crear una figura con una línea por cada concepto que tenga el booleano en True
     fig = go.Figure()
@@ -284,7 +388,7 @@ def crear_graficos(datos, etiquetas, titulo):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis ):
+    def __init__(self, datos_del_actor, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis,movilidad_personalizada,movilidad_1, tupla ):
         self.datos_del_actor = datos_del_actor
         self.expediente = expediente
         self.cuil_expediente = cuil_expediente
@@ -311,8 +415,14 @@ class CalculadorMovilidad:
         self.comparacion_mov_sentencia_no = comparacion_mov_sentencia_no
         self.comparacion_mov_caliva = comparacion_mov_caliva
         self.comparacion_mov_alanis = comparacion_mov_alanis
+        self.movilidad_personalizada = movilidad_personalizada
+        self.movilidad_1 = movilidad_1 #columna
+        self.tupla = tupla #tupla
+        self.resultado = procesar_tuplas(self.tupla, self.movilidad_1)
 
     def obtener_datos(self):
+        filas, filas_dinero = reajuste_movilidad(self.fecha_inicio, self.movilidad_1, self.monto, self.fecha_fin,self.tupla)
+        ultimo_valor_personalizado = filas[-1]
         lista_filas, lista_montos = buscar_fechas(self.fecha_inicio,self.fecha_fin, self.monto)
         ultimos_valores = lista_montos[-1]
         diccionario_comparacion = {
@@ -418,6 +528,16 @@ class CalculadorMovilidad:
                'conf_caliva_alanis_ripte': str(round((ultimos_valores[13] - ultimos_valores[7]) / ultimos_valores[7] * 100, 2)) + "%",
                'dif_alanis_alanis_ripte': formatear_dinero(ultimos_valores[13] - ultimos_valores[9]),
                'conf_alanis_alanis_ripte': str(round((ultimos_valores[13] - ultimos_valores[9]) / ultimos_valores[9] * 100, 2)) + "%",
+
+               #
+
+               'dif_anses_movilidad_personalizada': formatear_dinero(ultimo_valor_personalizado - ultimos_valores[0]),
+               'conf_anses_movilidad_personalizada': str(round((ultimo_valor_personalizado - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+
+               'dif_caliva_movilidad_personalizada': formatear_dinero(ultimo_valor_personalizado - ultimos_valores[7]),
+               'conf_caliva_movilidad_personalizada': str(round((ultimo_valor_personalizado - ultimos_valores[7]) / ultimos_valores[7] * 100, 2)) + "%",
+               'dif_alanis_movilidad_personalizada': formatear_dinero(ultimo_valor_personalizado - ultimos_valores[9]),
+               'conf_alanis_movilidad_personalizada': str(round((ultimo_valor_personalizado - ultimos_valores[9]) / ultimos_valores[9] * 100, 2)) + "%",
            }    
         datos = [ultimos_valores[0]]
         etiquetas = ['Anses']
@@ -473,6 +593,10 @@ class CalculadorMovilidad:
             datos.append(ultimos_valores[13])
             #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
             etiquetas.append('Alanis con RIPTE')
+        if self.movilidad_personalizada:
+            datos.append(ultimo_valor_personalizado)
+            #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+            etiquetas.append('Movilidad personalizada')
         grafico1 = crear_graficos(datos,etiquetas, "Haber a la fecha de cierre")
 
         if self.comparacion_mov_caliva:
@@ -515,13 +639,17 @@ class CalculadorMovilidad:
                     #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
                     etiquetas_2.append('Fallo Martinez')
                 if self.alanis_ipc:
-                    datos.append(ultimos_valores[12])
+                    datos_2.append(ultimos_valores[12])
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
-                    etiquetas.append('Alanis con IPC')
+                    etiquetas_2.append('Alanis con IPC')
                 if self.alanis_ripte:
-                    datos.append(ultimos_valores[13])
+                    datos_2.append(ultimos_valores[13])
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
-                    etiquetas.append('Alanis con RIPTE')
+                    etiquetas_2.append('Alanis con RIPTE')
+                if self.movilidad_personalizada:
+                    datos_2.append(ultimo_valor_personalizado)
+                    #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+                    etiquetas_2.append('Movilidad personalizada')
                 grafico2 = crear_graficos(datos_2, etiquetas_2, "Haber a la fecha de cierre")
         else:
             grafico2 = None
@@ -565,23 +693,28 @@ class CalculadorMovilidad:
                     #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
                     etiquetas_3.append('Fallo Martinez')
                 if self.alanis_ipc:
-                    datos.append(ultimos_valores[12])
+                    datos_3.append(ultimos_valores[12])
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
-                    etiquetas.append('Alanis con IPC')
+                    etiquetas_3.append('Alanis con IPC')
                 if self.alanis_ripte:
-                    datos.append(ultimos_valores[13])
+                    datos_3.append(ultimos_valores[13])
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
-                    etiquetas.append('Alanis con RIPTE')
+                    etiquetas_3.append('Alanis con RIPTE')
+                if self.movilidad_personalizada:
+                    datos_3.append(ultimo_valor_personalizado)
+                    #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+                    etiquetas_3.append('Movilidad personalizada')
                 grafico3 = crear_graficos(datos_3, etiquetas_3, "Haber a la fecha de cierre")
         else:
             grafico3 = None
 
-        return lista_filas, grafico1, grafico2, grafico3, diccionario_comparacion, ultimos_valores
+        return filas_dinero,ultimo_valor_personalizado, lista_filas, grafico1, grafico2, grafico3, diccionario_comparacion, ultimos_valores
 
     def generar_pdf(self):
-        lista_filas, grafico1, grafico2,grafico3, diccionario_comparacion, montos_a_fecha_cierre = self.obtener_datos()
+        filas_dinero,ultimo_valor_personalizado, lista_filas, grafico1, grafico2,grafico3, diccionario_comparacion, montos_a_fecha_cierre = self.obtener_datos()
+        lista_filas = [fila + (dinero,) for fila, dinero in zip(lista_filas, filas_dinero)]
 
-        grafico_4 = generar_grafico_linea(lista_filas, self.ipc, self.ripte, self.uma, self.movilidad_sentencia, self.Ley_27426_rezago, self.caliva_mas_anses, self.Caliva_Marquez_con_27551_con_3_rezago, self.Caliva_Marquez_con_27551_con_6_rezago, self.Alanis_Mas_Anses, self.Alanis_con_27551_con_3_meses_rezago, self.fallo_martinez, self.alanis_ipc, self.alanis_ripte, self.datos_del_actor)
+        grafico_4 = generar_grafico_linea(lista_filas, self.ipc, self.ripte, self.uma, self.movilidad_sentencia, self.Ley_27426_rezago, self.caliva_mas_anses, self.Caliva_Marquez_con_27551_con_3_rezago, self.Caliva_Marquez_con_27551_con_6_rezago, self.Alanis_Mas_Anses, self.Alanis_con_27551_con_3_meses_rezago, self.fallo_martinez, self.alanis_ipc, self.alanis_ripte,self.movilidad_personalizada ,self.datos_del_actor, filas_dinero)
         # Extraer fechas y montos de lista_fila
         
         rendered = render_template(
@@ -617,6 +750,8 @@ class CalculadorMovilidad:
             comparacion_mov_sentencia_si = self.comparacion_mov_sentencia_si,
             comparacion_mov_caliva= self.comparacion_mov_caliva,
             comparacion_mov_alanis= self.comparacion_mov_alanis,
+            movilidad_personalizada = self.movilidad_personalizada,
+            movilidad_aplicada = self.resultado,
             valor_anses = formatear_dinero(montos_a_fecha_cierre[0]),
             valor_ipc = formatear_dinero(montos_a_fecha_cierre[1]),
             valor_ripte = formatear_dinero(montos_a_fecha_cierre[2]),
@@ -631,6 +766,7 @@ class CalculadorMovilidad:
             valor_fallo_martinez = formatear_dinero(montos_a_fecha_cierre[11]),
             valor_alanis_ipc = formatear_dinero(montos_a_fecha_cierre[12]),
             valor_alanis_ripte = formatear_dinero(montos_a_fecha_cierre[13]),
+            valor_mov_personalizada = formatear_dinero(ultimo_valor_personalizado)
 
 
 
