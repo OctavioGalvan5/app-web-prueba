@@ -98,6 +98,8 @@ def procesar_tuplas(tuplas, movilidad_1):
         'Aumentos_Poder_Judicial_de_la_Nacion' : 'Aumentos Poder Judicial de la Nacion',
         'IPC_Precios_Consumidor' : 'Precios al Consumidor o Costo de Vida (I.P.C.)',
         'Salarios_Nivel_General_INDEC_Anual' : 'Salarios Nivel General INDEC Anual',
+        'Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M' : 'Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses',
+        'Aumentos_fallo_Martinez' : 'Aumentos Fallo Martinez para el año 2020',
 
     }
     resultado = diccionario[movilidad_1]
