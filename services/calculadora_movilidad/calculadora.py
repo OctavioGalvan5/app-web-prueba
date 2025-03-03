@@ -19,7 +19,7 @@ def convertir_fecha_periodo(fecha):
     return fecha.strftime('%m/%Y')
 
 
-def reajuste_movilidad(fecha_inicial, columna, monto, fecha_final, tupla_reajuste):
+def funcion_movilidad_personalizada(fecha_inicial, columna, monto, fecha_final, tupla_reajuste):
     with engine.connect() as connection:
         # Cargar la tabla desde la base de datos
         metadata = MetaData()
@@ -80,6 +80,42 @@ def siguiente_fecha(connection, tabla, fecha_actual):
     resultado = connection.execute(consulta).fetchone()
     return resultado[0] if resultado else None
 
+def procesar_tupla_reajuste(tupla, haber_reajustado, monto, fecha_inicio):
+    # Verificar si fecha_inicio es una cadena y convertirla a datetime si es necesario
+    if isinstance(fecha_inicio, str):
+        try:
+            fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')  # Ajusta el formato según corresponda
+        except ValueError:
+            raise ValueError("Formato de fecha inválido. Se esperaba 'YYYY-MM-DD'.")
+
+    # Ahora puedes usar strftime sin problemas
+    resultado = "Se parte de un Haber Percibido de {} Pesos del {} ".format(
+        formatear_dinero(monto), 
+        fecha_inicio.strftime('%d/%m/%Y')
+    )
+
+    bandera = 0
+    if haber_reajustado:
+        for elemento in tupla:
+            # Verifica si el primer elemento no es nulo
+            if elemento[0] is not None:
+                monto_reajuste = elemento[1]
+                fecha_reajuste = elemento[0]
+
+                # Verificar si fecha_reajuste es una cadena y convertirla a datetime si es necesario
+                if isinstance(fecha_reajuste, str):
+                    try:
+                        fecha_reajuste = datetime.strptime(fecha_reajuste, '%Y-%m-%d')  # Ajusta el formato según corresponda
+                    except ValueError:
+                        raise ValueError("Formato de fecha inválido. Se esperaba 'YYYY-MM-DD'.")
+
+                if bandera == 0:
+                    resultado += " que el " + fecha_reajuste.strftime('%d/%m/%Y') + " fué reajustado a " + formatear_dinero(monto_reajuste)
+                    bandera = 1
+                else:
+                    resultado += " y luego el " + fecha_reajuste.strftime('%d/%m/%Y') + " fué reajustado a " + formatear_dinero(monto_reajuste)
+
+    return resultado.strip()  # Elimina espacios al final
 def procesar_tuplas(tuplas, movilidad_1):
 
     diccionario = {
@@ -117,7 +153,7 @@ def procesar_tuplas(tuplas, movilidad_1):
 
     return resultado.strip()  # Elimina espacios al final
 
-def buscar_fechas(fecha_inicio, fecha_fin, monto):
+def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado):
     # Convertir las fechas ingresadas a objetos datetime.date en formato 'yyyy-mm-dd'
     fecha_ingresada_dt = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
     fecha_fin_dt = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
@@ -199,6 +235,12 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
                     monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)
                 else:
                     monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES'])
+
+                if haber_reajustado:
+                    for elemento in tupla_reajuste:
+                        if elemento[0] is not None and fila_dict['fechas'].year == elemento[0].year and fila_dict['fechas'].month == elemento[0].month:
+                            monto_columna2 = elemento[1]
+                            break
 
                 monto_columna3 *= Decimal(fila_dict['IPC'])
                 monto_columna4 *= Decimal(fila_dict['RIPTE'])
@@ -390,7 +432,7 @@ def crear_graficos(datos, etiquetas, titulo):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis,movilidad_personalizada,movilidad_1, tupla ):
+    def __init__(self, datos_del_actor, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis,movilidad_personalizada,movilidad_1, tupla, tupla_reajuste, haber_reajustado ):
         self.datos_del_actor = datos_del_actor
         self.expediente = expediente
         self.cuil_expediente = cuil_expediente
@@ -418,14 +460,17 @@ class CalculadorMovilidad:
         self.comparacion_mov_caliva = comparacion_mov_caliva
         self.comparacion_mov_alanis = comparacion_mov_alanis
         self.movilidad_personalizada = movilidad_personalizada
-        self.movilidad_1 = movilidad_1 #columna
-        self.tupla = tupla #tupla
+        self.movilidad_1 = movilidad_1 
+        self.tupla = tupla
         self.resultado = procesar_tuplas(self.tupla, self.movilidad_1)
+        self.tupla_reajuste = tupla_reajuste
+        self.haber_reajustado = haber_reajustado
+        self.haber = procesar_tupla_reajuste(self.tupla_reajuste, self.haber_reajustado, self.monto, self.fecha_inicio)
 
     def obtener_datos(self):
-        filas, filas_dinero = reajuste_movilidad(self.fecha_inicio, self.movilidad_1, self.monto, self.fecha_fin,self.tupla)
+        filas, filas_dinero = funcion_movilidad_personalizada(self.fecha_inicio, self.movilidad_1, self.monto, self.fecha_fin,self.tupla)
         ultimo_valor_personalizado = filas[-1]
-        lista_filas, lista_montos = buscar_fechas(self.fecha_inicio,self.fecha_fin, self.monto)
+        lista_filas, lista_montos = buscar_fechas(self.fecha_inicio,self.fecha_fin, self.monto, self.tupla_reajuste, self.haber_reajustado)
         ultimos_valores = lista_montos[-1]
         diccionario_comparacion = {
                'dif_anses_ipc': formatear_dinero(ultimos_valores[1] - ultimos_valores[0]),
@@ -735,6 +780,7 @@ class CalculadorMovilidad:
             num_beneficio = self.num_beneficio,
             fecha_inicio = convertir_fecha_periodo(self.fecha_inicio),
             fecha_fin = convertir_fecha_periodo(self.fecha_fin),
+            haber = self.haber,
             fecha_adquisicion_del_derecho = self.fecha_adquisicion_del_derecho,
             ipc = self.ipc,
             uma = self.uma,

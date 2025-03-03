@@ -368,13 +368,14 @@ def resultado_calculado_movilidad():
         comparacion_mov_caliva= request.form.get('comparacion_mov_caliva', False)
         comparacion_mov_alanis= request.form.get('comparacion_mov_alanis', False)
 
+        #movilidad personalizada
+    
         primer_fecha_fin = datetime.strptime(request.form.get('primer_fecha_fin'), '%Y-%m-%d') if request.form.get('primer_fecha_fin') else None
         segunda_fecha_fin = datetime.strptime(request.form.get('segunda_fecha_fin'), '%Y-%m-%d') if request.form.get('segunda_fecha_fin') else None
         tercer_fecha_fin = datetime.strptime(request.form.get('tercer_fecha_fin'), '%Y-%m-%d') if request.form.get('tercer_fecha_fin') else None
         cuarta_fecha_fin = datetime.strptime(request.form.get('cuarta_fecha_fin'), '%Y-%m-%d') if request.form.get('cuarta_fecha_fin') else None
         quinta_fecha_fin = datetime.strptime(request.form.get('quinta_fecha_fin'), '%Y-%m-%d') if request.form.get('quinta_fecha_fin') else None
         sexta_fecha_fin = datetime.strptime(request.form.get('sexta_fecha_fin'), '%Y-%m-%d') if request.form.get('sexta_fecha_fin') else None
-
 
         monto = Decimal(request.form['monto'])
         movilidad_1 = request.form.get('movilidad_1')
@@ -383,13 +384,32 @@ def resultado_calculado_movilidad():
         movilidad_4 = request.form.get('movilidad_4')
         movilidad_5 = request.form.get('movilidad_5')
         movilidad_6 = request.form.get('movilidad_6')
-
-
-
-
         tupla=((primer_fecha_fin,movilidad_2),(segunda_fecha_fin,movilidad_3),(tercer_fecha_fin,movilidad_4), (cuarta_fecha_fin,movilidad_5), (quinta_fecha_fin,movilidad_6))
 
-        calculo = CalculadorMovilidad(datos_del_actor, expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis, movilidad_personalizada, movilidad_1, tupla)
+
+        #Haber reajustado
+        haber_reajustado = request.form.get('haber_reajustado', False)
+        fecha_haber_reajustado_1 = datetime.strptime(request.form.get('fecha_haber_reajustado_1'), '%Y-%m-%d') if request.form.get('fecha_haber_reajustado_1') else None
+        fecha_haber_reajustado_2= datetime.strptime(request.form.get('fecha_haber_reajustado_2'), '%Y-%m-%d') if request.form.get('fecha_haber_reajustado_2') else None
+        fecha_haber_reajustado_3 = datetime.strptime(request.form.get('fecha_haber_reajustado_3'), '%Y-%m-%d') if request.form.get('fecha_haber_reajustado_3') else None
+        fecha_haber_reajustado_4 = datetime.strptime(request.form.get('fecha_haber_reajustado_4'), '%Y-%m-%d') if request.form.get('fecha_haber_reajustado_4') else None
+
+        # Obtener los valores del formulario
+        monto_reajustado_1 = request.form.get('monto_reajustado_1', '0')  # Usar '0' como valor por defecto si está vacío
+        monto_reajustado_2 = request.form.get('monto_reajustado_2', '0')
+        monto_reajustado_3 = request.form.get('monto_reajustado_3', '0')
+        monto_reajustado_4 = request.form.get('monto_reajustado_4', '0')
+
+        # Convertir a Decimal solo si el valor no está vacío
+        monto_reajustado_1 = Decimal(monto_reajustado_1) if monto_reajustado_1 else Decimal('0')
+        monto_reajustado_2 = Decimal(monto_reajustado_2) if monto_reajustado_2 else Decimal('0')
+        monto_reajustado_3 = Decimal(monto_reajustado_3) if monto_reajustado_3 else Decimal('0')
+        monto_reajustado_4 = Decimal(monto_reajustado_4) if monto_reajustado_4 else Decimal('0')
+
+        tupla_haber_reajustado=((fecha_haber_reajustado_1,monto_reajustado_1),(fecha_haber_reajustado_2,monto_reajustado_2), (fecha_haber_reajustado_3,monto_reajustado_3),(fecha_haber_reajustado_4,monto_reajustado_4))
+
+
+        calculo = CalculadorMovilidad(datos_del_actor, expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis, movilidad_personalizada, movilidad_1, tupla, tupla_haber_reajustado, haber_reajustado)
 
         resultado = calculo.generar_pdf()
         return resultado

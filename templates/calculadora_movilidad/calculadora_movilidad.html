@@ -269,9 +269,66 @@
                         <input type="date" id="fecha_fin" name="fecha_fin" required min="2000-01-01" max="2025-02-28">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="monto">Monto del haber a la fecha:</label>
-                    <input type="number" id="monto" name="monto" step="0.01" required placeholder="Ingrese el monto del haber a la fecha">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="monto">Monto del haber a la fecha:</label>
+                        <input type="number" id="monto" name="monto" step="0.01" required placeholder="Ingrese el monto del haber a la fecha">
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="haber_reajustado" name="haber_reajustado" value="true">
+                        <label for="haber_reajustado">Haber Reajustado</label>
+                        <span class="info-icon" data-tooltip="Marcar si el haber a la fecha fue reajustado">?</span>
+                    </div>
+                </div>
+                <div id="haber_reajustado_section" class="conditional-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monto_reajustado_1">Monto del haber reajustado:</label>
+                            <input type="number" id="monto_reajustado_1" name="monto_reajustado_1" step="0.01" placeholder="Ingrese el monto del haber reajustado">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_haber_reajustado_1">Fecha del haber reajustado:
+                                <span class="info-icon" data-tooltip="">?</span>
+                            </label>
+                            <input type="date" id="fecha_haber_reajustado_1" name="fecha_haber_reajustado_1"  min="2000-01-01" max="2025-02-28">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monto_reajustado_2">Monto del haber reajustado:</label>
+                            <input type="number" id="monto_reajustado_2" name="monto_reajustado_2" step="0.01"  placeholder="Ingrese el monto del haber reajustado">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_haber_reajustado_2">Fecha del haber reajustado:
+                                <span class="info-icon" data-tooltip="">?</span>
+                            </label>
+                            <input type="date" id="fecha_haber_reajustado_2" name="fecha_haber_reajustado_2" min="2000-01-01" max="2025-02-28">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monto_reajustado_3">Monto del haber reajustado:</label>
+                            <input type="number" id="monto_reajustado_3" name="monto_reajustado_3" step="0.01" placeholder="Ingrese el monto del haber reajustado">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_haber_reajustado_3">Fecha del haber reajustado:
+                                <span class="info-icon" data-tooltip="">?</span>
+                            </label>
+                            <input type="date" id="fecha_haber_reajustado_3" name="fecha_haber_reajustado_3" min="2000-01-01" max="2025-02-28">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monto_reajustado_4">Monto del haber reajustado:</label>
+                            <input type="number" id="monto_reajustado_4" name="monto_reajustado_4" step="0.01" placeholder="Ingrese el monto del haber reajustado">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_haber_reajustado_4">Fecha del haber reajustado:
+                                <span class="info-icon" data-tooltip="">?</span>
+                            </label>
+                            <input type="date" id="fecha_haber_reajustado_4" name="fecha_haber_reajustado_4"  min="2000-01-01" max="2025-02-28">
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Comparación con Haber de Sentencia</label>
@@ -401,12 +458,14 @@
             const form = document.getElementById('liquidacionForm');
             const checkboxes = {
                 comparacion_mov_sentencia_si: document.getElementById('comparacion_mov_sentencia_si'),
-                movilidad_personalizada: document.getElementById('movilidad_personalizada')
+                movilidad_personalizada: document.getElementById('movilidad_personalizada'),
+                haber_reajustado: document.getElementById('haber_reajustado'),
 
             };
             const sections = {
                 comparacion_mov_sentencia_si_section: document.getElementById('comparacion_mov_sentencia_si_section'),
-                movilidad_personalizada_section: document.getElementById('movilidad_personalizada_section')
+                movilidad_personalizada_section: document.getElementById('movilidad_personalizada_section'),
+                haber_reajustado_section: document.getElementById('haber_reajustado_section')
 
             };
 
@@ -417,6 +476,7 @@
             }
             toggleSection(checkboxes.comparacion_mov_sentencia_si, sections.comparacion_mov_sentencia_si_section);
             toggleSection(checkboxes.movilidad_personalizada, sections.movilidad_personalizada_section);
+            toggleSection(checkboxes.haber_reajustado, sections.haber_reajustado_section);
 
         });
 
