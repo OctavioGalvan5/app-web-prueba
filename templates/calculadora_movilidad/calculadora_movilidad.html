@@ -100,16 +100,24 @@
             font-size: 12px;
             margin-left: 5px;
             cursor: help;
+            position: relative;
         }
         .info-icon:hover::after {
             content: attr(data-tooltip);
             position: absolute;
             background-color: #333;
             color: #fff;
-            padding: 5px;
-            border-radius: 3px;
+            padding: 10px;
+            border-radius: 5px;
             font-size: 12px;
-            white-space: nowrap;
+            white-space: normal;
+            width: 300px;
+            word-wrap: break-word;
+            z-index: 1000;
+            margin-top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
         }
         .conditional-section {
             display: none;
@@ -250,15 +258,15 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="fecha_inicio">Fecha de haber de partida:
-                            <span class="info-icon" data-tooltip="No debe ser inferior al 01/01/2018">?</span>
+                            <span class="info-icon" data-tooltip="No debe ser inferior al 01/01/2000">?</span>
                         </label>
-                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2017-07-01" max="2024-08-31">
+                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2000-01-01" max="2025-02-28">
                     </div>
                     <div class="form-group">
                         <label for="fecha_fin">Fecha de cierre del haber:
-                            <span class="info-icon" data-tooltip="No debe ser superior al 31/12/2024">?</span>
+                            <span class="info-icon" data-tooltip="No debe ser superior al 28/02/2025">?</span>
                         </label>
-                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2018-02-28" max="2024-12-31">
+                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2000-01-01" max="2025-02-28">
                     </div>
                 </div>
                 <div class="form-group">
@@ -296,461 +304,92 @@
                         <div class="checkbox-item">
                             <input type="checkbox" id="ipc" name="ipc" value="true">
                             <label for="ipc">IPC</label>
-                            <span class="info-icon" data-tooltip="Información sobre el IPC">?</span>
+                            <span class="info-icon" data-tooltip="Precios al Consumidor o Costo de Vida (I.P.C.)">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="ripte" name="ripte" value="true">
                             <label for="ripte">RIPTE</label>
-                            <span class="info-icon" data-tooltip="Información sobre el RIPTE">?</span>
+                            <span class="info-icon" data-tooltip="RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="uma" name="uma" value="true">
                             <label for="uma">UMA</label>
-                            <span class="info-icon" data-tooltip="Información sobre la UMA">?</span>
+                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el
+                                01/04/2009 y desde ahi Aumentos Poder Judicial de la Nacion">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="Ley_27426_rezago" name="Ley_27426_rezago" value="true">
                             <label for="Ley_27426_rezago">Ley 27426 con rezago</label>
-                            <span class="info-icon" data-tooltip="Información sobre la Ley 27426 con rezago">?</span>
+                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2016 y desde ahi Ley 27426 - IPC y
+                                Ripte Trimestral Diferido 3 meses">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="caliva_mas_anses" name="caliva_mas_anses" value="true">
                             <label for="caliva_mas_anses">Caliva mas Anses</label>
-                            <span class="info-icon" data-tooltip="Información sobre Caliva más Anses">?</span>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
+                                desde ahi Aumentos Generales de la ANSeS por movilidad
+">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="Caliva_Marquez_con_27551_con_3_rezago" name="Caliva_Marquez_con_27551_con_3_rezago" value="true">
                             <label for="Caliva_Marquez_con_27551_con_3_rezago">Caliva mas Cendan</label>
-                            <span class="info-icon" data-tooltip="Información sobre Caliva Márquez con fallo Cendan">?</span>
+                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
+                                desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi Aumentos
+                                Generales de la ANSeS por movilidad">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="Alanis_Mas_Anses" name="Alanis_Mas_Anses" value="true">
                             <label for="Alanis_Mas_Anses">Alanis Mas Anses</label>
-                            <span class="info-icon" data-tooltip="Información sobre Alanis más Anses">?</span>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="Alanis_con_27551_con_3_meses_rezago" name="Alanis_con_27551_con_3_meses_rezago" value="true">
                             <label for="Alanis_con_27551_con_3_meses_rezago">Alanis con 27551 con 3 meses rezago</label>
-                            <span class="info-icon" data-tooltip="Información sobre Alanis con 27551 con 3 meses de rezago">?</span>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+                                31/12/2020 y desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi
+                                Aumentos Generales de la ANSeS por movilidad">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="fallo_martinez" name="fallo_martinez" value="true">
                             <label for="fallo_martinez">Fallo Martinez</label>
-                            <span class="info-icon" data-tooltip="Información sobre el fallo Martinez">?</span>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos Fallo
+                                Martinez para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad
+">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="alanis_ipc" name="alanis_ipc" value="true">
                             <label for="alanis_ipc">Alanis con IPC</label>
-                            <span class="info-icon" data-tooltip="Alanis mas Anses al 12/2020, luego IPC mensual hasta el 06/2024, luego Aumentos Anses">?</span>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+                                31/12/2020 y desde ahi Precios al Consumidor o Costo de Vida (I.P.C.) hasta el 30/06/2024 y desde ahi Aumentos Generales de
+                                la ANSeS por movilidad">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="alanis_ripte" name="alanis_ripte" value="true">
                             <label for="alanis_ripte">Alanis con RIPTE</label>
-                            <span class="info-icon" data-tooltip="Alanis mas Anses al 12/2020, luego RIPTE mensual hasta el 06/2024, luego Aumentos Anses">?</span>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+                                31/12/2020 y desde ahi RIPTE (Remuneración Imponible Promedio de Trabajadores Estables) hasta el 30/06/2024 y desde ahi
+                                Aumentos Generales de la ANSeS por movilidad">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="movilidad_personalizada" name="movilidad_personalizada" value="true">
                             <label for="movilidad_personalizada">Movilidad Personalizada</label>
-                            <span class="info-icon" data-tooltip="Alanis mas Anses al 12/2020, luego RIPTE mensual hasta el 06/2024, luego Aumentos Anses">?</span>
+                            <span class="info-icon" data-tooltip="Seleccione los indices manualmente">?</span>
                         </div>
                     </div>
                 </div>
-                <div id="movilidad_personalizada_section" class="conditional-section">
-                    <div class="form-group">
-                        <label for="plantillas">Plantillas predefinidas:</label>
-                        <div class="form-row">
-                            <div class="form-group" style="flex: 2">
-                                <select id="plantillas" class="form-control">
-                                    <option value="">Seleccione una plantilla</option>
-                                    <option value="badaro">Fallo Badaro, Fer Pastor y Caliva Marquez</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" id="aplicar-plantilla" class="submit-button" 
-                                        style="padding: 10px; margin-top: 0">
-                                    Aplicar Plantilla
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row movilidad-group" data-group="1">
-                        <div class="form-group">
-                            <label>Movilidad:</label>
-                            <div class="custom-select-container">
-                                <div class="custom-select-input" onclick="toggleDropdown('movilidad_1')">
-                                    <span class="selected-value">Seleccionar movilidad</span>
-                                    <span class="select-arrow">▼</span>
-                                </div>
-                                <div class="custom-select-dropdown" id="dropdown_movilidad_1">
-                                    <input type="text" 
-                                           class="search-box" 
-                                           placeholder="Buscar..."
-                                           onkeyup="filterOptions('movilidad_1', this.value)">
-                                    <div class="custom-options" id="options_movilidad_1">
-                                        <option value="Sin_Movilidad">Selecciona la movilidad</option>
-                                        <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                        <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                        <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                        <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                        <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                        <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                        <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                        <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                        <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                        <option value="Sin_Movilidad">Sin Movilidad</option>
-                                        <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                        <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                        <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                        <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                        <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-                                    </div>
-                                </div>
-                                <select name="movilidad_1" id="movilidad_1" hidden>
-                                    <option value="Sin_Movilidad">Selecciona la movilidad</option>
-                                    <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                    <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                    <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                    <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                    <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                    <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                    <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                    <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                    <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                    <option value="Sin_Movilidad">Sin Movilidad</option>
-                                    <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                    <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                    <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                    <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                    <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
 
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group date-group">
-                            <label for="primer_fecha_fin">al:</label>
-                            <input type="date" id="primer_fecha_fin" name="primer_fecha_fin">
-                        </div>
-                    </div>
+                {% include 'calculadora_movilidad/opciones_personalizadas.html' %}
 
-                    <div class="form-row movilidad-group" data-group="2">
-                        <div class="form-group">
-                            <label>Movilidad:</label>
-                            <div class="custom-select-container">
-                                <div class="custom-select-input" onclick="toggleDropdown('movilidad_2')">
-                                    <span class="selected-value">Seleccionar movilidad</span>
-                                    <span class="select-arrow">▼</span>
-                                </div>
-                                <div class="custom-select-dropdown" id="dropdown_movilidad_2">
-                                    <input type="text" 
-                                           class="search-box" 
-                                           placeholder="Buscar..."
-                                           onkeyup="filterOptions('movilidad_2', this.value)">
-                                    <div class="custom-options" id="options_movilidad_2">
-                                        <option value="">Selecciona la movilidad</option>
-                                        <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                        <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                        <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                        <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                        <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                        <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                        <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                        <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                        <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                        <option value="Sin_Movilidad">Sin Movilidad</option>
-                                        <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                        <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                        <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                        <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                        <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-
-                                    </div>
-                                </div>
-                                <select name="movilidad_2" id="movilidad_2" hidden>
-                                    <option value="">Selecciona la movilidad</option>
-                                    <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                    <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                    <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                    <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                    <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                    <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                    <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                    <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                    <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                    <option value="Sin_Movilidad">Sin Movilidad</option>
-                                    <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                    <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                    <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                    <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                    <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group date-group">
-                            <label for="segunda_fecha_fin">al:</label>
-                            <input type="date" id="segunda_fecha_fin" name="segunda_fecha_fin">
-                        </div>
-                    </div>
-
-
-
-                    <div class="form-row movilidad-group" data-group="3">
-                        <div class="form-group">
-                            <label>Movilidad:</label>
-                            <div class="custom-select-container">
-                                <div class="custom-select-input" onclick="toggleDropdown('movilidad_3')">
-                                    <span class="selected-value">Seleccionar movilidad</span>
-                                    <span class="select-arrow">▼</span>
-                                </div>
-                                <div class="custom-select-dropdown" id="dropdown_movilidad_3">
-                                    <input type="text" 
-                                           class="search-box" 
-                                           placeholder="Buscar..."
-                                           onkeyup="filterOptions('movilidad_3', this.value)">
-                                    <div class="custom-options" id="options_movilidad_3">
-                                        <option value="">Selecciona la movilidad</option>
-                                        <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                        <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                        <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                        <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                        <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                        <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                        <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                        <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                        <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                        <option value="Sin_Movilidad">Sin Movilidad</option>
-                                        <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                        <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                        <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                        <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                        <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-
-                                    </div>
-                                </div>
-                                <select name="movilidad_3" id="movilidad_3" hidden>
-                                    <option value="">Selecciona la movilidad</option>
-                                    <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                    <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                    <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                    <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                    <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                    <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                    <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                    <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                    <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                    <option value="Sin_Movilidad">Sin Movilidad</option>
-                                    <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                    <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                    <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                    <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                    <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group date-group">
-                            <label for="tercer_fecha_fin">al:</label>
-                            <input type="date" id="tercer_fecha_fin" name="tercer_fecha_fin">
-                        </div>
-                    </div>
-
-                    <div class="form-row movilidad-group" data-group="4">
-                        <div class="form-group">
-                            <label>Movilidad:</label>
-                            <div class="custom-select-container">
-                                <div class="custom-select-input" onclick="toggleDropdown('movilidad_4')">
-                                    <span class="selected-value">Seleccionar movilidad</span>
-                                    <span class="select-arrow">▼</span>
-                                </div>
-                                <div class="custom-select-dropdown" id="dropdown_movilidad_4">
-                                    <input type="text" 
-                                           class="search-box" 
-                                           placeholder="Buscar..."
-                                           onkeyup="filterOptions('movilidad_4', this.value)">
-                                    <div class="custom-options" id="options_movilidad_4">
-                                        <option value="">Selecciona la movilidad</option>
-                                        <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                        <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                        <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                        <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                        <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                        <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                        <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                        <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                        <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                        <option value="Sin_Movilidad">Sin Movilidad</option>
-                                        <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                        <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                        <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                        <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                        <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-                                    </div>
-                                </div>
-                                <select name="movilidad_4" id="movilidad_4" hidden>
-                                    <option value="">Selecciona la movilidad</option>
-                                    <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                    <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                    <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                    <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                    <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                    <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                    <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                    <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                    <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                    <option value="Sin_Movilidad">Sin Movilidad</option>
-                                    <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                    <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                    <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                    <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                    <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group date-group">
-                            <label for="primer_fecha_fin">al:</label>
-                            <input type="date" id="cuarta_fecha_fin" name="cuarta_fecha_fin">
-                        </div>
-                    </div>
-
-                    <div class="form-row movilidad-group" data-group="5">
-                        <div class="form-group">
-                            <label>Movilidad:</label>
-                            <div class="custom-select-container">
-                                <div class="custom-select-input" onclick="toggleDropdown('movilidad_5')">
-                                    <span class="selected-value">Seleccionar movilidad</span>
-                                    <span class="select-arrow">▼</span>
-                                </div>
-                                <div class="custom-select-dropdown" id="dropdown_movilidad_5">
-                                    <input type="text" 
-                                           class="search-box" 
-                                           placeholder="Buscar..."
-                                           onkeyup="filterOptions('movilidad_5', this.value)">
-                                    <div class="custom-options" id="options_movilidad_5">
-                                        <option value="">Selecciona la movilidad</option>
-                                        <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                        <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                        <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                        <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                        <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                        <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                        <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                        <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                        <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                        <option value="Sin_Movilidad">Sin Movilidad</option>
-                                        <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                        <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                        <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                        <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                        <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-                                    </div>
-                                </div>
-                                <select name="movilidad_5" id="movilidad_5" hidden>
-                                    <option value="">Selecciona la movilidad</option>
-                                    <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                    <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                    <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                    <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                    <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                    <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                    <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                    <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                    <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                    <option value="Sin_Movilidad">Sin Movilidad</option>
-                                    <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                    <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                    <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                    <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                    <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group date-group">
-                            <label for="quinta_fecha_fin">al:</label>
-                            <input type="date" id="quinta_fecha_fin" name="quinta_fecha_fin">
-                        </div>
-                    </div>
-
-                    <div class="form-row movilidad-group" data-group="6">
-                        <div class="form-group">
-                            <label>Movilidad:</label>
-                            <div class="custom-select-container">
-                                <div class="custom-select-input" onclick="toggleDropdown('movilidad_6')">
-                                    <span class="selected-value">Seleccionar movilidad</span>
-                                    <span class="select-arrow">▼</span>
-                                </div>
-                                <div class="custom-select-dropdown" id="dropdown_movilidad_6">
-                                    <input type="text" 
-                                           class="search-box" 
-                                           placeholder="Buscar..."
-                                           onkeyup="filterOptions('movilidad_6', this.value)">
-                                    <div class="custom-options" id="options_movilidad_6">
-                                        <option value="">Selecciona la movilidad</option>
-                                        <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                        <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                        <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                        <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                        <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                        <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                        <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                        <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                        <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                        <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                        <option value="Sin_Movilidad">Sin Movilidad</option>
-                                        <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                        <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                        <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                        <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                        <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-                                    </div>
-                                </div>
-                                <select name="movilidad_6" id="movilidad_6" hidden>
-                                    <option value="">Selecciona la movilidad</option>
-                                    <option value="Aumentos_Anses">Aumentos Generales de la ANSeS por movilidad</option>
-                                    <option value="Salarios_Nivel_General_INDEC">Salarios Nivel General INDEC</option>
-                                    <option value="Aumento_de_Marzo_2018_Ley_26417_14">Aumento de Marzo 2018 Ley 26417 14%</option>
-                                    <option value="Aumentos_fallo_Marquez_Raimundo_por_Ley_27551">Aumentos fallo Marquez, Raimundo por Ley 27551</option>
-                                    <option value="Aumentos_fallo_Alanis_Daniel_Ley_27551_35_55_2020">Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020</option>
-                                    <option value="RIPTE_Remuneracion_Imponible_Promedio_Trabajadores_Estables">RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)</option>
-                                    <option value="RIPTE_Trimestral_Retrasado_3_Meses">RIPTE trimestral retrasado 3 meses</option>
-                                    <option value="RIPTE_Retrasado_2_Meses">RIPTE retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_2_Meses">IPC retrasado 2 meses</option>
-                                    <option value="IPC_Retrasado_3_Meses">IPC retrasado 3 meses</option>
-                                    <option value="Ley_27551_50_IPC_50_RIPTE_Trimestral_Retrasado_3_Meses">Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses)</option>
-                                    <option value="Sin_Movilidad">Sin Movilidad</option>
-                                    <option value="Aumentos_Poder_Judicial_de_la_Nacion">Aumentos Poder Judicial de la Nacion</option>
-                                    <option value="IPC_Precios_Consumidor">Precios al Consumidor o Costo de Vida (I.P.C.)</option>
-                                    <option value="Salarios_Nivel_General_INDEC_Anual">Salarios Nivel General INDEC Anual</option>
-                                    <option value="Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M">Ley 27426 - IPC y Ripte Trimestral Diferido 3 meses</option>
-                                    <option value="Aumentos_fallo_Martinez">Aumentos Fallo Martinez para el año 2020 </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group date-group">
-                            <label for="sexta_fecha_fin">al:</label>
-                            <input type="date" id="sexta_fecha_fin" name="sexta_fecha_fin">
-                        </div>
-                    </div>
-                </div>
 
                 <button type="submit" class="submit-button">Calcular Diferencias</button>
             </form>

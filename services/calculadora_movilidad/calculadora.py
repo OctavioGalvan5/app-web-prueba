@@ -128,7 +128,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
     with engine.connect() as conn:
         # Buscar la fila con la fecha más cercana menor a la ingresada
         result = conn.execute(
-            text("SELECT * FROM indices_calculadora_de_movilidad WHERE fechas <= :fecha ORDER BY fechas DESC LIMIT 1"),
+            text("SELECT * FROM tabla_movilidades WHERE fechas <= :fecha ORDER BY fechas DESC LIMIT 1"),
             {"fecha": fecha_ingresada_dt}
         )
 
@@ -144,7 +144,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
             monto_columna4 = Decimal(fila_dict['RIPTE']) * Decimal(monto)
             monto_columna5 = Decimal(fila_dict['UMA']) * Decimal(monto)
             monto_columna6 = Decimal(fila_dict['alanis_ipc']) * Decimal(monto)
-            monto_columna7 = Decimal(fila_dict['ley_27426_sin_rezago']) * Decimal(monto)
+            monto_columna7 = Decimal(fila_dict['Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M']) * Decimal(monto)
             monto_columna8 = Decimal(fila_dict['Caliva_Marquez_con_27551_con_3_rezago']) * Decimal(monto)
             monto_columna9 = Decimal(fila_dict['Caliva_mas_Anses']) * Decimal(monto)
             monto_columna10 = Decimal(fila_dict['alanis_ripte']) * Decimal(monto)
@@ -185,7 +185,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
 
         # Buscar todas las filas con fechas mayores a la ingresada
         result_mayores = conn.execute(
-            text("SELECT * FROM indices_calculadora_de_movilidad WHERE fechas > :fecha ORDER BY fechas ASC"),
+            text("SELECT * FROM tabla_movilidades WHERE fechas > :fecha ORDER BY fechas ASC"),
             {"fecha": fecha_ingresada_dt}
         )
 
@@ -195,7 +195,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
             for fila in filas_mayores:
                 fila_dict = dict(zip(result_mayores.keys(), fila))  # Convertir la fila a diccionario
 
-                if fila_dict['id'] == 33:
+                if fila_dict['id'] == 243:
                     monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)
                 else:
                     monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES'])
@@ -204,7 +204,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto):
                 monto_columna4 *= Decimal(fila_dict['RIPTE'])
                 monto_columna5 *= Decimal(fila_dict['UMA'])
                 monto_columna6 *= Decimal(fila_dict['alanis_ipc'])
-                monto_columna7 *= Decimal(fila_dict['ley_27426_sin_rezago'])
+                monto_columna7 *= Decimal(fila_dict['Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M'])
                 monto_columna8 *= Decimal(fila_dict['Caliva_Marquez_con_27551_con_3_rezago'])
                 monto_columna9 *= Decimal(fila_dict['Caliva_mas_Anses'])
                 monto_columna10 *= Decimal(fila_dict['alanis_ripte'])
