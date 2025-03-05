@@ -181,7 +181,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
             fila_dict = dict(zip(columnas, fila_menor))  # Convertir la fila a diccionario
 
             # Acceder a las columnas por nombre y calcular los montos
-            monto_columna2 = Decimal(fila_dict['ANSES']) * Decimal(monto)
+            monto_columna2 = Decimal(monto)
             monto_columna3 = Decimal(fila_dict['IPC']) * Decimal(monto)
             monto_columna4 = Decimal(fila_dict['RIPTE']) * Decimal(monto)
             monto_columna5 = Decimal(fila_dict['UMA']) * Decimal(monto)
@@ -237,11 +237,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
             for fila in filas_mayores:
                 fila_dict = dict(zip(result_mayores.keys(), fila))  # Convertir la fila a diccionario
 
-                if haber_reajustado:
-                    for elemento in tupla_reajuste:
-                        if elemento[0] is not None and fila_dict['fechas'].year == elemento[0].year and fila_dict['fechas'].month == elemento[0].month:
-                            monto_columna2 = elemento[1]
-                            break
+                
                 if fallecido is not False and fila_dict['fechas'].year == fecha_fallecimiento.year and fila_dict['fechas'].month == fecha_fallecimiento.month:
                     if fila_dict['id'] == 243:
                         monto_columna2 = (monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)) * Decimal(0.7)
@@ -280,6 +276,12 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                         monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)
                     else:
                         monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES'])
+
+                    if haber_reajustado:
+                        for elemento in tupla_reajuste:
+                            if elemento[0] is not None and fila_dict['fechas'].year == elemento[0].year and fila_dict['fechas'].month == elemento[0].month:
+                                monto_columna2 = elemento[1]
+                                break
 
                     monto_columna3 *= Decimal(fila_dict['IPC'])
                     monto_columna4 *= Decimal(fila_dict['RIPTE'])
