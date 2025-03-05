@@ -338,6 +338,13 @@ def resultado_calculado_movilidad():
         login_user(ModelUser.get_by_id(current_user.id))  # Esto actualizará la información del usuario en Flask-Login
         # Recibir los datos necesarios del formulario
         datos_del_actor =  request.form['datos_del_actor']
+        fallecido = request.form.get('fallecido', False)
+        #
+        fecha_fallecimiento = request.form['fecha_fallecimiento']
+        if fecha_fallecimiento == '':
+            fecha_fallecimiento = "2022-02-01"
+        #
+        cobrador_pension = request.form['cobrador_pension']
         expediente =  request.form['expediente']
         cuil_expediente = request.form['cuil_expediente']
         beneficio =  request.form['beneficio']
@@ -409,7 +416,7 @@ def resultado_calculado_movilidad():
         tupla_haber_reajustado=((fecha_haber_reajustado_1,monto_reajustado_1),(fecha_haber_reajustado_2,monto_reajustado_2), (fecha_haber_reajustado_3,monto_reajustado_3),(fecha_haber_reajustado_4,monto_reajustado_4))
 
 
-        calculo = CalculadorMovilidad(datos_del_actor, expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis, movilidad_personalizada, movilidad_1, tupla, tupla_haber_reajustado, haber_reajustado)
+        calculo = CalculadorMovilidad(datos_del_actor, fallecido, fecha_fallecimiento,cobrador_pension,  expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis, movilidad_personalizada, movilidad_1, tupla, tupla_haber_reajustado, haber_reajustado)
 
         resultado = calculo.generar_pdf()
         return resultado
@@ -1125,6 +1132,18 @@ def resultado_herramientas_demandas():
 
         resultado = pdf.generar_pdf()
         return resultado
+
+@app.route('/base_datos_casos')
+@login_required
+def base_datos_casos():
+    return render_template('base_datos_casos/base_datos_casos.html')
+
+@app.route('/upload_file', methods=['POST'])
+def upload_file():
+    # Lógica para manejar los archivos subidos
+    return "Archivo subido correctamente"
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -9,6 +9,7 @@ from config import config
 from xhtml2pdf import pisa
 from io import BytesIO
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from sqlalchemy import create_engine, MetaData, Table, select, extract, text
 from decimal import Decimal
 
@@ -153,10 +154,15 @@ def procesar_tuplas(tuplas, movilidad_1):
 
     return resultado.strip()  # Elimina espacios al final
 
-def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado):
+def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado, fallecido, fecha_fallecimiento):
     # Convertir las fechas ingresadas a objetos datetime.date en formato 'yyyy-mm-dd'
     fecha_ingresada_dt = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
     fecha_fin_dt = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+
+    fecha_obj = datetime.strptime(fecha_fallecimiento, "%Y-%m-%d")
+    nueva_fecha = fecha_obj + relativedelta(months=1)
+    fecha_fallecimiento = nueva_fecha.strftime("%Y-%m-%d")
+    fecha_fallecimiento = datetime.strptime(fecha_fallecimiento, "%Y-%m-%d") 
 
     lista_filas = []
     lista_montos = []
@@ -231,30 +237,63 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
             for fila in filas_mayores:
                 fila_dict = dict(zip(result_mayores.keys(), fila))  # Convertir la fila a diccionario
 
-                if fila_dict['id'] == 243:
-                    monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)
-                else:
-                    monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES'])
-
                 if haber_reajustado:
                     for elemento in tupla_reajuste:
                         if elemento[0] is not None and fila_dict['fechas'].year == elemento[0].year and fila_dict['fechas'].month == elemento[0].month:
                             monto_columna2 = elemento[1]
                             break
+                if fallecido is not False and fila_dict['fechas'].year == fecha_fallecimiento.year and fila_dict['fechas'].month == fecha_fallecimiento.month:
+                    if fila_dict['id'] == 243:
+                        monto_columna2 = (monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)) * Decimal(0.7)
+                    else:
+                        monto_columna2 = (monto_columna2 * Decimal(fila_dict['ANSES'])) * Decimal(0.7)
 
-                monto_columna3 *= Decimal(fila_dict['IPC'])
-                monto_columna4 *= Decimal(fila_dict['RIPTE'])
-                monto_columna5 *= Decimal(fila_dict['UMA'])
-                monto_columna6 *= Decimal(fila_dict['alanis_ipc'])
-                monto_columna7 *= Decimal(fila_dict['Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M'])
-                monto_columna8 *= Decimal(fila_dict['Caliva_Marquez_con_27551_con_3_rezago'])
-                monto_columna9 *= Decimal(fila_dict['Caliva_mas_Anses'])
-                monto_columna10 *= Decimal(fila_dict['alanis_ripte'])
-                monto_columna11 *= Decimal(fila_dict['Alanis_Mas_Anses'])
-                monto_columna12 *= Decimal(fila_dict['Alanis_con_27551_con_3_meses_rezago'])
-                monto_columna13 *= Decimal(fila_dict['martinez'])
-                monto_columna14 *= Decimal(fila_dict['alanis_ipc'])
-                monto_columna15 *= Decimal(fila_dict['alanis_ripte'])
+                    monto_columna3 *= Decimal(fila_dict['IPC'])
+                    monto_columna3 = monto_columna3 * Decimal(0.7)
+                    monto_columna4 *= Decimal(fila_dict['RIPTE'])
+                    monto_columna4 = monto_columna4 * Decimal(0.7)
+                    monto_columna5 *= Decimal(fila_dict['UMA'])
+                    monto_columna5 = monto_columna5 * Decimal(0.7)
+                    monto_columna6 *= Decimal(fila_dict['alanis_ipc'])
+                    monto_columna6 = monto_columna6 * Decimal(0.7)
+                    monto_columna7 *= Decimal(fila_dict['Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M'])
+                    monto_columna7 = monto_columna7 * Decimal(0.7)
+                    monto_columna8 *= Decimal(fila_dict['Caliva_Marquez_con_27551_con_3_rezago'])
+                    monto_columna8 = monto_columna8 * Decimal(0.7)
+                    monto_columna9 *= Decimal(fila_dict['Caliva_mas_Anses'])
+                    monto_columna9 = monto_columna9 * Decimal(0.7)
+                    monto_columna10 *= Decimal(fila_dict['alanis_ripte'])
+                    monto_columna10 = monto_columna10 * Decimal(0.7)
+                    monto_columna11 *= Decimal(fila_dict['Alanis_Mas_Anses'])
+                    monto_columna11 = monto_columna11 * Decimal(0.7)
+                    monto_columna12 *= Decimal(fila_dict['Alanis_con_27551_con_3_meses_rezago'])
+                    monto_columna12 = monto_columna12 * Decimal(0.7)
+                    monto_columna13 *= Decimal(fila_dict['martinez'])
+                    monto_columna13 = monto_columna13 * Decimal(0.7)
+                    monto_columna14 *= Decimal(fila_dict['alanis_ipc'])
+                    monto_columna14 = monto_columna14 * Decimal(0.7)
+                    monto_columna15 *= Decimal(fila_dict['alanis_ripte'])
+                    monto_columna15 = monto_columna15 * Decimal(0.7)
+                    
+                else:  
+                    if fila_dict['id'] == 243:
+                        monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)
+                    else:
+                        monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES'])
+
+                    monto_columna3 *= Decimal(fila_dict['IPC'])
+                    monto_columna4 *= Decimal(fila_dict['RIPTE'])
+                    monto_columna5 *= Decimal(fila_dict['UMA'])
+                    monto_columna6 *= Decimal(fila_dict['alanis_ipc'])
+                    monto_columna7 *= Decimal(fila_dict['Ley_27426_IPC_RIPTE_Trimestral_Diferido_3M'])
+                    monto_columna8 *= Decimal(fila_dict['Caliva_Marquez_con_27551_con_3_rezago'])
+                    monto_columna9 *= Decimal(fila_dict['Caliva_mas_Anses'])
+                    monto_columna10 *= Decimal(fila_dict['alanis_ripte'])
+                    monto_columna11 *= Decimal(fila_dict['Alanis_Mas_Anses'])
+                    monto_columna12 *= Decimal(fila_dict['Alanis_con_27551_con_3_meses_rezago'])
+                    monto_columna13 *= Decimal(fila_dict['martinez'])
+                    monto_columna14 *= Decimal(fila_dict['alanis_ipc'])
+                    monto_columna15 *= Decimal(fila_dict['alanis_ripte'])
 
 
                 lista_filas.append((
@@ -432,8 +471,11 @@ def crear_graficos(datos, etiquetas, titulo):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis,movilidad_personalizada,movilidad_1, tupla, tupla_reajuste, haber_reajustado ):
+    def __init__(self, datos_del_actor,fallecido, fecha_fallecimiento, cobrador_pension, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis,movilidad_personalizada,movilidad_1, tupla, tupla_reajuste, haber_reajustado ):
         self.datos_del_actor = datos_del_actor
+        self.fallecido = fallecido
+        self.fecha_fallecimiento = fecha_fallecimiento
+        self.cobrador_pension = cobrador_pension
         self.expediente = expediente
         self.cuil_expediente = cuil_expediente
         self.beneficio = beneficio
@@ -470,7 +512,7 @@ class CalculadorMovilidad:
     def obtener_datos(self):
         filas, filas_dinero = funcion_movilidad_personalizada(self.fecha_inicio, self.movilidad_1, self.monto, self.fecha_fin,self.tupla)
         ultimo_valor_personalizado = filas[-1]
-        lista_filas, lista_montos = buscar_fechas(self.fecha_inicio,self.fecha_fin, self.monto, self.tupla_reajuste, self.haber_reajustado)
+        lista_filas, lista_montos = buscar_fechas(self.fecha_inicio,self.fecha_fin, self.monto, self.tupla_reajuste, self.haber_reajustado, self.fallecido, self.fecha_fallecimiento)
         ultimos_valores = lista_montos[-1]
         diccionario_comparacion = {
                'dif_anses_ipc': formatear_dinero(ultimos_valores[1] - ultimos_valores[0]),
@@ -647,8 +689,8 @@ class CalculadorMovilidad:
         grafico1 = crear_graficos(datos,etiquetas, "Haber a la fecha de cierre")
 
         if self.comparacion_mov_caliva:
-                datos_2 = [ultimos_valores[7]]
-                etiquetas_2 = ['Movilidad de Sentencia (Caliva)']
+                datos_2 = [ultimos_valores[0], ultimos_valores[7]]
+                etiquetas_2 = ['Anses','Movilidad de Sentencia (Caliva)']
                 if self.ipc:
                     datos_2.append(ultimos_valores[1])
                     #datos_2.append(round(ultimos_valores[1] - ultimos_valores[4],2))
@@ -673,10 +715,10 @@ class CalculadorMovilidad:
                     datos_2.append(ultimos_valores[8])
                     #datos_2.append(round(ultimos_valores[8] - ultimos_valores[4],2))
                     etiquetas_2.append('Caliva Marquez con 27551 con 6 rezago')
-                if self.Alanis_Mas_Anses:
-                    datos_2.append(ultimos_valores[9])
+                #if self.Alanis_Mas_Anses:
+                    #datos_2.append(ultimos_valores[9])
                     #datos_2.append(round(ultimos_valores[9] - ultimos_valores[4],2))
-                    etiquetas_2.append('Alanis mas Anses')
+                    #etiquetas_2.append('Alanis mas Anses')
                 if self.Alanis_con_27551_con_3_meses_rezago:
                     datos_2.append(ultimos_valores[10])
                     #datos_2.append(round(ultimos_valores[10] - ultimos_valores[4],2))
@@ -701,8 +743,8 @@ class CalculadorMovilidad:
         else:
             grafico2 = None
         if self.comparacion_mov_alanis:
-                datos_3 = [ultimos_valores[9]]
-                etiquetas_3 = ['Movilidad de Sentencia (Alanis)']
+                datos_3 = [ultimos_valores[0], ultimos_valores[9]]
+                etiquetas_3 = ['Anses','Movilidad de Sentencia (Alanis)']
                 if self.ipc:
                     datos_3.append(ultimos_valores[1])
                     #datos_2.append(round(ultimos_valores[1] - ultimos_valores[4],2))
@@ -774,6 +816,9 @@ class CalculadorMovilidad:
             grafico4 = grafico_4,
             monto = formatear_dinero(self.monto),
             datos_del_actor = self.datos_del_actor,
+            fallecido = self.fallecido,
+            fecha_fallecimiento = transformar_fecha(self.fecha_fallecimiento),
+            cobrador_pension = self.cobrador_pension,
             expediente = self.expediente,
             cuil_expediente = self.cuil_expediente,
             beneficio = self.beneficio,

@@ -156,10 +156,13 @@
             <strong>Fecha del haber de partida:</strong> {{fecha_inicio}}&nbsp;&nbsp;&nbsp;
             <strong>Fecha de cierre del haber:</strong> {{fecha_fin}}
         </p>
-        {% if movilidad_personalizada %}
-        <p><strong>Movilidad Personalizada:</strong> {{movilidad_aplicada}} </p>
+        {% if fallecido %}
+        <p>{{datos_del_actor}} fallece en fecha {{fecha_fallecimiento}}, siendo el beneficio apartir de entonces un 70% de su valor original y siendo el receptor de la pension {{cobrador_pension}}.</p>
         {% endif %}
     </div>
+
+    <div class="page-break"></div>
+    
     <h6>Diferencias de Movilidad con Haber Anses segun Jurisdiccion:</h6>
     <table style="margin-top: 20px;">
         <tr class="font-large first-column-cell2";>
@@ -299,9 +302,10 @@
         <img src="data:image/png;base64,{{ grafico4 }}" alt="Gráfico comparativo de haberes de Sentencia">
     </div>
 
-
+    
     {% if comparacion_mov_alanis %}
-    <h6>Diferencias de Movilidad con Haber de Sentencia segun Jurisdiccion:</h6>
+    <div class="page-break"></div>
+    <h6>Diferencias de Movilidad con Haber de Sentencia (Alanis) segun Jurisdiccion:</h6>
     <table>
         <tr class="font-large first-column-cell2";>
             <td rowspan="1" class="negrita">Movilidad</td>
@@ -312,6 +316,10 @@
             <td class="negrita">Variables comparativas</td>
             <td class="negrita">Diferencia mensual en $</td>
             <td class="negrita">Porcentaje de quita respecto del haber de sentencia</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Haber Percibido con Movilidad Anses</td>
+            <td> {{ valor_anses }} </td>
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Mov. Sentencia (Alanis)</td>
@@ -411,8 +419,10 @@
     </div>
     {% endif %}
 
+
     {% if comparacion_mov_caliva %}
-    <h6>Diferencias de Movilidad con Haber de Sentencia segun Jurisdiccion:</h6>
+    <div class="page-break"></div>
+    <h6>Diferencias de Movilidad con Haber de Sentencia (Caliva) segun Jurisdiccion:</h6>
     <table>
         <tr class="font-large first-column-cell2";>
             <td rowspan="1" class="negrita">Movilidad</td>
@@ -423,6 +433,10 @@
             <td class="negrita">Variables comparativas</td>
             <td class="negrita">Diferencia mensual en $</td>
             <td class="negrita">Porcentaje de quita respecto del haber de sentencia</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Haber Percibido con Movilidad Anses</td>
+            <td> {{ valor_anses }} </td>
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell">Mov. Sentencia (Caliva)</td>
@@ -557,6 +571,9 @@
                 {% if alanis_ipc %}
                 <td class="negrita">Alanis con IPC </td>
                 {% endif %}
+                {% if alanis_ripte %}
+                <td class="negrita">Alanis con Ripte </td>
+                {% endif %}
                 {% if movilidad_personalizada %}
                 <td class="negrita">Movilidad Personalizada</td>
                 {% endif %}
@@ -609,6 +626,111 @@
             </tr>
             {% endfor %}
         </tbody>
+    </table>
+    <div class="page-break"></div>
+    <table>
+        <tr class="font-large first-column-cell2";>
+            <td rowspan="1" class="negrita" style="width: 20%;">Movilidad</td>
+            <td rowspan="1" class="negrita" style="width: 80%;">Indices </td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Movilidad Anses</td>
+            <td> Aumentos Generales de la ANSeS por movilidad  </td>
+        </tr>
+        {% if ipc %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Ipc</td>
+            <td> Precios al Consumidor o Costo de Vida (I.P.C.) </td>
+        </tr>
+        {% endif %}
+        {% if ripte %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">RIPTE</td>
+            <td> RIPTE (Remuneración Imponible Promedio de Trabajadores Estables) </td>
+        </tr>
+        {% endif %}
+        {% if uma %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">UMA</td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el
+            31/12/2017 y desde ahi Aumentos Poder Judicial de la Nacion</td>
+        </tr>
+        {% endif %}
+        {% if Ley_27426_rezago %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Ley 27426 con rezago</td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2016 y desde ahi Ley 27426 - IPC y
+            Ripte Trimestral Diferido 3 meses</td>
+        </tr>
+        {% endif %}
+        {% if caliva_mas_anses  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Caliva Marquez mas Anses </td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el
+            31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+            ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
+            desde ahi Aumentos Generales de la ANSeS por movilidad</td>
+        </tr>
+        {% endif %}
+        {% if Caliva_Marquez_con_27551_con_3_rezago  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Caliva Marquez + fallo Cendan </td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el
+            31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+            ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
+            desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi Aumentos
+            Generales de la ANSeS por movilidad</td>
+        </tr>
+        {% endif %}
+        {% if Alanis_Mas_Anses  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis mas Anses </td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad</td>
+        </tr>
+        {% endif %}
+        {% if Alanis_con_27551_con_3_meses_rezago  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con 27551 con 3 meses rezago</td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el
+            31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+            ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+            31/12/2020 y desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi
+            Aumentos Generales de la ANSeS por movilidad</td>
+        </tr>
+        {% endif %}
+        {% if fallo_martinez  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Fallo Martinez</td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos Fallo
+            Martinez para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad</td>
+        </tr>
+        {% endif %}
+        {% if alanis_ipc  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con IPC</td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el
+            31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+            ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+            31/12/2020 y desde ahi Precios al Consumidor o Costo de Vida (I.P.C.) hasta el 30/06/2024 y desde ahi Aumentos Generales de
+            la ANSeS por movilidad</td>
+        </tr>
+        {% endif %}
+        {% if alanis_ripte  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con RIPTE</td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el
+            31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+            ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+            31/12/2020 y desde ahi RIPTE (Remuneración Imponible Promedio de Trabajadores Estables) hasta el 30/06/2024 y desde ahi
+            Aumentos Generales de la ANSeS por movilidad</td>
+        </tr>
+        {% endif %}
+        {% if movilidad_personalizada %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Movilidad Personalizada</td>
+            <td> {{movilidad_aplicada}} </td>
+        </tr>
+        {% endif %}
     </table>
 </body>
 </html>

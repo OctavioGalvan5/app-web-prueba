@@ -212,11 +212,30 @@
         <div class="form-container">
             <h1>Calculadora de Movilidad</h1>
             <form action="/resultado_calculado_movilidad" method="POST">
-                <div class="form-group">
-                    <label for="datos_del_actor">Nombre del actor:
-                        <span class="info-icon" data-tooltip="Información adicional sobre los datos del actor">?</span>
-                    </label>
-                    <input type="text" id="datos_del_actor" name="datos_del_actor" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="datos_del_actor">Nombre del actor:
+                            <span class="info-icon" data-tooltip="Información adicional sobre los datos del actor">?</span>
+                        </label>
+                        <input type="text" id="datos_del_actor" name="datos_del_actor" required>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="fallecido" name="fallecido" value="true">
+                        <label for="fallecido">Actor Fallecido</label>
+                        <span class="info-icon" data-tooltip="Marcar si el actor fallecio">?</span>
+                    </div>
+                </div>
+                <div id="fallecido_section" class="conditional-section" style=" margin-bottom: 30px;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fecha_fallecimiento">Fecha de Fallecimiento:</label>
+                            <input type="date" id="fecha_fallecimiento" name="fecha_fallecimiento">
+                        </div>
+                        <div class="form-group">
+                            <label for="cobrador_pension">Nombre de Persona que cobra pension:</label>
+                            <input type="text" id="cobrador_pension" name="cobrador_pension">
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="fecha_adquisicion_del_derecho">Fecha de adquisición del derecho:</label>
@@ -276,7 +295,7 @@
                     </div>
                     <div class="checkbox-item">
                         <input type="checkbox" id="haber_reajustado" name="haber_reajustado" value="true">
-                        <label for="haber_reajustado">Haber Reajustado</label>
+                        <label for="haber_reajustado">Tiene Haber Reajustado</label>
                         <span class="info-icon" data-tooltip="Marcar si el haber a la fecha fue reajustado">?</span>
                     </div>
                 </div>
@@ -343,7 +362,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="comparacion_mov_sentencia_si_section" class="conditional-section">
+                <div id="comparacion_mov_sentencia_si_section" class="conditional-section" style=" margin-bottom: 30px;">
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input type="checkbox" id="comparacion_mov_alanis" name="comparacion_mov_alanis" value="true">
@@ -372,7 +391,7 @@
                             <input type="checkbox" id="uma" name="uma" value="true">
                             <label for="uma">UMA</label>
                             <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el
-                                01/04/2009 y desde ahi Aumentos Poder Judicial de la Nacion">?</span>
+                                31/12/2017 y desde ahi Aumentos Poder Judicial de la Nacion">?</span>
                         </div>
                         <div class="checkbox-item">
                             <input type="checkbox" id="Ley_27426_rezago" name="Ley_27426_rezago" value="true">
@@ -460,12 +479,14 @@
                 comparacion_mov_sentencia_si: document.getElementById('comparacion_mov_sentencia_si'),
                 movilidad_personalizada: document.getElementById('movilidad_personalizada'),
                 haber_reajustado: document.getElementById('haber_reajustado'),
+                fallecido: document.getElementById('fallecido'),
 
             };
             const sections = {
                 comparacion_mov_sentencia_si_section: document.getElementById('comparacion_mov_sentencia_si_section'),
                 movilidad_personalizada_section: document.getElementById('movilidad_personalizada_section'),
-                haber_reajustado_section: document.getElementById('haber_reajustado_section')
+                haber_reajustado_section: document.getElementById('haber_reajustado_section'),
+                fallecido_section: document.getElementById('fallecido_section')
 
             };
 
@@ -477,6 +498,7 @@
             toggleSection(checkboxes.comparacion_mov_sentencia_si, sections.comparacion_mov_sentencia_si_section);
             toggleSection(checkboxes.movilidad_personalizada, sections.movilidad_personalizada_section);
             toggleSection(checkboxes.haber_reajustado, sections.haber_reajustado_section);
+            toggleSection(checkboxes.fallecido, sections.fallecido_section);
 
         });
 
