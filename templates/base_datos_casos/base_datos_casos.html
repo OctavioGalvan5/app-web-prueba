@@ -159,142 +159,86 @@
         
     </style>
 </head>
-<body>
-    {% include 'navs/nav.html' %}
-    <div class="container">
-        <div class="form-container">
-            <h2>Ingresar Nueva Sentencia</h2>
-            <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="numero_expediente">Número de Expediente:</label>
-                        <input type="text" id="numero_expediente" name="numero_expediente" required>
+    <body>
+        {% include 'navs/nav.html' %}
+        <div class="container">
+            <div class="form-container">
+                <h2>Ingresar Nueva Sentencia</h2>
+                <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
+                    <div class="form-group drop-zone" id="drop-zone">
+                        Arrastra y suelta archivos aquí o haz clic para seleccionar
+                        <input type="file" id="documentos" name="documentos[]" accept=".pdf" multiple hidden>
                     </div>
-                    <div class="form-group">
-                        <label for="fecha_sentencia">Fecha de la Sentencia:</label>
-                        <input type="date" id="fecha_sentencia" name="fecha_sentencia" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="jurisdiccion">Jurisdicción:</label>
-                        <input type="text" id="jurisdiccion" name="jurisdiccion" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="juzgado">Juzgado:</label>
-                        <input type="text" id="juzgado" name="juzgado" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="instancia">Instancia:</label>
-                    <select id="instancia" name="instancia">
-                        <option value="Primera Instancia">Primera Instancia</option>
-                        <option value="Cámara">Cámara</option>
-                        <option value="Corte Suprema">Corte Suprema</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="caratula">Carátula:</label>
-                    <input type="text" id="caratula" name="caratula" required>
-                </div>
-                <div class="form-group">
-                    <label for="resumen">Resumen del Fallo:</label>
-                    <textarea id="resumen" name="resumen" rows="4" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="fundamentos">Fundamentos:</label>
-                    <textarea id="fundamentos" name="fundamentos" rows="4" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="normativa">Normativa Aplicada:</label>
-                    <textarea id="normativa" name="normativa" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="palabras_clave">Palabras Clave:</label>
-                    <input type="text" id="palabras_clave" name="palabras_clave">
-                </div>
-                <div class="form-group">
-                    <label for="firmantes">Jueces/Funcionarios Firmantes:</label>
-                    <textarea id="firmantes" name="firmantes" rows="3" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="numero_resolucion">Número de Resolución:</label>
-                    <input type="text" id="numero_resolucion" name="numero_resolucion">
-                </div>
-                <div class="form-group">
-                    <label for="estado_sentencia">Estado de la Sentencia:</label>
-                    <select id="estado_sentencia" name="estado_sentencia">
-                        <option value="Firme">Firme</option>
-                        <option value="Sujeta a Revisión">Sujeta a Revisión</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="honorarios">Honorarios Regulados:</label>
-                    <input type="text" id="honorarios" name="honorarios">
-                </div>
-                <div class="form-group drop-zone" id="drop-zone">
-                    Arrastra y suelta archivos aquí o haz clic para seleccionar
-                    <input type="file" id="documentos" name="documentos[]" accept=".pdf,.doc,.docx" multiple hidden>
-                </div>
-                <div class="file-list" id="file-list"></div>
-                
-                <button type="submit" class="submit-button">Cargar Sentencia</button>
-            </form>
+                    <div class="file-list" id="file-list"></div>
+
+                    <button type="submit" class="submit-button">Cargar Sentencia</button>
+                </form>
+            </div>
         </div>
-    </div>
-    <script>
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('documentos');
-        const fileList = document.getElementById('file-list');
+        <script>
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('documentos');
+            const fileList = document.getElementById('file-list');
 
-        dropZone.addEventListener('click', () => fileInput.click());
+            dropZone.addEventListener('click', () => fileInput.click());
 
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.style.backgroundColor = '#e0e0e0';
-        });
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '#e0e0e0';
+            });
 
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.style.backgroundColor = '#f9f9f9';
-        });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.style.backgroundColor = '#f9f9f9';
+            });
 
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.style.backgroundColor = '#f9f9f9';
-            fileInput.files = e.dataTransfer.files;
-            updateFileList();
-        });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '#f9f9f9';
+                fileInput.files = e.dataTransfer.files;
+                updateFileList();
+            });
 
-        fileInput.addEventListener('change', updateFileList);
+            fileInput.addEventListener('change', updateFileList);
 
-        function updateFileList() {
-            fileList.innerHTML = '';
-            for (let file of fileInput.files) {
-                const fileItem = document.createElement('div');
-                fileItem.classList.add('file-item');
-                fileItem.textContent = file.name;
+            function updateFileList() {
+                fileList.innerHTML = '';
+                for (let file of fileInput.files) {
+                    const fileItem = document.createElement('div');
+                    fileItem.classList.add('file-item');
+                    fileItem.textContent = file.name;
 
-                const removeBtn = document.createElement('span');
-                removeBtn.textContent = '✖';
-                removeBtn.classList.add('remove-file');
-                removeBtn.addEventListener('click', () => removeFile(file));
+                    const removeBtn = document.createElement('span');
+                    removeBtn.textContent = '✖';
+                    removeBtn.classList.add('remove-file');
+                    removeBtn.addEventListener('click', () => removeFile(file));
 
-                fileItem.appendChild(removeBtn);
-                fileList.appendChild(fileItem);
-            }
-        }
-
-        function removeFile(fileToRemove) {
-            const dt = new DataTransfer();
-            for (let file of fileInput.files) {
-                if (file !== fileToRemove) {
-                    dt.items.add(file);
+                    fileItem.appendChild(removeBtn);
+                    fileList.appendChild(fileItem);
                 }
             }
-            fileInput.files = dt.files;
-            updateFileList();
-        }
-    </script>
-</body>
+
+            function removeFile(fileToRemove) {
+                const dt = new DataTransfer();
+                for (let file of fileInput.files) {
+                    if (file !== fileToRemove) {
+                        dt.items.add(file);
+                    }
+                }
+                fileInput.files = dt.files;
+                updateFileList();
+            }
+
+            function validateFiles() {
+                const files = fileInput.files;
+                for (let file of files) {
+                    if (file.type !== 'application/pdf') {
+                        alert('Solo se permiten archivos PDF.');
+                        return false;
+                    }
+                }
+                return true;
+            }
+        </script>
+    </body>
     {% include 'footers/footer.html' %}
-</html>
+    </html>

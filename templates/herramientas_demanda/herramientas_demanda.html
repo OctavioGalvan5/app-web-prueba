@@ -459,9 +459,36 @@
                             <input type="checkbox" id="hospital_nino_jesus" name="hospital_nino_jesus">
                             <label for="hospital_nino_jesus">HOSPITAL NIÑO JESÚS DE PRAGA</label>
                         </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="massalin_particulares" name="massalin_particulares">
+                            <label for="massalin_particulares">Massalin Particulares S.A/S.R.L</label>
+                        </div>
                         <div class="checkbox-item" style="display: none;">
                             <input type="checkbox" id="extras" name="extras">
                             <label for="extras">Agregar conceptos manualmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Massalin Particulares S.A/S.R.L -->
+                    <div id="massalin_particulares_section" class="conditional-section" style="display: none;">
+                        <h3>Massalin Particulares S.A/S.R.L</h3>
+                        <div class="checkbox-group">
+                            <!-- Checkboxes ordenadas por código (de menor a mayor) -->
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo" name="Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo">
+                                <label for="Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo">Código 3000. Concepto Asig. No Rem. Ac. 07 SUETRA No Remunerativo.</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="Concepto_Asig_Acuerdo_2015_No_Remunerativo" name="Concepto_Asig_Acuerdo_2015_No_Remunerativo">
+                                <label for="Concepto_Asig_Acuerdo_2015_No_Remunerativo">Código 3000. Concepto: Asig. Acuerdo 2015 No Remunerativo</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="Concepto_Asig_Acuerdo_2016_No_remunerativo" name="Concepto_Asig_Acuerdo_2016_No_remunerativo">
+                                <label for="Concepto_Asig_Acuerdo_2016_No_remunerativo">Código 3000. Concepto: Asig. Acuerdo 2016 No remunerativo</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1698,7 +1725,8 @@
                 el_sol_transporte: document.getElementById('el_sol_transporte'),
                 provincia_salta_derechos_humanos: document.getElementById('provincia_salta_derechos_humanos'),
                 hospital_del_milagro: document.getElementById('hospital_del_milagro'),
-                hospital_nino_jesus: document.getElementById('hospital_nino_jesus')
+                hospital_nino_jesus: document.getElementById('hospital_nino_jesus'),
+                massalin_particulares: document.getElementById('massalin_particulares'),
             };
 
             const sections = {
@@ -1736,7 +1764,8 @@
                 el_sol_transporte_section: document.getElementById('el_sol_transporte_section'),
                 provincia_salta_derechos_humanos_section: document.getElementById('provincia_salta_derechos_humanos_section'),
                 hospital_del_milagro_section: document.getElementById('hospital_del_milagro_section'),
-                hospital_nino_jesus_section: document.getElementById('hospital_nino_jesus_section')
+                hospital_nino_jesus_section: document.getElementById('hospital_nino_jesus_section'),
+                massalin_particulares_section: document.getElementById('massalin_particulares_section')
             };
 
             function toggleSection(checkbox, section) {
@@ -1785,6 +1814,7 @@
             toggleSection(checkboxes.provincia_salta_derechos_humanos, sections.provincia_salta_derechos_humanos_section);
             toggleSection(checkboxes.hospital_del_milagro, sections.hospital_del_milagro_section);
             toggleSection(checkboxes.hospital_nino_jesus, sections.hospital_nino_jesus_section);
+            toggleSection(checkboxes.massalin_particulares, sections.massalin_particulares_section);
         });
     </script>
 </body>

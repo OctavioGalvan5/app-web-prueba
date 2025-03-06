@@ -845,6 +845,12 @@ def resultado_herramientas_demandas():
         diccionario_sumas = {
             "sumas_remunerativas": request.form.get('sumas_remunerativas', False),
 
+            "massalin_particulares": request.form.get('massalin_particulares', False),
+            "Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo": request.form.get('Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo', False),
+            "Concepto_Asig_Acuerdo_2015_No_Remunerativo": request.form.get('Concepto_Asig_Acuerdo_2015_No_Remunerativo', False),
+            "Concepto_Asig_Acuerdo_2016_No_remunerativo": request.form.get('Concepto_Asig_Acuerdo_2016_No_remunerativo', False),
+
+
             "municipalidad_salta": request.form.get('municipalidad_salta', False),
             "municipalidad_salta_47_hijo": request.form.get('municipalidad_salta_47_hijo', False),
             "municipalidad_salta_52_conyuge": request.form.get('municipalidad_salta_52_conyuge', False),

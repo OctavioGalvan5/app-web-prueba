@@ -360,6 +360,34 @@
         {% endif %}
         {% endif %}
 
+        {% if diccionario_sumas.massalin_particulares %}
+        <tr class="font-large_2 first-column-cell2">
+            <td colspan="2" class="negrita" style="text-align: center;">Massalin Particulares S.A/S.R.L</td>
+        </tr>
+        <tr class="font-large_2 first-column-cell2">
+            <td class="negrita columna_sumas_codigo" >Código</td>
+            <td class="negrita" style="text-align: center;">Concepto</td>
+        </tr>
+        {% if diccionario_sumas.Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">3000</td>
+            <td>Concepto Asig. No Rem. Ac. 07 SUETRA No Remunerativo</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.Concepto_Asig_Acuerdo_2015_No_Remunerativo %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">3000</td>
+            <td>Concepto: Asig. Acuerdo 2015 No Remunerativo</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.Concepto_Asig_Acuerdo_2016_No_remunerativo %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">3000</td>
+            <td>Concepto: Asig. Acuerdo 2016 No remunerativo</td>
+        </tr>
+        {% endif %}
+        {% endif %}
+
         {% if diccionario_sumas.todo_obras_srl %}
         <tr class="font-large_2 first-column-cell2">
             <td colspan="2" class="negrita" style="text-align: center;">Todo Obra S.R.L</td>
