@@ -266,6 +266,76 @@
     {% if diccionario_sumas.sumas_remunerativas %}
     <h6>Sumas No Remunerativas:</h6>
     <table style="margin-top: 20px;">
+        {% if diccionario_sumas.instituto_provincial_de_vivienda %}
+        <tr class="font-large_2 first-column-cell2">
+            <td colspan="2" class="negrita" style="text-align: center;">Instituto Provincial de Vivienda Salta- IPV</td>
+        </tr>
+        <tr class="font-large_2 first-column-cell2">
+            <td class="negrita columna_sumas_codigo" >Código</td>
+            <td class="negrita" style="text-align: center;">Concepto</td>
+        </tr>
+        {% if diccionario_sumas.ipv_adic_ac_salarial_2010 %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">627</td>
+            <td>Adic. Ac Salarial 2010</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.ipv_adic_ac_salarial_2016 %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">628</td>
+            <td>Adic. Ac Salarial 2016</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.ipv_retroactivo_adic%}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">629</td>
+            <td>Retroactivo Adic</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.ipv_ac_salarial_2016 %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">633</td>
+            <td>Ac. Salarial 2016</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.ipv_adic_respons_cargo %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">43</td>
+            <td>Adic. Respons. Cargo</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.ipv_adic %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">214</td>
+            <td>Adic</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.ipv_dto_2857_04 %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">215</td>
+            <td>Dto. N° 2857/04</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.ipv_monto_extraordinario %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">405</td>
+            <td>Monto Extraordinario</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.ipv_extraord_acta_04_13 %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">406</td>
+            <td>Extraord Acta 04/13</td>
+        </tr>
+        {% endif %}
+        {% if diccionario_sumas.ipv_adic_ipv %}
+        <tr class="font-large_2">
+            <td class="columna_sumas_codigo">630</td>
+            <td>Adic IPV</td>
+        </tr>
+        {% endif %}
+        {% endif %}
+        
         {% if diccionario_sumas.municipalidad_salta %}
         <tr class="font-large_2 first-column-cell2">
             <td colspan="2" class="negrita" style="text-align: center;">Municipalidad de Salta</td>

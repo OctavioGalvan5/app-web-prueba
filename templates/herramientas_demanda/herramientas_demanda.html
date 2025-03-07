@@ -463,9 +463,64 @@
                             <input type="checkbox" id="massalin_particulares" name="massalin_particulares">
                             <label for="massalin_particulares">Massalin Particulares S.A/S.R.L</label>
                         </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="instituto_provincial_de_vivienda" name="instituto_provincial_de_vivienda">
+                            <label for="instituto_provincial_de_vivienda">Instituto Provincial de Vivienda Salta- IPV</label>
+                        </div>
                         <div class="checkbox-item" style="display: none;">
                             <input type="checkbox" id="extras" name="extras">
                             <label for="extras">Agregar conceptos manualmente</label>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Massalin Particulares S.A/S.R.L -->
+                    <div id="instituto_provincial_de_vivienda_section" class="conditional-section" style="display: none;">
+                        <h3>Instituto Provincial de Vivienda Salta- IPV</h3>
+                        <div class="checkbox-group">
+                            <!-- Checkboxes ordenadas por código (de menor a mayor) -->
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_adic_ac_salarial_2010" name="ipv_adic_ac_salarial_2010">
+                                <label for="ipv_adic_ac_salarial_2010">627 Adic. Ac Salarial 2010</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_adic_ac_salarial_2016" name="ipv_adic_ac_salarial_2016">
+                                <label for="ipv_adic_ac_salarial_2016">628 Adic. Ac Salarial 2016</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_retroactivo_adic" name="ipv_retroactivo_adic">
+                                <label for="ipv_retroactivo_adic">629 Retroactivo Adic</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_ac_salarial_2016" name="ipv_ac_salarial_2016">
+                                <label for="ipv_ac_salarial_2016">633 Ac. Salarial 2016 </label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_adic_respons_cargo" name="ipv_adic_respons_cargo">
+                                <label for="ipv_adic_respons_cargo">43 Adic. Respons. Cargo</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_adic" name="ipv_adic">
+                                <label for="ipv_adic">214 Adic</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_dto_2857_04" name="ipv_dto_2857_04">
+                                <label for="ipv_dto_2857_04">215 Dto. N° 2857/04</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_monto_extraordinario" name="ipv_monto_extraordinario">
+                                <label for="ipv_monto_extraordinario">405 Monto Extraordinario</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_extraord_acta_04_13" name="ipv_extraord_acta_04_13">
+                                <label for="ipv_extraord_acta_04_13">406 Extraord Acta 04/13</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ipv_adic_ipv" name="ipv_adic_ipv">
+                                <label for="ipv_adic_ipv">630 Adic IPV</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <label for="extras">Agregar conceptos manualmente</label>
+                            </div>
                         </div>
                     </div>
 
@@ -1727,6 +1782,7 @@
                 hospital_del_milagro: document.getElementById('hospital_del_milagro'),
                 hospital_nino_jesus: document.getElementById('hospital_nino_jesus'),
                 massalin_particulares: document.getElementById('massalin_particulares'),
+                instituto_provincial_de_vivienda: document.getElementById('instituto_provincial_de_vivienda'),
             };
 
             const sections = {
@@ -1765,7 +1821,8 @@
                 provincia_salta_derechos_humanos_section: document.getElementById('provincia_salta_derechos_humanos_section'),
                 hospital_del_milagro_section: document.getElementById('hospital_del_milagro_section'),
                 hospital_nino_jesus_section: document.getElementById('hospital_nino_jesus_section'),
-                massalin_particulares_section: document.getElementById('massalin_particulares_section')
+                massalin_particulares_section: document.getElementById('massalin_particulares_section'),
+                instituto_provincial_de_vivienda_section: document.getElementById('instituto_provincial_de_vivienda_section')
             };
 
             function toggleSection(checkbox, section) {
@@ -1815,6 +1872,7 @@
             toggleSection(checkboxes.hospital_del_milagro, sections.hospital_del_milagro_section);
             toggleSection(checkboxes.hospital_nino_jesus, sections.hospital_nino_jesus_section);
             toggleSection(checkboxes.massalin_particulares, sections.massalin_particulares_section);
+            toggleSection(checkboxes.instituto_provincial_de_vivienda, sections.instituto_provincial_de_vivienda_section);
         });
     </script>
 </body>

@@ -843,6 +843,22 @@ def resultado_herramientas_demandas():
         diccionario_sumas = {
             "sumas_remunerativas": request.form.get('sumas_remunerativas', False),
 
+            "instituto_provincial_de_vivienda": request.form.get('instituto_provincial_de_vivienda', False),
+            "ipv_adic_ac_salarial_2010": request.form.get('ipv_adic_ac_salarial_2010', False),
+            "ipv_adic_ac_salarial_2016": request.form.get('ipv_adic_ac_salarial_2016', False),
+            "ipv_retroactivo_adic": request.form.get('ipv_retroactivo_adic', False),
+            "ipv_ac_salarial_2016": request.form.get('ipv_ac_salarial_2016', False),
+            "ipv_adic_respons_cargo": request.form.get('ipv_adic_respons_cargo', False),
+            "ipv_adic": request.form.get('ipv_adic', False),
+            "ipv_dto_2857_04": request.form.get('ipv_dto_2857_04', False),
+            "ipv_monto_extraordinario": request.form.get('ipv_monto_extraordinario', False),
+            "ipv_extraord_acta_04_13": request.form.get('ipv_extraord_acta_04_13', False),
+            "ipv_adic_ipv": request.form.get('ipv_adic_ipv', False),
+
+
+
+            
+
             "massalin_particulares": request.form.get('massalin_particulares', False),
             "Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo": request.form.get('Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo', False),
             "Concepto_Asig_Acuerdo_2015_No_Remunerativo": request.form.get('Concepto_Asig_Acuerdo_2015_No_Remunerativo', False),
