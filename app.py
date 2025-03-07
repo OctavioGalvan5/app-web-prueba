@@ -326,16 +326,15 @@ def prueba():
 
 
 @app.route('/resultado_calculado_movilidad', methods=['POST'])
-@login_required
 def resultado_calculado_movilidad():
-        if current_user.credito <= 0:
-            flash("No tienes suficientes créditos para realizar esta operación.")
-            return redirect(url_for('prueba'))
-        current_user.credito -= 1
-        ModelUser.update_credito(current_user.id, current_user.credito)  # Actualiza el crédito en la base de datos
+        #if current_user.credito <= 0:
+            #flash("No tienes suficientes créditos para realizar esta operación.")
+            #return redirect(url_for('prueba'))
+        #current_user.credito -= 1
+        #ModelUser.update_credito(current_user.id, current_user.credito)  # Actualiza el crédito en la base de datos
 
         # Vuelve a cargar la información del usuario para reflejar el cambio en current_user
-        login_user(ModelUser.get_by_id(current_user.id))  # Esto actualizará la información del usuario en Flask-Login
+        #login_user(ModelUser.get_by_id(current_user.id))  # Esto actualizará la información del usuario en Flask-Login
         # Recibir los datos necesarios del formulario
         datos_del_actor =  request.form['datos_del_actor']
         fallecido = request.form.get('fallecido', False)
@@ -733,7 +732,6 @@ def comparador_productos():
     return render_template('comparador_productos/comparador_productos.html')
 
 @app.route('/comparador_productos_resultado', methods=['POST'])
-@login_required
 def comparador_productos_resultado():
     # Recoge los datos enviados desde el formulario
     autos = request.form.get("Autos")
@@ -1143,6 +1141,18 @@ def resultado_herramientas_demandas():
 @login_required
 def base_datos_casos():
     return render_template('base_datos_casos/base_datos_casos.html')
+
+@app.route('/calculadora_movilidad_publica')
+def calculadora_movilidad_publica():
+    return render_template('herramientas_publicas/calculadora_movilidad_publica.html')
+
+@app.route('/calculadora_tope_maximo_publica')
+def calculadora_tope_maximo_publica():
+    return render_template('herramientas_publicas/calculadora_tope_maximo_publica.html')
+
+@app.route('/comparador_productos_publica')
+def comparador_productos_publica():
+    return render_template('herramientas_publicas/comparador_productos_publica.html')
 
 @app.route('/upload_file', methods=['POST'])
 def upload_file():

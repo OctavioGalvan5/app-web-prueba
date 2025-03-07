@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Movilidad</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #E6E6FA, #9370DB);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #4B0082;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c5282;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input[type="date"] {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236A0DAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        .submit-button {
+            background-color: #2c5282;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .submit-button:hover {
+            background-color: #1a365d;
+        }
+        .info-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #2c5282;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 16px;
+            font-size: 12px;
+            margin-left: 5px;
+            cursor: help;
+            position: relative;
+        }
+        .info-icon:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: normal;
+            width: 300px;
+            word-wrap: break-word;
+            z-index: 1000;
+            margin-top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
+        }
+        .conditional-section {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        @media (max-width: 600px) {
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+        /* Nuevos estilos para select unificado */
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            background: white;
+            position: relative;
+        }
+
+        .custom-select-dropdown {
+            position: absolute;
+            width: 100%;
+            max-height: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: white;
+            z-index: 1000;
+            display: none;
+            margin-top: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .search-box {
+            padding: 8px;
+            width: calc(100% - 16px);
+            border: none;
+            border-bottom: 1px solid #ddd;
+            margin: 5px;
+        }
+
+        .custom-options {
+            max-height: 160px;
+            overflow-y: auto;
+        }
+
+        .custom-option {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .custom-option:hover {
+            background-color: #f5f5f5;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        .custom-option.selected {
+            background-color: #2c5282;
+            color: white;
+        }
+        .movilidad-group {
+            display: none;
+        }
+        .movilidad-group[data-group="1"] {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="margin-top: 70px;">
+        <div class="form-container">
+            <h1>Calculadora de Movilidad</h1>
+            <form action="/resultado_calculado_movilidad" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="datos_del_actor">Nombre del actor:
+                            <span class="info-icon" data-tooltip="Información adicional sobre los datos del actor">?</span>
+                        </label>
+                        <input type="text" id="datos_del_actor" name="datos_del_actor" required>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="fallecido" name="fallecido" value="true">
+                        <label for="fallecido">Actor Fallecido</label>
+                        <span class="info-icon" data-tooltip="Marcar si el actor fallecio">?</span>
+                    </div>
+                </div>
+                <div id="fallecido_section" class="conditional-section" style=" margin-bottom: 30px;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fecha_fallecimiento">Fecha de Fallecimiento:</label>
+                            <input type="date" id="fecha_fallecimiento" name="fecha_fallecimiento">
+                        </div>
+                        <div class="form-group">
+                            <label for="cobrador_pension">Nombre de Persona que cobra pension:</label>
+                            <input type="text" id="cobrador_pension" name="cobrador_pension">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fecha_adquisicion_del_derecho">Fecha de adquisición del derecho:</label>
+                    <input type="date" id="fecha_adquisicion_del_derecho" name="fecha_adquisicion_del_derecho" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="beneficio">Tipo de Beneficio:</label>
+                        <select id="beneficio" name="beneficio" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="Jubilacion Ordinaria">Jubilación Ordinaria</option>
+                            <option value="Retiro Transitorio por Discapacidad">Retiro Transitorio por Discapacidad</option>
+                            <option value="Prestacion Anticipada por Desempleo">Prestacion Anticipada por Desempleo</option>
+                            <option value="Pension Directa">Pension Directa</option>
+                            <option value="Pension Derivada">Pension Derivada</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="num_beneficio">Número de Beneficio:</label>
+                        <input type="text" id="num_beneficio" name="num_beneficio" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="beneficio">Cuil o Expediente:</label>
+                        <select id="beneficio" name="cuil_expediente" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="Cuil">Cuil</option>
+                            <option value="Expediente">Nro. Expediente</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expediente">Nro:</label>
+                        <input type="text" id="expediente" name="expediente">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fecha_inicio">Fecha de haber de partida:
+                            <span class="info-icon" data-tooltip="No debe ser inferior al 01/01/2000">?</span>
+                        </label>
+                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2000-01-01" max="2025-02-28">
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_fin">Fecha de cierre del haber:
+                            <span class="info-icon" data-tooltip="No debe ser superior al 28/02/2025">?</span>
+                        </label>
+                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2000-01-01" max="2025-02-28">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="monto">Monto del haber a la fecha:</label>
+                        <input type="number" id="monto" name="monto" step="0.01" required placeholder="Ingrese el monto del haber a la fecha">
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="haber_reajustado" name="haber_reajustado" value="true">
+                        <label for="haber_reajustado">Tiene Haber Reajustado</label>
+                        <span class="info-icon" data-tooltip="Marcar si el haber a la fecha fue reajustado">?</span>
+                    </div>
+                </div>
+                <div id="haber_reajustado_section" class="conditional-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monto_reajustado_1">Monto del haber reajustado:</label>
+                            <input type="number" id="monto_reajustado_1" name="monto_reajustado_1" step="0.01" placeholder="Ingrese el monto del haber reajustado">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_haber_reajustado_1">Fecha del haber reajustado:
+                                <span class="info-icon" data-tooltip="">?</span>
+                            </label>
+                            <input type="date" id="fecha_haber_reajustado_1" name="fecha_haber_reajustado_1"  min="2000-01-01" max="2025-02-28">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monto_reajustado_2">Monto del haber reajustado:</label>
+                            <input type="number" id="monto_reajustado_2" name="monto_reajustado_2" step="0.01"  placeholder="Ingrese el monto del haber reajustado">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_haber_reajustado_2">Fecha del haber reajustado:
+                                <span class="info-icon" data-tooltip="">?</span>
+                            </label>
+                            <input type="date" id="fecha_haber_reajustado_2" name="fecha_haber_reajustado_2" min="2000-01-01" max="2025-02-28">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monto_reajustado_3">Monto del haber reajustado:</label>
+                            <input type="number" id="monto_reajustado_3" name="monto_reajustado_3" step="0.01" placeholder="Ingrese el monto del haber reajustado">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_haber_reajustado_3">Fecha del haber reajustado:
+                                <span class="info-icon" data-tooltip="">?</span>
+                            </label>
+                            <input type="date" id="fecha_haber_reajustado_3" name="fecha_haber_reajustado_3" min="2000-01-01" max="2025-02-28">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monto_reajustado_4">Monto del haber reajustado:</label>
+                            <input type="number" id="monto_reajustado_4" name="monto_reajustado_4" step="0.01" placeholder="Ingrese el monto del haber reajustado">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_haber_reajustado_4">Fecha del haber reajustado:
+                                <span class="info-icon" data-tooltip="">?</span>
+                            </label>
+                            <input type="date" id="fecha_haber_reajustado_4" name="fecha_haber_reajustado_4"  min="2000-01-01" max="2025-02-28">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Comparación con Haber de Sentencia</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="comparacion_mov_sentencia_si" name="comparacion_mov_sentencia_si" value="true">
+                            <label for="comparacion_mov_sentencia_si">Si</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="comparacion_mov_sentencia_no" name="comparacion_mov_sentencia_no" value="true">
+                            <label for="comparacion_mov_sentencia_no">No</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="comparacion_mov_sentencia_si_section" class="conditional-section" style=" margin-bottom: 30px;">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="comparacion_mov_alanis" name="comparacion_mov_alanis" value="true">
+                            <label for="comparacion_mov_alanis">Alanis</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="comparacion_mov_caliva" name="comparacion_mov_caliva" value="true">
+                            <label for="comparacion_mov_caliva">Caliva</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Seleccione Movilidades a comparar:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ipc" name="ipc" value="true">
+                            <label for="ipc">IPC</label>
+                            <span class="info-icon" data-tooltip="Precios al Consumidor o Costo de Vida (I.P.C.)">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ripte" name="ripte" value="true">
+                            <label for="ripte">RIPTE</label>
+                            <span class="info-icon" data-tooltip="RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="uma" name="uma" value="true">
+                            <label for="uma">UMA</label>
+                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumentos Poder Judicial de la Nacion">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="Ley_27426_rezago" name="Ley_27426_rezago" value="true">
+                            <label for="Ley_27426_rezago">Ley 27426 con rezago</label>
+                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2016 y desde ahi Ley 27426 - IPC y
+                                Ripte Trimestral Diferido 3 meses">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="caliva_mas_anses" name="caliva_mas_anses" value="true">
+                            <label for="caliva_mas_anses">Caliva mas Anses</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
+                                desde ahi Aumentos Generales de la ANSeS por movilidad
+">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="Caliva_Marquez_con_27551_con_3_rezago" name="Caliva_Marquez_con_27551_con_3_rezago" value="true">
+                            <label for="Caliva_Marquez_con_27551_con_3_rezago">Caliva mas Cendan</label>
+                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
+                                desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi Aumentos
+                                Generales de la ANSeS por movilidad">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="Alanis_Mas_Anses" name="Alanis_Mas_Anses" value="true">
+                            <label for="Alanis_Mas_Anses">Alanis Mas Anses</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="Alanis_con_27551_con_3_meses_rezago" name="Alanis_con_27551_con_3_meses_rezago" value="true">
+                            <label for="Alanis_con_27551_con_3_meses_rezago">Alanis con 27551 con 3 meses rezago</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+                                31/12/2020 y desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi
+                                Aumentos Generales de la ANSeS por movilidad">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fallo_martinez" name="fallo_martinez" value="true">
+                            <label for="fallo_martinez">Fallo Martinez</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos Fallo
+                                Martinez para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad
+">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="alanis_ipc" name="alanis_ipc" value="true">
+                            <label for="alanis_ipc">Alanis con IPC</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+                                31/12/2020 y desde ahi Precios al Consumidor o Costo de Vida (I.P.C.) hasta el 30/06/2024 y desde ahi Aumentos Generales de
+                                la ANSeS por movilidad">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="alanis_ripte" name="alanis_ripte" value="true">
+                            <label for="alanis_ripte">Alanis con RIPTE</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+                                31/12/2020 y desde ahi RIPTE (Remuneración Imponible Promedio de Trabajadores Estables) hasta el 30/06/2024 y desde ahi
+                                Aumentos Generales de la ANSeS por movilidad">?</span>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="movilidad_personalizada" name="movilidad_personalizada" value="true">
+                            <label for="movilidad_personalizada">Movilidad Personalizada</label>
+                            <span class="info-icon" data-tooltip="Seleccione los indices manualmente">?</span>
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'calculadora_movilidad/opciones_personalizadas.html' %}
+
+
+                <button type="submit" class="submit-button">Calcular Diferencias</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('liquidacionForm');
+            const checkboxes = {
+                comparacion_mov_sentencia_si: document.getElementById('comparacion_mov_sentencia_si'),
+                movilidad_personalizada: document.getElementById('movilidad_personalizada'),
+                haber_reajustado: document.getElementById('haber_reajustado'),
+                fallecido: document.getElementById('fallecido'),
+
+            };
+            const sections = {
+                comparacion_mov_sentencia_si_section: document.getElementById('comparacion_mov_sentencia_si_section'),
+                movilidad_personalizada_section: document.getElementById('movilidad_personalizada_section'),
+                haber_reajustado_section: document.getElementById('haber_reajustado_section'),
+                fallecido_section: document.getElementById('fallecido_section')
+
+            };
+
+            function toggleSection(checkbox, section) {
+                checkbox.addEventListener('change', function() {
+                    section.style.display = this.checked ? 'block' : 'none';
+                });
+            }
+            toggleSection(checkboxes.comparacion_mov_sentencia_si, sections.comparacion_mov_sentencia_si_section);
+            toggleSection(checkboxes.movilidad_personalizada, sections.movilidad_personalizada_section);
+            toggleSection(checkboxes.haber_reajustado, sections.haber_reajustado_section);
+            toggleSection(checkboxes.fallecido, sections.fallecido_section);
+
+        });
+
+
+        // Inicializar selects
+            function initializeCustomSelects() {
+                document.querySelectorAll('.custom-select-container').forEach(container => {
+                    const originalSelect = container.querySelector('select');
+                    const optionsContainer = container.querySelector('.custom-options');
+                    const display = container.querySelector('.selected-value');
+
+                    // Generar opciones personalizadas
+                    optionsContainer.innerHTML = '';
+                    Array.from(originalSelect.options).forEach(option => {
+                        const div = document.createElement('div');
+                        div.className = 'custom-option';
+                        div.textContent = option.text;
+                        div.dataset.value = option.value;
+                        div.onclick = () => {
+                            originalSelect.value = option.value;
+                            display.textContent = option.text;
+                            container.querySelector('.custom-select-dropdown').style.display = 'none';
+                        };
+                        optionsContainer.appendChild(div);
+                    });
+                });
+            }
+
+            function toggleDropdown(id) {
+                const dropdown = document.getElementById(`dropdown_${id}`);
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            }
+
+            function filterOptions(id, searchTerm) {
+                const options = document.querySelectorAll(`#options_${id} .custom-option`);
+                const term = searchTerm.toLowerCase();
+
+                options.forEach(option => {
+                    const text = option.textContent.toLowerCase();
+                    option.style.display = text.includes(term) ? 'block' : 'none';
+                });
+            }
+
+            // Cerrar dropdown al hacer clic fuera
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.custom-select-container')) {
+                    document.querySelectorAll('.custom-select-dropdown').forEach(dropdown => {
+                        dropdown.style.display = 'none';
+                    });
+                }
+            });
+
+            // Inicializar al cargar
+            document.addEventListener('DOMContentLoaded', initializeCustomSelects);
+
+        // Configuraciones de plantillas
+        const plantillas = {
+            'caliva': {
+                movilidades: [
+                    {numero: 1, valor: 'Aumentos_Anses', fecha: '2017-12-31'},
+                    {numero: 2, valor: 'Aumento_de_Marzo_2018_Ley_26417_14', fecha: '2018-06-30'},
+                    {numero: 3, valor: 'Aumentos_Anses', fecha: '2019-12-31'},
+                    {numero: 4, valor: 'Aumentos_fallo_Marquez_Raimundo_por_Ley_27551', fecha: '2020-12-31'},
+                    {numero: 5, valor: 'Aumentos_Anses', fecha: ''}
+                ]
+            }
+            // Agrega más plantillas aquí
+        };
+
+            document.getElementById('aplicar-plantilla').addEventListener('click', function() {
+                const plantillaSeleccionada = document.getElementById('plantillas').value;
+                const config = plantillas[plantillaSeleccionada];
+
+                if (!config) return;
+
+                // Limpiar todos los campos primero
+                document.querySelectorAll('.movilidad-group').forEach(grupo => {
+                    grupo.style.display = 'none';
+                    grupo.querySelectorAll('select, input[type="date"]').forEach(input => input.value = '');
+                });
+
+                // Mostrar primer grupo
+                document.querySelector('.movilidad-group[data-group="1"]').style.display = 'flex';
+
+                // Aplicar nueva configuración
+                config.movilidades.forEach(mov => {
+                    const grupo = document.querySelector(`.movilidad-group[data-group="${mov.numero}"]`);
+                    const selectOriginal = grupo.querySelector(`select[name="movilidad_${mov.numero}"]`);
+                    const inputFecha = grupo.querySelector(`input[name="${obtenerNombreFecha(mov.numero)}"]`);
+
+                    // Actualizar valores
+                    selectOriginal.value = mov.valor;
+                    inputFecha.value = mov.fecha;
+
+                    // Forzar actualización de visibilidad
+                    if(inputFecha.value) {
+                        inputFecha.dispatchEvent(new Event('input'));
+                        grupo.style.display = 'flex';
+                    }
+
+                    // Actualizar componente visual
+                    actualizarComponenteVisual(selectOriginal);
+                });
+
+                // Actualizar visibilidad final
+                actualizarVisibilidadGrupos();
+            });
+
+            function actualizarComponenteVisual(selectOriginal) {
+                const customContainer = selectOriginal.closest('.custom-select-container');
+                const displaySpan = customContainer.querySelector('.selected-value');
+                const optionsDiv = customContainer.querySelector('.custom-options');
+
+                const selectedOption = Array.from(selectOriginal.options).find(opt => opt.value === selectOriginal.value);
+                if(selectedOption) {
+                    displaySpan.textContent = selectedOption.text;
+                    optionsDiv.querySelectorAll('.custom-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                        if(opt.dataset.value === selectOriginal.value) {
+                            opt.classList.add('selected');
+                        }
+                    });
+                }
+            }
+
+        function obtenerNombreFecha(numero) {
+            const nombresFechas = [
+                'primer_fecha_fin', 
+                'segunda_fecha_fin', 
+                'tercer_fecha_fin', 
+                'cuarta_fecha_fin', 
+                'quinta_fecha_fin', 
+                'sexta_fecha_fin'
+            ];
+            return nombresFechas[numero - 1];
+        }
+            // Función para mostrar/ocultar grupos
+            function actualizarVisibilidadGrupos() {
+                const grupos = document.querySelectorAll('.movilidad-group');
+
+                grupos.forEach((grupo, index) => {
+                    if (index === 0) return; // El primer grupo siempre visible
+
+                    const grupoAnterior = grupos[index - 1];
+                    const fechaAnterior = grupoAnterior.querySelector('input[type="date"]');
+
+                    if (fechaAnterior.value) {
+                        grupo.style.display = 'flex';
+                    } else {
+                        grupo.style.display = 'none';
+
+                        // Resetear valores del grupo oculto
+                        const select = grupo.querySelector('select');
+                        const inputFecha = grupo.querySelector('input[type="date"]');
+                        const customSelectInput = grupo.querySelector('.custom-select-input .selected-value');
+
+                        if (select) {
+                            select.value = ''; // Resetear el select original
+                            customSelectInput.textContent = 'Selecciona la movilidad'; // Resetear el display visual
+                        }
+
+                        if (inputFecha) {
+                            inputFecha.value = ''; // Resetear la fecha
+                        }
+
+                        // Limpiar selección visual en el dropdown
+                        const optionsDiv = grupo.querySelector('.custom-options');
+                        if (optionsDiv) {
+                            optionsDiv.querySelectorAll('.custom-option').forEach(opt => {
+                                opt.classList.remove('selected');
+                            });
+                        }
+                    }
+                });
+            }
+
+            // Event listeners para todos los inputs de fecha
+            document.querySelectorAll('.movilidad-group input[type="date"]').forEach(input => {
+                input.addEventListener('input', actualizarVisibilidadGrupos);
+            });
+
+            // Inicializar al cargar
+            document.addEventListener('DOMContentLoaded', actualizarVisibilidadGrupos);
+    </script>
+</body>
+</html>
