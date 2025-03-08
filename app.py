@@ -30,6 +30,7 @@ from services.comparador_productos.comparador_productos import Comparador_produc
 from services.movilizador_de_haber.movilizador_de_haber import calculo_retroactivo
 from services.planilla_docente.planilla_docente import Planilla_Docente
 from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
+from services.base_datos_casos.pdf_gemini import extract_text_from_pdf, analyze_legal_documents
 # Entities
 from models.entities.User import User
 
@@ -1171,10 +1172,28 @@ def comparador_productos_publica():
     return render_template('herramientas_publicas/comparador_productos_publica.html')
 
 @app.route('/upload_file', methods=['POST'])
+@login_required
 def upload_file():
-    # Lógica para manejar los archivos subidos
-    return "Archivo subido correctamente"
+    if 'documentos[]' not in request.files:
+        return "No se enviaron archivos", 400
 
+    archivos = request.files.getlist('documentos[]')
+    textos = []
+    for archivo in archivos:
+        if archivo.filename == '':
+            continue
+        # Extrae el texto del PDF
+        texto = extract_text_from_pdf(archivo)
+        textos.append(texto)
+
+    # Concatena el texto de todos los archivos, separándolos con dos saltos de línea
+    texto_concatenado = "\n\n".join(textos)
+
+    # Llama a la función que analiza los documentos con la API de Gemini
+    resultado_gemini = analyze_legal_documents(texto_concatenado)
+
+    # Muestra el resultado en una plantilla
+    return render_template('base_datos_casos/resultado.html', resultado=resultado_gemini)
 
 
 if __name__ == '__main__':

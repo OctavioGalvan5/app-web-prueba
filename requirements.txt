@@ -11,3 +11,5 @@ pandas
 openpyxl
 plotly
 kaleido
+PyPDF2
+google-generativeai

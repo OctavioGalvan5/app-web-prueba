@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultado del Análisis</title>
+</head>
+<body>
+  <h2>Resultado del Análisis de Sentencias</h2>
+  <pre>{{ resultado | tojson(indent=4) }}</pre>
+  <a href="{{ url_for('extraer_texto_pdf') }}">Volver</a>
+</body>
+</html>
