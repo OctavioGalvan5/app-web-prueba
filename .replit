@@ -1,4 +1,4 @@
-modules = ["web", "python-3.11", "nix"]
+modules = ["nix", "python-3.11", "web"]
 run = "python app.py"
 [nix]
 channel = "stable-24_05"

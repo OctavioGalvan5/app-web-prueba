@@ -1,4 +1,3 @@
-
 from babel.numbers import format_currency
 from datetime import datetime
 from models.database import engine
@@ -35,7 +34,7 @@ def obtener_porcentaje_minimo(valor_ingresado):
 
 def formatear_dinero(cantidad):
     return format_currency(cantidad, 'ARS', locale='es_AR').replace(u'\xa0', u'')
-  
+
 def dividir(monto, valor_uma):
   resultado = float(monto) / float(valor_uma)
   return round(resultado, 2)
@@ -43,11 +42,11 @@ def dividir(monto, valor_uma):
 def calcular_porcentaje(porcentaje, numero):
   resultado = (porcentaje / 100) * numero
   return round(resultado, 2)
-  
+
 def sumar_porcentaje(porcentaje, numero):
   resultado = numero + (numero * porcentaje / 100)
   return round(resultado, 2)
-  
+
 def restar_porcentaje(porcentaje, numero):
   resultado = numero - (numero * porcentaje / 100)
   return round(resultado, 2)
@@ -77,7 +76,7 @@ def transformar_fecha_periodo(fecha):
   # Formatear la fecha al nuevo formato deseado
   fecha_formateada = fecha_objeto.strftime("%m/%Y")
   return fecha_formateada
-                                      
+
 def calcular_porcentajes_ley_21839(monto):
   porcentaje_aplicable= calcular_porcentaje(13,monto)
   apoderada = sumar_porcentaje(30,porcentaje_aplicable)
