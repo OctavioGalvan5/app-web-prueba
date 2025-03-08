@@ -1,7 +1,7 @@
-import google.generativeai as genai
 import PyPDF2
 import re
 import json
+import google.generativeai as uwu
 
 def extract_text_from_pdf(file):
     """
@@ -17,7 +17,7 @@ def analyze_legal_documents(texto_pdfs):
     la API key proporcionada y retorna un diccionario con la información extraída en formato JSON.
     """
     # Configura la API de Gemini usando la API key dada
-    genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
+    uwu.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
 
     prompt = f"""Eres un asistente legal experto en analizar sentencias judiciales. Los siguientes documentos están relacionados con un mismo caso. Analiza la información y proporciona un resumen consolidado en formato JSON:
 
@@ -35,11 +35,30 @@ def analyze_legal_documents(texto_pdfs):
 Texto de los documentos:
 {texto_pdfs}
 """
-    response = genai.GenerativeModel("gemini-2.0-flash").generate_content(prompt)
+    response = uwu.GenerativeModel("gemini-2.0-flash").generate_content(prompt)
     json_response = response.text
 
-    # Extrae y limpia el JSON de la respuesta
-    json_response = re.search(r'\{.*\}', json_response.replace('\n', ''), re.DOTALL).group(0)
+    # Escapar las comillas dobles dentro del texto
+    json_response = json_response.replace('"', '\\"')
+
+    # Busca el JSON dentro de la respuesta, si existe
+    match = re.search(r'\{.*\}', json_response.replace('\n', ''), re.DOTALL)
+
+    if match:
+        json_response = match.group(0)
+        print("JSON extraído:", json_response)  # Imprime el JSON extraído
+    else:
+        print("No se encontró un JSON válido en la respuesta")
+        return None  # O cualquier otro valor predeterminado que desees
+
+    # Reemplaza comillas escapadas si es necesario
     json_response = json_response.replace('\\"', '"').replace("'", '"')
-    data = json.loads(json_response)
+
+    try:
+        data = json.loads(json_response)
+    except json.decoder.JSONDecodeError as e:
+        print(f"Error al analizar JSON: {e}")
+        print(f"JSON recibido: {json_response}")
+        return None  # O cualquier otro valor predeterminado que desees
+
     return data
