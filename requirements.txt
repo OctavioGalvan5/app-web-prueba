@@ -1,4 +1,3 @@
-google-generativeai
 Flask
 Gunicorn
 sqlalchemy
@@ -13,3 +12,4 @@ openpyxl
 plotly
 kaleido
 PyPDF2
+google-generativeai
