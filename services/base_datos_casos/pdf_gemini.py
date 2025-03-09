@@ -1,7 +1,7 @@
 import PyPDF2
 import re
 import json
-import google.generativeai as uwu
+import google.generativeai as genai
 from sqlalchemy import text
 from models.database import engine  # Verifica que la conexión esté bien configurada
 from datetime import datetime
@@ -31,7 +31,7 @@ def extract_text_from_pdf(file):
 
 def analyze_legal_documents(texto_pdfs):
     try:
-        uwu.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
+        genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
 
         prompt = f"""Eres un asistente legal experto en analizar sentencias judiciales. Los siguientes documentos estan relacionados con un mismo caso. Analiza la informacion y proporciona un resumen consolidado en formato JSON, Importante: NO uses acentos (reemplaza las vocales acentuadas por sus equivalentes sin acento):
 
@@ -40,12 +40,12 @@ def analyze_legal_documents(texto_pdfs):
     "honorarios": "cantidad de honorarios mencionados en los documentos. Importante: deben ser los mas recientes, y deben ser devueltos de la siguiente manera, por ejemplo si los honorarios son $125.456,56, se devolvera como 125456.56 (si no se mencionan, indica devolver "" es decir null)",
     "instancia": "instancia (ejemplo: Primera Instancia, Segunda Instancia, etc.)",
     "jueces": "nombres de los jueces que dictaron la sentencia",
-    "nombre_caso": "nombre del caso",
+    "nombre_caso": "nombre del caso (No debes darlo todo en mayusculas, por ejemplo Si el Caso se llama PEDRO GUZMAN C/ANSES, Darlo como Pedro Guzman C/Anses, respeta la gramatica)",
     "numero_expediente": "numero de expediente",
     "fecha_sentencia": "fecha de la sentencia, damela en formato DD/MM/AAAA, en caso de no tener el dia, ponerlo como 01/MM/AAAA" si no hay fecha de manera explicativa, poner "" es decir null",
     "palabras_clave": "palabras clave mas relevantes del caso",
     "jurisdiccion": "jurisdiccion a la que pertenece la sentencia",
-    "juzgado": "juzgado que emitio la sentencia",
+    "juzgado": "juzgado que emitio la sentencia (No debes darlo todo en mayusculas, por ejemplo si el juzgado es CAMARA FEDERAL DE SALTA 1 , Darlo como Camara Federal de Salta 1, respeta la gramatica)",
     "caratula": "caratula de la sentencia",
     "fundamentos": "fundamentos legales de la sentencia",
     "normativa": "normativa aplicada en la sentencia (si no se menciona, indica: 'No se menciona normativa')",
@@ -56,7 +56,7 @@ def analyze_legal_documents(texto_pdfs):
 Texto de los documentos:
 {texto_pdfs}
 """
-        model = uwu.GenerativeModel("gemini-2.0-flash")
+        model = genai.GenerativeModel("gemini-2.0-flash")
         response = model.generate_content(prompt)
         json_response = response.text
 

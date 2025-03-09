@@ -3,7 +3,7 @@ import tempfile
 from docx import Document
 from docx.shared import Inches
 from datetime import datetime, timedelta
-from flask import Flask, render_template, request, make_response, send_file, redirect, url_for, flash, session
+from flask import Flask, render_template, request, make_response, send_file, redirect, url_for, flash, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
 from sqlalchemy.exc import OperationalError
@@ -15,6 +15,7 @@ from io import BytesIO
 from decimal import Decimal
 import pandas as pd
 import openpyxl
+import google.generativeai as genai
 #Models
 from models.ModelUser import ModelUser
 from sqlalchemy import text
@@ -1230,7 +1231,6 @@ def eliminar_caso(id):
                 {"id": id}
             )
             if not result.fetchone():
-                flash("El caso no existe", "error")
                 return redirect(url_for('ver_casos'))
 
             # Eliminar el caso
@@ -1239,10 +1239,8 @@ def eliminar_caso(id):
                 {"id": id}
             )
 
-        flash("Caso eliminado correctamente", "success")
     except Exception as e:
         print(f"Error al eliminar caso: {e}")
-        flash("Error al eliminar el caso", "error")
 
     return redirect(url_for('ver_casos'))
 @app.route('/upload_file', methods=['POST'])
@@ -1280,6 +1278,61 @@ def upload_file():
 
     # Muestra el resultado en una plantilla
     return redirect(url_for('ver_casos'))
+
+genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
+model = genai.GenerativeModel('gemini-2.0-flash', system_instruction="Eres una IA de un estudio Juridico Toyos y Espin, siempre se cordial, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible")
+
+@app.route('/chat', methods=['POST'])
+@login_required
+def chat():
+    try:
+        # Obtén los casos de la base de datos
+        with engine.connect() as connection:
+            result = connection.execute(text("SELECT * FROM sentencias"))
+            casos = [dict(row._mapping) for row in result]
+
+        # Prepara el contexto con los casos
+        contexto = "Tienes acceso a los siguientes casos:\n\n"
+        for caso in casos:
+            contexto += f"""
+            Nombre del caso: {caso['nombre_caso']}
+            Expediente: {caso['numero_expediente']}
+            Instancia: {caso['instancia']}
+            Juzgado: {caso['juzgado']}
+            Fecha: {caso['fecha_sentencia']}
+            Honorarios: {caso['honorarios']}
+            Resumen: {caso['resumen']}
+            --------------------------\n
+            """
+
+        # Obtén el mensaje del usuario
+        data = request.get_json()
+        mensaje_usuario = data.get('mensaje')
+
+        # Prepara el prompt
+        prompt = f"""
+        Eres un asistente legal experto en casos judiciales. 
+        Tienes acceso a la siguiente información de casos:
+
+        {contexto}
+
+        El usuario te ha preguntado: {mensaje_usuario}
+
+        Responde de manera clara y concisa, refiriéndote a los casos específicos cuando sea necesario.
+        Si no encuentras información relevante, indica que no tienes datos sobre ese caso.
+        """
+
+        # Genera la respuesta
+        response = model.generate_content(prompt)
+        return jsonify({'respuesta': response.text})
+
+    except Exception as e:
+        print(f"Error en el chat: {e}")
+        return jsonify({'error': 'Hubo un error procesando tu solicitud'}), 500
+
+
+
+
 
 
 if __name__ == '__main__':

@@ -156,7 +156,77 @@
         .submit-button:hover {
             background-color: #3a0066;
         }
-        
+
+        .chat-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #4B0082;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .chat-input button {
+            background-color: #4B0082;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chat-input button:hover {
+            background-color: #3a0066;
+        }
+
+        .mensaje-usuario {
+            background: #4B0082;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            align-self: flex-end;
+            word-break: break-word;
+        }
+
+        .mensaje-ia {
+            background: #e6e6fa;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            word-break: break-word;
+        }
+
+        .error {
+            color: #dc3545;
+            background: #ffe6e6;
+        }
     </style>
 </head>
     <body>
