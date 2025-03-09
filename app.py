@@ -17,6 +17,8 @@ import pandas as pd
 import openpyxl
 #Models
 from models.ModelUser import ModelUser
+from sqlalchemy import text
+from models.database import engine  # Verifica que la conexión esté bien configurada
 #Services
 from services.generador_demandas.demanda import Formulario
 from services.calculadora_uma.generador_pdf import PDFGenerator
@@ -30,7 +32,7 @@ from services.comparador_productos.comparador_productos import Comparador_produc
 from services.movilizador_de_haber.movilizador_de_haber import calculo_retroactivo
 from services.planilla_docente.planilla_docente import Planilla_Docente
 from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
-from services.base_datos_casos.pdf_gemini import extract_text_from_pdf, analyze_legal_documents
+from services.base_datos_casos.pdf_gemini import extract_text_from_pdf, analyze_legal_documents, save_sentencia_to_db, update_sentencia_in_db
 # Entities
 from models.entities.User import User
 
@@ -1157,7 +1159,7 @@ def resultado_herramientas_demandas():
 @app.route('/base_datos_casos')
 @login_required
 def base_datos_casos():
-    return render_template('base_datos_casos/base_datos_casos.html')
+    return render_template('base_datos_casos/casos.html')
 
 @app.route('/calculadora_movilidad_publica')
 def calculadora_movilidad_publica():
@@ -1171,10 +1173,83 @@ def calculadora_tope_maximo_publica():
 def comparador_productos_publica():
     return render_template('herramientas_publicas/comparador_productos_publica.html')
 
+# Agrega esto en tu archivo principal de Flask (app.py o similar)
+@app.template_filter('formato_moneda')
+def formato_moneda(value):
+    try:
+        if value is None:
+            return ""
+        # Convertir a float por si viene como string desde la BD
+        amount = float(value)
+        # Formatear con separadores de miles y decimales
+        return "${:,.2f}".format(amount).replace(",", "X").replace(".", ",").replace("X", ".")
+    except (ValueError, TypeError):
+        return ""
+
+@app.route('/ver_casos')
+@login_required
+def ver_casos():
+    with engine.connect() as connection:
+        result = connection.execute(text("SELECT * FROM sentencias"))
+        casos = [dict(row._mapping) for row in result]
+    return render_template('base_datos_casos/casos.html', casos=casos)
+
+@app.route('/editar_caso/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_caso(id):
+    if request.method == 'POST':
+        # Procesar la edición
+        data = request.form.to_dict()
+        data['id'] = id
+        update_sentencia_in_db(data)
+        flash("Caso actualizado correctamente", "success")
+        return redirect(url_for('ver_casos'))
+
+    # Obtener el caso existente
+    with engine.connect() as connection:
+        result = connection.execute(
+            text("SELECT * FROM sentencias WHERE id = :id"),
+            {"id": id}
+        )
+        caso = result.mappings().first()
+
+    if not caso:
+        flash("Caso no encontrado", "error")
+        return redirect(url_for('ver_casos'))
+
+    return render_template('base_datos_casos/editar_caso.html', caso=caso)
+
+@app.route('/eliminar_caso/<int:id>', methods=['POST'])
+@login_required
+def eliminar_caso(id):
+    try:
+        with engine.begin() as connection:
+            # Primero verificar que existe el caso
+            result = connection.execute(
+                text("SELECT * FROM sentencias WHERE id = :id"),
+                {"id": id}
+            )
+            if not result.fetchone():
+                flash("El caso no existe", "error")
+                return redirect(url_for('ver_casos'))
+
+            # Eliminar el caso
+            connection.execute(
+                text("DELETE FROM sentencias WHERE id = :id"),
+                {"id": id}
+            )
+
+        flash("Caso eliminado correctamente", "success")
+    except Exception as e:
+        print(f"Error al eliminar caso: {e}")
+        flash("Error al eliminar el caso", "error")
+
+    return redirect(url_for('ver_casos'))
 @app.route('/upload_file', methods=['POST'])
 @login_required
 def upload_file():
     if 'documentos[]' not in request.files:
+        flash("No se enviaron archivos", "error")
         return "No se enviaron archivos", 400
 
     archivos = request.files.getlist('documentos[]')
@@ -1182,9 +1257,12 @@ def upload_file():
     for archivo in archivos:
         if archivo.filename == '':
             continue
-        # Extrae el texto del PDF
         texto = extract_text_from_pdf(archivo)
         textos.append(texto)
+
+    if not textos:
+        flash("No se pudo extraer texto de los archivos", "error")
+        return redirect(url_for('ver_casos'))
 
     # Concatena el texto de todos los archivos, separándolos con dos saltos de línea
     texto_concatenado = "\n\n".join(textos)
@@ -1192,8 +1270,16 @@ def upload_file():
     # Llama a la función que analiza los documentos con la API de Gemini
     resultado_gemini = analyze_legal_documents(texto_concatenado)
 
+    if resultado_gemini:
+        # Llamada a la función para guardar en la BD
+        save_sentencia_to_db(resultado_gemini)
+        flash("Sentencia guardada correctamente.", "success")
+    else:
+        flash("No se pudo analizar el documento.", "error")
+        return redirect(url_for('upload_file'))
+
     # Muestra el resultado en una plantilla
-    return render_template('base_datos_casos/resultado.html', resultado=resultado_gemini)
+    return redirect(url_for('ver_casos'))
 
 
 if __name__ == '__main__':

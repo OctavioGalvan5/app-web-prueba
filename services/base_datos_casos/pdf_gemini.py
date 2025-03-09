@@ -2,63 +2,175 @@ import PyPDF2
 import re
 import json
 import google.generativeai as uwu
+from sqlalchemy import text
+from models.database import engine  # Verifica que la conexión esté bien configurada
+from datetime import datetime
+
+def convertir_fecha(fecha_str):
+    formatos = [
+        "%Y-%m-%d",  # Formato ISO (input date)
+        "%d/%m/%Y",  # Formato original
+        "%m/%Y",     # Formato sin día
+        "%Y-%m"      # Formato ISO sin día
+    ]
+
+    for formato in formatos:
+        try:
+            fecha_obj = datetime.strptime(fecha_str, formato).date()
+            return fecha_obj
+        except ValueError:
+            continue
+
+    print(f"Formato de fecha no reconocido: {fecha_str}")
+    return None
 
 def extract_text_from_pdf(file):
-    """
-    Recibe un objeto FileStorage (archivo PDF subido) y retorna el texto extraído.
-    """
     pdf_reader = PyPDF2.PdfReader(file)
-    text = "".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
-    return text
+    text_content = "".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
+    return text_content
 
 def analyze_legal_documents(texto_pdfs):
-    """
-    Recibe el texto concatenado de documentos legales, configura la API de Gemini usando
-    la API key proporcionada y retorna un diccionario con la información extraída en formato JSON.
-    """
-    # Configura la API de Gemini usando la API key dada
-    uwu.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
+    try:
+        uwu.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
 
-    prompt = f"""Eres un asistente legal experto en analizar sentencias judiciales. Los siguientes documentos están relacionados con un mismo caso. Analiza la información y proporciona un resumen consolidado en formato JSON:
+        prompt = f"""Eres un asistente legal experto en analizar sentencias judiciales. Los siguientes documentos estan relacionados con un mismo caso. Analiza la informacion y proporciona un resumen consolidado en formato JSON, Importante: NO uses acentos (reemplaza las vocales acentuadas por sus equivalentes sin acento):
 
 {{
     "resumen": "resumen breve del caso considerando ambos documentos, minimo 200 palabras",
-    "honorarios": "cantidad de honorarios mencionados en ambos documentos (si no se mencionan, indica: 'No se mencionan Honorarios')",
+    "honorarios": "cantidad de honorarios mencionados en los documentos. Importante: deben ser los mas recientes, y deben ser devueltos de la siguiente manera, por ejemplo si los honorarios son $125.456,56, se devolvera como 125456.56 (si no se mencionan, indica devolver "" es decir null)",
     "instancia": "instancia (ejemplo: Primera Instancia, Segunda Instancia, etc.)",
     "jueces": "nombres de los jueces que dictaron la sentencia",
     "nombre_caso": "nombre del caso",
-    "numero_expediente": "número de expediente",
-    "fecha_sentencia": "fecha de la sentencia (dos fechas en caso que haya dos sentencias), damela en formato DD/MM/AAAA, en caso de no tener el día, ponerlo como 01/MM/AAAA",
-    "palabras_clave": "palabras clave más relevantes del caso"
+    "numero_expediente": "numero de expediente",
+    "fecha_sentencia": "fecha de la sentencia, damela en formato DD/MM/AAAA, en caso de no tener el dia, ponerlo como 01/MM/AAAA" si no hay fecha de manera explicativa, poner "" es decir null",
+    "palabras_clave": "palabras clave mas relevantes del caso",
+    "jurisdiccion": "jurisdiccion a la que pertenece la sentencia",
+    "juzgado": "juzgado que emitio la sentencia",
+    "caratula": "caratula de la sentencia",
+    "fundamentos": "fundamentos legales de la sentencia",
+    "normativa": "normativa aplicada en la sentencia (si no se menciona, indica: 'No se menciona normativa')",
+    "numero_resolucion": "numero de resolucion (si no se menciona, indica: 'No se menciona numero de resolucion')",
+    "estado_sentencia": "estado de la sentencia (ejemplo: Firme, Sujeta a Revision)"
 }}
 
 Texto de los documentos:
 {texto_pdfs}
 """
-    response = uwu.GenerativeModel("gemini-2.0-flash").generate_content(prompt)
-    json_response = response.text
+        model = uwu.GenerativeModel("gemini-2.0-flash")
+        response = model.generate_content(prompt)
+        json_response = response.text
 
-    # Escapar las comillas dobles dentro del texto
-    json_response = json_response.replace('"', '\\"')
+        # Buscar el bloque JSON en la respuesta
+        match = re.search(r'\{.*\}', json_response.replace('\n', ''), re.DOTALL)
+        if match:
+            json_response = match.group(0)
+            print("JSON extraido:", json_response)
+        else:
+            print("No se encontro un JSON valido en la respuesta")
+            return None
 
-    # Busca el JSON dentro de la respuesta, si existe
-    match = re.search(r'\{.*\}', json_response.replace('\n', ''), re.DOTALL)
+        # Cargar y decodificar el JSON
+        try:
+            data = json.loads(json_response)
+            return data
+        except json.decoder.JSONDecodeError as e:
+            print(f"Error al analizar JSON: {e}")
+            print(f"JSON recibido: {json_response}")
+            return None
 
-    if match:
-        json_response = match.group(0)
-        print("JSON extraído:", json_response)  # Imprime el JSON extraído
-    else:
-        print("No se encontró un JSON válido en la respuesta")
-        return None  # O cualquier otro valor predeterminado que desees
+    except Exception as e:
+        print(f"Error al llamar a la API de Gemini: {e}")
+        return None
 
-    # Reemplaza comillas escapadas si es necesario
-    json_response = json_response.replace('\\"', '"').replace("'", '"')
+def save_sentencia_to_db(data):
+    fecha_str = data.get("fecha_sentencia")
+    fecha_date = convertir_fecha(fecha_str) if fecha_str else None
+
+    sentencia_data = {
+        "resumen": data.get("resumen"),
+        "honorarios": data.get("honorarios"),
+        "instancia": data.get("instancia"),
+        "jueces": data.get("jueces"),
+        "nombre_caso": data.get("nombre_caso"),
+        "numero_expediente": data.get("numero_expediente"),
+        "fecha_sentencia": fecha_date,  # Ahora es un objeto date
+        "palabras_clave": data.get("palabras_clave"),
+        "jurisdiccion": data.get("jurisdiccion"),
+        "juzgado": data.get("juzgado"),
+        "caratula": data.get("caratula"),
+        "fundamentos": data.get("fundamentos"),
+        "normativa": data.get("normativa"),
+        "numero_resolucion": data.get("numero_resolucion"),
+        "estado_sentencia": data.get("estado_sentencia")
+    }
+
+    insert_query = text("""
+        INSERT INTO sentencias (
+            resumen, honorarios, instancia, jueces, nombre_caso, numero_expediente,
+            fecha_sentencia, palabras_clave, jurisdiccion, juzgado, caratula,
+            fundamentos, normativa, numero_resolucion, estado_sentencia
+        ) VALUES (
+            :resumen, :honorarios, :instancia, :jueces, :nombre_caso, :numero_expediente,
+            :fecha_sentencia, :palabras_clave, :jurisdiccion, :juzgado, :caratula,
+            :fundamentos, :normativa, :numero_resolucion, :estado_sentencia
+        )
+    """)
 
     try:
-        data = json.loads(json_response)
-    except json.decoder.JSONDecodeError as e:
-        print(f"Error al analizar JSON: {e}")
-        print(f"JSON recibido: {json_response}")
-        return None  # O cualquier otro valor predeterminado que desees
+        with engine.begin() as connection:
+            result = connection.execute(insert_query, sentencia_data)
+            print("Filas insertadas:", result.rowcount)
+        print("Datos insertados en la base de datos.")
+    except Exception as e:
+        print("Error al insertar en la base de datos:", e)
 
-    return data
+def update_sentencia_in_db(data):
+    fecha_str = data.get("fecha_sentencia")
+    fecha_date = convertir_fecha(fecha_str) if fecha_str else None
+
+    sentencia_data = {
+        "id": data.get("id"),
+        "resumen": data.get("resumen"),
+        "honorarios": data.get("honorarios"),
+        "instancia": data.get("instancia"),
+        "jueces": data.get("jueces"),
+        "nombre_caso": data.get("nombre_caso"),
+        "numero_expediente": data.get("numero_expediente"),
+        "fecha_sentencia": fecha_date,
+        "palabras_clave": data.get("palabras_clave"),
+        "jurisdiccion": data.get("jurisdiccion"),
+        "juzgado": data.get("juzgado"),
+        "caratula": data.get("caratula"),
+        "fundamentos": data.get("fundamentos"),
+        "normativa": data.get("normativa"),
+        "numero_resolucion": data.get("numero_resolucion"),
+        "estado_sentencia": data.get("estado_sentencia")
+    }
+
+    update_query = text("""
+        UPDATE sentencias SET
+            resumen = :resumen,
+            honorarios = :honorarios,
+            instancia = :instancia,
+            jueces = :jueces,
+            nombre_caso = :nombre_caso,
+            numero_expediente = :numero_expediente,
+            fecha_sentencia = :fecha_sentencia,
+            palabras_clave = :palabras_clave,
+            jurisdiccion = :jurisdiccion,
+            juzgado = :juzgado,
+            caratula = :caratula,
+            fundamentos = :fundamentos,
+            normativa = :normativa,
+            numero_resolucion = :numero_resolucion,
+            estado_sentencia = :estado_sentencia
+        WHERE id = :id
+    """)
+
+    try:
+        with engine.begin() as connection:
+            result = connection.execute(update_query, sentencia_data)
+            print("Filas actualizadas:", result.rowcount)
+        print("Datos actualizados en la base de datos.")
+    except Exception as e:
+        print("Error al actualizar en la base de datos:", e)
