@@ -1280,7 +1280,7 @@ def upload_file():
     return redirect(url_for('ver_casos'))
 
 genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
-model = genai.GenerativeModel('gemini-2.0-flash', system_instruction="Eres una IA de un estudio Juridico Toyos y Espin, siempre se cordial, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible")
+model = genai.GenerativeModel('gemini-2.0-flash', system_instruction="Eres una IA de un estudio Juridico Toyos y Espin, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible")
 
 @app.route('/chat', methods=['POST'])
 @login_required
@@ -1291,40 +1291,51 @@ def chat():
             result = connection.execute(text("SELECT * FROM sentencias"))
             casos = [dict(row._mapping) for row in result]
 
-        # Prepara el contexto con los casos
-        contexto = "Tienes acceso a los siguientes casos:\n\n"
-        for caso in casos:
-            contexto += f"""
-            Nombre del caso: {caso['nombre_caso']}
-            Expediente: {caso['numero_expediente']}
-            Instancia: {caso['instancia']}
-            Juzgado: {caso['juzgado']}
-            Fecha: {caso['fecha_sentencia']}
-            Honorarios: {caso['honorarios']}
-            Resumen: {caso['resumen']}
-            --------------------------\n
-            """
+        # Construir contexto con los casos
+        contexto = f"Tienes acceso a los siguientes casos, si se te pregunta sobre ellos, haras un resumen de toda la informacion (Importante: nunca uses el dato de id) :\n\n {casos} "
 
         # Obtén el mensaje del usuario
         data = request.get_json()
         mensaje_usuario = data.get('mensaje')
 
-        # Prepara el prompt
+        # Recuperar historial del chat desde la sesión
+        if 'historial_chat' not in session:
+            session['historial_chat'] = []
+
+        # Agregar mensaje del usuario al historial
+        session['historial_chat'].append(f"Usuario: {mensaje_usuario}")
+
+        # Construir historial del chat
+        historial_chat = "\n".join(session['historial_chat'])
+
+        # Construir el prompt con memoria del chat
         prompt = f"""
-        Eres un asistente legal experto en casos judiciales. 
+        Eres un asistente legal experto en casos judiciales.
+        Importante: solo debes saludar si eres el primer mensaje, despues no.
         Tienes acceso a la siguiente información de casos:
 
         {contexto}
 
-        El usuario te ha preguntado: {mensaje_usuario}
+        Conversación previa:
+        {historial_chat}
 
+        El usuario te ha preguntado: {mensaje_usuario}
+        Importante: nunca uses el dato de id, siempre responderas en español y si se te pide informacion sobre un caso lo daras de manera ordenada y con parrafos en lo posible, respetando reglas gramaticales, aqui tienes un ejemplo:
+
+        El caso Costanzo Emilse Noemi C/ANSES fue resuelto por la Cámara Federal de la Seguridad Social - Sala 1, que analizó un recurso interpuesto por ANSES en contra de la regulación de honorarios y la imposición de costas. La Cámara confirmó que ANSES debía asumir las costas conforme al principio objetivo de la derrota (art. 68 del CPCCN) y jurisprudencia de la CSJN (Rueda, Orlinda c/ ANSES y Morales, Blanca Azucena c/ ANSES). En cuanto a los honorarios, se consideró la complejidad del caso, el mérito profesional, las tareas realizadas en la ejecución y el precedente Finn Carlos Ignacio c/ ANSES, aplicando la Ley 27.423 (arts. 15, 16, 21, 24, 29, 41 y 51), la Acordada CSJN 30/2023 y la Resolución SGA 1497/2024, reduciéndolos a $1.575.300 (30 UMA). El expediente Nº 16712/2011 se encuentra en segunda instancia, con sentencia dictada el 30 de julio de 2024, bajo la jurisdicción de la Cámara Federal de la Seguridad Social - Sala 1, aunque sin mención de los jueces intervinientes. La carátula del expediente es Costanzo Emilse Noemi C/ANSES s/Incidente, y la sentencia permanece sujeta a revisión.
+        
         Responde de manera clara y concisa, refiriéndote a los casos específicos cuando sea necesario.
         Si no encuentras información relevante, indica que no tienes datos sobre ese caso.
         """
 
-        # Genera la respuesta
+        # Genera la respuesta con Gemini
         response = model.generate_content(prompt)
-        return jsonify({'respuesta': response.text})
+        respuesta = response.text.strip()
+
+        # Agregar respuesta al historial de chat
+        session['historial_chat'].append(f"Asistente: {respuesta}")
+
+        return jsonify({'respuesta': respuesta})
 
     except Exception as e:
         print(f"Error en el chat: {e}")
