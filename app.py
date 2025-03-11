@@ -33,7 +33,8 @@ from services.comparador_productos.comparador_productos import Comparador_produc
 from services.movilizador_de_haber.movilizador_de_haber import calculo_retroactivo
 from services.planilla_docente.planilla_docente import Planilla_Docente
 from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
-from services.base_datos_casos.pdf_gemini import extract_text_from_pdf, analyze_legal_documents, save_sentencia_to_db, update_sentencia_in_db
+from services.base_datos_casos.pdf_gemini import update_sentencia_in_db
+from services.base_datos_casos.drive_utils import process_and_save_file
 # Entities
 from models.entities.User import User
 
@@ -1220,6 +1221,33 @@ def editar_caso(id):
 
     return render_template('base_datos_casos/editar_caso.html', caso=caso)
 
+@app.route('/upload_file', methods=['POST'])
+@login_required
+def upload_file():
+    if 'documentos[]' not in request.files:
+        flash("No se enviaron archivos", "error")
+        return redirect(url_for('ver_casos'))
+
+    archivos = request.files.getlist('documentos[]')
+    processed = False
+
+    for archivo in archivos:
+        if archivo.filename == '':
+            continue
+
+        # Llama a la función que procesa el archivo:
+        drive_link, error = process_and_save_file(archivo.stream, archivo.filename)
+        if error:
+            flash(error, "error")
+        else:
+            flash(f"Archivo {archivo.filename} subido y analizado correctamente.", "success")
+            processed = True
+
+    if not processed:
+        flash("No se pudo procesar ningún archivo.", "error")
+
+    return redirect(url_for('ver_casos'))
+
 @app.route('/eliminar_caso/<int:id>', methods=['POST'])
 @login_required
 def eliminar_caso(id):
@@ -1243,41 +1271,7 @@ def eliminar_caso(id):
         print(f"Error al eliminar caso: {e}")
 
     return redirect(url_for('ver_casos'))
-@app.route('/upload_file', methods=['POST'])
-@login_required
-def upload_file():
-    if 'documentos[]' not in request.files:
-        flash("No se enviaron archivos", "error")
-        return "No se enviaron archivos", 400
 
-    archivos = request.files.getlist('documentos[]')
-    textos = []
-    for archivo in archivos:
-        if archivo.filename == '':
-            continue
-        texto = extract_text_from_pdf(archivo)
-        textos.append(texto)
-
-    if not textos:
-        flash("No se pudo extraer texto de los archivos", "error")
-        return redirect(url_for('ver_casos'))
-
-    # Concatena el texto de todos los archivos, separándolos con dos saltos de línea
-    texto_concatenado = "\n\n".join(textos)
-
-    # Llama a la función que analiza los documentos con la API de Gemini
-    resultado_gemini = analyze_legal_documents(texto_concatenado)
-
-    if resultado_gemini:
-        # Llamada a la función para guardar en la BD
-        save_sentencia_to_db(resultado_gemini)
-        flash("Sentencia guardada correctamente.", "success")
-    else:
-        flash("No se pudo analizar el documento.", "error")
-        return redirect(url_for('upload_file'))
-
-    # Muestra el resultado en una plantilla
-    return redirect(url_for('ver_casos'))
 
 genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
 model = genai.GenerativeModel('gemini-2.0-flash', system_instruction="Eres una IA de un estudio Juridico Toyos y Espin, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible")

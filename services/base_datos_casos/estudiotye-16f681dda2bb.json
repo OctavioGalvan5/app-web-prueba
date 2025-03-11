@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "estudiotye",
+  "private_key_id": "16f681dda2bbf0e83d02db301a14a7d09e4d09b2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC+UsUB3LRIx1wD\nk5nBUDhtWfURnNDO+G9kTPAW7K3H0llkbN+6PAQISfBQ9m5ivPRoBFWi80Tt2BPT\nVMWFJtIcjU+l0hEefFbLhG9FZg/POwLoEskRgIAIjirAV77kC9M6Vpop86/0pgeE\nNBjZiToLVR/8iTCJcRSias+OlyBhdH4o1Rrxtk0oBmKrM4WVt32j//ZUHzB7qo8U\n+aViuykhWJYYaa4azCtCLV2d3JDbTWnp51A7V8R0rJz7X5OvvwiyrDoznawlXZ7B\nXPsmGGYLXLztakGp5UOwjyqgUN/oPEh+GRmUuVjwXQ3njl+CNJtdZGIUTD552nRL\nRdtAhWIrAgMBAAECggEAF9+QsA/GhYKMUN6I4NjL2zD3hAK5poc/Nxj3h3NKG9CP\nlKtGJ7mI1UlWXbGBCIhPLWUDIPIxk+wQwJIs8et8BkeA1Xn+L7waXw5OWX7Yk36s\nJKmGky1yjKAt+KaJCVilDEz6ADJ9wHW7Ek2T+GWK5F+vKCGaoa2PkGKkL8IBNngL\nnCxuDU1LVoCn6basac/lwVRTd16CJqm7cfAjpeyKXvwYz/V0rzqSydpUycip8DX7\nTA/WoFCGPw6zy+pJVId69umP2VzC0pq3RzUQ1r/z9u5Oa6asRqMDSDGuYQ76WEh5\nKX4fjnq2lxzi2ADRBEEfXmT2cjkZQLQHDm3PiVmzYQKBgQDjoKt1Xvj1f/kQfaZl\njrxq7pcoHGBDQy2GxC/o942NvIWlFzjAlQph1TpXzoJHU8jBIQW7NF03JdFaNfwd\n6nKo+dWQDLYAejBNdh5Oz7pLsfk81o31iZ88xt5YouZe/WmSo1+X0jq9X1MTICt5\nMtlPNmivTwos3VxI9Dcpe8QBGQKBgQDWC8NvVXl0r6vg0CbFXvnCA+HbaQhPUecz\nAoMu7sDlFpqabk0J3DpCsjv/TuxjiTkbEibcILpHuzKdrwGDjRg9JKyEe+v2WAYq\no9HoElS3tVmeIZ8+EmLTGR6gXp3npLWkVVwHxZ77V0yPew9Tr3lphd62A4iWoZSz\nvosNTsvR4wKBgArbgRIqI4niPskQlT1G36niE4ewQs8yhxtkhDyCglf+ZAmJ4AUf\nls0v1IaXrRMl5e+AWbuiNcgJn8DDznDG3A0/TXZ/hLblHSS0u6FauzIdHRxPx5ms\npNHLUpO7wW1KfRyneknNl0utHlNNN4WibUcf+0JRbNTTAjHgpDjwVFsRAoGACJLG\nDDKPP9Y9ey67LtKkDFpddI1bcNnl+cwS9xFHFqX2IVNjsI5qovtCnfJKU55OdEAg\n4FZLP85Gs7wrwlona2OJqXDRPbe+33xaTwJU9FrGMShFmZXg8XWjHWdMydd2ExP8\nMK+As66GeYTDU2XG5iwfhIjVsrrcGur55NmQHmMCgYEA3zGQ/RdKzAjbo0/sn9Hg\nKYqx7Zq4T+fDvZPrl5tkcG9fbD4jCzK1yC1jLG92rGtVSD3Nd9TjaJ738N1ug/01\ncA74ybhZkVD+eEzhTw48WT12kzL6tUq2pBy4Nb47D/5lEXo6c0VtkVi7gE7ryJTW\nIhbt/Tu+Vc/0EfrVOfrEKzo=\n-----END PRIVATE KEY-----\n",
+  "client_email": "drive-upload-service@estudiotye.iam.gserviceaccount.com",
+  "client_id": "114559852350644816567",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/drive-upload-service%40estudiotye.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

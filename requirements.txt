@@ -13,3 +13,6 @@ plotly
 kaleido
 PyPDF2
 google-generativeai
+google-api-python-client
+google-auth
+google-auth-httplib2
