@@ -6,6 +6,7 @@ from googleapiclient.http import MediaIoBaseUpload
 import PyPDF2
 import re
 import json
+import os
 import google.generativeai as genai
 import hashlib
 from datetime import datetime
@@ -13,12 +14,19 @@ from sqlalchemy import text
 from models.database import engine  # Verifica que la conexión esté bien configurada
 from services.base_datos_casos.pdf_gemini import analyze_legal_documents, extract_text_from_pdf, save_sentencia_to_db
 
-# Configuración de la API de Google Drive
+# Definir los alcances (scopes)
 SCOPES = ['https://www.googleapis.com/auth/drive']
-SERVICE_ACCOUNT_FILE = 'services/base_datos_casos/estudiotye-992fd0d6f8d9.json'  # Actualiza esta ruta
 
-credentials = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+# En vez de especificar la ruta al archivo JSON, obtenemos el JSON desde la variable de entorno
+credentials_json = os.getenv("GOOGLE_CREDENTIALS")
+if credentials_json is None:
+    raise Exception("La variable de entorno 'GOOGLE_CREDENTIALS' no está definida.")
+
+# Convertir la cadena JSON a un diccionario de Python
+credentials_info = json.loads(credentials_json)
+
+# Crear las credenciales usando la información del service account y los scopes definidos
+credentials = service_account.Credentials.from_service_account_info(credentials_info, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=credentials)
 
 def calculate_file_hash(file_obj):

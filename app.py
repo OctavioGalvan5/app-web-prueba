@@ -34,7 +34,7 @@ from services.movilizador_de_haber.movilizador_de_haber import calculo_retroacti
 from services.planilla_docente.planilla_docente import Planilla_Docente
 from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
 from services.base_datos_casos.pdf_gemini import update_sentencia_in_db
-from services.base_datos_casos.drive_utils import process_and_save_file, delete_drive_file
+from services.base_datos_casos.drive_utils import process_and_save_file, delete_drive_file, calculate_file_hash
 # Entities
 from models.entities.User import User
 
@@ -1200,7 +1200,7 @@ def ver_casos():
 @login_required
 def editar_caso(id):
     if request.method == 'POST':
-        # Primero, obtenemos el caso existente para contar con el link anterior en caso de subir un nuevo archivo
+        # Primero, obtenemos el caso existente para contar con el link anterior y otros datos.
         with engine.connect() as connection:
             result = connection.execute(
                 text("SELECT * FROM sentencias WHERE id = :id"),
@@ -1215,29 +1215,54 @@ def editar_caso(id):
         data = request.form.to_dict()
         data['id'] = id
 
-        # Si se envía un archivo nuevo (o varios) desde el formulario de edición
+        # Mantenemos los valores previos de drive_link y file_hash en caso de que no se suba un nuevo archivo.
+        if not data.get('drive_link'):
+            data['drive_link'] = caso.get('drive_link')
+        if not data.get('file_hash'):
+            data['file_hash'] = caso.get('file_hash')
+
+        # Si se envía uno o varios archivos nuevos desde el formulario de edición.
         if 'documentos[]' in request.files:
             archivos = request.files.getlist('documentos[]')
             for archivo in archivos:
                 if archivo.filename == '':
                     continue
-                # Procesa y sube el archivo a Drive
+
+                # Calcular el hash del archivo utilizando la función calculate_file_hash.
+                file_hash = calculate_file_hash(archivo.stream)
+                # Importante: reiniciamos el puntero del stream para que el archivo se pueda leer de nuevo.
+                archivo.stream.seek(0)
+
+                # Verificar si el hash ya existe en la base de datos.
+                with engine.connect() as connection:
+                    result = connection.execute(
+                        text("SELECT id FROM sentencias WHERE file_hash = :file_hash"),
+                        {"file_hash": file_hash}
+                    )
+                    existing_id = result.scalar()
+
+                if existing_id:
+                    flash(f"El archivo {archivo.filename} ya fue subido previamente.", "warning")
+                    continue  # No se procesa este archivo
+
+                # Si el hash no existe, procesamos y subimos el archivo a Drive.
                 new_drive_link, error = process_and_save_file(archivo.stream, archivo.filename)
                 if error:
                     flash(error, "danger")
                 else:
-                    # Si existe un archivo anterior en Drive, se elimina
+                    # Si existe un archivo anterior en Drive, se elimina.
                     if caso.get('drive_link'):
                         delete_drive_file(caso.get('drive_link'))
-                    # Actualizamos el link en los datos que se guardarán en la DB
+                    # Actualizamos el link y el hash en los datos que se guardarán en la DB.
                     data['drive_link'] = new_drive_link
+                    data['file_hash'] = file_hash
 
-        # Actualizamos la sentencia/caso en la base de datos
+        # Actualizamos la sentencia/caso en la base de datos.
         update_sentencia_in_db(data)
         flash("Caso actualizado correctamente", "success")
         return redirect(url_for('ver_casos'))
 
-    # Para el método GET, se obtiene el caso existente
+    # Para el método GET, se obtiene el caso existente.
     with engine.connect() as connection:
         result = connection.execute(
             text("SELECT * FROM sentencias WHERE id = :id"),

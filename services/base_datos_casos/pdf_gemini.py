@@ -154,7 +154,9 @@ def update_sentencia_in_db(data):
         "fundamentos": data.get("fundamentos"),
         "normativa": data.get("normativa"),
         "numero_resolucion": data.get("numero_resolucion"),
-        "estado_sentencia": data.get("estado_sentencia")
+        "estado_sentencia": data.get("estado_sentencia"),
+        "drive_link": data.get("drive_link"),  # Se agrega el drive_link
+        "file_hash": data.get("file_hash")       # Se agrega el hash del archivo
     }
 
     update_query = text("""
@@ -173,7 +175,9 @@ def update_sentencia_in_db(data):
             fundamentos = :fundamentos,
             normativa = :normativa,
             numero_resolucion = :numero_resolucion,
-            estado_sentencia = :estado_sentencia
+            estado_sentencia = :estado_sentencia,
+            drive_link = :drive_link,
+            file_hash = :file_hash
         WHERE id = :id
     """)
 
