@@ -282,10 +282,11 @@
               <input type="text" name="numero_resolucion" value="{{ caso.numero_resolucion if caso.numero_resolucion else 'No se menciona número de resolución' }}">
             </div>
           </div>
-
+        {% if caso.drive_link %}
           <div class="form-row">
-            <a href="{{ caso.drive_link if caso.drive_link else '' }}">Ver caso subido</a>
+            <a href="{{ caso.drive_link if caso.drive_link else '' }}">Ver Caso Subido</a>
           </div>
+        {% endif %}
 
           <!-- Sección 5: Carga de Nueva Sentencia -->
           <div hidden class="form-container" style="margin-top: 70px;">
