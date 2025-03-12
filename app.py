@@ -1225,7 +1225,7 @@ def editar_caso(id):
 @login_required
 def upload_file():
     if 'documentos[]' not in request.files:
-        flash("No se enviaron archivos", "error")
+        flash("No se enviaron archivos", "danger")  # Cambiado "error" → "danger"
         return redirect(url_for('ver_casos'))
 
     archivos = request.files.getlist('documentos[]')
@@ -1238,15 +1238,16 @@ def upload_file():
         # Llama a la función que procesa el archivo:
         drive_link, error = process_and_save_file(archivo.stream, archivo.filename)
         if error:
-            flash(error, "error")
+            flash(error, "danger")  # Cambiado "error" → "danger"
         else:
             flash(f"Archivo {archivo.filename} subido y analizado correctamente.", "success")
             processed = True
 
     if not processed:
-        flash("No se pudo procesar ningún archivo.", "error")
+        flash("No se pudo procesar ningún archivo.", "danger")  # Cambiado "error" → "danger"
 
     return redirect(url_for('ver_casos'))
+
 
 @app.route('/eliminar_caso/<int:id>', methods=['POST'])
 @login_required
