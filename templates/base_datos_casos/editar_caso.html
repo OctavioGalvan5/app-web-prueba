@@ -140,128 +140,252 @@
                 width: 100%;
             }
         }
+        .drop-zone {
+            border: 2px dashed #4B0082;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+        }
+        .drop-zone:hover {
+            background-color: #e0e0e0;
+        }
+        .file-list {
+            margin-top: 10px;
+        }
+        .file-item {
+            background-color: #eee;
+            padding: 8px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .remove-file {
+            color: red;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .submit-button {
+            background-color: #4B0082;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .submit-button:hover {
+            background-color: #3a0066;
+        }
     </style>
 </head>
 <body>
     {% include 'navs/nav.html' %}
     <div class="container">
-        <div class="form-container">
-            <h2>{{ caso.nombre_caso }}</h2>
-            <form method="POST">
-                <!-- Sección 1: Información Básica -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Nombre del Caso:</label>
-                        <input type="text" name="nombre_caso" value="{{ caso.nombre_caso }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>N° Expediente:</label>
-                        <input type="text" name="numero_expediente" value="{{ caso.numero_expediente }}">
-                    </div>
-                </div>
+      <div class="form-container">
+        <h2>{{ caso.nombre_caso }}</h2>
+        <form action="{{ url_for('editar_caso', id=caso.id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
+          <!-- Sección 1: Información Básica -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre del Caso:</label>
+              <input type="text" name="nombre_caso" value="{{ caso.nombre_caso }}" required>
+            </div>
+            <div class="form-group">
+              <label>N° Expediente:</label>
+              <input type="text" name="numero_expediente" value="{{ caso.numero_expediente }}">
+            </div>
+          </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Fecha Sentencia:</label>
-                        <input type="date" name="fecha_sentencia" 
-                               value="{% if caso.fecha_sentencia %}{{ caso.fecha_sentencia.strftime('%Y-%m-%d') }}{% endif %}">
-                    </div>
-                    <div class="form-group">
-                        <label>Honorarios ($):</label>
-                        <input type="number" step="0.01" name="honorarios" 
-                               value="{{ caso.honorarios if caso.honorarios else '' }}">
-                    </div>
-                </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fecha Sentencia:</label>
+              <input type="date" name="fecha_sentencia" value="{% if caso.fecha_sentencia %}{{ caso.fecha_sentencia.strftime('%Y-%m-%d') }}{% endif %}">
+            </div>
+            <div class="form-group">
+              <label>Honorarios ($):</label>
+              <input type="number" step="0.01" name="honorarios" value="{{ caso.honorarios if caso.honorarios else '' }}">
+            </div>
+          </div>
 
-                <!-- Sección 2: Datos Judiciales -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Instancia:</label>
-                        <select name="instancia">
-                            <option value="Primera Instancia" {% if caso.instancia == 'Primera Instancia' %}selected{% endif %}>Primera Instancia</option>
-                            <option value="Segunda Instancia" {% if caso.instancia == 'Segunda Instancia' %}selected{% endif %}>Segunda Instancia</option>
-                            <option value="Cámara de Apelaciones" {% if caso.instancia == 'Cámara de Apelaciones' %}selected{% endif %}>Cámara de Apelaciones</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Estado Sentencia:</label>
-                        <select name="estado_sentencia">
-                            <option value="Firme" {% if caso.estado_sentencia == 'Firme' %}selected{% endif %}>Firme</option>
-                            <option value="Sujeta a Revisión" {% if caso.estado_sentencia == 'Sujeta a Revisión' %}selected{% endif %}>Sujeta a Revisión</option>
-                            <option value="Ejecutoriada" {% if caso.estado_sentencia == 'Ejecutoriada' %}selected{% endif %}>Ejecutoriada</option>
-                        </select>
-                    </div>
-                </div>
+          <!-- Sección 2: Datos Judiciales -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Instancia:</label>
+              <select name="instancia">
+                <option value="Primera Instancia" {% if caso.instancia == 'Primera Instancia' %}selected{% endif %}>Primera Instancia</option>
+                <option value="Segunda Instancia" {% if caso.instancia == 'Segunda Instancia' %}selected{% endif %}>Segunda Instancia</option>
+                <option value="Cámara de Apelaciones" {% if caso.instancia == 'Cámara de Apelaciones' %}selected{% endif %}>Cámara de Apelaciones</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Estado Sentencia:</label>
+              <select name="estado_sentencia">
+                <option value="Firme" {% if caso.estado_sentencia == 'Firme' %}selected{% endif %}>Firme</option>
+                <option value="Sujeta a Revisión" {% if caso.estado_sentencia == 'Sujeta a Revisión' %}selected{% endif %}>Sujeta a Revisión</option>
+                <option value="Ejecutoriada" {% if caso.estado_sentencia == 'Ejecutoriada' %}selected{% endif %}>Ejecutoriada</option>
+              </select>
+            </div>
+          </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Jurisdicción:</label>
-                        <input type="text" name="jurisdiccion" value="{{ caso.jurisdiccion }}">
-                    </div>
-                    <div class="form-group">
-                        <label>Juzgado:</label>
-                        <input type="text" name="juzgado" value="{{ caso.juzgado }}">
-                    </div>
-                </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Jurisdicción:</label>
+              <input type="text" name="jurisdiccion" value="{{ caso.jurisdiccion }}">
+            </div>
+            <div class="form-group">
+              <label>Juzgado:</label>
+              <input type="text" name="juzgado" value="{{ caso.juzgado }}">
+            </div>
+          </div>
 
-                <!-- Sección 3: Detalles Técnicos -->
-                <div class="form-group">
-                    <label>Jueces (separar con comas):</label>
-                    <input type="text" name="jueces" 
-                           value="{{ caso.jueces if caso.jueces else '' }}"
-                           placeholder="Ej: Dr. Perez, Dra. Gomez">
-                </div>
+          <!-- Sección 3: Detalles Técnicos -->
+          <div class="form-group">
+            <label>Jueces (separar con comas):</label>
+            <input type="text" name="jueces" value="{{ caso.jueces if caso.jueces else '' }}" placeholder="Ej: Dr. Perez, Dra. Gomez">
+          </div>
 
-                <div class="form-group">
-                    <label>Palabras Clave (separar con comas):</label>
-                    <input type="text" name="palabras_clave" 
-                           value="{{ caso.palabras_clave if caso.palabras_clave else '' }}"
-                           placeholder="Ej: daños, responsabilidad civil">
-                </div>
+          <div class="form-group">
+            <label>Palabras Clave (separar con comas):</label>
+            <input type="text" name="palabras_clave" value="{{ caso.palabras_clave if caso.palabras_clave else '' }}" placeholder="Ej: daños, responsabilidad civil">
+          </div>
 
-                <div class="form-group">
-                    <label>Carátula:</label>
-                    <textarea name="caratula" rows="3">{{ caso.caratula if caso.caratula else '' }}</textarea>
-                </div>
+          <div class="form-group">
+            <label>Carátula:</label>
+            <textarea name="caratula" rows="3">{{ caso.caratula if caso.caratula else '' }}</textarea>
+          </div>
 
-                <div class="form-group">
-                    <label>Resumen:</label>
-                    <textarea name="resumen" rows="5">{{ caso.resumen if caso.resumen else '' }}</textarea>
-                </div>
+          <div class="form-group">
+            <label>Resumen:</label>
+            <textarea name="resumen" rows="5">{{ caso.resumen if caso.resumen else '' }}</textarea>
+          </div>
 
-                <div class="form-group">
-                    <label>Fundamentos:</label>
-                    <textarea name="fundamentos" rows="5">{{ caso.fundamentos if caso.fundamentos else '' }}</textarea>
-                </div>
+          <div class="form-group">
+            <label>Fundamentos:</label>
+            <textarea name="fundamentos" rows="5">{{ caso.fundamentos if caso.fundamentos else '' }}</textarea>
+          </div>
 
-                <!-- Sección 4: Datos Adicionales -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Normativa Aplicada:</label>
-                        <input type="text" name="normativa" 
-                               value="{{ caso.normativa if caso.normativa else 'No se menciona normativa' }}">
-                    </div>
-                    <div class="form-group">
-                        <label>N° Resolución:</label>
-                        <input type="text" name="numero_resolucion" 
-                               value="{{ caso.numero_resolucion if caso.numero_resolucion else 'No se menciona número de resolución' }}">
-                    </div>
-                </div>
+          <!-- Sección 4: Datos Adicionales -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Normativa Aplicada:</label>
+              <input type="text" name="normativa" value="{{ caso.normativa if caso.normativa else 'No se menciona normativa' }}">
+            </div>
+            <div class="form-group">
+              <label>N° Resolución:</label>
+              <input type="text" name="numero_resolucion" value="{{ caso.numero_resolucion if caso.numero_resolucion else 'No se menciona número de resolución' }}">
+            </div>
+          </div>
 
-                <div class="form-row">
-                    <a href="{{ caso.drive_link if caso.drive_link else '' }}">Ver caso subido</a>
-                </div>
-                
+          <div class="form-row">
+            <a href="{{ caso.drive_link if caso.drive_link else '' }}">Ver caso subido</a>
+          </div>
 
+          <!-- Sección 5: Carga de Nueva Sentencia -->
+          <div class="form-container" style="margin-top: 70px;">
+            <h2>Ingresar Nueva Sentencia</h2>
+            <div class="form-group drop-zone" id="drop-zone">
+              Arrastra y suelta archivos aquí o haz clic para seleccionar
+              <input type="file" id="documentos" name="documentos[]" accept=".pdf" multiple hidden>
+            </div>
+            <div class="file-list" id="file-list"></div>
+            <!-- Este botón comparte el mismo submit que el formulario completo -->
+            <button type="submit" class="submit-button">Cargar Sentencia</button>
+          </div>
 
-                <!-- Contenedor de Botones -->
-                <div class="botones-container">
-                    <button type="submit" class="submit-button">Guardar Cambios</button>
-                    <a href="{{ url_for('ver_casos') }}" class="submit-button btn-cancelar">Cancelar</a>
-                </div>
-            </form>
-        </div>
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              <div class="container mt-3">
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endwith %}
+
+          <!-- Contenedor de Botones Final -->
+          <div class="botones-container">
+            <button type="submit" class="submit-button">Guardar Cambios</button>
+            <a href="{{ url_for('ver_casos') }}" class="submit-button btn-cancelar">Cancelar</a>
+          </div>
+        </form>
+      </div>
     </div>
+
     {% include 'footers/footer.html' %}
+    <script>
+        // Script para el drag and drop
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('documentos');
+        const fileList = document.getElementById('file-list');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#e0e0e0';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.backgroundColor = '#f9f9f9';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#f9f9f9';
+            fileInput.files = e.dataTransfer.files;
+            updateFileList();
+        });
+
+        fileInput.addEventListener('change', updateFileList);
+
+        function updateFileList() {
+            fileList.innerHTML = '';
+            for (let file of fileInput.files) {
+                const fileItem = document.createElement('div');
+                fileItem.classList.add('file-item');
+                fileItem.textContent = file.name;
+
+                const removeBtn = document.createElement('span');
+                removeBtn.textContent = '✖';
+                removeBtn.classList.add('remove-file');
+                removeBtn.addEventListener('click', () => removeFile(file));
+
+                fileItem.appendChild(removeBtn);
+                fileList.appendChild(fileItem);
+            }
+        }
+
+        function removeFile(fileToRemove) {
+            const dt = new DataTransfer();
+            for (let file of fileInput.files) {
+                if (file !== fileToRemove) {
+                    dt.items.add(file);
+                }
+            }
+            fileInput.files = dt.files;
+            updateFileList();
+        }
+
+        function validateFiles() {
+            const files = fileInput.files;
+            for (let file of files) {
+                if (file.type !== 'application/pdf') {
+                    alert('Solo se permiten archivos PDF.');
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>

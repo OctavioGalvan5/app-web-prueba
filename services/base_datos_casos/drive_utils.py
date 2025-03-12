@@ -15,7 +15,7 @@ from services.base_datos_casos.pdf_gemini import analyze_legal_documents, extrac
 
 # Configuración de la API de Google Drive
 SCOPES = ['https://www.googleapis.com/auth/drive']
-SERVICE_ACCOUNT_FILE = 'services/base_datos_casos/estudiotye-16f681dda2bb.json'  # Actualiza esta ruta
+SERVICE_ACCOUNT_FILE = 'services/base_datos_casos/estudiotye-992fd0d6f8d9.json'  # Actualiza esta ruta
 
 credentials = service_account.Credentials.from_service_account_file(
     SERVICE_ACCOUNT_FILE, scopes=SCOPES)
@@ -113,3 +113,26 @@ def process_and_save_file(file_obj, file_name):
     save_sentencia_to_db(sentencia_data)
 
     return drive_link, None
+
+def delete_drive_file(drive_link):
+    """
+    Elimina un archivo de Google Drive utilizando el link proporcionado.
+    Extrae el ID del archivo del link y llama a la API de Drive para borrarlo.
+
+    Retorna:
+        None si se eliminó correctamente,
+        un mensaje de error en caso de fallo.
+    """
+    # Extraer el ID del archivo del link utilizando una expresión regular
+    import re
+    match = re.search(r'/d/([a-zA-Z0-9_-]+)', drive_link)
+    if not match:
+        return "No se pudo extraer el ID del archivo de Drive."
+    file_id = match.group(1)
+
+    try:
+        # Llamar a la API para eliminar el archivo
+        drive_service.files().delete(fileId=file_id).execute()
+        return None
+    except Exception as e:
+        return str(e)
