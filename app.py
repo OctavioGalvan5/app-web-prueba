@@ -1230,14 +1230,13 @@ def editar_caso(id):
 
                 # Calcular el hash del archivo utilizando la función calculate_file_hash.
                 file_hash = calculate_file_hash(archivo.stream)
-                # Importante: reiniciamos el puntero del stream para que el archivo se pueda leer de nuevo.
                 archivo.stream.seek(0)
 
-                # Verificar si el hash ya existe en la base de datos.
+                # Verificar si el hash ya existe en otro caso (excluyendo el registro actual)
                 with engine.connect() as connection:
                     result = connection.execute(
-                        text("SELECT id FROM sentencias WHERE file_hash = :file_hash"),
-                        {"file_hash": file_hash}
+                        text("SELECT id FROM sentencias WHERE file_hash = :file_hash AND id != :id"),
+                        {"file_hash": file_hash, "id": id}
                     )
                     existing_id = result.scalar()
 
@@ -1245,14 +1244,15 @@ def editar_caso(id):
                     flash(f"El archivo {archivo.filename} ya fue subido previamente.", "warning")
                     continue  # No se procesa este archivo
 
-                # Si el hash no existe, procesamos y subimos el archivo a Drive.
-                new_drive_link, error = process_and_save_file(archivo.stream, archivo.filename)
+                # Si existe un archivo anterior en Drive, se elimina.
+                if caso.get('drive_link'):
+                    delete_drive_file(caso.get('drive_link'))
+
+                # Procesa y sube el archivo en modo actualización
+                new_drive_link, error = process_and_save_file(archivo.stream, archivo.filename, update=True)
                 if error:
                     flash(error, "danger")
                 else:
-                    # Si existe un archivo anterior en Drive, se elimina.
-                    if caso.get('drive_link'):
-                        delete_drive_file(caso.get('drive_link'))
                     # Actualizamos el link y el hash en los datos que se guardarán en la DB.
                     data['drive_link'] = new_drive_link
                     data['file_hash'] = file_hash
@@ -1275,6 +1275,7 @@ def editar_caso(id):
         return redirect(url_for('ver_casos'))
 
     return render_template('base_datos_casos/editar_caso.html', caso=caso)
+
 
 
 @app.route('/upload_file', methods=['POST'])
@@ -1310,15 +1311,21 @@ def upload_file():
 def eliminar_caso(id):
     try:
         with engine.begin() as connection:
-            # Primero verificar que existe el caso
+            # Primero verificar que existe el caso y obtener sus datos
             result = connection.execute(
                 text("SELECT * FROM sentencias WHERE id = :id"),
                 {"id": id}
             )
-            if not result.fetchone():
+            caso = result.mappings().first()
+            if not caso:
                 return redirect(url_for('ver_casos'))
 
-            # Eliminar el caso
+            # Si existe un archivo en Drive, lo eliminamos
+            drive_link = caso.get("drive_link")
+            if drive_link:
+                delete_drive_file(drive_link)
+
+            # Eliminar el caso de la base de datos
             connection.execute(
                 text("DELETE FROM sentencias WHERE id = :id"),
                 {"id": id}
@@ -1328,6 +1335,7 @@ def eliminar_caso(id):
         print(f"Error al eliminar caso: {e}")
 
     return redirect(url_for('ver_casos'))
+
 
 
 genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")

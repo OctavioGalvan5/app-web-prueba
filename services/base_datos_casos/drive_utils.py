@@ -78,23 +78,15 @@ def file_hash_exists(file_hash):
 
 # ================== Función principal para procesar y guardar el PDF ==================
 
-def process_and_save_file(file_obj, file_name):
+def process_and_save_file(file_obj, file_name, update=False):
     """
-    Realiza el siguiente flujo:
-      1. Calcula el hash del archivo y verifica que no exista en la BD.
-      2. Si no existe, extrae el texto del PDF y llama a analyze_legal_documents para obtener
-         los datos (resumen, honorarios, etc.).
-      3. Sube el archivo a Google Drive para obtener el link.
-      4. Agrega drive_link y file_hash al diccionario obtenido y lo guarda en la BD.
-
-    Retorna:
-      - drive_link: En caso de éxito.
-      - mensaje de error si el archivo ya existe o hubo problemas en el análisis.
+    Procesa y guarda un archivo PDF. Si update es False se inserta un nuevo registro;
+    si es True se omite la inserción, dejando al usuario actualizar el registro existente.
     """
-    # Calcula el hash del archivo
+    # Calcular el hash del archivo
     file_hash = calculate_file_hash(file_obj)
 
-    # Verifica si el archivo ya fue subido
+    # Verificar si el archivo ya fue subido (se asume que, en edición, se excluye el registro actual en la consulta)
     if file_hash_exists(file_hash):
         return None, f"El archivo {file_name} ya ha sido subido previamente."
 
@@ -117,10 +109,12 @@ def process_and_save_file(file_obj, file_name):
     sentencia_data['drive_link'] = drive_link
     sentencia_data['file_hash'] = file_hash
 
-    # Inserta todos los datos en la base de datos
-    save_sentencia_to_db(sentencia_data)
+    # Si no se está actualizando, se inserta un nuevo registro en la base de datos.
+    if not update:
+        save_sentencia_to_db(sentencia_data)
 
     return drive_link, None
+
 
 def delete_drive_file(drive_link):
     """

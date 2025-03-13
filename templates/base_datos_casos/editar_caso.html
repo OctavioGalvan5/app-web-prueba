@@ -289,15 +289,13 @@
         {% endif %}
 
           <!-- Sección 5: Carga de Nueva Sentencia -->
-          <div hidden class="form-container" style="margin-top: 70px;">
+          <div class="form-container" style="margin-top: 70px;">
             <h2>Ingresar Nueva Sentencia</h2>
             <div class="form-group drop-zone" id="drop-zone">
               Arrastra y suelta archivos aquí o haz clic para seleccionar
               <input type="file" id="documentos" name="documentos[]" accept=".pdf" multiple hidden>
             </div>
             <div class="file-list" id="file-list"></div>
-            <!-- Este botón comparte el mismo submit que el formulario completo -->
-            <button type="submit" class="submit-button">Cargar Sentencia</button>
           </div>
 
           {% with messages = get_flashed_messages(with_categories=true) %}
