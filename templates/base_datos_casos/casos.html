@@ -358,7 +358,8 @@
                 <option value="">Todas las instancias</option>
                 <option value="Primera Instancia">Primera Instancia</option>
                 <option value="Segunda Instancia">Segunda Instancia</option>
-                <option value="Cámara de Apelaciones">Cámara de Apelaciones</option>
+                <option value="Instancia Extraordinaria">Instancia Extraordinaria</option>
+                <option value="Organo Autonomo extrapoder (MP)">Organo Autonomo extrapoder (MP)</option>
             </select>
 
             <button class="btn-reset" onclick="resetearFiltros()">
@@ -382,7 +383,6 @@
                         <th>Fecha Sentencia</th>
                         <th>Instancia</th>
                         <th>Juzgado</th>
-                        <th>Honorarios</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -394,7 +394,6 @@
                         <td>{{ caso.fecha_sentencia.strftime('%d/%m/%Y') if caso.fecha_sentencia else '' }}</td>
                         <td>{{ caso.instancia }}</td>
                         <td>{{ caso.juzgado }}</td>
-                        <td>{{ caso.honorarios | formato_moneda if caso.honorarios else '' }}</td>
                         <td>
                             <div class="acciones-contenedor">
                                 <a href="{{ url_for('editar_caso', id=caso.id) }}" class="btn-editar">Ver</a>

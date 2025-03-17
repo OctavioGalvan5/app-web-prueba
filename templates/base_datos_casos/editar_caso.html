@@ -221,7 +221,8 @@
               <select name="instancia">
                 <option value="Primera Instancia" {% if caso.instancia == 'Primera Instancia' %}selected{% endif %}>Primera Instancia</option>
                 <option value="Segunda Instancia" {% if caso.instancia == 'Segunda Instancia' %}selected{% endif %}>Segunda Instancia</option>
-                <option value="Cámara de Apelaciones" {% if caso.instancia == 'Cámara de Apelaciones' %}selected{% endif %}>Cámara de Apelaciones</option>
+                <option value="Instancia Extraordinaria" {% if caso.instancia == 'Instancia Extraordinaria' %}selected{% endif %}>Instancia Extraordinaria</option>
+                  <option value="Organo Autonomo extrapoder (MP)" {% if caso.instancia == 'Organo Autonomo extrapoder (MP)' %}selected{% endif %}>Organo Autonomo extrapoder (MP)</option>
               </select>
             </div>
             <div class="form-group">
@@ -229,7 +230,6 @@
               <select name="estado_sentencia">
                 <option value="Firme" {% if caso.estado_sentencia == 'Firme' %}selected{% endif %}>Firme</option>
                 <option value="Sujeta a Revisión" {% if caso.estado_sentencia == 'Sujeta a Revisión' %}selected{% endif %}>Sujeta a Revisión</option>
-                <option value="Ejecutoriada" {% if caso.estado_sentencia == 'Ejecutoriada' %}selected{% endif %}>Ejecutoriada</option>
               </select>
             </div>
           </div>
