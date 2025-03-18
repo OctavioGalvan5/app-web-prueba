@@ -1,4 +1,5 @@
 import PyPDF2
+import pdfplumber
 import re
 import json
 import google.generativeai as genai
@@ -26,11 +27,10 @@ def convertir_fecha(fecha_str):
     return None
 
 def extract_text_from_pdf(file_obj):
-    pdf_reader = PyPDF2.PdfReader(file_obj)
-    text_content = "".join([
-        page.extract_text() 
-        for page in pdf_reader.pages if page.extract_text()
-    ])
+    text_content = ""
+    with pdfplumber.open(file_obj) as pdf:
+        for page in pdf.pages:
+            text_content += page.extract_text() or ""  # Evita errores con páginas vacías
     return text_content
 
 def analyze_legal_documents(texto_pdfs):
@@ -43,7 +43,7 @@ def analyze_legal_documents(texto_pdfs):
     "resumen": "resumen breve del caso considerando ambos documentos, minimo 200 palabras",
     "honorarios": "cantidad de honorarios mencionados en los documentos. Importante: deben ser los mas recientes, y deben ser devueltos de la siguiente manera, por ejemplo si los honorarios son $125.456,56, se devolvera como 125456.56 (si no se mencionan, indica devolver \"\" es decir null)",
     "instancia": "instancia (ejemplo: Primera Instancia, Segunda Instancia, Instancia extraordinaria, Ministerio Publico fiscal etc.)
-    Si se habla de Juzgado Federa entonces se refiere a Primera Instancia, si habla de Camara Federal o Tribunal es una segunda instancia,",
+    Si se habla de Juzgado Federal entonces se refiere a Primera Instancia, si habla de Camara Federal o Tribunal es una segunda instancia,",
     "jueces": "nombres de los jueces que dictaron la sentencia (se los mencionan en la firma digital al final del pdf) en juzgado hay solo un juez por lo general, mientras que en camara hay varios, si hay alguna abstencion de firma mencionarlo (el porque) ",
     "nombre_caso": "nombre del caso (No debes darlo todo en mayusculas, por ejemplo Si el Caso se llama PEDRO GUZMAN C/ANSES, Darlo como Pedro Guzman C/Anses, respeta la gramatica)",
     "numero_expediente": "numero de expediente",
