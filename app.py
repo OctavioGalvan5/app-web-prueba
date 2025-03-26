@@ -100,6 +100,10 @@ def home():
 def calculadora_uma():
     return render_template('calculadora_uma/calculadora_uma.html')
 
+@app.route('/calculadora_uma_publica')
+def calculadora_uma_publica():
+    return render_template('calculadora_uma/calculadora_uma_publica.html')
+
 @app.route('/resultado_uma', methods=['POST'])
 @login_required
 def generar_pdf_route():
@@ -1196,6 +1200,13 @@ def ver_casos():
         casos = [dict(row._mapping) for row in result]
     return render_template('base_datos_casos/casos.html', casos=casos)
 
+@app.route('/casos_publicos')
+def casos_publicos():
+    with engine.connect() as connection:
+        result = connection.execute(text("SELECT * FROM sentencias"))
+        casos = [dict(row._mapping) for row in result]
+    return render_template('base_datos_casos/casos_publicos.html', casos=casos)
+
 @app.route('/editar_caso/<int:id>', methods=['GET', 'POST'])
 @login_required
 def editar_caso(id):
@@ -1275,6 +1286,86 @@ def editar_caso(id):
         return redirect(url_for('ver_casos'))
 
     return render_template('base_datos_casos/editar_caso.html', caso=caso)
+
+@app.route('/ver_casos_publicos/<int:id>', methods=['GET', 'POST'])
+@login_required
+def ver_casos_publicos(id):
+    if request.method == 'POST':
+        # Primero, obtenemos el caso existente para contar con el link anterior y otros datos.
+        with engine.connect() as connection:
+            result = connection.execute(
+                text("SELECT * FROM sentencias WHERE id = :id"),
+                {"id": id}
+            )
+            caso = result.mappings().first()
+        if not caso:
+            flash("Caso no encontrado", "error")
+            return redirect(url_for('ver_casos'))
+
+        # Procesamos los datos del formulario
+        data = request.form.to_dict()
+        data['id'] = id
+
+        # Mantenemos los valores previos de drive_link y file_hash en caso de que no se suba un nuevo archivo.
+        if not data.get('drive_link'):
+            data['drive_link'] = caso.get('drive_link')
+        if not data.get('file_hash'):
+            data['file_hash'] = caso.get('file_hash')
+
+        # Si se envía uno o varios archivos nuevos desde el formulario de edición.
+        if 'documentos[]' in request.files:
+            archivos = request.files.getlist('documentos[]')
+            for archivo in archivos:
+                if archivo.filename == '':
+                    continue
+
+                # Calcular el hash del archivo utilizando la función calculate_file_hash.
+                file_hash = calculate_file_hash(archivo.stream)
+                archivo.stream.seek(0)
+
+                # Verificar si el hash ya existe en otro caso (excluyendo el registro actual)
+                with engine.connect() as connection:
+                    result = connection.execute(
+                        text("SELECT id FROM sentencias WHERE file_hash = :file_hash AND id != :id"),
+                        {"file_hash": file_hash, "id": id}
+                    )
+                    existing_id = result.scalar()
+
+                if existing_id:
+                    flash(f"El archivo {archivo.filename} ya fue subido previamente.", "warning")
+                    continue  # No se procesa este archivo
+
+                # Si existe un archivo anterior en Drive, se elimina.
+                if caso.get('drive_link'):
+                    delete_drive_file(caso.get('drive_link'))
+
+                # Procesa y sube el archivo en modo actualización
+                new_drive_link, error = process_and_save_file(archivo.stream, archivo.filename, update=True)
+                if error:
+                    flash(error, "danger")
+                else:
+                    # Actualizamos el link y el hash en los datos que se guardarán en la DB.
+                    data['drive_link'] = new_drive_link
+                    data['file_hash'] = file_hash
+
+        # Actualizamos la sentencia/caso en la base de datos.
+        update_sentencia_in_db(data)
+        flash("Caso actualizado correctamente", "success")
+        return redirect(url_for('ver_casos'))
+
+    # Para el método GET, se obtiene el caso existente.
+    with engine.connect() as connection:
+        result = connection.execute(
+            text("SELECT * FROM sentencias WHERE id = :id"),
+            {"id": id}
+        )
+        caso = result.mappings().first()
+
+    if not caso:
+        flash("Caso no encontrado", "error")
+        return redirect(url_for('ver_casos'))
+
+    return render_template('base_datos_casos/ver_casos_publicos.html', caso=caso)
 
 
 

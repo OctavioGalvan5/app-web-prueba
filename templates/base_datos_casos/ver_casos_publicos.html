@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Carga de Sentencias</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #E6E6FA, #9370DB);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #4B0082;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c5282;
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #4B0082;
+            outline: none;
+            background-color: #fff;
+        }
+        input[type="date"] {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236A0DAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+        }
+        .submit-button {
+            background-color: #4B0082;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            display: block;
+        }
+        .submit-button:hover {
+            background-color: #3a0066;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .container {
+                padding: 10px;
+            }
+            .form-container {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 24px;
+            }
+        }
+        /* Nuevos estilos para botones */
+        .botones-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .botones-container .submit-button {
+            flex: 1;
+        }
+        .btn-cancelar {
+            background-color: #6c757d !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-cancelar:hover {
+            background-color: #5a6268 !important;
+        }
+        @media (max-width: 480px) {
+            .botones-container {
+                flex-direction: column;
+            }
+            .botones-container .submit-button {
+                width: 100%;
+            }
+        }
+        .drop-zone {
+            border: 2px dashed #4B0082;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+        }
+        .drop-zone:hover {
+            background-color: #e0e0e0;
+        }
+        .file-list {
+            margin-top: 10px;
+        }
+        .file-item {
+            background-color: #eee;
+            padding: 8px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .remove-file {
+            color: red;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .submit-button {
+            background-color: #4B0082;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .submit-button:hover {
+            background-color: #3a0066;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navs/nav.html' %}
+    <div class="container">
+      <div class="form-container">
+        <h2>{{ caso.nombre_caso }}</h2>
+        <form action="{{ url_for('editar_caso', id=caso.id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
+          <!-- Sección 1: Información Básica -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre del Caso:</label>
+              <input type="text" name="nombre_caso" value="{{ caso.nombre_caso }}" required>
+            </div>
+            <div class="form-group">
+              <label>N° Expediente:</label>
+              <input type="text" name="numero_expediente" value="{{ caso.numero_expediente }}">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fecha Sentencia:</label>
+              <input type="date" name="fecha_sentencia" value="{% if caso.fecha_sentencia %}{{ caso.fecha_sentencia.strftime('%Y-%m-%d') }}{% endif %}">
+            </div>
+            <div class="form-group">
+              <label>Honorarios ($):</label>
+              <input type="number" step="0.01" name="honorarios" value="{{ caso.honorarios if caso.honorarios else '' }}">
+            </div>
+          </div>
+
+          <!-- Sección 2: Datos Judiciales -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Instancia:</label>
+              <select name="instancia">
+                <option value="Primera Instancia" {% if caso.instancia == 'Primera Instancia' %}selected{% endif %}>Primera Instancia</option>
+                <option value="Segunda Instancia" {% if caso.instancia == 'Segunda Instancia' %}selected{% endif %}>Segunda Instancia</option>
+                <option value="Instancia Extraordinaria" {% if caso.instancia == 'Instancia Extraordinaria' %}selected{% endif %}>Instancia Extraordinaria</option>
+                  <option value="Organo Autonomo extrapoder (MP)" {% if caso.instancia == 'Organo Autonomo extrapoder (MP)' %}selected{% endif %}>Organo Autonomo extrapoder (MP)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Estado Sentencia:</label>
+              <select name="estado_sentencia">
+                <option value="Firme" {% if caso.estado_sentencia == 'Firme' %}selected{% endif %}>Firme</option>
+                <option value="Sujeta a Revisión" {% if caso.estado_sentencia == 'Sujeta a Revisión' %}selected{% endif %}>Sujeta a Revisión</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Jurisdicción:</label>
+              <input type="text" name="jurisdiccion" value="{{ caso.jurisdiccion }}">
+            </div>
+            <div class="form-group">
+              <label>Juzgado:</label>
+              <input type="text" name="juzgado" value="{{ caso.juzgado }}">
+            </div>
+          </div>
+
+          <!-- Sección 3: Detalles Técnicos -->
+          <div class="form-group">
+            <label>Jueces (separar con comas):</label>
+            <input type="text" name="jueces" value="{{ caso.jueces if caso.jueces else '' }}" placeholder="Ej: Dr. Perez, Dra. Gomez">
+          </div>
+
+          <div class="form-group">
+            <label>Palabras Clave (separar con comas):</label>
+            <input type="text" name="palabras_clave" value="{{ caso.palabras_clave if caso.palabras_clave else '' }}" placeholder="Ej: daños, responsabilidad civil">
+          </div>
+
+          <div class="form-group">
+            <label>Carátula:</label>
+            <textarea name="caratula" rows="3">{{ caso.caratula if caso.caratula else '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Resumen:</label>
+            <textarea name="resumen" rows="5">{{ caso.resumen if caso.resumen else '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Fundamentos:</label>
+            <textarea name="fundamentos" rows="5">{{ caso.fundamentos if caso.fundamentos else '' }}</textarea>
+          </div>
+
+          <!-- Sección 4: Datos Adicionales -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Normativa Aplicada:</label>
+              <input type="text" name="normativa" value="{{ caso.normativa if caso.normativa else 'No se menciona normativa' }}">
+            </div>
+            <div class="form-group">
+              <label>N° Resolución:</label>
+              <input type="text" name="numero_resolucion" value="{{ caso.numero_resolucion if caso.numero_resolucion else 'No se menciona número de resolución' }}">
+            </div>
+          </div>
+        {% if caso.drive_link %}
+          <div class="form-row">
+            <a href="{{ caso.drive_link if caso.drive_link else '' }}">Ver Caso Subido</a>
+          </div>
+        {% endif %}
+
+          <div class="botones-container">
+            <a href="{{ url_for('casos_publicos') }}" class="submit-button btn-cancelar">Volver</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    {% include 'footers/footer.html' %}
+    <script>
+        // Script para el drag and drop
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('documentos');
+        const fileList = document.getElementById('file-list');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#e0e0e0';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.backgroundColor = '#f9f9f9';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.backgroundColor = '#f9f9f9';
+            fileInput.files = e.dataTransfer.files;
+            updateFileList();
+        });
+
+        fileInput.addEventListener('change', updateFileList);
+
+        function updateFileList() {
+            fileList.innerHTML = '';
+            for (let file of fileInput.files) {
+                const fileItem = document.createElement('div');
+                fileItem.classList.add('file-item');
+                fileItem.textContent = file.name;
+
+                const removeBtn = document.createElement('span');
+                removeBtn.textContent = '✖';
+                removeBtn.classList.add('remove-file');
+                removeBtn.addEventListener('click', () => removeFile(file));
+
+                fileItem.appendChild(removeBtn);
+                fileList.appendChild(fileItem);
+            }
+        }
+
+        function removeFile(fileToRemove) {
+            const dt = new DataTransfer();
+            for (let file of fileInput.files) {
+                if (file !== fileToRemove) {
+                    dt.items.add(file);
+                }
+            }
+            fileInput.files = dt.files;
+            updateFileList();
+        }
+
+        function validateFiles() {
+            const files = fileInput.files;
+            for (let file of files) {
+                if (file.type !== 'application/pdf') {
+                    alert('Solo se permiten archivos PDF.');
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
