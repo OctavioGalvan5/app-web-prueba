@@ -16,6 +16,10 @@ from decimal import Decimal
 import pandas as pd
 import openpyxl
 import google.generativeai as genai
+import json
+import gspread
+from google.auth.transport.requests import Request
+from google.oauth2.service_account import Credentials
 #Models
 from models.ModelUser import ModelUser
 from sqlalchemy import text
@@ -1492,6 +1496,51 @@ def chat():
         return jsonify({'error': 'Hubo un error procesando tu solicitud'}), 500
 
 
+
+# Configuración de Google Sheets
+SCOPE = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+
+# En vez de especificar la ruta al archivo JSON, obtenemos el JSON desde la variable de entorno
+credentials_json = os.getenv("GOOGLE_CREDENTIALS")
+if credentials_json is None:
+    raise Exception("La variable de entorno 'GOOGLE_CREDENTIALS' no está definida.")
+
+# Convertir la cadena JSON a un diccionario de Python
+credentials_info = json.loads(credentials_json)
+
+# Crear las credenciales usando la información del service account y los scopes definidos
+creds = Credentials.from_service_account_info(credentials_info, scopes=SCOPE)
+
+# Usar gspread para acceder a la hoja de Google Sheets
+gc = gspread.authorize(creds)
+
+# ID de la hoja de cálculo (se extrae del enlace)
+SPREADSHEET_ID = "1N36KM98qxaKh4-fgt1KyUg2zu_SjMNENpPFC0rGjWkA"
+
+# Abrir la hoja de cálculo utilizando el ID
+sheet = gc.open_by_key(SPREADSHEET_ID).sheet1
+
+@app.route("/biblioteca")
+@login_required
+def biblioteca():
+
+    # Obtener todos los registros desde la hoja de cálculo
+    data = sheet.get_all_records()
+
+    # Si algunas columnas están vacías, podemos procesar los datos y asegurarnos de que todo se lea bien.
+    books = []
+    for row in data:
+        # Asegurémonos de que las columnas tienen un valor, si no, asignamos un valor predeterminado
+        books.append({
+            'autor': row.get('Autor (Apellido y Nombre)', 'No disponible'),
+            'titulo': row.get('Titulo del libro', 'No disponible'),
+            'categoria': row.get('Categoria', 'No disponible'),
+            'edicion': row.get('Edición', 'No disponible'),
+            'ano': row.get('Año', 'No disponible'),
+            'palabras_claves': row.get('Palabras claves de busqueda', 'No disponible'),
+        })
+
+    return render_template("biblioteca/biblioteca.html", books=books)
 
 
 
