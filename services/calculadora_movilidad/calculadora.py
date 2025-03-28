@@ -28,6 +28,7 @@ def funcion_movilidad_personalizada(fecha_inicial, columna, monto, fecha_final, 
 
         # Inicializar variables y convertir fechas a tipo date si son datetime
         fecha_actual = datetime.strptime(fecha_inicial, "%Y-%m-%d").date() if isinstance(fecha_inicial, str) else fecha_inicial.date() if isinstance(fecha_inicial, datetime) else fecha_inicial
+        fecha_actual = fecha_actual + relativedelta(months=1)  # Sumar un mes
         fecha_final = datetime.strptime(fecha_final, "%Y-%m-%d").date() if isinstance(fecha_final, str) else fecha_final.date() if isinstance(fecha_final, datetime) else fecha_final
         fecha_final = fecha_final.date() if isinstance(fecha_final, datetime) else fecha_final
         resultados = []
@@ -62,9 +63,11 @@ def funcion_movilidad_personalizada(fecha_inicial, columna, monto, fecha_final, 
 
             # Verificar si el mes y año de fecha_actual coinciden con alguna fecha en la tupla para cambiar de columna
             for ajuste in tupla_reajuste:
-                if ajuste[0] is not None and fecha_actual.year == ajuste[0].year and fecha_actual.month == ajuste[0].month:
-                    columna_actual = ajuste[1]  # Cambiar a la columna de ajuste
-                    break
+                if ajuste[0] is not None:
+                    fecha = ajuste[0] + relativedelta(months=1)  # Sumar un mes
+                    if fecha_actual.year == fecha.year and fecha_actual.month == fecha.month:
+                        columna_actual = ajuste[1]  # Cambiar a la columna de ajuste
+                        break
 
             # Incrementar fecha_actual a la siguiente fecha en la tabla
             fecha_actual = siguiente_fecha(connection, tabla, fecha_actual)
@@ -158,7 +161,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
     # Convertir las fechas ingresadas a objetos datetime.date en formato 'yyyy-mm-dd'
     fecha_ingresada_dt = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
     fecha_fin_dt = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
-
+    fecha_ingresada_dt = fecha_ingresada_dt + relativedelta(months=1)  # Sumar un mes
     fecha_obj = datetime.strptime(fecha_fallecimiento, "%Y-%m-%d")
     nueva_fecha = fecha_obj + relativedelta(months=1)
     fecha_fallecimiento = nueva_fecha.strftime("%Y-%m-%d")
@@ -237,7 +240,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
             for fila in filas_mayores:
                 fila_dict = dict(zip(result_mayores.keys(), fila))  # Convertir la fila a diccionario
 
-                
+
                 if fallecido is not False and fila_dict['fechas'].year == fecha_fallecimiento.year and fila_dict['fechas'].month == fecha_fallecimiento.month:
                     if fila_dict['id'] == 243:
                         monto_columna2 = (monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)) * Decimal(0.7)
@@ -270,7 +273,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                     monto_columna14 = monto_columna14 * Decimal(0.7)
                     monto_columna15 *= Decimal(fila_dict['alanis_ripte'])
                     monto_columna15 = monto_columna15 * Decimal(0.7)
-                    
+
                 else:  
                     if fila_dict['id'] == 243:
                         monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)
@@ -521,7 +524,7 @@ class CalculadorMovilidad:
                'conf_anses_ipc': str(round((ultimos_valores[1] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
                'dif_sent_ipc': formatear_dinero(ultimos_valores[1] - ultimos_valores[4]),
                'conf_sent_ipc': str(round((ultimos_valores[1] - ultimos_valores[4]) / ultimos_valores[4] * 100, 2)) + "%",
-            
+
                'dif_caliva_ipc': formatear_dinero(ultimos_valores[1] - ultimos_valores[7]),
                'conf_caliva_ipc': str(round((ultimos_valores[1] - ultimos_valores[7]) / ultimos_valores[7] * 100, 2)) + "%",
                'dif_alanis_ipc': formatear_dinero(ultimos_valores[1] - ultimos_valores[9]),
@@ -807,7 +810,7 @@ class CalculadorMovilidad:
 
         grafico_4 = generar_grafico_linea(lista_filas, self.ipc, self.ripte, self.uma, self.movilidad_sentencia, self.Ley_27426_rezago, self.caliva_mas_anses, self.Caliva_Marquez_con_27551_con_3_rezago, self.Caliva_Marquez_con_27551_con_6_rezago, self.Alanis_Mas_Anses, self.Alanis_con_27551_con_3_meses_rezago, self.fallo_martinez, self.alanis_ipc, self.alanis_ripte,self.movilidad_personalizada ,self.datos_del_actor, filas_dinero)
         # Extraer fechas y montos de lista_fila
-        
+
         rendered = render_template(
             'calculadora_movilidad/resultado_calculadora_movilidad.html',
             filas=lista_filas, 

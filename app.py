@@ -20,6 +20,7 @@ import json
 import gspread
 from google.auth.transport.requests import Request
 from google.oauth2.service_account import Credentials
+from dateutil.relativedelta import relativedelta
 #Models
 from models.ModelUser import ModelUser
 from sqlalchemy import text
