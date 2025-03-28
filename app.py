@@ -1538,6 +1538,8 @@ def biblioteca():
             'edicion': row.get('Edición', 'No disponible'),
             'ano': row.get('Año', 'No disponible'),
             'palabras_claves': row.get('Palabras claves de busqueda', 'No disponible'),
+            'link': row.get('Link'),
+
         })
 
     return render_template("biblioteca/biblioteca.html", books=books)
