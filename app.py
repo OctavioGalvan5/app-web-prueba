@@ -40,6 +40,7 @@ from services.planilla_docente.planilla_docente import Planilla_Docente
 from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
 from services.base_datos_casos.pdf_gemini import update_sentencia_in_db
 from services.base_datos_casos.drive_utils import process_and_save_file, delete_drive_file, calculate_file_hash
+from services.formularios.formularios import geminis_api_extract_data, procesar_datos_extraidos
 # Entities
 from models.entities.User import User
 
@@ -1545,8 +1546,83 @@ def biblioteca():
 
     return render_template("biblioteca/biblioteca.html", books=books)
 
+@app.route('/formularios')
+@login_required
+def formularios():
+    with engine.connect() as connection:
+        result = connection.execute(text("SELECT * FROM data_clientes"))
+        data_clientes = [dict(row._mapping) for row in result]
+    return render_template('formularios/formularios.html', data_clientes=data_clientes)
 
+@app.route('/upload_dni', methods=['POST'])
+@login_required
+def upload_dni():
+    # Obtener las imágenes del formulario
+    imagenes = request.files.getlist('documentos')
 
+    if len(imagenes) != 2:
+        flash("Debe enviar dos imágenes del DNI.", "danger")
+        return redirect(url_for('formularios'))
+
+    # Se envían ambas imágenes a la API de Gemini
+    extracted_data, error = geminis_api_extract_data(imagenes[0].stream, imagenes[1].stream)
+
+    if error or not extracted_data:
+        flash(f"Error al extraer datos del DNI: {error}", "danger")
+        return redirect(url_for('formularios'))
+
+    # Guardar los datos extraídos en la base de datos
+    try:
+        with engine.begin() as connection:
+            connection.execute(
+                text("""
+                    INSERT INTO data_clientes (
+                        numero_dni, 
+                        numero_cuil, 
+                        nombre, 
+                        fecha_de_nacimiento, 
+                        nacionalidad, 
+                        direccion
+                    ) VALUES (
+                        :dni_number, 
+                        :cuil_number, 
+                        :name, 
+                        :date_of_birth, 
+                        :nationality, 
+                        :address
+                    )
+                """),
+                extracted_data
+            )
+        flash("Datos del DNI guardados correctamente.", "success")
+    except Exception as e:
+        flash(f"Error al guardar los datos en la base de datos: {str(e)}", "danger")
+
+    return redirect(url_for('formularios'))
+
+@app.route('/eliminar_cliente/<int:id>', methods=['POST'])
+@login_required
+def eliminar_cliente(id):
+    try:
+        with engine.begin() as connection:
+            # Primero verificar que existe el caso y obtener sus datos
+            result = connection.execute(
+                text("SELECT * FROM data_clientes WHERE id = :id"),
+                {"id": id}
+            )
+            caso = result.mappings().first()
+            if not caso:
+                return redirect(url_for('formularios'))
+
+            # Eliminar el caso de la base de datos
+            connection.execute(
+                text("DELETE FROM data_clientes WHERE id = :id"),
+                {"id": id}
+            )
+
+    except Exception as e:
+        print(f"Error al eliminar caso: {e}")
+    return redirect(url_for('formularios'))
 
 if __name__ == '__main__':
     app.run(debug=True)
