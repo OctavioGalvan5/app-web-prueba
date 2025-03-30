@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Carga de Sentencias</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #E6E6FA, #9370DB);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #4B0082;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c5282;
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #4B0082;
+            outline: none;
+            background-color: #fff;
+        }
+        input[type="date"] {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236A0DAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+        }
+        .submit-button {
+            background-color: #4B0082;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            display: block;
+        }
+        .submit-button:hover {
+            background-color: #3a0066;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .container {
+                padding: 10px;
+            }
+            .form-container {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 24px;
+            }
+        }
+        /* Nuevos estilos para botones */
+        .botones-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .botones-container .submit-button {
+            flex: 1;
+        }
+        .btn-cancelar {
+            background-color: #6c757d !important;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-cancelar:hover {
+            background-color: #5a6268 !important;
+        }
+        @media (max-width: 480px) {
+            .botones-container {
+                flex-direction: column;
+            }
+            .botones-container .submit-button {
+                width: 100%;
+            }
+        }
+        .drop-zone {
+            border: 2px dashed #4B0082;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+        }
+        .drop-zone:hover {
+            background-color: #e0e0e0;
+        }
+        .file-list {
+            margin-top: 10px;
+        }
+        .file-item {
+            background-color: #eee;
+            padding: 8px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .remove-file {
+            color: red;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .submit-button {
+            background-color: #4B0082;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .submit-button:hover {
+            background-color: #3a0066;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navs/nav.html' %}
+    <div class="container">
+      <div class="form-container">
+        <h2>{{ data_cliente.nombre }}</h2>
+        <form action="{{ url_for('ver_cliente', id=data_cliente.id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
+          <!-- Sección 1: Información Básica -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre:</label>
+              <input type="text" name="nombre" value="{{ data_cliente.nombre }}" required>
+            </div>
+            <div class="form-group">
+              <label>Nro de Dni:</label>
+              <input type="text" name="numero_dni" value="{{ data_cliente.numero_dni if data_cliente.numero_dni else '' }}">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fecha de Nacimiento:</label>
+              <input type="date" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}">
+            </div>
+            <div class="form-group">
+              <label>Nro de Cuil:</label>
+                <input type="text" name="numero_cuil" value="{{ data_cliente.numero_cuil if data_cliente.numero_cuil else '' }}">
+            </div>
+          </div>
+            <div class="form-row">
+                <div class="form-group">
+                  <label>Nacionalidad:</label>
+                  <input type="text" name="nacionalidad" value="{{ data_cliente.nacionalidad if data_cliente.nacionalidad else '' }}">
+                </div>
+                <div class="form-group">
+                  <label>Direccion:</label>
+                  <input type="text" name="direccion" value="{{ data_cliente.direccion if data_cliente.direccion else '' }}">
+                </div>
+              </div>
+            <div hidden class="form-row">
+                <div class="form-group">
+                    <input type="hidden" name="id" value="{{ data_cliente.id }}">
+                </div>
+              </div>
+          <!-- Contenedor de Botones Final -->
+          <div class="botones-container">
+            <button type="submit" class="submit-button">Guardar Cambios</button>
+            <a href="{{ url_for('formularios') }}" class="submit-button btn-cancelar">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    {% include 'footers/footer.html' %}
+</body>
+</html>

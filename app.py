@@ -40,7 +40,7 @@ from services.planilla_docente.planilla_docente import Planilla_Docente
 from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
 from services.base_datos_casos.pdf_gemini import update_sentencia_in_db
 from services.base_datos_casos.drive_utils import process_and_save_file, delete_drive_file, calculate_file_hash
-from services.formularios.formularios import geminis_api_extract_data, procesar_datos_extraidos
+from services.formularios.formularios import geminis_api_extract_data, update_cliente_in_db
 # Entities
 from models.entities.User import User
 
@@ -1373,8 +1373,6 @@ def ver_casos_publicos(id):
 
     return render_template('base_datos_casos/ver_casos_publicos.html', caso=caso)
 
-
-
 @app.route('/upload_file', methods=['POST'])
 @login_required
 def upload_file():
@@ -1401,7 +1399,6 @@ def upload_file():
         flash("No se pudo procesar ningún archivo.", "danger")  # Cambiado "error" → "danger"
 
     return redirect(url_for('ver_casos'))
-
 
 @app.route('/eliminar_caso/<int:id>', methods=['POST'])
 @login_required
@@ -1434,13 +1431,11 @@ def eliminar_caso(id):
     return redirect(url_for('ver_casos'))
 
 
-
-genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
-model = genai.GenerativeModel('gemini-2.0-flash', system_instruction="Eres una IA de un estudio Juridico Toyos y Espin, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible")
-
 @app.route('/chat', methods=['POST'])
 @login_required
 def chat():
+    genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
+    model = genai.GenerativeModel('gemini-2.0-flash', system_instruction="Eres una IA de un estudio Juridico Toyos y Espin, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible")
     try:
         # Obtén los casos de la base de datos
         with engine.connect() as connection:
@@ -1498,34 +1493,32 @@ def chat():
         return jsonify({'error': 'Hubo un error procesando tu solicitud'}), 500
 
 
-
-# Configuración de Google Sheets
-SCOPE = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-
-# En vez de especificar la ruta al archivo JSON, obtenemos el JSON desde la variable de entorno
-credentials_json = os.getenv("GOOGLE_CREDENTIALS")
-if credentials_json is None:
-    raise Exception("La variable de entorno 'GOOGLE_CREDENTIALS' no está definida.")
-
-# Convertir la cadena JSON a un diccionario de Python
-credentials_info = json.loads(credentials_json)
-
-# Crear las credenciales usando la información del service account y los scopes definidos
-creds = Credentials.from_service_account_info(credentials_info, scopes=SCOPE)
-
-# Usar gspread para acceder a la hoja de Google Sheets
-gc = gspread.authorize(creds)
-
-# ID de la hoja de cálculo (se extrae del enlace)
-SPREADSHEET_ID = "1N36KM98qxaKh4-fgt1KyUg2zu_SjMNENpPFC0rGjWkA"
-
-# Abrir la hoja de cálculo utilizando el ID
-sheet = gc.open_by_key(SPREADSHEET_ID).sheet1
-
 @app.route("/biblioteca")
 @login_required
 def biblioteca():
+    # Configuración de Google Sheets
+    SCOPE = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
+    # En vez de especificar la ruta al archivo JSON, obtenemos el JSON desde la variable de entorno
+    credentials_json = os.getenv("GOOGLE_CREDENTIALS")
+    if credentials_json is None:
+        raise Exception("La variable de entorno 'GOOGLE_CREDENTIALS' no está definida.")
+
+    # Convertir la cadena JSON a un diccionario de Python
+    credentials_info = json.loads(credentials_json)
+
+    # Crear las credenciales usando la información del service account y los scopes definidos
+    creds = Credentials.from_service_account_info(credentials_info, scopes=SCOPE)
+
+    # Usar gspread para acceder a la hoja de Google Sheets
+    gc = gspread.authorize(creds)
+
+    # ID de la hoja de cálculo (se extrae del enlace)
+    SPREADSHEET_ID = "1N36KM98qxaKh4-fgt1KyUg2zu_SjMNENpPFC0rGjWkA"
+
+    # Abrir la hoja de cálculo utilizando el ID
+    sheet = gc.open_by_key(SPREADSHEET_ID).sheet1
+    
     # Obtener todos los registros desde la hoja de cálculo
     data = sheet.get_all_records()
 
@@ -1623,6 +1616,43 @@ def eliminar_cliente(id):
     except Exception as e:
         print(f"Error al eliminar caso: {e}")
     return redirect(url_for('formularios'))
+
+@app.route('/ver_cliente/<int:id>', methods=['GET', 'POST'])
+@login_required
+def ver_cliente(id):
+    if request.method == 'POST':
+        # Primero, obtenemos el caso existente para contar con el link anterior y otros datos.
+        with engine.connect() as connection:
+            result = connection.execute(
+                text("SELECT * FROM data_clientes WHERE id = :id"),
+                {"id": id}
+            )
+            data_cliente = result.mappings().first()
+        if not data_cliente:
+            flash("Caso no encontrado", "error")
+            return redirect(url_for('ver_casos'))
+
+        # Procesamos los datos del formulario
+        data = request.form.to_dict()
+
+        # Actualizamos la sentencia/caso en la base de datos.
+        update_cliente_in_db(data)
+        flash("Caso actualizado correctamente", "success")
+        return redirect(url_for('ver_cliente', id=id))
+
+    # Para el método GET, se obtiene el caso existente.
+    with engine.connect() as connection:
+        result = connection.execute(
+            text("SELECT * FROM data_clientes WHERE id = :id"),
+            {"id": id}
+        )
+        data_cliente= result.mappings().first()
+
+    if not data_cliente:
+        flash("Caso no encontrado", "error")
+        return redirect(url_for('ver_casos'))
+
+    return render_template('formularios/ver_cliente.html', data_cliente=data_cliente)
 
 if __name__ == '__main__':
     app.run(debug=True)
