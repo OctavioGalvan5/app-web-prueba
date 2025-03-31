@@ -24,11 +24,11 @@ def convertir_fecha(fecha_str):
     return None
 
 # Configurar la API de Gemini
-genai.configure(api_key=os.getenv("AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU"))
+genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
 
 
 def geminis_api_extract_data(front_image, back_image):
-    modelo = genai.GenerativeModel("gemini-2.5-pro-exp-03-25")
+    modelo = genai.GenerativeModel("gemini-2.0-flash")
     try:
         # Convertir imágenes a base64
         front_b64 = base64.b64encode(front_image.read()).decode("utf-8")

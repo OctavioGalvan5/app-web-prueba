@@ -183,37 +183,49 @@
         .submit-button:hover {
             background-color: #3a0066;
         }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 5px;
+        }
     </style>
 </head>
-<body>
-    {% include 'navs/nav.html' %}
-    <div class="container">
-      <div class="form-container">
-        <h2>{{ data_cliente.nombre }}</h2>
-        <form action="{{ url_for('ver_cliente', id=data_cliente.id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
-          <!-- Sección 1: Información Básica -->
-          <div class="form-row">
-            <div class="form-group">
-              <label>Nombre:</label>
-              <input type="text" name="nombre" value="{{ data_cliente.nombre }}" required>
-            </div>
-            <div class="form-group">
-              <label>Nro de Dni:</label>
-              <input type="text" name="numero_dni" value="{{ data_cliente.numero_dni if data_cliente.numero_dni else '' }}">
-            </div>
-          </div>
+    <body>
+        {% include 'navs/nav.html' %}
+        <div class="container">
+          <div class="form-container">
+            <h2>{{ data_cliente.nombre }}</h2>
+            <form action="{{ url_for('ver_cliente', id=data_cliente.id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
+              <!-- Sección 1: Información Básica -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Nombre:</label>
+                  <input type="text" name="nombre" value="{{ data_cliente.nombre }}" required>
+                </div>
+                <div class="form-group">
+                  <label>Nro de Dni:</label>
+                  <input type="text" name="numero_dni" value="{{ data_cliente.numero_dni if data_cliente.numero_dni else '' }}">
+                </div>
+              </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label>Fecha de Nacimiento:</label>
-              <input type="date" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}">
-            </div>
-            <div class="form-group">
-              <label>Nro de Cuil:</label>
-                <input type="text" name="numero_cuil" value="{{ data_cliente.numero_cuil if data_cliente.numero_cuil else '' }}">
-            </div>
-          </div>
-            <div class="form-row">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Fecha de Nacimiento:</label>
+                  <input type="date" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}">
+                </div>
+                <div class="form-group">
+                  <label>Nro de Cuil:</label>
+                  <input type="text" name="numero_cuil" value="{{ data_cliente.numero_cuil if data_cliente.numero_cuil else '' }}">
+                </div>
+              </div>
+              <div class="form-row">
                 <div class="form-group">
                   <label>Nacionalidad:</label>
                   <input type="text" name="nacionalidad" value="{{ data_cliente.nacionalidad if data_cliente.nacionalidad else '' }}">
@@ -223,20 +235,84 @@
                   <input type="text" name="direccion" value="{{ data_cliente.direccion if data_cliente.direccion else '' }}">
                 </div>
               </div>
-            <div hidden class="form-row">
+              <div style="display: none;" class="form-row">
                 <div class="form-group">
-                    <input type="hidden" name="id" value="{{ data_cliente.id }}">
+                  <input type="hidden" name="id" value="{{ data_cliente.id }}">
                 </div>
               </div>
-          <!-- Contenedor de Botones Final -->
-          <div class="botones-container">
-            <button type="submit" class="submit-button">Guardar Cambios</button>
-            <a href="{{ url_for('formularios') }}" class="submit-button btn-cancelar">Cancelar</a>
-          </div>
-        </form>
-      </div>
-    </div>
+                
+                <div class="form-row conditional-section" style="display: none;">
+                    <div class="form-group">
+                        <label>Información adicional de incompatibilidad:</label>
+                        <input type="text" name="info_incompatibilidad" 
+                               placeholder="Ingrese información adicional">
+                    </div>
+                </div>
 
-    {% include 'footers/footer.html' %}
-</body>
+              <!-- Sección para formularios adicionales -->
+            <h3>Formularios por Opciones</h3>
+
+            <div class="form-row">
+                <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" name="formularios_jubilacion_ordinaria" id="formularios_jubilacion_ordinaria">
+                    <label for="formularios_jubilacion_ordinaria">Formularios Jubilacion Ordinaria</label>
+                </div>
+                </div>
+            </div>
+            
+            <h3>Formularios</h3>
+            <div class="form-row">
+              <div class="checkbox-group">
+                <div class="checkbox-item">
+                  <input type="checkbox" name="formulario_incompatibilidad_beneficio" id="formulario_incompatibilidad_beneficio">
+                  <label for="formulario_incompatibilidad_beneficio">Formulario Incompatibilidad Beneficio</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" name="formulario_super_incompatibilidad_beneficio" id="formulario_super_incompatibilidad_beneficio">
+                    <label for="formulario_super_incompatibilidad_beneficio">Formulario Super Incompatibilidad </label>
+                </div>
+              </div>
+            </div>
+
+
+
+              <!-- Contenedor de Botones Final -->
+              <div class="botones-container">
+                <!-- Botón para actualizar los datos -->
+                <button type="submit" name="accion" value="guardar_cambios" class="submit-button">Guardar Cambios</button>
+                <!-- Botón para generar y descargar el PDF -->
+                <button type="submit" name="accion" value="hacer_formulario" class="submit-button">Hacer formulario</button>
+                <a href="{{ url_for('formularios') }}" class="submit-button btn-cancelar">Cancelar</a>
+              </div>
+            </form>
+          </div>
+        </div>
+        {% include 'footers/footer.html' %}
+        <script>
+            // Función para controlar la visibilidad de la sección condicional
+            function toggleConditionalSection() {
+                const incompatibilidad = document.getElementById('formulario_incompatibilidad_beneficio').checked;
+                const superIncompatibilidad = document.getElementById('formulario_super_incompatibilidad_beneficio').checked;
+                const section = document.querySelector('.conditional-section');
+
+                section.style.display = (incompatibilidad || superIncompatibilidad) ? 'block' : 'none';
+            }
+
+            // Event listeners para los checkboxes
+            document.getElementById('formulario_incompatibilidad_beneficio').addEventListener('change', toggleConditionalSection);
+            document.getElementById('formulario_super_incompatibilidad_beneficio').addEventListener('change', toggleConditionalSection);
+
+            // Control principal de jubilación ordinaria
+            document.getElementById('formularios_jubilacion_ordinaria').addEventListener('change', function() {
+                const isChecked = this.checked;
+                document.getElementById('formulario_incompatibilidad_beneficio').checked = isChecked;
+                document.getElementById('formulario_super_incompatibilidad_beneficio').checked = isChecked;
+                toggleConditionalSection(); // Actualizar visibilidad al cambiar
+            });
+
+            // Ejecutar al cargar por si hay valores pre-seleccionados
+            toggleConditionalSection();
+        </script>
+    </body>
 </html>

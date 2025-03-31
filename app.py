@@ -1,4 +1,5 @@
 import os
+import zipfile
 import tempfile
 from docx import Document
 from docx.shared import Inches
@@ -21,6 +22,9 @@ import gspread
 from google.auth.transport.requests import Request
 from google.oauth2.service_account import Credentials
 from dateutil.relativedelta import relativedelta
+from pypdf import PdfReader, PdfWriter
+import os
+import platform
 #Models
 from models.ModelUser import ModelUser
 from sqlalchemy import text
@@ -1617,36 +1621,93 @@ def eliminar_cliente(id):
         print(f"Error al eliminar caso: {e}")
     return redirect(url_for('formularios'))
 
+
 @app.route('/ver_cliente/<int:id>', methods=['GET', 'POST'])
 @login_required
 def ver_cliente(id):
     if request.method == 'POST':
-        # Primero, obtenemos el caso existente para contar con el link anterior y otros datos.
-        with engine.connect() as connection:
-            result = connection.execute(
-                text("SELECT * FROM data_clientes WHERE id = :id"),
-                {"id": id}
-            )
-            data_cliente = result.mappings().first()
-        if not data_cliente:
-            flash("Caso no encontrado", "error")
-            return redirect(url_for('ver_casos'))
+        accion = request.form.get('accion')
 
-        # Procesamos los datos del formulario
+        # Actualizamos los datos en la base de datos (para ambas acciones)
         data = request.form.to_dict()
-
-        # Actualizamos la sentencia/caso en la base de datos.
         update_cliente_in_db(data)
-        flash("Caso actualizado correctamente", "success")
-        return redirect(url_for('ver_cliente', id=id))
 
-    # Para el método GET, se obtiene el caso existente.
+        # Si se presionó el botón para generar el formulario PDF:
+        if accion == 'hacer_formulario':
+            # Se obtiene la información actualizada del cliente desde la DB
+            with engine.connect() as connection:
+                result = connection.execute(
+                    text("SELECT * FROM data_clientes WHERE id = :id"),
+                    {"id": id}
+                )
+                data_cliente = result.mappings().first()
+
+            # Construir el diccionario con los datos extraídos de la base
+            datos = {
+                "nombre": data_cliente.get("nombre", ""),
+                "numero_dni": data_cliente.get("numero_dni", ""),
+                "fecha_de_nacimiento": data_cliente.get("fecha_de_nacimiento").strftime('%Y-%m-%d') if data_cliente.get("fecha_de_nacimiento") else "",
+                "numero_cuil": data_cliente.get("numero_cuil", ""),
+                "nacionalidad": data_cliente.get("nacionalidad", ""),
+                "direccion": data_cliente.get("direccion", ""),
+                "Aclaración": "Formulario de incompatibilidad de beneficio activado" 
+                    if request.form.get("formulario_incompatibilidad_beneficio") else ""
+            }
+
+            formularios = []
+            if request.form.get("formulario_incompatibilidad_beneficio"):
+                formularios.append("datos/formularios/formulario_incompatibilidad_beneficio.pdf")
+            if request.form.get("formulario_super_incompatibilidad_beneficio"):
+                formularios.append("datos/formularios/pdfdinamico.pdf") 
+
+            # Diccionario para almacenar los PDFs generados en memoria
+            pdf_files = {}
+
+            # Procesar cada PDF: leer la plantilla y actualizar los campos
+            for idx, formulario in enumerate(formularios):
+                reader = PdfReader(formulario)
+                writer = PdfWriter()
+                writer.clone_reader_document_root(reader)
+                # Verifica que el PDF tenga al menos una página
+                if len(writer.pages) == 0:
+                    flash(f"El archivo {formulario} no tiene páginas o está dañado.", "error")
+                    return redirect(url_for('ver_cliente', id=id))
+                writer.update_page_form_field_values(writer.pages[0], datos)
+
+                # Generar un nombre único para cada PDF resultante
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                output_pdf_name = f"formulario_anses_{timestamp}_{idx}.pdf"
+
+                # Guardar el PDF en memoria usando BytesIO
+                output = BytesIO()
+                writer.write(output)
+                output.seek(0)
+                pdf_files[output_pdf_name] = output
+
+            # Crear un archivo ZIP en memoria que contenga todos los PDFs
+            zip_buffer = BytesIO()
+            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                for filename, file_data in pdf_files.items():
+                    zip_file.writestr(filename, file_data.getvalue())
+            zip_buffer.seek(0)
+
+            # Generar un nombre único para el ZIP
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            zip_filename = f"formularios_{timestamp}.zip"
+
+            # Enviar el archivo ZIP para descarga
+            return send_file(zip_buffer, as_attachment=True, download_name=zip_filename, mimetype='application/zip')
+        else:
+            flash("Caso actualizado correctamente", "success")
+            return redirect(url_for('ver_cliente', id=id))
+
+    # Para GET: se obtiene el caso existente desde la base de datos
     with engine.connect() as connection:
         result = connection.execute(
             text("SELECT * FROM data_clientes WHERE id = :id"),
             {"id": id}
         )
-        data_cliente= result.mappings().first()
+        data_cliente = result.mappings().first()
 
     if not data_cliente:
         flash("Caso no encontrado", "error")
