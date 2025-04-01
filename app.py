@@ -44,7 +44,7 @@ from services.planilla_docente.planilla_docente import Planilla_Docente
 from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
 from services.base_datos_casos.pdf_gemini import update_sentencia_in_db
 from services.base_datos_casos.drive_utils import process_and_save_file, delete_drive_file, calculate_file_hash
-from services.formularios.formularios import geminis_api_extract_data, update_cliente_in_db
+from services.formularios.formularios import geminis_api_extract_data, update_cliente_in_db, convert_pdf_to_image, process_file
 # Entities
 from models.entities.User import User
 
@@ -1217,86 +1217,6 @@ def casos_publicos():
         casos = [dict(row._mapping) for row in result]
     return render_template('base_datos_casos/casos_publicos.html', casos=casos)
 
-@app.route('/editar_caso/<int:id>', methods=['GET', 'POST'])
-@login_required
-def editar_caso(id):
-    if request.method == 'POST':
-        # Primero, obtenemos el caso existente para contar con el link anterior y otros datos.
-        with engine.connect() as connection:
-            result = connection.execute(
-                text("SELECT * FROM sentencias WHERE id = :id"),
-                {"id": id}
-            )
-            caso = result.mappings().first()
-        if not caso:
-            flash("Caso no encontrado", "error")
-            return redirect(url_for('ver_casos'))
-
-        # Procesamos los datos del formulario
-        data = request.form.to_dict()
-        data['id'] = id
-
-        # Mantenemos los valores previos de drive_link y file_hash en caso de que no se suba un nuevo archivo.
-        if not data.get('drive_link'):
-            data['drive_link'] = caso.get('drive_link')
-        if not data.get('file_hash'):
-            data['file_hash'] = caso.get('file_hash')
-
-        # Si se envía uno o varios archivos nuevos desde el formulario de edición.
-        if 'documentos[]' in request.files:
-            archivos = request.files.getlist('documentos[]')
-            for archivo in archivos:
-                if archivo.filename == '':
-                    continue
-
-                # Calcular el hash del archivo utilizando la función calculate_file_hash.
-                file_hash = calculate_file_hash(archivo.stream)
-                archivo.stream.seek(0)
-
-                # Verificar si el hash ya existe en otro caso (excluyendo el registro actual)
-                with engine.connect() as connection:
-                    result = connection.execute(
-                        text("SELECT id FROM sentencias WHERE file_hash = :file_hash AND id != :id"),
-                        {"file_hash": file_hash, "id": id}
-                    )
-                    existing_id = result.scalar()
-
-                if existing_id:
-                    flash(f"El archivo {archivo.filename} ya fue subido previamente.", "warning")
-                    continue  # No se procesa este archivo
-
-                # Si existe un archivo anterior en Drive, se elimina.
-                if caso.get('drive_link'):
-                    delete_drive_file(caso.get('drive_link'))
-
-                # Procesa y sube el archivo en modo actualización
-                new_drive_link, error = process_and_save_file(archivo.stream, archivo.filename, update=True)
-                if error:
-                    flash(error, "danger")
-                else:
-                    # Actualizamos el link y el hash en los datos que se guardarán en la DB.
-                    data['drive_link'] = new_drive_link
-                    data['file_hash'] = file_hash
-
-        # Actualizamos la sentencia/caso en la base de datos.
-        update_sentencia_in_db(data)
-        flash("Caso actualizado correctamente", "success")
-        return redirect(url_for('ver_casos'))
-
-    # Para el método GET, se obtiene el caso existente.
-    with engine.connect() as connection:
-        result = connection.execute(
-            text("SELECT * FROM sentencias WHERE id = :id"),
-            {"id": id}
-        )
-        caso = result.mappings().first()
-
-    if not caso:
-        flash("Caso no encontrado", "error")
-        return redirect(url_for('ver_casos'))
-
-    return render_template('base_datos_casos/editar_caso.html', caso=caso)
-
 @app.route('/ver_casos_publicos/<int:id>', methods=['GET', 'POST'])
 @login_required
 def ver_casos_publicos(id):
@@ -1377,32 +1297,136 @@ def ver_casos_publicos(id):
 
     return render_template('base_datos_casos/ver_casos_publicos.html', caso=caso)
 
+@app.route('/editar_caso/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar_caso(id):
+    if request.method == 'POST':
+        # Primero, obtenemos el caso existente para contar con el link anterior y otros datos.
+        with engine.connect() as connection:
+            result = connection.execute(
+                text("SELECT * FROM sentencias WHERE id = :id"),
+                {"id": id}
+            )
+            caso = result.mappings().first()
+        if not caso:
+            flash("Caso no encontrado", "error")
+            return redirect(url_for('ver_casos'))
+
+        # Procesamos los datos del formulario
+        data = request.form.to_dict()
+        data['id'] = id
+
+        # Mantenemos los valores previos de drive_link y file_hash en caso de que no se suba un nuevo archivo.
+        if not data.get('drive_link'):
+            data['drive_link'] = caso.get('drive_link')
+        if not data.get('file_hash'):
+            data['file_hash'] = caso.get('file_hash')
+
+        # Si se envía uno o varios archivos nuevos desde el formulario de edición.
+        if 'documentos[]' in request.files:
+            archivos = request.files.getlist('documentos[]')
+            for archivo in archivos:
+                if archivo.filename == '':
+                    continue
+
+                # Calcular el hash del archivo utilizando la función calculate_file_hash.
+                file_hash = calculate_file_hash(archivo.stream)
+                archivo.stream.seek(0)
+
+                # Verificar si el hash ya existe en otro caso (excluyendo el registro actual)
+                with engine.connect() as connection:
+                    result = connection.execute(
+                        text("SELECT id FROM sentencias WHERE file_hash = :file_hash AND id != :id"),
+                        {"file_hash": file_hash, "id": id}
+                    )
+                    existing_id = result.scalar()
+
+                if existing_id:
+                    flash(f"El archivo {archivo.filename} ya fue subido previamente.", "warning")
+                    continue  # No se procesa este archivo
+
+                # Si existe un archivo anterior en Drive, se elimina.
+                if caso.get('drive_link'):
+                    delete_drive_file(caso.get('drive_link'))
+
+                # Procesa y sube el archivo en modo actualización
+                new_drive_link, error = process_and_save_file(archivo.stream, archivo.filename, update=True)
+                if error:
+                    flash(error, "danger")
+                else:
+                    # Actualizamos el link y el hash en los datos que se guardarán en la DB.
+                    data['drive_link'] = new_drive_link
+                    data['file_hash'] = file_hash
+
+        # Actualizamos la sentencia/caso en la base de datos.
+        update_sentencia_in_db(data)
+        flash("Caso actualizado correctamente", "success")
+        return redirect(url_for('ver_casos'))
+
+    # Para el método GET, se obtiene el caso existente.
+    with engine.connect() as connection:
+        result = connection.execute(
+            text("SELECT * FROM sentencias WHERE id = :id"),
+            {"id": id}
+        )
+        caso = result.mappings().first()
+
+    if not caso:
+        flash("Caso no encontrado", "error")
+        return redirect(url_for('ver_casos'))
+
+    return render_template('base_datos_casos/editar_caso.html', caso=caso)
+
+
+
 @app.route('/upload_file', methods=['POST'])
 @login_required
 def upload_file():
     if 'documentos[]' not in request.files:
-        flash("No se enviaron archivos", "danger")  # Cambiado "error" → "danger"
+        flash("No se enviaron archivos", "danger")
         return redirect(url_for('ver_casos'))
 
     archivos = request.files.getlist('documentos[]')
     processed = False
+    new_file_hash = None  # Guardaremos el hash del primer archivo procesado correctamente
 
     for archivo in archivos:
         if archivo.filename == '':
             continue
 
-        # Llama a la función que procesa el archivo:
+        # Calcular el hash del archivo (asegúrate de tener implementada la función calculate_file_hash)
+        file_hash = calculate_file_hash(archivo.stream)
+        archivo.stream.seek(0)
+
+        # Llama a la función que procesa el archivo (si update es False, inserta un nuevo registro)
         drive_link, error = process_and_save_file(archivo.stream, archivo.filename)
         if error:
-            flash(error, "danger")  # Cambiado "error" → "danger"
+            flash(error, "danger")
         else:
-            flash(f"Archivo {archivo.filename} subido y analizado correctamente.", "success")
             processed = True
+            new_file_hash = file_hash
+            flash(f"Archivo {archivo.filename} subido y analizado correctamente.", "success")
+            # Si solo procesas un archivo nuevo, puedes romper el bucle aquí
+            break
 
     if not processed:
-        flash("No se pudo procesar ningún archivo.", "danger")  # Cambiado "error" → "danger"
+        flash("No se pudo procesar ningún archivo.", "danger")
+        return redirect(url_for('ver_casos'))
 
-    return redirect(url_for('ver_casos'))
+    # Buscar en la base de datos el ID del caso recién insertado usando el file_hash
+    with engine.connect() as connection:
+        result = connection.execute(
+            text("SELECT id FROM sentencias WHERE file_hash = :file_hash"),
+            {"file_hash": new_file_hash}
+        )
+        new_id = result.scalar()
+
+    if new_id:
+        # Redirigir a la función editar_caso para el caso insertado
+        return redirect(url_for('editar_caso', id=new_id))
+    else:
+        flash("No se encontró el caso subido.", "danger")
+        return redirect(url_for('ver_casos'))
 
 @app.route('/eliminar_caso/<int:id>', methods=['POST'])
 @login_required
@@ -1554,15 +1578,24 @@ def formularios():
 @app.route('/upload_dni', methods=['POST'])
 @login_required
 def upload_dni():
-    # Obtener las imágenes del formulario
-    imagenes = request.files.getlist('documentos')
+    # Obtener todos los archivos enviados
+    documentos = request.files.getlist('documentos')
 
-    if len(imagenes) != 2:
-        flash("Debe enviar dos imágenes del DNI.", "danger")
+    if len(documentos) < 1:
+        flash("Debe enviar al menos un archivo (imagen o PDF) del DNI.", "danger")
         return redirect(url_for('formularios'))
 
-    # Se envían ambas imágenes a la API de Gemini
-    extracted_data, error = geminis_api_extract_data(imagenes[0].stream, imagenes[1].stream)
+    # Procesar cada archivo recibido
+    processed_files = []
+    for file in documentos:
+        processed = process_file(file)
+        if not processed:
+            flash("Error al procesar alguno de los archivos.", "danger")
+            return redirect(url_for('formularios'))
+        processed_files.append(processed)
+
+    # Enviar la lista de archivos procesados a la API de Gemini
+    extracted_data, error = geminis_api_extract_data(processed_files)
 
     if error or not extracted_data:
         flash(f"Error al extraer datos del DNI: {error}", "danger")

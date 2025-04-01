@@ -5,7 +5,9 @@ import json
 from datetime import datetime
 from sqlalchemy import text
 from models.database import engine  # Verifica que la conexión esté bien configurada
-
+from io import BytesIO
+import fitz  # PyMuPDF
+from PIL import Image
 
 def convertir_fecha(fecha_str):
     formatos = [
@@ -27,36 +29,34 @@ def convertir_fecha(fecha_str):
 genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
 
 
-def geminis_api_extract_data(front_image, back_image):
+def geminis_api_extract_data(image_streams):
     modelo = genai.GenerativeModel("gemini-2.0-flash")
     try:
-        # Convertir imágenes a base64
-        front_b64 = base64.b64encode(front_image.read()).decode("utf-8")
-        back_b64 = base64.b64encode(back_image.read()).decode("utf-8")
+        contenido = []
+        # Iterar sobre cada archivo (imagen) y convertirlo a base64
+        for stream in image_streams:
+            # Aseguramos que el puntero esté al inicio
+            stream.seek(0)
+            image_b64 = base64.b64encode(stream.read()).decode("utf-8")
+            contenido.append({"mime_type": "image/jpeg", "data": image_b64})
 
-        print("✅ Imágenes convertidas a base64 correctamente")
-
-        # Prepara el contenido para la API
-        contenido = [
-            {"mime_type": "image/jpeg", "data": front_b64},
-            {"mime_type": "image/jpeg", "data": back_b64},
-            {
-                "text": """Eres un asistente legal experto en analizar imágenes de documentos. 
-                Analiza las imágenes de DNI y proporciona la siguiente información en formato JSON:
-                {
-                    "dni_number": "Número de DNI",
-                    "cuil_number": "Número de CUIL",
-                    "name": "Nombre completo, por ejemplo no coloques MARIA PEREZ, coloca Maria Perez",
-                    "date_of_birth": "YYYY-MM-DD",
-                    "nationality": "Nacionalidad",
-                    "address": "Dirección"
-                }"""
-            },
-        ]
+        # Agregar la instrucción de análisis como el último ítem
+        contenido.append({
+            "text": """Eres un asistente legal experto en analizar imágenes de documentos. 
+Analiza las imágenes de DNI y proporciona la siguiente información en formato JSON:
+{
+    "dni_number": "Número de DNI",
+    "cuil_number": "Número de CUIL",
+    "name": "Nombre completo, por ejemplo no coloques MARIA PEREZ, coloca Maria Perez",
+    "date_of_birth": "YYYY-MM-DD",
+    "nationality": "Nacionalidad, un ejemplo puede ser Argentina, Brasileña, Chilena, etc",
+    "address": "Dirección"
+}"""
+        })
 
         print("📨 Enviando datos a la API de Gemini...")
 
-        # Envía la solicitud a la API
+        # Enviar la solicitud a la API
         respuesta = modelo.generate_content(contenido)
 
         if not respuesta or not hasattr(respuesta, 'text'):
@@ -74,10 +74,9 @@ def geminis_api_extract_data(front_image, back_image):
 
 def procesar_datos_extraidos(json_texto):
     try:
-        # Limpiar el texto recibido, eliminando las comillas invertidas si están presentes
+        # Limpiar el texto recibido, eliminando posibles delimitadores
         json_texto = json_texto.strip().strip("```json").strip("```")
-
-        print("📑 JSON limpio:", json_texto)  # Verificar que ahora es un JSON válido
+        print("📑 JSON limpio:", json_texto)
 
         # Convertir la respuesta en JSON
         datos = json.loads(json_texto)
@@ -85,7 +84,7 @@ def procesar_datos_extraidos(json_texto):
         # Validar claves necesarias
         claves_requeridas = ["dni_number", "cuil_number", "name", "date_of_birth", "nationality", "address"]
         for clave in claves_requeridas:
-            datos.setdefault(clave, "")  # Si falta una clave, se asigna una cadena vacía
+            datos.setdefault(clave, "")
 
         return datos
     except json.JSONDecodeError as e:
@@ -123,3 +122,34 @@ def update_cliente_in_db(data):
         print("Datos actualizados en la base de datos.")
     except Exception as e:
         print("Error al actualizar en la base de datos:", e)
+
+
+
+def convert_pdf_to_image(file):
+    file_bytes = file.read()
+    try:
+        doc = fitz.open(stream=file_bytes, filetype="pdf")
+    except Exception as e:
+        print("Error al abrir el PDF:", e)
+        return None
+    if doc.page_count == 0:
+        return None
+    # Procesa la primera página
+    page = doc.load_page(0)
+    pix = page.get_pixmap()
+    # Convertir el pixmap a bytes en formato JPEG
+    image_bytes = pix.tobytes("jpeg")
+    # Envolver en BytesIO para que se comporte como un stream
+    image_io = BytesIO(image_bytes)
+    image_io.seek(0)
+    return image_io
+
+# Función para procesar el archivo: si es PDF se convierte; si es imagen, se envuelve en BytesIO
+def process_file(file):
+    if file.filename.lower().endswith('.pdf'):
+        return convert_pdf_to_image(file)
+    else:
+        file_bytes = file.read()
+        file_io = BytesIO(file_bytes)
+        file_io.seek(0)
+        return file_io

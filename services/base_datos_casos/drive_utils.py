@@ -13,6 +13,8 @@ from datetime import datetime
 from sqlalchemy import text
 from models.database import engine  # Verifica que la conexión esté bien configurada
 from services.base_datos_casos.pdf_gemini import analyze_legal_documents, extract_text_from_pdf, save_sentencia_to_db
+import fitz  # PyMuPDF
+from io import BytesIO
 
 # Definir los alcances (scopes)
 SCOPES = ['https://www.googleapis.com/auth/drive']
@@ -28,6 +30,30 @@ credentials_info = json.loads(credentials_json)
 # Crear las credenciales usando la información del service account y los scopes definidos
 credentials = service_account.Credentials.from_service_account_info(credentials_info, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=credentials)
+
+def extract_last_page_image(file_obj):
+    """
+    Extrae la última página del PDF y la devuelve como un objeto BytesIO en formato JPEG.
+    """
+    # Leer todo el contenido del archivo PDF
+    file_bytes = file_obj.read()
+    try:
+        doc = fitz.open(stream=file_bytes, filetype="pdf")
+    except Exception as e:
+        print("Error al abrir el PDF:", e)
+        return None
+
+    if doc.page_count == 0:
+        return None
+
+    # Cargar la última página (índice: page_count - 1)
+    last_page = doc.load_page(doc.page_count - 1)
+    pix = last_page.get_pixmap()
+    image_bytes = pix.tobytes("jpeg")
+
+    image_io = BytesIO(image_bytes)
+    image_io.seek(0)
+    return image_io
 
 def calculate_file_hash(file_obj):
     """
@@ -86,18 +112,25 @@ def process_and_save_file(file_obj, file_name, update=False):
     # Calcular el hash del archivo
     file_hash = calculate_file_hash(file_obj)
 
-    # Verificar si el archivo ya fue subido (se asume que, en edición, se excluye el registro actual en la consulta)
+    # Verificar si el archivo ya fue subido
     if file_hash_exists(file_hash):
         return None, f"El archivo {file_name} ya ha sido subido previamente."
 
-    # Reinicia el puntero y extrae el texto del PDF para analizarlo
+    # Reinicia el puntero y extrae el texto del PDF
     file_obj.seek(0)
     texto = extract_text_from_pdf(file_obj)
     if not texto:
         return None, "No se pudo extraer texto del archivo PDF."
 
-    # Llama a la función que analiza el documento con IA
-    sentencia_data = analyze_legal_documents(texto)
+    # Extraer la imagen de la última página
+    file_obj.seek(0)
+    ultima_imagen = extract_last_page_image(file_obj)
+    if not ultima_imagen:
+        return None, "No se pudo extraer la imagen de la última página del PDF."
+
+    # Llama a la función que analiza el documento con IA,
+    # pasando tanto el texto como la imagen de la última página
+    sentencia_data = analyze_legal_documents(texto, ultima_imagen)
     if not sentencia_data:
         return None, "Error al analizar el documento con la API."
 
@@ -105,7 +138,7 @@ def process_and_save_file(file_obj, file_name, update=False):
     file_obj.seek(0)
     drive_link, drive_id = upload_file_to_drive(file_obj, file_name)
 
-    # Agrega el link de Drive y el hash al diccionario obtenido por analyze_legal_documents
+    # Agrega el link de Drive y el hash al diccionario obtenido
     sentencia_data['drive_link'] = drive_link
     sentencia_data['file_hash'] = file_hash
 

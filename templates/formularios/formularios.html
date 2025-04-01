@@ -402,8 +402,8 @@
             <h2>Ingresar Nuevo Cliente</h2>
             <form action="{{ url_for('upload_dni') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
                 <div class="form-group drop-zone" id="drop-zone">
-                    Arrastra y suelta foto del frente y dorso del dni aquí o haz clic para seleccionar
-                    <input type="file" id="documentos" name="documentos" accept=".jpg,.jpeg" multiple hidden>
+                    Arrastra y suelta fotos o PDFs del DNI aquí o haz clic para seleccionar
+                    <input type="file" id="documentos" name="documentos" accept=".jpg,.jpeg,.pdf" multiple hidden>
                 </div>
                 <div class="file-list" id="file-list"></div>
                 <button type="submit" class="submit-button">Cargar Cliente</button>
