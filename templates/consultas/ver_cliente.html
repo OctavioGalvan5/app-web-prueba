@@ -211,7 +211,7 @@
                 </div>
                   <div class="form-group">
                     <label>Apellido:</label>
-                    <input type="text" name="numero_dni" value="{{ data_cliente.apellido if data_cliente.apellido else '' }}">
+                    <input type="text" name="apellido" value="{{ data_cliente.apellido if data_cliente.apellido else '' }}">
                   </div>
               </div>
 
@@ -237,11 +237,27 @@
                   <label>Nacionalidad:</label>
                   <input type="text" name="nacionalidad" value="{{ data_cliente.nacionalidad if data_cliente.nacionalidad else '' }}">
                 </div>
-                <div class="form-group">
-                  <label>Direccion:</label>
-                  <input type="text" name="direccion" value="{{ data_cliente.direccion if data_cliente.direccion else '' }}">
-                </div>
               </div>
+              <div class="form-row">
+                  <div class="form-group">
+                    <label>Direccion:</label>
+                    <input type="text" name="direccion" value="{{ data_cliente.direccion if data_cliente.direccion else '' }}">
+                  </div>
+                  <div class="form-group">
+                      <label>Provincia:</label>
+                      <input type="text" name="provincia" value="{{ data_cliente.provincia if data_cliente.provincia else '' }}">
+                    </div>
+              </div>
+                <div class="form-row">
+                      <div class="form-group">
+                        <label>Departamento:</label>
+                        <input type="text" name="departamento" value="{{ data_cliente.departamento if data_cliente.departamento else '' }}">
+                      </div>
+                      <div class="form-group">
+                          <label>Ciudad:</label>
+                          <input type="text" name="ciudad" value="{{ data_cliente.ciudad if data_cliente.ciudad else '' }}">
+                        </div>
+                  </div>
               <div style="display: none;" class="form-row">
                 <div class="form-group">
                   <input type="hidden" name="id" value="{{ data_cliente.id }}">

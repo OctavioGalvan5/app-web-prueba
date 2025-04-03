@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base de Datos de Casos</title>
+    <title>Jurisprudencia Previsional</title>
     <style>
         body, html {
             margin: 0;
@@ -96,12 +96,23 @@
         .btn-editar:hover {
             background-color: #7B68EE;
         }
-        /* Se eliminó el estilo del botón eliminar */
         /* Estilos para filtros */
         .filtros-container {
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            gap: 15px;
             margin-bottom: 25px;
+        }
+        .info-busqueda {
+            font-size: 16px;
+            color: #4B0082;
+            text-align: center;
+        }
+        .busqueda-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         .busqueda-input {
             flex: 2;
@@ -137,11 +148,13 @@
             font-size: 14px;
             color: #4B0082;
             font-weight: bold;
+            text-align: center;
         }
         .filtros-activos {
             margin: 10px 0;
             font-size: 14px;
             color: #4B0082;
+            text-align: center;
         }
         .filtro-activo {
             background-color: #e6e6fa;
@@ -173,7 +186,7 @@
                 width: 100%;
                 text-align: center;
             }
-            .filtros-container {
+            .busqueda-row {
                 flex-direction: column;
             }
         }
@@ -292,24 +305,32 @@
         <!-- Sección de casos -->
         <h2>Casos Registrados</h2>
 
+        <!-- Información para el usuario -->
+        <div class="info-busqueda">
+            Use el buscador para encontrar casos de <strong>jurisprudencia previsional</strong>.<br>
+            También puede cargar nuevas sentencias en el formulario inferior.
+        </div>
+
         <!-- Filtros -->
         <div class="filtros-container">
-            <input type="text" 
-                   class="busqueda-input" 
-                   placeholder="Buscar por nombre o expediente..."
-                   id="busquedaInput">
+            <div class="busqueda-row">
+                <input type="text" 
+                       class="busqueda-input" 
+                       placeholder="Buscar casos (ej: pensión, pension)" 
+                       id="busquedaInput">
 
-            <select class="filtro-select" id="filtroInstancia">
-                <option value="">Todas las instancias</option>
-                <option value="Primera Instancia">Primera Instancia</option>
-                <option value="Segunda Instancia">Segunda Instancia</option>
-                <option value="Instancia Extraordinaria">Instancia Extraordinaria</option>
-                <option value="Organo Autonomo extrapoder (MP)">Organo Autonomo extrapoder (MP)</option>
-            </select>
+                <select class="filtro-select" id="filtroInstancia">
+                    <option value="">Todas las instancias</option>
+                    <option value="Primera Instancia">Primera Instancia</option>
+                    <option value="Segunda Instancia">Segunda Instancia</option>
+                    <option value="Instancia Extraordinaria">Instancia Extraordinaria</option>
+                    <option value="Organo Autonomo extrapoder (MP)">Organo Autonomo extrapoder (MP)</option>
+                </select>
 
-            <button class="btn-reset" onclick="resetearFiltros()">
-                Limpiar Filtros
-            </button>
+                <button class="btn-reset" onclick="resetearFiltros()">
+                    Limpiar Filtros
+                </button>
+            </div>
         </div>
 
         <div class="contador-resultados">
@@ -342,7 +363,6 @@
                         <td>
                             <div class="acciones-contenedor">
                                 <a href="{{ url_for('ver_casos_publicos', id=caso.id) }}" class="btn-editar">Ver</a>
-                                <!-- Se eliminó el botón Eliminar -->
                             </div>
                         </td>
                     </tr>
@@ -453,25 +473,26 @@
             return true;
         }
 
-        // Filtrado de casos
+        // Filtrado de casos con búsqueda acento-insensible
         function filtrarCasos() {
             const inputBusqueda = document.getElementById('busquedaInput');
             const filtroInstancia = document.getElementById('filtroInstancia');
             const tabla = document.querySelector('.tabla-casos tbody');
             const filas = tabla.querySelectorAll('tr');
 
-            const textoBusqueda = inputBusqueda.value.toLowerCase();
+            // Normalizamos el término de búsqueda para eliminar acentos
+            const textoBusqueda = inputBusqueda.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
             const instanciaSeleccionada = filtroInstancia.value;
 
-            // Si no hay filtros, ocultar todos los casos
             if (textoBusqueda === '' && instanciaSeleccionada === '') {
                 filas.forEach(fila => {
                     fila.style.display = 'none';
                 });
             } else {
                 filas.forEach(fila => {
-                    const nombreCaso = fila.cells[0].textContent.toLowerCase();
-                    const expediente = fila.cells[1].textContent.toLowerCase();
+                    // Se normalizan los textos de cada celda para una comparación justa
+                    const nombreCaso = fila.cells[0].textContent.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                    const expediente = fila.cells[1].textContent.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
                     const instancia = fila.cells[3].textContent;
 
                     const coincideTexto = nombreCaso.includes(textoBusqueda) || expediente.includes(textoBusqueda);
@@ -486,7 +507,6 @@
 
         // Funciones adicionales
         function actualizarContador() {
-            // Se cuentan sólo las filas visibles (display diferente de "none")
             const filasVisibles = document.querySelectorAll('.tabla-casos tbody tr:not([style*="display: none"])').length;
             document.getElementById('contador').textContent = filasVisibles;
         }
@@ -525,7 +545,6 @@
 
             if (!mensaje) return;
 
-            // Mostrar mensaje del usuario
             chatBox.innerHTML += `
                 <div class="mensaje-usuario">
                     <strong>Tú:</strong> ${mensaje}
@@ -548,7 +567,6 @@
 
                 if (data.error) throw new Error(data.error);
 
-                // Mostrar respuesta de la IA
                 chatBox.innerHTML += `
                     <div class="mensaje-ia">
                         <strong>Asistente:</strong> ${data.respuesta}
@@ -564,7 +582,6 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Permitir enviar con Enter
         document.getElementById('chatInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 enviarMensaje();

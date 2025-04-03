@@ -51,7 +51,12 @@ Analiza las imágenes de DNI y proporciona la siguiente información en formato 
     "surname": "Apellido completo, por ejemplo no coloques MARIA PEREZ, coloca Perez",
     "date_of_birth": "YYYY-MM-DD",
     "nationality": "Nacionalidad, un ejemplo puede ser Argentina, Brasileña, Chilena, etc",
-    "address": "Dirección"
+    "address": "Dirección, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Ohiggins 1673 DT/C B° 20 De Febrero'",
+    "province": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta'",
+    "department": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta Capital'",
+    "city": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta'",
+
+
 }"""
         })
 
@@ -83,7 +88,7 @@ def procesar_datos_extraidos(json_texto):
         datos = json.loads(json_texto)
 
         # Validar claves necesarias
-        claves_requeridas = ["dni_number", "cuil_number", "name", "surname", "date_of_birth", "nationality", "address"]
+        claves_requeridas = ["dni_number", "cuil_number", "name", "surname", "date_of_birth", "nationality", "address", "province", "department", "city"]
         for clave in claves_requeridas:
             datos.setdefault(clave, "")
 
@@ -104,6 +109,10 @@ def update_cliente_in_db(data):
         "numero_cuil": data.get("numero_cuil"),
         "nacionalidad": data.get("nacionalidad"),
         "direccion": data.get("direccion"),
+        "provincia": data.get("provincia"),
+        "departamento": data.get("departamento"),
+        "ciudad": data.get("ciudad"),
+
     }
 
     update_query = text("""
@@ -114,7 +123,10 @@ def update_cliente_in_db(data):
             fecha_de_nacimiento = :fecha_de_nacimiento,
             numero_cuil = :numero_cuil,
             nacionalidad = :nacionalidad,
-            direccion = :direccion
+            direccion = :direccion,
+            provincia = :provincia,
+            departamento = :departamento,
+            ciudad = :ciudad
         WHERE id = :id
     """)
 

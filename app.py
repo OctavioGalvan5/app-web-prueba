@@ -1490,7 +1490,7 @@ def chat():
         # Construir el prompt con memoria del chat
         prompt = f"""
         Eres un asistente legal experto en casos judiciales.
-        Importante: solo debes saludar si eres el primer mensaje, despues no.
+        Importante: solo debes saludar si eres el primer mensaje, despues no (aunque saludes no significa que debes ignorar lo que te mando el usuario, por ejemplo, si te mandan un mensaje diciendo 'Hola, me gustaria saber los casos que hablan sobre...' en ese caso saludaras y le daras la informacion que te piden.
         Tienes acceso a la siguiente información de casos:
 
         {contexto}
@@ -1601,10 +1601,10 @@ def upload_dni():
         flash(f"Error al extraer datos del DNI: {error}", "danger")
         return redirect(url_for('consultas'))
 
-    # Guardar los datos extraídos en la base de datos
+    # Guardar los datos extraídos en la base de datos y obtener el ID del cliente insertado
     try:
         with engine.begin() as connection:
-            connection.execute(
+            result = connection.execute(
                 text("""
                     INSERT INTO data_clientes (
                         numero_dni, 
@@ -1613,7 +1613,10 @@ def upload_dni():
                         apellido,
                         fecha_de_nacimiento, 
                         nacionalidad, 
-                        direccion
+                        direccion,
+                        provincia,
+                        departamento,
+                        ciudad
                     ) VALUES (
                         :dni_number, 
                         :cuil_number, 
@@ -1621,16 +1624,22 @@ def upload_dni():
                         :surname,
                         :date_of_birth, 
                         :nationality, 
-                        :address
+                        :address,
+                        :province,
+                        :department,
+                        :city
                     )
                 """),
                 extracted_data
             )
+            new_id = result.lastrowid
         flash("Datos del DNI guardados correctamente.", "success")
     except Exception as e:
         flash(f"Error al guardar los datos en la base de datos: {str(e)}", "danger")
+        return redirect(url_for('consultas'))
 
-    return redirect(url_for('consultas'))
+    # Redirigir a la pantalla del cliente recién cargado
+    return redirect(url_for('ver_cliente', id=new_id))
 
 @app.route('/eliminar_cliente/<int:id>', methods=['POST'])
 @login_required
@@ -1663,8 +1672,9 @@ def ver_cliente(id):
     if request.method == 'POST':
         accion = request.form.get('accion')
 
-        # Actualizamos los datos en la base de datos (para ambas acciones)
+        # Convertir los datos del formulario en un diccionario
         data = request.form.to_dict()
+        # Actualizar los datos del cliente en la base de datos
         update_cliente_in_db(data)
 
         # Si se presionó el botón para generar el formulario PDF:
@@ -1686,10 +1696,14 @@ def ver_cliente(id):
                 "numero_cuil": data_cliente.get("numero_cuil", ""),
                 "nacionalidad": data_cliente.get("nacionalidad", ""),
                 "direccion": data_cliente.get("direccion", ""),
-                "Aclaración": "Formulario de incompatibilidad de beneficio activado" 
+                "provincia": data_cliente.get("provincia", ""),
+                "departamento": data_cliente.get("departamento", ""),
+                "ciudad": data_cliente.get("ciudad", ""),
+                "Aclaración": "Formulario de incompatibilidad de beneficio activado"
                     if request.form.get("formulario_incompatibilidad_beneficio") else ""
             }
 
+            # Seleccionar los formularios PDF que se van a procesar
             formularios = []
             if request.form.get("formulario_incompatibilidad_beneficio"):
                 formularios.append("datos/formularios/formulario_incompatibilidad_beneficio.pdf")
@@ -1720,7 +1734,7 @@ def ver_cliente(id):
                 output.seek(0)
                 pdf_files[output_pdf_name] = output
 
-            # Crear un archivo ZIP en memoria que contenga todos los PDFs
+            # Crear un archivo ZIP en memoria que contenga todos los PDFs generados
             zip_buffer = BytesIO()
             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
                 for filename, file_data in pdf_files.items():
@@ -1733,11 +1747,12 @@ def ver_cliente(id):
 
             # Enviar el archivo ZIP para descarga
             return send_file(zip_buffer, as_attachment=True, download_name=zip_filename, mimetype='application/zip')
-        else:
+        # Si la acción es guardar cambios, se actualiza y se redirige a la misma pantalla
+        elif accion == 'guardar_cambios':
             flash("Caso actualizado correctamente", "success")
             return redirect(url_for('ver_cliente', id=id))
 
-    # Para GET: se obtiene el caso existente desde la base de datos
+    # Para método GET: se obtiene el caso existente desde la base de datos
     with engine.connect() as connection:
         result = connection.execute(
             text("SELECT * FROM data_clientes WHERE id = :id"),
