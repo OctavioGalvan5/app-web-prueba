@@ -209,21 +209,28 @@
                   <label>Nombre:</label>
                   <input type="text" name="nombre" value="{{ data_cliente.nombre }}" required>
                 </div>
-                <div class="form-group">
-                  <label>Nro de Dni:</label>
-                  <input type="text" name="numero_dni" value="{{ data_cliente.numero_dni if data_cliente.numero_dni else '' }}">
-                </div>
+                  <div class="form-group">
+                    <label>Apellido:</label>
+                    <input type="text" name="numero_dni" value="{{ data_cliente.apellido if data_cliente.apellido else '' }}">
+                  </div>
               </div>
 
-              <div class="form-row">
+            <div class="form-row">
                 <div class="form-group">
                   <label>Fecha de Nacimiento:</label>
                   <input type="date" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}">
                 </div>
+            </div>
+
+              <div class="form-row">
                 <div class="form-group">
                   <label>Nro de Cuil:</label>
                   <input type="text" name="numero_cuil" value="{{ data_cliente.numero_cuil if data_cliente.numero_cuil else '' }}">
                 </div>
+                  <div class="form-group">
+                    <label>Nro de Dni:</label>
+                    <input type="text" name="numero_dni" value="{{ data_cliente.numero_dni if data_cliente.numero_dni else '' }}">
+                  </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
@@ -275,15 +282,13 @@
               </div>
             </div>
 
-
-
               <!-- Contenedor de Botones Final -->
               <div class="botones-container">
                 <!-- Botón para actualizar los datos -->
                 <button type="submit" name="accion" value="guardar_cambios" class="submit-button">Guardar Cambios</button>
                 <!-- Botón para generar y descargar el PDF -->
                 <button type="submit" name="accion" value="hacer_formulario" class="submit-button">Hacer formulario</button>
-                <a href="{{ url_for('formularios') }}" class="submit-button btn-cancelar">Cancelar</a>
+                <a href="{{ url_for('consultas') }}" class="submit-button btn-cancelar">Cancelar</a>
               </div>
             </form>
           </div>

@@ -45,9 +45,10 @@ def geminis_api_extract_data(image_streams):
             "text": """Eres un asistente legal experto en analizar imágenes de documentos. 
 Analiza las imágenes de DNI y proporciona la siguiente información en formato JSON:
 {
-    "dni_number": "Número de DNI",
+    "dni_number": "Número de DNI, darlo de la siguiente manera, por ejemplo 45879598, es decir sin puntos",
     "cuil_number": "Número de CUIL",
-    "name": "Nombre completo, por ejemplo no coloques MARIA PEREZ, coloca Maria Perez",
+    "name": "Nombre completo, por ejemplo no coloques MARIA PEREZ, coloca Maria",
+    "surname": "Apellido completo, por ejemplo no coloques MARIA PEREZ, coloca Perez",
     "date_of_birth": "YYYY-MM-DD",
     "nationality": "Nacionalidad, un ejemplo puede ser Argentina, Brasileña, Chilena, etc",
     "address": "Dirección"
@@ -82,7 +83,7 @@ def procesar_datos_extraidos(json_texto):
         datos = json.loads(json_texto)
 
         # Validar claves necesarias
-        claves_requeridas = ["dni_number", "cuil_number", "name", "date_of_birth", "nationality", "address"]
+        claves_requeridas = ["dni_number", "cuil_number", "name", "surname", "date_of_birth", "nationality", "address"]
         for clave in claves_requeridas:
             datos.setdefault(clave, "")
 
@@ -97,6 +98,7 @@ def update_cliente_in_db(data):
     cliente_data = {
         "id": data.get("id"),
         "nombre": data.get("nombre"),
+        "apellido": data.get("apellido"),
         "numero_dni": data.get("numero_dni"),
         "fecha_de_nacimiento": fecha_date,
         "numero_cuil": data.get("numero_cuil"),
@@ -107,6 +109,7 @@ def update_cliente_in_db(data):
     update_query = text("""
         UPDATE data_clientes SET
             nombre = :nombre,
+            apellido = :apellido,
             numero_dni = :numero_dni,
             fecha_de_nacimiento = :fecha_de_nacimiento,
             numero_cuil = :numero_cuil,

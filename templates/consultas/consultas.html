@@ -368,6 +368,7 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
+                        <th>Apellido</th>
                         <th>Dni</th>
                         <th>Nacionalidad</th>
                         <th>Fecha de Nacimiento</th>
@@ -378,6 +379,7 @@
                     {% for data in data_clientes %}
                     <tr>
                         <td>{{ data.nombre }}</td>
+                        <td>{{ data.apellido }}</td>
                         <td>{{ data.numero_dni }}</td>
                         <td>{{ data.nacionalidad }}</td>
                         <td>{{ data.fecha_de_nacimiento.strftime('%d/%m/%Y') }}</td>
@@ -481,62 +483,63 @@
             updateFileList();
         }
 
-        // Filtrado de casos
+        // Función para eliminar acentos
+        function removeAccents(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        // Filtrado de casos por nombre, apellido o DNI sin distinguir acentos
         function filtrarCasos() {
             const inputBusqueda = document.getElementById('busquedaInput');
-            const filtroInstancia = document.getElementById('filtroInstancia');
             const tabla = document.querySelector('.tabla-casos tbody');
             const filas = tabla.querySelectorAll('tr');
 
-            const textoBusqueda = inputBusqueda.value.toLowerCase();
-            const instanciaSeleccionada = filtroInstancia.value;
+            // Se remueven acentos y se pasa a minúsculas el texto de búsqueda
+            const textoBusqueda = removeAccents(inputBusqueda.value.toLowerCase());
 
             filas.forEach(fila => {
-                const nombreCaso = fila.cells[0].textContent.toLowerCase();
-                const expediente = fila.cells[1].textContent.toLowerCase();
-                const instancia = fila.cells[3].textContent;
+                // Se obtienen y normalizan los valores de nombre, apellido y dni
+                const nombre = removeAccents(fila.cells[0].textContent.toLowerCase());
+                const apellido = removeAccents(fila.cells[1].textContent.toLowerCase());
+                const dni = removeAccents(fila.cells[2].textContent.toLowerCase());
 
-                const coincideTexto = nombreCaso.includes(textoBusqueda) || 
-                                    expediente.includes(textoBusqueda);
-                const coincideInstancia = instanciaSeleccionada === "" || 
-                                        instancia === instanciaSeleccionada;
+                // Se verifica si alguno de los campos incluye el texto buscado
+                const coincideTexto = nombre.includes(textoBusqueda) ||
+                                      apellido.includes(textoBusqueda) ||
+                                      dni.includes(textoBusqueda);
 
-                fila.style.display = (coincideTexto && coincideInstancia) ? '' : 'none';
+                fila.style.display = (coincideTexto) ? '' : 'none';
             });
             actualizarContador();
             mostrarFiltrosActivos();
         }
 
-        // Funciones adicionales
+        // Actualiza el contador de filas visibles
         function actualizarContador() {
-            const filasVisibles = document.querySelectorAll('.tabla-casos tbody tr[style=""]').length;
-            document.getElementById('contador').textContent = filasVisibles;
+            const filas = document.querySelectorAll('.tabla-casos tbody tr');
+            let contador = 0;
+            filas.forEach(fila => {
+                if (fila.style.display !== 'none') {
+                    contador++;
+                }
+            });
+            document.getElementById('contador').textContent = contador;
         }
 
-        function resetearFiltros() {
-            document.getElementById('busquedaInput').value = '';
-            document.getElementById('filtroInstancia').value = '';
-            filtrarCasos();
-        }
-
+        // Muestra el filtro activo de búsqueda
         function mostrarFiltrosActivos() {
             const contenedor = document.getElementById('filtrosActivos');
             const busqueda = document.getElementById('busquedaInput').value;
-            const instancia = document.getElementById('filtroInstancia').value;
 
             let html = '';
             if (busqueda) {
                 html += `<span class="filtro-activo">Búsqueda: "${busqueda}"</span>`;
             }
-            if (instancia) {
-                html += `<span class="filtro-activo">Instancia: ${instancia}</span>`;
-            }
             contenedor.innerHTML = html;
         }
 
-        // Inicialización
+        // Inicialización del filtro al escribir en el input
         document.getElementById('busquedaInput').addEventListener('input', filtrarCasos);
-        document.getElementById('filtroInstancia').addEventListener('change', filtrarCasos);
         filtrarCasos();
     </script>
 </body>

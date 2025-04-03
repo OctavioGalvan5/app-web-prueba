@@ -1,4 +1,5 @@
 Flask
+docx
 Gunicorn
 sqlalchemy
 pymysql

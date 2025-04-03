@@ -44,7 +44,7 @@ from services.planilla_docente.planilla_docente import Planilla_Docente
 from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
 from services.base_datos_casos.pdf_gemini import update_sentencia_in_db
 from services.base_datos_casos.drive_utils import process_and_save_file, delete_drive_file, calculate_file_hash
-from services.formularios.formularios import geminis_api_extract_data, update_cliente_in_db, convert_pdf_to_image, process_file
+from services.consultas.consultas import geminis_api_extract_data, update_cliente_in_db, convert_pdf_to_image, process_file
 # Entities
 from models.entities.User import User
 
@@ -1567,13 +1567,13 @@ def biblioteca():
 
     return render_template("biblioteca/biblioteca.html", books=books)
 
-@app.route('/formularios')
+@app.route('/consultas')
 @login_required
-def formularios():
+def consultas():
     with engine.connect() as connection:
         result = connection.execute(text("SELECT * FROM data_clientes"))
         data_clientes = [dict(row._mapping) for row in result]
-    return render_template('formularios/formularios.html', data_clientes=data_clientes)
+    return render_template('consultas/consultas.html', data_clientes=data_clientes)
 
 @app.route('/upload_dni', methods=['POST'])
 @login_required
@@ -1583,7 +1583,7 @@ def upload_dni():
 
     if len(documentos) < 1:
         flash("Debe enviar al menos un archivo (imagen o PDF) del DNI.", "danger")
-        return redirect(url_for('formularios'))
+        return redirect(url_for('consultas'))
 
     # Procesar cada archivo recibido
     processed_files = []
@@ -1591,7 +1591,7 @@ def upload_dni():
         processed = process_file(file)
         if not processed:
             flash("Error al procesar alguno de los archivos.", "danger")
-            return redirect(url_for('formularios'))
+            return redirect(url_for('consultas'))
         processed_files.append(processed)
 
     # Enviar la lista de archivos procesados a la API de Gemini
@@ -1599,7 +1599,7 @@ def upload_dni():
 
     if error or not extracted_data:
         flash(f"Error al extraer datos del DNI: {error}", "danger")
-        return redirect(url_for('formularios'))
+        return redirect(url_for('consultas'))
 
     # Guardar los datos extraídos en la base de datos
     try:
@@ -1609,14 +1609,16 @@ def upload_dni():
                     INSERT INTO data_clientes (
                         numero_dni, 
                         numero_cuil, 
-                        nombre, 
+                        nombre,
+                        apellido,
                         fecha_de_nacimiento, 
                         nacionalidad, 
                         direccion
                     ) VALUES (
                         :dni_number, 
                         :cuil_number, 
-                        :name, 
+                        :name,
+                        :surname,
                         :date_of_birth, 
                         :nationality, 
                         :address
@@ -1628,7 +1630,7 @@ def upload_dni():
     except Exception as e:
         flash(f"Error al guardar los datos en la base de datos: {str(e)}", "danger")
 
-    return redirect(url_for('formularios'))
+    return redirect(url_for('consultas'))
 
 @app.route('/eliminar_cliente/<int:id>', methods=['POST'])
 @login_required
@@ -1642,7 +1644,7 @@ def eliminar_cliente(id):
             )
             caso = result.mappings().first()
             if not caso:
-                return redirect(url_for('formularios'))
+                return redirect(url_for('consultas'))
 
             # Eliminar el caso de la base de datos
             connection.execute(
@@ -1652,7 +1654,7 @@ def eliminar_cliente(id):
 
     except Exception as e:
         print(f"Error al eliminar caso: {e}")
-    return redirect(url_for('formularios'))
+    return redirect(url_for('consultas'))
 
 
 @app.route('/ver_cliente/<int:id>', methods=['GET', 'POST'])
@@ -1678,6 +1680,7 @@ def ver_cliente(id):
             # Construir el diccionario con los datos extraídos de la base
             datos = {
                 "nombre": data_cliente.get("nombre", ""),
+                "apellido": data_cliente.get("apellido", ""),
                 "numero_dni": data_cliente.get("numero_dni", ""),
                 "fecha_de_nacimiento": data_cliente.get("fecha_de_nacimiento").strftime('%Y-%m-%d') if data_cliente.get("fecha_de_nacimiento") else "",
                 "numero_cuil": data_cliente.get("numero_cuil", ""),
@@ -1744,9 +1747,9 @@ def ver_cliente(id):
 
     if not data_cliente:
         flash("Caso no encontrado", "error")
-        return redirect(url_for('ver_casos'))
+        return redirect(url_for('consultas'))
 
-    return render_template('formularios/ver_cliente.html', data_cliente=data_cliente)
+    return render_template('consultas/ver_cliente.html', data_cliente=data_cliente)
 
 if __name__ == '__main__':
     app.run(debug=True)
