@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base de Datos de Casos</title>
+    <title>Jurisprudencia Previsional</title>
     <style>
         body, html {
             margin: 0;
@@ -515,32 +515,35 @@
             return true;
         }
 
-        // Filtrado de casos
+        // Función para eliminar acentos
+        function eliminarAcentos(texto) {
+            return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
         function filtrarCasos() {
             const inputBusqueda = document.getElementById('busquedaInput');
             const filtroInstancia = document.getElementById('filtroInstancia');
             const tabla = document.querySelector('.tabla-casos tbody');
             const filas = tabla.querySelectorAll('tr');
 
-            const textoBusqueda = inputBusqueda.value.toLowerCase();
+            // Convertir la búsqueda a minúsculas y sin acentos
+            const textoBusqueda = eliminarAcentos(inputBusqueda.value.toLowerCase());
             const instanciaSeleccionada = filtroInstancia.value;
 
             filas.forEach(fila => {
-                const nombreCaso = fila.cells[0].textContent.toLowerCase();
-                const expediente = fila.cells[1].textContent.toLowerCase();
+                // Convertir nombre del caso y expediente a minúsculas y sin acentos
+                const nombreCaso = eliminarAcentos(fila.cells[0].textContent.toLowerCase());
+                const expediente = eliminarAcentos(fila.cells[1].textContent.toLowerCase());
                 const instancia = fila.cells[3].textContent;
 
-                const coincideTexto = nombreCaso.includes(textoBusqueda) || 
-                                    expediente.includes(textoBusqueda);
-                const coincideInstancia = instanciaSeleccionada === "" || 
-                                        instancia === instanciaSeleccionada;
+                const coincideTexto = nombreCaso.includes(textoBusqueda) || expediente.includes(textoBusqueda);
+                const coincideInstancia = instanciaSeleccionada === "" || instancia === instanciaSeleccionada;
 
                 fila.style.display = (coincideTexto && coincideInstancia) ? '' : 'none';
             });
             actualizarContador();
             mostrarFiltrosActivos();
         }
-
         // Funciones adicionales
         function actualizarContador() {
             const filasVisibles = document.querySelectorAll('.tabla-casos tbody tr[style=""]').length;
