@@ -49,9 +49,12 @@ Analiza las imágenes de DNI y proporciona la siguiente información en formato 
     "cuil_number": "Número de CUIL",
     "name": "Nombre completo, por ejemplo no coloques MARIA PEREZ, coloca Maria",
     "surname": "Apellido completo, por ejemplo no coloques MARIA PEREZ, coloca Perez",
+    "full_name": "Nombre y apellido completo, por ejemplo Maria Perez",
     "date_of_birth": "YYYY-MM-DD",
+    "entry_date": "Fecha de ingreso al pais (no siempre tendra), devolver en formato YYYY-MM-DD",
     "nationality": "Nacionalidad, un ejemplo puede ser Argentina, Brasileña, Chilena, etc",
     "address": "Dirección, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Ohiggins 1673 DT/C B° 20 De Febrero'",
+    "adress_number": "Numero de la dirección, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente '1673'",
     "province": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta'",
     "department": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta Capital'",
     "city": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta'",
@@ -88,7 +91,7 @@ def procesar_datos_extraidos(json_texto):
         datos = json.loads(json_texto)
 
         # Validar claves necesarias
-        claves_requeridas = ["dni_number", "cuil_number", "name", "surname", "date_of_birth", "nationality", "address", "province", "department", "city"]
+        claves_requeridas = ["dni_number", "cuil_number", "name", "surname", "full_name", "date_of_birth", "entry_date", "nationality", "address", "adress_number", "province", "department", "city"]
         for clave in claves_requeridas:
             datos.setdefault(clave, "")
 
@@ -100,15 +103,20 @@ def procesar_datos_extraidos(json_texto):
 def update_cliente_in_db(data):
     fecha_str = data.get("fecha_de_nacimiento")
     fecha_date = convertir_fecha(fecha_str) if fecha_str else None
+    fecha_str = data.get("fecha_de_ingreso")
+    fecha_ingreso = convertir_fecha(fecha_str) if fecha_str else None
     cliente_data = {
         "id": data.get("id"),
         "nombre": data.get("nombre"),
         "apellido": data.get("apellido"),
+        "nombre_completo": data.get("nombre_completo"),
         "numero_dni": data.get("numero_dni"),
         "fecha_de_nacimiento": fecha_date,
+        "fecha_de_ingreso": fecha_ingreso,
         "numero_cuil": data.get("numero_cuil"),
         "nacionalidad": data.get("nacionalidad"),
         "direccion": data.get("direccion"),
+        "numero_direccion": data.get("numero_direccion"),
         "provincia": data.get("provincia"),
         "departamento": data.get("departamento"),
         "ciudad": data.get("ciudad"),
@@ -119,11 +127,14 @@ def update_cliente_in_db(data):
         UPDATE data_clientes SET
             nombre = :nombre,
             apellido = :apellido,
+            nombre_completo = :nombre_completo,
             numero_dni = :numero_dni,
             fecha_de_nacimiento = :fecha_de_nacimiento,
+            fecha_de_ingreso = :fecha_de_ingreso,
             numero_cuil = :numero_cuil,
             nacionalidad = :nacionalidad,
             direccion = :direccion,
+            numero_direccion = :numero_direccion,
             provincia = :provincia,
             departamento = :departamento,
             ciudad = :ciudad

@@ -214,13 +214,16 @@
                     <input type="text" name="apellido" value="{{ data_cliente.apellido if data_cliente.apellido else '' }}">
                   </div>
               </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                  <label>Fecha de Nacimiento:</label>
-                  <input type="date" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}">
+                <div class="form-row">
+                    <div class="form-group">
+                      <label>Fecha de Nacimiento:</label>
+                      <input type="date" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}">
+                    </div>
+                    <div class="form-group">
+                      <label>Fecha de Ingreso al Pais:</label>
+                      <input type="date" name="fecha_de_ingreso" value="{% if data_cliente.fecha_de_ingreso %}{{ data_cliente.fecha_de_ingreso.strftime('%Y-%m-%d') }}{% endif %}">
+                    </div>
                 </div>
-            </div>
 
               <div class="form-row">
                 <div class="form-group">
@@ -244,11 +247,15 @@
                     <input type="text" name="direccion" value="{{ data_cliente.direccion if data_cliente.direccion else '' }}">
                   </div>
                   <div class="form-group">
-                      <label>Provincia:</label>
-                      <input type="text" name="provincia" value="{{ data_cliente.provincia if data_cliente.provincia else '' }}">
+                      <label>Numero:</label>
+                      <input type="text" name="numero_direccion" value="{{ data_cliente.numero_direccion if data_cliente.numero_direccion else '' }}">
                     </div>
               </div>
                 <div class="form-row">
+                    <div class="form-group">
+                      <label>Provincia:</label>
+                      <input type="text" name="provincia" value="{{ data_cliente.provincia if data_cliente.provincia else '' }}">
+                    </div>
                       <div class="form-group">
                         <label>Departamento:</label>
                         <input type="text" name="departamento" value="{{ data_cliente.departamento if data_cliente.departamento else '' }}">
@@ -263,6 +270,11 @@
                   <input type="hidden" name="id" value="{{ data_cliente.id }}">
                 </div>
               </div>
+            <div style="display: none;" class="form-row">
+                <div class="form-group">
+                  <input name="nombre_completo" value="{{ data_cliente.nombre_completo }}">
+                </div>                  
+            </div>
                 
                 <div class="form-row conditional-section" style="display: none;">
                     <div class="form-group">
@@ -288,14 +300,36 @@
             <div class="form-row">
               <div class="checkbox-group">
                 <div class="checkbox-item">
-                  <input type="checkbox" name="formulario_incompatibilidad_beneficio" id="formulario_incompatibilidad_beneficio">
-                  <label for="formulario_incompatibilidad_beneficio">Formulario Incompatibilidad Beneficio</label>
+                  <input type="checkbox" name="2.91_Guarda_Documental" id="2.91_Guarda_Documental">
+                  <label for="2.91_Guarda_Documental">2.91 Guarda Documental</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" name="formulario_super_incompatibilidad_beneficio" id="formulario_super_incompatibilidad_beneficio">
-                    <label for="formulario_super_incompatibilidad_beneficio">Formulario Super Incompatibilidad </label>
+                    <input type="checkbox" name="6.18_Solicitud_Prestaciones_Previsionales" id="6.18_Solicitud_Prestaciones_Previsionales">
+                    <label for="6.18_Solicitud_Prestaciones_Previsionales">6.18 Solicitud Prestaciones Previsionales</label>
                 </div>
               </div>
+            </div>
+
+            <div class="form-row">
+              <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" name="6.18_Solicitud_Prestaciones_Previsionales_pension" id="6.18_Solicitud_Prestaciones_Previsionales_pension">
+                    <label for="6.18_Solicitud_Prestaciones_Previsionales_pension">6.18 Solicitud Prestaciones Previsionales (pension)</label>
+                </div>
+                  <div class="checkbox-item">
+                      <input type="checkbox" name="Acta_Poder" id="Acta_Poder">
+                      <label for="Acta_Poder">Acta Poder</label>
+                  </div>
+              </div>
+             </div>
+
+            <div class="form-row">
+                <div class="checkbox-group">                      
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="Anexo_Baja_Puam" id="Anexo_Baja_Puam">
+                          <label for="Anexo_Baja_Puam">Anexo Baja Puam</label>
+                    </div>
+                </div>
             </div>
 
               <!-- Contenedor de Botones Final -->

@@ -1610,9 +1610,12 @@ def upload_dni():
                         numero_cuil, 
                         nombre,
                         apellido,
-                        fecha_de_nacimiento, 
+                        nombre_completo,
+                        fecha_de_nacimiento,
+                        fecha_de_ingreso,
                         nacionalidad, 
                         direccion,
+                        numero_direccion,
                         provincia,
                         departamento,
                         ciudad
@@ -1621,9 +1624,12 @@ def upload_dni():
                         :cuil_number, 
                         :name,
                         :surname,
-                        :date_of_birth, 
+                        :full_name,
+                        :date_of_birth,
+                        :entry_date,
                         :nationality, 
                         :address,
+                        :adress_number,
                         :province,
                         :department,
                         :city
@@ -1676,7 +1682,6 @@ def ver_cliente(id):
         # Actualizar los datos del cliente en la base de datos
         update_cliente_in_db(data)
 
-        # Si se presionó el botón para generar el formulario PDF:
         if accion == 'hacer_formulario':
             # Se obtiene la información actualizada del cliente desde la DB
             with engine.connect() as connection:
@@ -1690,11 +1695,15 @@ def ver_cliente(id):
             datos = {
                 "nombre": data_cliente.get("nombre", ""),
                 "apellido": data_cliente.get("apellido", ""),
+                "nombre_completo": data_cliente.get("nombre_completo", ""),
                 "numero_dni": data_cliente.get("numero_dni", ""),
-                "fecha_de_nacimiento": data_cliente.get("fecha_de_nacimiento").strftime('%Y-%m-%d') if data_cliente.get("fecha_de_nacimiento") else "",
+                "fecha_de_nacimiento_formato": data_cliente.get("fecha_de_nacimiento").strftime('%d/%m/%Y') if data_cliente.get("fecha_de_nacimiento") else "",
+                "fecha_de_nacimiento": data_cliente.get("fecha_de_nacimiento").strftime('%d%m%Y') if data_cliente.get("fecha_de_nacimiento") else "",
+                "fecha_de_ingreso": data_cliente.get("fecha_de_ingreso").strftime('%d%m%y') if data_cliente.get("fecha_de_ingreso") else "",
                 "numero_cuil": data_cliente.get("numero_cuil", ""),
                 "nacionalidad": data_cliente.get("nacionalidad", ""),
                 "direccion": data_cliente.get("direccion", ""),
+                "numero_direccion": data_cliente.get("numero_direccion", ""),
                 "provincia": data_cliente.get("provincia", ""),
                 "departamento": data_cliente.get("departamento", ""),
                 "ciudad": data_cliente.get("ciudad", ""),
@@ -1702,17 +1711,20 @@ def ver_cliente(id):
                     if request.form.get("formulario_incompatibilidad_beneficio") else ""
             }
 
-            # Seleccionar los formularios PDF que se van a procesar
+            # Diccionario para almacenar los archivos generados en memoria (PDFs y Word)
+            archivos_generados = {}
+
+            # Procesar cada formulario PDF (como antes)
             formularios = []
-            if request.form.get("formulario_incompatibilidad_beneficio"):
-                formularios.append("datos/formularios/formulario_incompatibilidad_beneficio.pdf")
-            if request.form.get("formulario_super_incompatibilidad_beneficio"):
-                formularios.append("datos/formularios/pdfdinamico.pdf") 
+            if request.form.get("2.91_Guarda_Documental"):
+                formularios.append("datos/formularios/2.91_Guarda_Documental.pdf")
+            if request.form.get("6.18_Solicitud_Prestaciones_Previsionales"):
+                formularios.append("datos/formularios/6.18_Solicitud_Prestaciones_Previsionales.pdf")
+            if request.form.get("6.18_Solicitud_Prestaciones_Previsionales_pension"):
+                formularios.append("datos/formularios/6.18_Solicitud_Prestaciones_Previsionales_pension.pdf")
+            if request.form.get("Anexo_Baja_Puam"):
+                formularios.append("datos/formularios/Anexo_Baja_Puam.pdf")
 
-            # Diccionario para almacenar los PDFs generados en memoria
-            pdf_files = {}
-
-            # Procesar cada PDF: leer la plantilla y actualizar los campos
             for idx, formulario in enumerate(formularios):
                 reader = PdfReader(formulario)
                 writer = PdfWriter()
@@ -1723,35 +1735,52 @@ def ver_cliente(id):
                     return redirect(url_for('ver_cliente', id=id))
                 writer.update_page_form_field_values(writer.pages[0], datos)
 
-                # Generar un nombre único para cada PDF resultante
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 output_pdf_name = f"formulario_anses_{timestamp}_{idx}.pdf"
 
-                # Guardar el PDF en memoria usando BytesIO
                 output = BytesIO()
                 writer.write(output)
                 output.seek(0)
-                pdf_files[output_pdf_name] = output
+                archivos_generados[output_pdf_name] = output
 
-            # Crear un archivo ZIP en memoria que contenga todos los PDFs generados
+            # Procesar archivos Word si existen checkboxes marcados
+            # Definir una lista de tuplas (nombre_archivo_base, ruta_template)
+            word_templates = []
+            if request.form.get("Acta_Poder"):
+                word_templates.append(("acta_poder", "datos/formularios/Acta_Poder.docx"))
+            # Puedes agregar más checkboxes para distintos documentos Word, por ejemplo:
+            if request.form.get("Otro Documento"):
+                word_templates.append(("otro_documento", "datos/templates/otro_documento.docx"))
+
+            # Procesar cada template Word
+            if word_templates:
+                from docxtpl import DocxTemplate
+                for nombre_base, template_path in word_templates:
+                    doc = DocxTemplate(template_path)
+                    doc.render(datos)
+                    output_word = BytesIO()
+                    doc.save(output_word)
+                    output_word.seek(0)
+                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                    output_word_name = f"{nombre_base}_{timestamp}.docx"
+                    archivos_generados[output_word_name] = output_word
+
+            # Crear un archivo ZIP en memoria que contenga todos los archivos generados
             zip_buffer = BytesIO()
             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-                for filename, file_data in pdf_files.items():
+                for filename, file_data in archivos_generados.items():
                     zip_file.writestr(filename, file_data.getvalue())
             zip_buffer.seek(0)
 
-            # Generar un nombre único para el ZIP
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             zip_filename = f"formularios_{timestamp}.zip"
 
-            # Enviar el archivo ZIP para descarga
             return send_file(zip_buffer, as_attachment=True, download_name=zip_filename, mimetype='application/zip')
-        # Si la acción es guardar cambios, se actualiza y se redirige a la misma pantalla
+
         elif accion == 'guardar_cambios':
             flash("Caso actualizado correctamente", "success")
             return redirect(url_for('ver_cliente', id=id))
 
-    # Para método GET: se obtiene el caso existente desde la base de datos
     with engine.connect() as connection:
         result = connection.execute(
             text("SELECT * FROM data_clientes WHERE id = :id"),
@@ -1764,6 +1793,7 @@ def ver_cliente(id):
         return redirect(url_for('consultas'))
 
     return render_template('consultas/ver_cliente.html', data_cliente=data_cliente)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
