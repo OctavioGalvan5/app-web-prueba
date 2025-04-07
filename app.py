@@ -1460,7 +1460,6 @@ def eliminar_caso(id):
 
 
 @app.route('/chat', methods=['POST'])
-@login_required
 def chat():
     genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
     model = genai.GenerativeModel('gemini-2.0-flash', system_instruction="Eres una IA de un estudio Juridico Toyos y Espin, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible")
