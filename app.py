@@ -1607,10 +1607,15 @@ def upload_dni():
                 text("""
                     INSERT INTO data_clientes (
                         numero_dni, 
-                        numero_cuil, 
+                        numero_cuil,
+                        numero_celular,
                         nombre,
                         apellido,
                         nombre_completo,
+                        nombre_completo_2,
+                        sexo,
+                        sexo_femenino,
+                        sexo_masculino,
                         fecha_de_nacimiento,
                         fecha_de_ingreso,
                         nacionalidad, 
@@ -1621,10 +1626,15 @@ def upload_dni():
                         ciudad
                     ) VALUES (
                         :dni_number, 
-                        :cuil_number, 
+                        :cuil_number,
+                        :phone_number,
                         :name,
                         :surname,
                         :full_name,
+                        :full_name_2,
+                        :sexo,
+                        :sexo_femenino,
+                        :sexo_masculino,
                         :date_of_birth,
                         :entry_date,
                         :nationality, 
@@ -1695,20 +1705,28 @@ def ver_cliente(id):
             datos = {
                 "nombre": data_cliente.get("nombre", ""),
                 "apellido": data_cliente.get("apellido", ""),
+                "numero_celular": data_cliente.get("numero_celular", ""),
                 "nombre_completo": data_cliente.get("nombre_completo", ""),
+                "nombre_completo_2": data_cliente.get("nombre_completo_2", ""),
+                "sexo": data_cliente.get("sexo", ""),
+                "sexo_femenino": data_cliente.get("sexo_femenino", ""),
+                "sexo_masculino": data_cliente.get("sexo_masculino", ""),
                 "numero_dni": data_cliente.get("numero_dni", ""),
                 "fecha_de_nacimiento_formato": data_cliente.get("fecha_de_nacimiento").strftime('%d/%m/%Y') if data_cliente.get("fecha_de_nacimiento") else "",
                 "fecha_de_nacimiento": data_cliente.get("fecha_de_nacimiento").strftime('%d%m%Y') if data_cliente.get("fecha_de_nacimiento") else "",
+                "fecha_de_nacimiento_dia": data_cliente.get("fecha_de_nacimiento").strftime('%d') if data_cliente.get("fecha_de_nacimiento") else "",
+                "fecha_de_nacimiento_mes": data_cliente.get("fecha_de_nacimiento").strftime('%m') if data_cliente.get("fecha_de_nacimiento") else "",
+                "fecha_de_nacimiento_año": data_cliente.get("fecha_de_nacimiento").strftime('%Y') if data_cliente.get("fecha_de_nacimiento") else "",
                 "fecha_de_ingreso": data_cliente.get("fecha_de_ingreso").strftime('%d%m%y') if data_cliente.get("fecha_de_ingreso") else "",
                 "numero_cuil": data_cliente.get("numero_cuil", ""),
+                "cuil_inicio": data_cliente.get("numero_cuil", "")[:2],  # los dos primeros dígitos
+                "cuil_fin": data_cliente.get("numero_cuil", "")[-1:],   # el último dígito
                 "nacionalidad": data_cliente.get("nacionalidad", ""),
                 "direccion": data_cliente.get("direccion", ""),
                 "numero_direccion": data_cliente.get("numero_direccion", ""),
                 "provincia": data_cliente.get("provincia", ""),
                 "departamento": data_cliente.get("departamento", ""),
                 "ciudad": data_cliente.get("ciudad", ""),
-                "Aclaración": "Formulario de incompatibilidad de beneficio activado"
-                    if request.form.get("formulario_incompatibilidad_beneficio") else ""
             }
 
             # Diccionario para almacenar los archivos generados en memoria (PDFs y Word)
@@ -1718,12 +1736,54 @@ def ver_cliente(id):
             formularios = []
             if request.form.get("2.91_Guarda_Documental"):
                 formularios.append("datos/formularios/2.91_Guarda_Documental.pdf")
+                
             if request.form.get("6.18_Solicitud_Prestaciones_Previsionales"):
                 formularios.append("datos/formularios/6.18_Solicitud_Prestaciones_Previsionales.pdf")
+                
             if request.form.get("6.18_Solicitud_Prestaciones_Previsionales_pension"):
                 formularios.append("datos/formularios/6.18_Solicitud_Prestaciones_Previsionales_pension.pdf")
+                
             if request.form.get("Anexo_Baja_Puam"):
                 formularios.append("datos/formularios/Anexo_Baja_Puam.pdf")
+                
+            if request.form.get("Anexo_I_Ley_27.625"):
+                formularios.append("datos/formularios/Anexo_I_Ley_27.625.pdf")
+                
+            if request.form.get("Anexo_II_DEC_894_01"):
+                formularios.append("datos/formularios/Anexo_II_DEC_894_01.pdf")
+                
+            if request.form.get("Anexo_II_980_05"):
+                formularios.append("datos/formularios/Anexo_II_980_05.pdf")
+                
+            if request.form.get("Anexo_II_Socioeconómico_24.476"):
+                formularios.append("datos/formularios/Anexo_II_Socioeconómico_24.476.pdf")
+                
+            if request.form.get("Baja_PNC"):
+                formularios.append("datos/formularios/Baja_PNC.pdf")
+                
+            if request.form.get("Carta_Poder_SRT"):
+                formularios.append("datos/formularios/Carta_Poder_SRT.pdf")
+                
+            if request.form.get("DDJJ_de_salud_resol_300"):
+                formularios.append("datos/formularios/DDJJ_de_salud_resol_300.pdf")
+                
+            if request.form.get("DDJJ_Ley_17562_6.9"):
+                formularios.append("datos/formularios/DDJJ_Ley_17562_6.9.pdf")
+                
+            if request.form.get("F_3283_Autorización_ARCA"):
+                formularios.append("datos/formularios/F_3283_Autorización_ARCA.pdf")
+                
+            if request.form.get("Formulario_Carta_Poder_(CSS)"):
+                formularios.append("datos/formularios/Formulario_Carta_Poder_(CSS).pdf")
+                
+            if request.form.get("Formulario_encuesta_RTI"):
+                formularios.append("datos/formularios/Formulario_encuesta_RTI.pdf")
+                
+            if request.form.get("PS_1.75_Carta_Poder_Cap_III_27.705"):
+                formularios.append("datos/formularios/PS_1.75_Carta_Poder_Cap_III_27.705.pdf")
+
+            if request.form.get("PS_5.7_Derivacion_aportes_Obra_Social"):
+                formularios.append("datos/formularios/PS_5.7_Derivacion_aportes_Obra_Social.pdf")
 
             for idx, formulario in enumerate(formularios):
                 reader = PdfReader(formulario)

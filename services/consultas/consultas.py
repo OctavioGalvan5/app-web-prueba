@@ -47,9 +47,14 @@ Analiza las imágenes de DNI y proporciona la siguiente información en formato 
 {
     "dni_number": "Número de DNI, darlo de la siguiente manera, por ejemplo 45879598, es decir sin puntos",
     "cuil_number": "Número de CUIL",
-    "name": "Nombre completo, por ejemplo no coloques MARIA PEREZ, coloca Maria",
-    "surname": "Apellido completo, por ejemplo no coloques MARIA PEREZ, coloca Perez",
-    "full_name": "Nombre y apellido completo, por ejemplo Maria Perez",
+    "phone_number": "Aqui siempre devolveras vacio",
+    "name": "Nombre completo, por ejemplo no coloques MARIA LUCIA PEREZ GOMEZ, coloca Maria Lucia",
+    "surname": "Apellido completo, por ejemplo no coloques MARIA LUCIA PEREZ GOMEZ, coloca Perez Gomez",
+    "full_name": "Apellido y Nombre completo, por ejemplo Perez Gomez Maria Lucia",
+    "full_name_2": "Nombre y Apellido completo, por ejemplo Maria Lucia Perez Gomez",
+    "sexo": "Sexo, por ejemplo si lees 'F', pondras unicamente 'Femenino', si lees 'M' pondras unicamente 'Masculino'",
+    "sexo_femenino": "si lees 'F' entonces devolveras unas 'X' sino devolveras '' es decir vacio",
+    "sexo_masculino": "si lees 'M' entonces devolveras unas 'X' sino devolveras '' es decir vacio",
     "date_of_birth": "YYYY-MM-DD",
     "entry_date": "Fecha de ingreso al pais (no siempre tendra), devolver en formato YYYY-MM-DD",
     "nationality": "Nacionalidad, un ejemplo puede ser Argentina, Brasileña, Chilena, etc",
@@ -91,7 +96,7 @@ def procesar_datos_extraidos(json_texto):
         datos = json.loads(json_texto)
 
         # Validar claves necesarias
-        claves_requeridas = ["dni_number", "cuil_number", "name", "surname", "full_name", "date_of_birth", "entry_date", "nationality", "address", "adress_number", "province", "department", "city"]
+        claves_requeridas = ["dni_number", "cuil_number", "phone_number", "name", "surname", "full_name", "full_name_2", "sexo", "sexo_femenino", "sexo_masculino", "date_of_birth", "entry_date", "nationality", "address", "adress_number", "province", "department", "city"]
         for clave in claves_requeridas:
             datos.setdefault(clave, "")
 
@@ -109,7 +114,12 @@ def update_cliente_in_db(data):
         "id": data.get("id"),
         "nombre": data.get("nombre"),
         "apellido": data.get("apellido"),
+        "numero_celular": data.get("numero_celular"),
         "nombre_completo": data.get("nombre_completo"),
+        "nombre_completo_2": data.get("nombre_completo_2"),
+        "sexo": data.get("sexo"),
+        "sexo_femenino": data.get("sexo_femenino"),
+        "sexo_masculino": data.get("sexo_masculino"),
         "numero_dni": data.get("numero_dni"),
         "fecha_de_nacimiento": fecha_date,
         "fecha_de_ingreso": fecha_ingreso,
@@ -127,7 +137,12 @@ def update_cliente_in_db(data):
         UPDATE data_clientes SET
             nombre = :nombre,
             apellido = :apellido,
+            numero_celular = :numero_celular,
             nombre_completo = :nombre_completo,
+            nombre_completo_2 = :nombre_completo_2,
+            sexo = :sexo,
+            sexo_femenino = :sexo_femenino,
+            sexo_masculino = :sexo_masculino,
             numero_dni = :numero_dni,
             fecha_de_nacimiento = :fecha_de_nacimiento,
             fecha_de_ingreso = :fecha_de_ingreso,

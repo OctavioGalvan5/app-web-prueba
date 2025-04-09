@@ -240,6 +240,10 @@
                   <label>Nacionalidad:</label>
                   <input type="text" name="nacionalidad" value="{{ data_cliente.nacionalidad if data_cliente.nacionalidad else '' }}">
                 </div>
+                  <div class="form-group">
+                    <label>Sexo:</label>
+                    <input type="text" name="sexo" value="{{ data_cliente.sexo if data_cliente.sexo else '' }}">
+                  </div>
               </div>
               <div class="form-row">
                   <div class="form-group">
@@ -275,12 +279,26 @@
                   <input name="nombre_completo" value="{{ data_cliente.nombre_completo }}">
                 </div>                  
             </div>
-                
+            <div style="display: none;" class="form-row">
+                <div class="form-group">
+                    <input name="nombre_completo_2" value="{{ data_cliente.nombre_completo_2 }}">
+                </div>                  
+            </div>
+            <div style="display: none;" class="form-row">
+                <div class="form-group">
+                    <input name="sexo_femenino" value="{{ data_cliente.sexo_femenino }}">
+                </div>                  
+            </div>
+            <div style="display: none;" class="form-row">
+                <div class="form-group">
+                    <input name="sexo_masculino" value="{{ data_cliente.sexo_masculino }}">
+                </div>                  
+            </div>
                 <div class="form-row conditional-section" style="display: none;">
                     <div class="form-group">
-                        <label>Celular:</label>
-                        <input type="text" name="celular" 
-                               placeholder="Ingrese información adicional">
+                        <label>Numero Celular:</label>
+                        <input type="text" name="numero_celular" 
+                               placeholder="Ingrese el número de celular" value="{{ data_cliente.numero_celular if data_cliente.numero_celular else '' }}">
                     </div>
                 </div>
 
@@ -329,7 +347,83 @@
                           <input type="checkbox" name="Anexo_Baja_Puam" id="Anexo_Baja_Puam">
                           <label for="Anexo_Baja_Puam">Anexo Baja Puam</label>
                     </div>
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="Anexo_I_Ley_27.625" id="Anexo_I_Ley_27.625">
+                          <label for="Anexo_I_Ley_27.625">Anexo I Ley 27.625</label>
+                    </div>
                 </div>
+            </div>
+
+            <div class="form-row">
+                <div class="checkbox-group">                      
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="Anexo_II_DEC_894_01" id="Anexo_II_DEC_894_01">                              <label for="Anexo_II_DEC_894_01">Anexo II DEC 894/01</label>
+                    </div>
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="Anexo_II_980_05" id="Anexo_II_980_05">
+                          <label for="Anexo_II_980_05">Anexo II 980/05</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="checkbox-group">                      
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="Anexo_II_Socioeconómico_24.476" id="Anexo_II_Socioeconómico_24.476">
+                          <label for="Anexo_II_Socioeconómico_24.476">Anexo II Socioeconómico 24.476</label>
+                    </div>
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="Baja_PNC" id="Baja_PNC">
+                          <label for="Baja_PNC">Baja PNC</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="checkbox-group">                      
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="Carta_Poder_SRT" id="Carta_Poder_SRT">
+                          <label for="Carta_Poder_SRT">Carta Poder SRT</label>
+                    </div>
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="DDJJ_de_salud_resol_300" id="DDJJ_de_salud_resol_300">
+                          <label for="DDJJ_de_salud_resol_300">DDJJ de salud resol 300</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="checkbox-group">                      
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="DDJJ_Ley_17562_6.9" id="DDJJ_Ley_17562_6.9">
+                          <label for="DDJJ_Ley_17562_6.9">DDJJ Ley 17562 6.9</label>
+                    </div>
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="F_3283_Autorización_ARCA" id="F_3283_Autorización_ARCA">
+                          <label for="F_3283_Autorización_ARCA">F 3283 Autorización ARCA</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                 <div class="checkbox-group">                      
+                    <div class="checkbox-item">
+                          <input type="checkbox" name="Formulario_Carta_Poder_(CSS)" id="Formulario_Carta_Poder_(CSS)">
+                          <label for="Formulario_Carta_Poder_(CSS)">Formulario Carta Poder (CSS)</label>
+                    </div>
+                     <div class="checkbox-item">
+                           <input type="checkbox" name="Formulario_encuesta_RTI" id="Formulario_encuesta_RTI">
+                           <label for="Formulario_encuesta_RTI">Formulario encuesta RTI</label>
+                     </div>
+                </div>
+            </div>
+            <div class="form-row">
+                 <div class="checkbox-group">                      
+                     <div class="checkbox-item">                               
+                         <input type="checkbox" name="PS_1.75_Carta_Poder_Cap_III_27.705" id="PS_1.75_Carta_Poder_Cap_III_27.705">
+                         <label for="PS_1.75_Carta_Poder_Cap_III_27.705">PS 1.75 Carta Poder Cap III 27.705</label>
+                     </div>
+                     <div class="checkbox-item">                               
+                          <input type="checkbox" name="PS_5.7_Derivacion_aportes_Obra_Social" id="PS_5.7_Derivacion_aportes_Obra_Social">
+                          <label for="PS_5.7_Derivacion_aportes_Obra_Social">PS 5.7 Derivacion aportes Obra Social</label>
+                      </div>
+                 </div>
             </div>
 
               <!-- Contenedor de Botones Final -->
