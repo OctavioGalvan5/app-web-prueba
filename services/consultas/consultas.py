@@ -46,7 +46,7 @@ def geminis_api_extract_data(image_streams):
 Analiza las imágenes de DNI y proporciona la siguiente información en formato JSON:
 {
     "dni_number": "Número de DNI, darlo de la siguiente manera, por ejemplo 45879598, es decir sin puntos",
-    "cuil_number": "Número de CUIL",
+    "cuil_number": "Número de CUIL, si esta en formato por ejemplo 20-34979576-5, devolver 20349795765",
     "phone_number": "Aqui siempre devolveras vacio",
     "name": "Nombre completo, por ejemplo no coloques MARIA LUCIA PEREZ GOMEZ, coloca Maria Lucia",
     "surname": "Apellido completo, por ejemplo no coloques MARIA LUCIA PEREZ GOMEZ, coloca Perez Gomez",

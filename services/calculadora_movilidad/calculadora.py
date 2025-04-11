@@ -184,7 +184,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
             fila_dict = dict(zip(columnas, fila_menor))  # Convertir la fila a diccionario
 
             # Acceder a las columnas por nombre y calcular los montos
-            monto_columna2 = Decimal(monto)
+            monto_columna2 = Decimal(monto) * Decimal(fila_dict['ANSES'])
             monto_columna3 = Decimal(fila_dict['IPC']) * Decimal(monto)
             monto_columna4 = Decimal(fila_dict['RIPTE']) * Decimal(monto)
             monto_columna5 = Decimal(fila_dict['UMA']) * Decimal(monto)
