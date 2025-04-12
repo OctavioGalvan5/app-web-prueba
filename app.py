@@ -1702,12 +1702,14 @@ def ver_cliente(id):
                 data_cliente = result.mappings().first()
 
             # Construir el diccionario con los datos extraídos de la base
+            nombre = data_cliente.get("nombre", "")
+            apellido = data_cliente.get("apellido", "")
             datos = {
-                "nombre": data_cliente.get("nombre", ""),
-                "apellido": data_cliente.get("apellido", ""),
+                "nombre": nombre,
+                "apellido": apellido,
                 "numero_celular": data_cliente.get("numero_celular", ""),
-                "nombre_completo": data_cliente.get("nombre_completo", ""),
-                "nombre_completo_2": data_cliente.get("nombre_completo_2", ""),
+                "nombre_completo": f"{apellido} {nombre}",
+                "nombre_completo_2": f"{nombre} {apellido}",
                 "sexo": data_cliente.get("sexo", ""),
                 "sexo_femenino": data_cliente.get("sexo_femenino", ""),
                 "sexo_masculino": data_cliente.get("sexo_masculino", ""),
@@ -1785,6 +1787,57 @@ def ver_cliente(id):
             if request.form.get("PS_5.7_Derivacion_aportes_Obra_Social"):
                 formularios.append("datos/formularios/PS_5.7_Derivacion_aportes_Obra_Social.pdf")
 
+            if request.form.get("PS_5.11_Aceptacion_de_la_Obra_Social"):
+                formularios.append("datos/formularios/PS_5.11_Aceptacion_de_la_Obra_Social.pdf")
+
+            if request.form.get("PS_6.292_DDJJ_solicitante_SDM"):
+                formularios.append("datos/formularios/PS_6.292_DDJJ_solicitante_SDM.pdf")
+
+            if request.form.get("PS_6.293_DDJJ_Dador_de_trabajo_SDM"):
+                formularios.append("datos/formularios/PS_6.293_DDJJ_Dador_de_trabajo_SDM.pdf")
+
+            if request.form.get("PS_6.294_DDJJ_renuncia_SDM"):
+                formularios.append("datos/formularios/PS_6.294_DDJJ_renuncia_SDM.pdf")
+
+            if request.form.get("PS_6.2_Certific_de_Servicios"):
+                formularios.append("datos/formularios/PS_6.2_Certific_de_Servicios.pdf")
+
+            if request.form.get("PS_6.3_Nivel_de_estudios_RTI"):
+                formularios.append("datos/formularios/PS_6.3_Nivel_de_estudios_RTI.pdf")
+
+            if request.form.get("PS_6.4_Carta_Poder"):
+                formularios.append("datos/formularios/PS_6.4_Carta_Poder.pdf")
+
+            if request.form.get("PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS"):
+                formularios.append("datos/formularios/PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS.pdf")
+
+            if request.form.get("PS_6.13_DDJJ_Testimonial_dependencia_económica"):
+                formularios.append("datos/formularios/PS_6.13_DDJJ_Testimonial_dependencia_económica.pdf")
+
+            if request.form.get("PS_6.268_Certific_de_Servicios_(Ampliatoria)"):
+                formularios.append("datos/formularios/PS_6.268_Certific_de_Servicios_(Ampliatoria).pdf")
+
+            if request.form.get("PS_6.273_Certific_complementaria_investigadores"):
+                formularios.append("datos/formularios/PS_6.273_Certific_complementaria_investigadores.pdf")
+
+            if request.form.get("PS_6.278_Dto_de_cuotas_jubilación"):
+                formularios.append("datos/formularios/PS_6.278_Dto_de_cuotas_jubilación.pdf")
+
+            if request.form.get("PS_6.279_Dto_de_cuotas_pensión"):
+                formularios.append("datos/formularios/PS_6.279_Dto_de_cuotas_pensión.pdf")
+
+            if request.form.get("PS_6.284_DDJJ_Fzas_Armadas"):
+                formularios.append("datos/formularios/PS_6.284_DDJJ_Fzas_Armadas.pdf")
+
+            if request.form.get("PS_6.305_Carta_Poder"):
+                formularios.append("datos/formularios/PS_6.305_Carta_Poder.pdf")
+
+            if request.form.get("Renuncia_condicionada"):
+                formularios.append("datos/formularios/Renuncia_condicionada.pdf")
+
+            if request.form.get("Telegrama_revocando_poder"):
+                formularios.append("datos/formularios/Telegrama_revocando_poder.pdf")
+
             for idx, formulario in enumerate(formularios):
                 reader = PdfReader(formulario)
                 writer = PdfWriter()
@@ -1808,9 +1861,10 @@ def ver_cliente(id):
             word_templates = []
             if request.form.get("Acta_Poder"):
                 word_templates.append(("acta_poder", "datos/formularios/Acta_Poder.docx"))
-            # Puedes agregar más checkboxes para distintos documentos Word, por ejemplo:
-            if request.form.get("Otro Documento"):
-                word_templates.append(("otro_documento", "datos/templates/otro_documento.docx"))
+
+            if request.form.get("(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado"):
+                word_templates.append(("(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado", "datos/formularios/(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado.docx"))
+            
 
             # Procesar cada template Word
             if word_templates:
