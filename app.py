@@ -1864,6 +1864,15 @@ def ver_cliente(id):
 
             if request.form.get("(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado"):
                 word_templates.append(("(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado", "datos/formularios/(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado.docx"))
+
+            if request.form.get("(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado"):
+                word_templates.append(("(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado", "datos/formularios/(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado.docx"))
+
+            if request.form.get("CONVENIO_MAGISTRADOS"):
+                word_templates.append(("CONVENIO_MAGISTRADOS", "datos/formularios/CONVENIO_MAGISTRADOS.docx"))
+
+            if request.form.get("CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES"):
+                word_templates.append(("CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES", "datos/formularios/CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES.docx"))
             
 
             # Procesar cada template Word
