@@ -31,6 +31,13 @@
             font-size: 28px;
             font-weight: 600;
         }
+
+        h3 {
+            color: #4B0082;
+            margin-bottom: 30px;
+            font-size: 20px;
+            font-weight: 600;
+        }
         .form-group {
             margin-bottom: 25px;
         }
@@ -294,7 +301,7 @@
                     <input name="sexo_masculino" value="{{ data_cliente.sexo_masculino }}">
                 </div>                  
             </div>
-                <div class="form-row conditional-section">
+                <div class="form-row">
                     <div class="form-group">
                         <label>Numero Celular:</label>
                         <input type="text" name="numero_celular" 
@@ -307,16 +314,126 @@
 
             <div class="form-row">
                 <div class="checkbox-group">
-                <div class="checkbox-item">
-                    <input type="checkbox" name="formularios_jubilacion_ordinaria" id="formularios_jubilacion_ordinaria">
-                    <label for="formularios_jubilacion_ordinaria">Formularios Jubilacion Ordinaria</label>
-                </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Reconocimiento_de_Servicios" id="formularios_Reconocimiento_de_Servicios">
+                        <label for="formularios_Reconocimiento_de_Servicios">Formularios Reconocimiento de Servicios</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Jubilación" id="formularios_Jubilación">
+                        <label for="formularios_Jubilación">Formularios Jubilación</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Jubilación_con_24.476" id="formularios_Jubilación_con_24.476">
+                        <label for="formularios_Jubilación_con_24.476">Formularios Jubilación con 24.476</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Jubilación_con_27.705" id="formularios_Jubilación_con_27.705">
+                        <label for="formularios_Jubilación_con_27.705">Formularios Jubilación con 27.705</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Jubilación_docente" id="formularios_Jubilación_docente">
+                        <label for="formularios_Jubilación_docente"> Formularios Jubilación docente (1)</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Jubilación_serv_diferenciales" id="formularios_Jubilación_serv_diferenciales">
+                        <label for="formularios_Jubilación_serv_diferenciales">Formularios Jubilación serv diferenciales</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Jubilación_Servicio_Doméstico" id="formularios_Jubilación_Servicio_Doméstico">
+                        <label for="formularios_Jubilación_Servicio_Doméstico">Formularios Jubilación Servicio Doméstico</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Jubilación_HIV" id="formularios_Jubilación_HIV">
+                        <label for="formularios_Jubilación_HIV">Formularios Jubilación HIV</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Jubilación_trabajadores_minusvalidos_ceguera" id="formularios_Jubilación_trabajadores_minusvalidos_ceguera">
+                        <label for="formularios_Jubilación_trabajadores_minusvalidos_ceguera">Formularios Jubilación Trabajadores minusvalidos/ceguera</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Pension_Directa_casados" id="formularios_Pension_Directa_casados">
+                        <label for="formularios_Pension_Directa_casados">Formularios Pension Directa (Casados)</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Pension_Directa_convivientes" id="formularios_Pension_Directa_convivientes">
+                        <label for="formularios_Pension_Directa_convivientes">Formularios Pension Directa (Convivientes)</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Pension_Deriva_casados" id="formularios_Pension_Deriva_casados">
+                        <label for="formularios_Pension_Deriva_casados">Formularios Pension Derivada (Casados)</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Pension_Deriva_convivientes" id="formularios_Pension_Deriva_convivientes">
+                        <label for="formularios_Pension_Deriva_convivientes">Formularios Pension Derivada (Convivientes)</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Pension_Directa_Derivada_hijo_discapacitada" id="formularios_Pension_Directa_Derivada_hijo_discapacitada">
+                        <label for="formularios_Pension_Directa_Derivada_hijo_discapacitada">Formularios Pensión Directa o Derivada hijo/a discapacitada</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Retiro_Transitorio_por_invalidez" id="formularios_Retiro_Transitorio_por_invalidez">
+                        <label for="formularios_Retiro_Transitorio_por_invalidez">Formularios Retiro Transitorio por invalidez</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Retiro_Transitorio_por_invalidez_SDM" id="formularios_Retiro_Transitorio_por_invalidez_SDM">
+                        <label for="formularios_Retiro_Transitorio_por_invalidez_SDM">Formularios Retiro Transitorio por invalidez - SDM</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_PUAM" id="formularios_PUAM">
+                        <label for="formularios_PUAM">Formularios PUAM</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_UCAP" id="formularios_UCAP">
+                        <label for="formularios_UCAP">Formularios UCAP</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_Reajuste_de_Haberes" id="formularios_Reajuste_de_Haberes">
+                        <label for="formularios_Reajuste_de_Haberes">Formularios Reajuste de Haberes</label>
+                    </div>
+
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="formularios_asignacion_fliar_hijo_discapacitado" id="formularios_asignacion_fliar_hijo_discapacitado">
+                        <label for="formularios_asignacion_fliar_hijo_discapacitado">Formularios ASIGNACION FLIAR HIJO DISCAP.</label>
+                    </div>
                 </div>
             </div>
             
             <h3>Formularios</h3>
-            <div class="form-row">
               <div class="checkbox-group">
+                  <div class="checkbox-item">                               
+                      <input type="checkbox" name="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" id="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">                            
+                   <label for="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">(Beneficios) NUEVO CONVENIO DE HONORARIOS Numerado</label>                                                        
+                  </div>                   
+                  <div class="checkbox-item">                               
+                  <input type="checkbox" name="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" id="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">                                      
+                  <label for="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">(Juicios) NUEVO CONVENIO DE HONORARIOS Numerado</label>                                                 
+                  </div>
+                  <div class="checkbox-item">                               
+                  <input type="checkbox" name="CONVENIO_MAGISTRADOS" id="CONVENIO_MAGISTRADOS">                        
+                  <label for="CONVENIO_MAGISTRADOS">CONVENIO MAGISTRADOS</label>                                                 
+                  </div>                    
+                  <div class="checkbox-item">                               
+                  <input type="checkbox" name="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES" id="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES">                        
+                  <label for="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES">CONVENIO DE GASTOS ADMINISTRATIVOS JUDICIALES</label>                                                 
+                  </div>
                 <div class="checkbox-item">
                   <input type="checkbox" name="2.91_Guarda_Documental" id="2.91_Guarda_Documental">
                   <label for="2.91_Guarda_Documental">2.91 Guarda Documental</label>
@@ -325,11 +442,6 @@
                     <input type="checkbox" name="6.18_Solicitud_Prestaciones_Previsionales" id="6.18_Solicitud_Prestaciones_Previsionales">
                     <label for="6.18_Solicitud_Prestaciones_Previsionales">6.18 Solicitud Prestaciones Previsionales</label>
                 </div>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="checkbox-group">
                 <div class="checkbox-item">
                     <input type="checkbox" name="6.18_Solicitud_Prestaciones_Previsionales_pension" id="6.18_Solicitud_Prestaciones_Previsionales_pension">
                     <label for="6.18_Solicitud_Prestaciones_Previsionales_pension">6.18 Solicitud Prestaciones Previsionales (pension)</label>
@@ -338,11 +450,7 @@
                       <input type="checkbox" name="Acta_Poder" id="Acta_Poder">
                       <label for="Acta_Poder">Acta Poder</label>
                   </div>
-              </div>
-             </div>
-
-            <div class="form-row">
-                <div class="checkbox-group">                      
+                  
                     <div class="checkbox-item">
                           <input type="checkbox" name="Anexo_Baja_Puam" id="Anexo_Baja_Puam">
                           <label for="Anexo_Baja_Puam">Anexo Baja Puam</label>
@@ -350,23 +458,14 @@
                     <div class="checkbox-item">
                           <input type="checkbox" name="Anexo_I_Ley_27.625" id="Anexo_I_Ley_27.625">
                           <label for="Anexo_I_Ley_27.625">Anexo I Ley 27.625</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="checkbox-group">                      
+                    </div>                 
                     <div class="checkbox-item">
                           <input type="checkbox" name="Anexo_II_DEC_894_01" id="Anexo_II_DEC_894_01">                              <label for="Anexo_II_DEC_894_01">Anexo II DEC 894/01</label>
                     </div>
                     <div class="checkbox-item">
                           <input type="checkbox" name="Anexo_II_980_05" id="Anexo_II_980_05">
                           <label for="Anexo_II_980_05">Anexo II 980/05</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="checkbox-group">                      
+                    </div>                      
                     <div class="checkbox-item">
                           <input type="checkbox" name="Anexo_II_Socioeconómico_24.476" id="Anexo_II_Socioeconómico_24.476">
                           <label for="Anexo_II_Socioeconómico_24.476">Anexo II Socioeconómico 24.476</label>
@@ -374,11 +473,7 @@
                     <div class="checkbox-item">
                           <input type="checkbox" name="Baja_PNC" id="Baja_PNC">
                           <label for="Baja_PNC">Baja PNC</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="checkbox-group">                      
+                    </div>                    
                     <div class="checkbox-item">
                           <input type="checkbox" name="Carta_Poder_SRT" id="Carta_Poder_SRT">
                           <label for="Carta_Poder_SRT">Carta Poder SRT</label>
@@ -386,11 +481,7 @@
                     <div class="checkbox-item">
                           <input type="checkbox" name="DDJJ_de_salud_resol_300" id="DDJJ_de_salud_resol_300">
                           <label for="DDJJ_de_salud_resol_300">DDJJ de salud resol 300</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="checkbox-group">                      
+                    </div>                  
                     <div class="checkbox-item">
                           <input type="checkbox" name="DDJJ_Ley_17562_6.9" id="DDJJ_Ley_17562_6.9">
                           <label for="DDJJ_Ley_17562_6.9">DDJJ Ley 17562 6.9</label>
@@ -398,11 +489,7 @@
                     <div class="checkbox-item">
                           <input type="checkbox" name="F_3283_Autorización_ARCA" id="F_3283_Autorización_ARCA">
                           <label for="F_3283_Autorización_ARCA">F 3283 Autorización ARCA</label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                 <div class="checkbox-group">                      
+                    </div>                     
                     <div class="checkbox-item">
                           <input type="checkbox" name="Formulario_Carta_Poder_(CSS)" id="Formulario_Carta_Poder_(CSS)">
                           <label for="Formulario_Carta_Poder_(CSS)">Formulario Carta Poder (CSS)</label>
@@ -410,11 +497,7 @@
                      <div class="checkbox-item">
                            <input type="checkbox" name="Formulario_encuesta_RTI" id="Formulario_encuesta_RTI">
                            <label for="Formulario_encuesta_RTI">Formulario encuesta RTI</label>
-                     </div>
-                </div>
-            </div>
-            <div class="form-row">
-                 <div class="checkbox-group">                      
+                     </div>                     
                      <div class="checkbox-item">                               
                          <input type="checkbox" name="PS_1.75_Carta_Poder_Cap_III_27.705" id="PS_1.75_Carta_Poder_Cap_III_27.705">
                          <label for="PS_1.75_Carta_Poder_Cap_III_27.705">PS 1.75 Carta Poder Cap III 27.705</label>
@@ -422,12 +505,7 @@
                      <div class="checkbox-item">                               
                           <input type="checkbox" name="PS_5.7_Derivacion_aportes_Obra_Social" id="PS_5.7_Derivacion_aportes_Obra_Social">
                           <label for="PS_5.7_Derivacion_aportes_Obra_Social">PS 5.7 Derivacion aportes Obra Social</label>
-                      </div>
-                 </div>
-            </div>
-
-            <div class="form-row">
-                 <div class="checkbox-group">                      
+                      </div>                   
                      <div class="checkbox-item">                               
                          <input type="checkbox" name="PS_5.11_Aceptacion_de_la_Obra_Social" id="PS_5.11_Aceptacion_de_la_Obra_Social">
                         <label for="PS_5.11_Aceptacion_de_la_Obra_Social">PS 5.11 Aceptacion de la Obra Social</label>
@@ -435,12 +513,7 @@
                      <div class="checkbox-item">                               
                           <input type="checkbox" name="PS_6.292_DDJJ_solicitante_SDM" id="PS_6.292_DDJJ_solicitante_SDM">
                          <label for="PS_6.292_DDJJ_solicitante_SDM">PS 6.292 DDJJ solicitante SDM</label>
-                      </div>
-                 </div>
-              </div>
-            
-             <div class="form-row">
-                 <div class="checkbox-group">                      
+                      </div>                     
                      <div class="checkbox-item">                               
                          <input type="checkbox" name="PS_6.293_DDJJ_Dador_de_trabajo_SDM" id="PS_6.293_DDJJ_Dador_de_trabajo_SDM">                           
                          <label for="PS_6.293_DDJJ_Dador_de_trabajo_SDM">PS 6.293 DDJJ Dador de trabajo SDM</label>
@@ -448,35 +521,20 @@
                      <div class="checkbox-item">                               
                           <input type="checkbox" name="PS_6.294_DDJJ_renuncia_SDM" id="PS_6.294_DDJJ_renuncia_SDM">                           
                           <label for="PS_6.294_DDJJ_renuncia_SDM">PS 6.294 DDJJ renuncia SDM</label>
-                     </div>
-                 </div>
-              </div>
-
-            <div class="form-row">
-                 <div class="checkbox-group">                      
+                     </div>                     
                      <div class="checkbox-item">                               
                          <input type="checkbox" name="PS_6.2_Certific_de_Servicios" id="PS_6.2_Certific_de_Servicios">                             <label for="PS_6.2_Certific_de_Servicios">PS 6.2 Certific de Servicios</label>
                     </div>
                      <div class="checkbox-item">                               
                           <input type="checkbox" name="PS_6.3_Nivel_de_estudios_RTI" id="PS_6.3_Nivel_de_estudios_RTI">                             <label for="PS_6.3_Nivel_de_estudios_RTI">PS 6.3 Nivel de estudios RTI</label>
-                     </div>
-                 </div>
-            </div>
-
-              <div class="form-row">
-                 <div class="checkbox-group">                      
+                     </div>                    
                      <div class="checkbox-item">                               
                          <input type="checkbox" name="PS_6.4_Carta_Poder" id="PS_6.4_Carta_Poder">                             <label for="PS_6.4_Carta_Poder">PS 6.4 Carta Poder</label>                                              
                      </div>
                      <div class="checkbox-item">                               
                           <input type="checkbox" name="PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS" id="PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS">                             
                          <label for="PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS">PS 6.8 DDJJ TESTIMONIAL ACRED SERVICIOS </label>                     
-                      </div>
-                  </div>
-             </div>
-
-              <div class="form-row">
-                 <div class="checkbox-group">                      
+                      </div>                     
                      <div class="checkbox-item">                               
                          <input type="checkbox" name="PS_6.13_DDJJ_Testimonial_dependencia_económica" id="PS_6.13_DDJJ_Testimonial_dependencia_económica">                             
                          <label for="PS_6.13_DDJJ_Testimonial_dependencia_económica">PS 6.13 DDJJ Testimonial dependencia económica</label>                                    
@@ -484,12 +542,7 @@
                      <div class="checkbox-item">                               
                           <input type="checkbox" name="PS_6.268_Certific_de_Servicios_(Ampliatoria)" id="PS_6.268_Certific_de_Servicios_(Ampliatoria)">                             
                           <label for="PS_6.268_Certific_de_Servicios_(Ampliatoria)">PS 6.268 Certific. de Servicios (Ampliatoria)</label>                                    
-                      </div>
-                  </div>
-             </div>
-                
-             <div class="form-row">
-                 <div class="checkbox-group">                      
+                      </div>                    
                     <div class="checkbox-item">                               
                            <input type="checkbox" name="PS_6.273_Certific_complementaria_investigadores" id="PS_6.273_Certific_complementaria_investigadores">                             
                           <label for="PS_6.273_Certific_complementaria_investigadores">PS 6.273 Certific. complementaria investigadores</label>                                    
@@ -497,12 +550,7 @@
                      <div class="checkbox-item">                               
                             <input type="checkbox" name="PS_6.278_Dto_de_cuotas_jubilación" id="PS_6.278_Dto_de_cuotas_jubilación">                             
                            <label for="PS_6.278_Dto_de_cuotas_jubilación">PS 6.278 Dto de cuotas jubilación</label>                                    
-                     </div>
-                 </div>
-             </div>
-
-              <div class="form-row">
-                 <div class="checkbox-group">                      
+                     </div>                    
                     <div class="checkbox-item">                               
                            <input type="checkbox" name="PS_6.279_Dto_de_cuotas_pensión" id="PS_6.279_Dto_de_cuotas_pensión">                             
                         <label for="PS_6.279_Dto_de_cuotas_pensión">PS 6.279 Dto de cuotas pensión</label>                                    
@@ -510,50 +558,16 @@
                      <div class="checkbox-item">                               
                             <input type="checkbox" name="PS_6.284_DDJJ_Fzas_Armadas" id="PS_6.284_DDJJ_Fzas_Armadas">                             
                          <label for="PS_6.284_DDJJ_Fzas_Armadas">PS 6.284 DDJJ Fzas Armadas</label>                                    
-                     </div>
-                 </div>
-              </div>
-
-            <div class="form-row">
-                 <div class="checkbox-group">                      
+                     </div>                     
                     <div class="checkbox-item">                               
                            <input type="checkbox" name="PS_6.305_Carta_Poder" id="PS_6.305_Carta_Poder">                            <label for="PS_6.305_Carta_Poder">PS 6.305 Carta Poder</label>                                    
                     </div>
                      <div class="checkbox-item">                               
                             <input type="checkbox" name="Renuncia_condicionada" id="Renuncia_condicionada">                            <label for="Renuncia_condicionada">Renuncia condicionada</label>                                    
-                     </div>
-                </div>
-            </div>
-                
-             <div class="form-row">
-                 <div class="checkbox-group">                      
+                     </div>                   
                     <div class="checkbox-item">                               
                            <input type="checkbox" name="Telegrama_revocando_poder" id="Telegrama_revocando_poder">                            <label for="Telegrama_revocando_poder">Telegrama revocando poder</label>                                                        </div>
-                     <div class="checkbox-item">                               
-                            <input type="checkbox" name="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" id="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">                            
-                         <label for="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">(Beneficios) NUEVO CONVENIO DE HONORARIOS Numerado</label>                                                        
-                     </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="checkbox-group">                      
-                    <div class="checkbox-item">                               
-                        <input type="checkbox" name="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" id="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">                                      
-                        <label for="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">(Juicios) NUEVO CONVENIO DE HONORARIOS Numerado</label>                                                 
-                    </div>
-                    <div class="checkbox-item">                               
-                        <input type="checkbox" name="CONVENIO_MAGISTRADOS" id="CONVENIO_MAGISTRADOS">                        
-                        <label for="CONVENIO_MAGISTRADOS">CONVENIO MAGISTRADOS</label>                                                 
-                    </div>
-                </div>
-            </div>
-
-             <div class="form-row">
-                 <div class="checkbox-group">                      
-                    <div class="checkbox-item">                               
-                        <input type="checkbox" name="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES" id="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES">                        
-                        <label for="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES">CONVENIO DE GASTOS ADMINISTRATIVOS JUDICIALES</label>                                                 
-                    </div>
+                     
                 </div>
              </div>
 
@@ -570,29 +584,283 @@
         </div>
         {% include 'footers/footer.html' %}
         <script>
-            // Función para controlar la visibilidad de la sección condicional
-            function toggleConditionalSection() {
-                const incompatibilidad = document.getElementById('formulario_incompatibilidad_beneficio').checked;
-                const superIncompatibilidad = document.getElementById('formulario_super_incompatibilidad_beneficio').checked;
-                const section = document.querySelector('.conditional-section');
+             // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Reconocimiento_de_Servicios').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
 
-                section.style.display = (incompatibilidad || superIncompatibilidad) ? 'block' : 'none';
-            }
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Renuncia_condicionada', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS'];
 
-            // Event listeners para los checkboxes
-            document.getElementById('formulario_incompatibilidad_beneficio').addEventListener('change', toggleConditionalSection);
-            document.getElementById('formulario_super_incompatibilidad_beneficio').addEventListener('change', toggleConditionalSection);
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
 
-            // Control principal de jubilación ordinaria
-            document.getElementById('formularios_jubilacion_ordinaria').addEventListener('change', function() {
-                const isChecked = this.checked;
-                document.getElementById('formulario_incompatibilidad_beneficio').checked = isChecked;
-                document.getElementById('formulario_super_incompatibilidad_beneficio').checked = isChecked;
-                toggleConditionalSection(); // Actualizar visibilidad al cambiar
-            });
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Jubilación').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
 
-            // Ejecutar al cargar por si hay valores pre-seleccionados
-            toggleConditionalSection();
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Jubilación_con_24.476').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_II_Socioeconómico_24.476', 'PS_6.278_Dto_de_cuotas_jubilación'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Jubilación_con_27.705').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.305_Carta_Poder'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Jubilación_docente').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Renuncia_condicionada', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+            
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Jubilación_serv_diferenciales').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+            
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Jubilación_Servicio_Doméstico').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.292_DDJJ_solicitante_SDM', 'PS_6.293_DDJJ_Dador_de_trabajo_SDM', 'PS_6.294_DDJJ_renuncia_SDM'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Jubilación_HIV').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.292_DDJJ_solicitante_SDM', 'PS_6.293_DDJJ_Dador_de_trabajo_SDM', 'PS_6.294_DDJJ_renuncia_SDM', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Jubilación_trabajadores_minusvalidos_ceguera').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', 'Carta_Poder_SRT', 'PS_6.3_Nivel_de_estudios_RTI', 'Formulario_encuesta_RTI', 'DDJJ_de_salud_resol_300', 'PS_6.273_Certific_complementaria_investigadores'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Pension_Directa_casados').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.279_Dto_de_cuotas_pensión', 'DDJJ_Ley_17562_6.9', ];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Pension_Directa_convivientes').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.279_Dto_de_cuotas_pensión', 'PS_6.13_DDJJ_Testimonial_dependencia_económica' ];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Pension_Deriva_casados').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.278_Dto_de_cuotas_jubilación', 'DDJJ_Ley_17562_6.9'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Pension_Deriva_convivientes').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.13_DDJJ_Testimonial_dependencia_económica'];
+
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Pension_Directa_Derivada_hijo_discapacitada').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.13_DDJJ_Testimonial_dependencia_económica', 'Carta_Poder_SRT', 'Formulario_encuesta_RTI', 'PS_6.2_Certific_de_Servicios', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS'];
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Retiro_Transitorio_por_invalidez').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', 'Carta_Poder_SRT', 'Formulario_encuesta_RTI', 'PS_6.2_Certific_de_Servicios', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'F_3283_Autorización_ARCA', '6.18_Solicitud_Prestaciones_Previsionales', 'Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.3_Nivel_de_estudios_RTI', 'DDJJ_de_salud_resol_300', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.273_Certific_complementaria_investigadores'];
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Retiro_Transitorio_por_invalidez_SDM').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', 'Carta_Poder_SRT', 'Formulario_encuesta_RTI', 'PS_6.2_Certific_de_Servicios', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'F_3283_Autorización_ARCA', '6.18_Solicitud_Prestaciones_Previsionales', 'Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.3_Nivel_de_estudios_RTI', 'DDJJ_de_salud_resol_300', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.292_DDJJ_solicitante_SDM', 'PS_6.293_DDJJ_Dador_de_trabajo_SDM', 'PS_6.294_DDJJ_renuncia_SDM'];
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_PUAM').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'F_3283_Autorización_ARCA', '6.18_Solicitud_Prestaciones_Previsionales'];
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_UCAP').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', '2.91_Guarda_Documental', 'PS_1.75_Carta_Poder_Cap_III_27.705', 'PS_6.305_Carta_Poder', 'DDJJ_de_salud_resol_300', 'PS_6.2_Certific_de_Servicios'];
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+            
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_Reajuste_de_Haberes').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', '2.91_Guarda_Documental', 'PS_6.2_Certific_de_Servicios', 'PS_6.4_Carta_Poder', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Telegrama_revocando_poder'];
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
+
+            // Escucha el evento change del checkbox principal
+              document.getElementById('formularios_asignacion_fliar_hijo_discapacitado').addEventListener('change', function() {
+                // Estado del checkbox principal (true o false)
+                const estado = this.checked;
+
+                // Array con los IDs de las checkboxes que quieres sincronizar
+                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder'];
+                // Para cada checkbox en el array, se actualiza su estado
+                checkboxesDependientes.forEach(function(id) {
+                  document.getElementById(id).checked = estado;
+                });
+              });
         </script>
     </body>
 </html>

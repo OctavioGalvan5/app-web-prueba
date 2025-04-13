@@ -1656,6 +1656,64 @@ def upload_dni():
     # Redirigir a la pantalla del cliente recién cargado
     return redirect(url_for('ver_cliente', id=new_id))
 
+@app.route('/agregar_cliente', methods=['POST'])
+@login_required
+def agregar_cliente():
+    try:
+        with engine.begin() as connection:
+            result = connection.execute(
+                text("""
+                    INSERT INTO data_clientes (
+                        numero_dni, 
+                        numero_cuil,
+                        numero_celular,
+                        nombre,
+                        apellido,
+                        nombre_completo,
+                        nombre_completo_2,
+                        sexo,
+                        sexo_femenino,
+                        sexo_masculino,
+                        fecha_de_nacimiento,
+                        fecha_de_ingreso,
+                        nacionalidad, 
+                        direccion,
+                        numero_direccion,
+                        provincia,
+                        departamento,
+                        ciudad
+                    ) VALUES (
+                        NULL, 
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL, 
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL,
+                        NULL
+                    )
+                """)
+            )
+            new_id = result.lastrowid
+        flash("Cliente agregado correctamente con valores nulos.", "success")
+    except Exception as e:
+        flash(f"Error al guardar los datos en la base de datos: {str(e)}", "danger")
+        return redirect(url_for('consultas'))
+
+    # Redirigir a la pantalla del cliente recién cargado
+    return redirect(url_for('ver_cliente', id=new_id))
+
+
 @app.route('/eliminar_cliente/<int:id>', methods=['POST'])
 @login_required
 def eliminar_cliente(id):

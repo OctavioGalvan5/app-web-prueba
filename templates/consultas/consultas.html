@@ -425,6 +425,13 @@
             {% endif %}
         {% endwith %}
 
+        <div class="form-container" style="margin-top: 70px;">
+            <h2>Ingresar Cliente Manualmente</h2>
+            <form action="{{ url_for('agregar_cliente') }}" method="POST" enctype="multipart/form-data" onsubmit="return">
+                <button type="submit" class="submit-button">Cargar Cliente</button>
+            </form>
+        </div>
+
     </div>
 
     {% include 'footers/footer.html' %}
