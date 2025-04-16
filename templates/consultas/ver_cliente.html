@@ -224,7 +224,7 @@
                 <div class="form-row">
                     <div class="form-group">
                       <label>Fecha de Nacimiento:</label>
-                      <input type="date" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}">
+                      <input type="date" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}" required>
                     </div>
                     <div class="form-group">
                       <label>Fecha de Ingreso al Pais:</label>
