@@ -1786,6 +1786,8 @@ def ver_cliente(id):
                 "provincia": data_cliente.get("provincia", ""),
                 "departamento": data_cliente.get("departamento", ""),
                 "ciudad": data_cliente.get("ciudad", ""),
+                "donde_firmar": "X",
+
             }
 
             # Diccionario para almacenar los archivos generados en memoria (PDFs y Word)
