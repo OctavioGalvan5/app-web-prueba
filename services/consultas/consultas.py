@@ -30,7 +30,7 @@ genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
 
 
 def geminis_api_extract_data(image_streams):
-    modelo = genai.GenerativeModel("gemini-2.0-flash")
+    modelo = genai.GenerativeModel("gemini-1.5-pro")
     try:
         contenido = []
         # Iterar sobre cada archivo (imagen) y convertirlo a base64
@@ -46,7 +46,7 @@ def geminis_api_extract_data(image_streams):
 Analiza las imágenes de DNI y proporciona la siguiente información en formato JSON:
 {
     "dni_number": "Número de DNI, darlo de la siguiente manera, por ejemplo 45879598, es decir sin puntos",
-    "cuil_number": "Número de CUIL, si esta en formato por ejemplo 20-34979576-5, devolver 20349795765",
+    "cuil_number": "Número de CUIL, si esta en formato por ejemplo 20-34979576-5, devolver 20349795765, el cuil suele encontrarse en el dorso del dni, donde se encuentran datos como la direccion, en esta parte no encontraras datos como nombre o apellido, en caso de no encontrar devolver vacio",
     "phone_number": "Aqui siempre devolveras vacio",
     "name": "Nombre completo, por ejemplo no coloques MARIA LUCIA PEREZ GOMEZ, coloca Maria Lucia",
     "surname": "Apellido completo, por ejemplo no coloques MARIA LUCIA PEREZ GOMEZ, coloca Perez Gomez",
@@ -58,7 +58,7 @@ Analiza las imágenes de DNI y proporciona la siguiente información en formato 
     "date_of_birth": "YYYY-MM-DD",
     "entry_date": "Fecha de ingreso al pais (no siempre tendra), devolver en formato YYYY-MM-DD",
     "nationality": "Nacionalidad, un ejemplo puede ser Argentina, Brasileña, Chilena, etc",
-    "address": "Dirección, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Ohiggins 1673 DT/C B° 20 De Febrero'",
+    "address": "lea el texto de la imagen y busque una dirección, extraé únicamente la dirección del domicilio como figura en el dorso del DNI argentino. Por ejemplo, si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', deberás devolver únicamente 'Ohiggins 1673 DT/C B° 20 De Febrero'. La dirección suele estar en la esquina superior izquierda del dorso. No incluyas la ciudad, provincia ni repitas palabras como 'Salta', 'Buenos Aires', etc. Corregí las mayúsculas (por ejemplo, 'O' HIGGINS' se transforma en 'Ohiggins', y '20 DE FEBRERO' en '20 De Febrero'). Conservá abreviaciones como 'DT/C', 'B°', etc. Ignorá todo lo que venga después del segundo guion si está presente.",
     "adress_number": "Numero de la dirección, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente '1673'",
     "province": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta'",
     "department": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta Capital'",
@@ -100,69 +100,78 @@ def procesar_datos_extraidos(json_texto):
         for clave in claves_requeridas:
             datos.setdefault(clave, "")
 
+        # Calcular el CUIL si el dni_number está presente
+        if datos["dni_number"]:
+            cuil = calcular_cuil(datos.get("sexo", ""), datos["dni_number"])
+            datos["cuil_number"] = cuil
+            print(f"✅ CUIL calculado: {cuil}")
+
         return datos
     except json.JSONDecodeError as e:
         print("❌ Error al decodificar JSON en procesar_datos_extraidos:", str(e))
         return None
 
 def update_cliente_in_db(data):
-    fecha_str = data.get("fecha_de_nacimiento")
-    fecha_date = convertir_fecha(fecha_str) if fecha_str else None
-    fecha_str = data.get("fecha_de_ingreso")
-    fecha_ingreso = convertir_fecha(fecha_str) if fecha_str else None
-    cliente_data = {
-        "id": data.get("id"),
-        "nombre": data.get("nombre"),
-        "apellido": data.get("apellido"),
-        "numero_celular": data.get("numero_celular"),
-        "nombre_completo": data.get("nombre_completo"),
-        "nombre_completo_2": data.get("nombre_completo_2"),
-        "sexo": data.get("sexo"),
-        "sexo_femenino": data.get("sexo_femenino"),
-        "sexo_masculino": data.get("sexo_masculino"),
-        "numero_dni": data.get("numero_dni"),
-        "fecha_de_nacimiento": fecha_date,
-        "fecha_de_ingreso": fecha_ingreso,
-        "numero_cuil": data.get("numero_cuil"),
-        "nacionalidad": data.get("nacionalidad"),
-        "direccion": data.get("direccion"),
-        "numero_direccion": data.get("numero_direccion"),
-        "provincia": data.get("provincia"),
-        "departamento": data.get("departamento"),
-        "ciudad": data.get("ciudad"),
+        print("Datos recibidos:", data)  # Para depurar los datos recibidos
 
-    }
+        fecha_str = data.get("fecha_de_nacimiento")
+        fecha_date = convertir_fecha(fecha_str) if fecha_str else None
+        fecha_str = data.get("fecha_de_ingreso")
+        fecha_ingreso = convertir_fecha(fecha_str) if fecha_str else None
 
-    update_query = text("""
-        UPDATE data_clientes SET
-            nombre = :nombre,
-            apellido = :apellido,
-            numero_celular = :numero_celular,
-            nombre_completo = :nombre_completo,
-            nombre_completo_2 = :nombre_completo_2,
-            sexo = :sexo,
-            sexo_femenino = :sexo_femenino,
-            sexo_masculino = :sexo_masculino,
-            numero_dni = :numero_dni,
-            fecha_de_nacimiento = :fecha_de_nacimiento,
-            fecha_de_ingreso = :fecha_de_ingreso,
-            numero_cuil = :numero_cuil,
-            nacionalidad = :nacionalidad,
-            direccion = :direccion,
-            numero_direccion = :numero_direccion,
-            provincia = :provincia,
-            departamento = :departamento,
-            ciudad = :ciudad
-        WHERE id = :id
-    """)
 
-    try:
-        with engine.begin() as connection:
-            result = connection.execute(update_query, cliente_data)
-            print("Filas actualizadas:", result.rowcount)
-        print("Datos actualizados en la base de datos.")
-    except Exception as e:
-        print("Error al actualizar en la base de datos:", e)
+        cliente_data = {
+            "id": data.get("id"),
+            "nombre": data.get("nombre"),
+            "apellido": data.get("apellido"),
+            "numero_celular": data.get("numero_celular"),
+            "nombre_completo": data.get("nombre_completo"),
+            "nombre_completo_2": data.get("nombre_completo_2"),
+            "sexo": data.get("sexo"),
+            "sexo_femenino": data.get("sexo_femenino"),
+            "sexo_masculino": data.get("sexo_masculino"),
+            "numero_dni": data.get("numero_dni"),
+            "fecha_de_nacimiento": fecha_date,
+            "fecha_de_ingreso": fecha_ingreso,
+            "numero_cuil": data.get("numero_cuil"),
+            "nacionalidad": data.get("nacionalidad"),
+            "direccion": data.get("direccion"),
+            "numero_direccion": data.get("numero_direccion"),
+            "provincia": data.get("provincia"),
+            "departamento": data.get("departamento"),
+            "ciudad": data.get("ciudad"),
+        }
+
+        update_query = text("""
+          UPDATE data_clientes SET
+                nombre = :nombre,
+                apellido = :apellido,
+                numero_celular = :numero_celular,
+                nombre_completo = :nombre_completo,
+                nombre_completo_2 = :nombre_completo_2,
+                sexo = :sexo,
+                sexo_femenino = :sexo_femenino,
+                sexo_masculino = :sexo_masculino,
+                numero_dni = :numero_dni,
+                fecha_de_nacimiento = :fecha_de_nacimiento,
+                fecha_de_ingreso = :fecha_de_ingreso,
+                numero_cuil = :numero_cuil,
+                nacionalidad = :nacionalidad,
+                direccion = :direccion,
+                numero_direccion = :numero_direccion,
+                provincia = :provincia,
+                departamento = :departamento,
+                ciudad = :ciudad
+            WHERE id = :id
+        """)
+    
+        try:
+            with engine.begin() as connection:
+                result = connection.execute(update_query, cliente_data)
+                print("Filas actualizadas:", result.rowcount)
+            print("Datos actualizados en la base de datos.")
+        except Exception as e:
+            print("Error al actualizar en la base de datos:", e)
 
 
 
@@ -194,3 +203,40 @@ def process_file(file):
         file_io = BytesIO(file_bytes)
         file_io.seek(0)
         return file_io
+
+
+def calcular_cuil(sexo, dni):
+    if not dni:
+        return ""
+
+    # Definir el prefijo dependiendo del sexo
+    if sexo == "Femenino":
+        cuil_prefix = "27"
+    elif sexo == "Masculino":
+        cuil_prefix = "20"
+    else:
+        cuil_prefix = "20"  # Para otros casos, usamos el código de hombre
+
+    # Asegurarse de que el DNI sea un número de 8 dígitos
+    dni = ''.join(filter(str.isdigit, dni))  # Extrae solo los dígitos
+    if len(dni) != 8:
+        return ""  # Si no tiene 8 dígitos, no es un DNI válido
+
+    # Convertir el DNI en una lista de números
+    dni_digits = list(map(int, dni[:8]))  # Solo tomamos los primeros 8 dígitos
+
+    # El algoritmo para calcular el verificador se basa en los primeros 8 dígitos del DNI
+    cuil_digits = [int(cuil_prefix[0]), int(cuil_prefix[1])] + dni_digits
+
+    # Los coeficientes para calcular el verificador
+    coef = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+    suma = sum([coef[i] * cuil_digits[i] for i in range(10)])
+
+    # Calcular el verificador
+    resto = suma % 11
+    verificador = (11 - resto) if resto != 0 else 0
+
+    # Formar el CUIL
+    cuil = f"{cuil_prefix}{dni}{verificador}"
+
+    return cuil

@@ -23,8 +23,11 @@ from google.auth.transport.requests import Request
 from google.oauth2.service_account import Credentials
 from dateutil.relativedelta import relativedelta
 from pypdf import PdfReader, PdfWriter
-import os
 import platform
+from werkzeug.utils import secure_filename
+from xhtml2pdf import pisa  # o import pisa
+from io import BytesIO
+
 #Models
 from models.ModelUser import ModelUser
 from sqlalchemy import text
@@ -44,7 +47,7 @@ from services.planilla_docente.planilla_docente import Planilla_Docente
 from services.herramientas_demandas.herramientas_demandas import HerramientasDemanda
 from services.base_datos_casos.pdf_gemini import update_sentencia_in_db
 from services.base_datos_casos.drive_utils import process_and_save_file, delete_drive_file, calculate_file_hash
-from services.consultas.consultas import geminis_api_extract_data, update_cliente_in_db, convert_pdf_to_image, process_file
+from services.consultas.consultas import geminis_api_extract_data, update_cliente_in_db, convert_pdf_to_image, process_file, calcular_cuil
 # Entities
 from models.entities.User import User
 
@@ -1648,9 +1651,7 @@ def upload_dni():
                 extracted_data
             )
             new_id = result.lastrowid
-        flash("Datos del DNI guardados correctamente.", "success")
     except Exception as e:
-        flash(f"Error al guardar los datos en la base de datos: {str(e)}", "danger")
         return redirect(url_for('consultas'))
 
     # Redirigir a la pantalla del cliente recién cargado
@@ -1705,9 +1706,7 @@ def agregar_cliente():
                 """)
             )
             new_id = result.lastrowid
-        flash("Cliente agregado correctamente con valores nulos.", "success")
     except Exception as e:
-        flash(f"Error al guardar los datos en la base de datos: {str(e)}", "danger")
         return redirect(url_for('consultas'))
 
     # Redirigir a la pantalla del cliente recién cargado
@@ -1779,8 +1778,8 @@ def ver_cliente(id):
                 "fecha_de_nacimiento_año": data_cliente.get("fecha_de_nacimiento").strftime('%Y') if data_cliente.get("fecha_de_nacimiento") else "",
                 "fecha_de_ingreso": data_cliente.get("fecha_de_ingreso").strftime('%d%m%y') if data_cliente.get("fecha_de_ingreso") else "",
                 "numero_cuil": data_cliente.get("numero_cuil", ""),
-                "cuil_inicio": data_cliente.get("numero_cuil", "")[:2],  # los dos primeros dígitos
-                "cuil_fin": data_cliente.get("numero_cuil", "")[-1:],   # el último dígito
+                "cuil_inicio": data_cliente.get("numero_cuil", "")[:2],
+                "cuil_fin": data_cliente.get("numero_cuil", "")[-1:],
                 "nacionalidad": data_cliente.get("nacionalidad", ""),
                 "direccion": data_cliente.get("direccion", ""),
                 "numero_direccion": data_cliente.get("numero_direccion", ""),
@@ -1791,123 +1790,162 @@ def ver_cliente(id):
 
             # Diccionario para almacenar los archivos generados en memoria (PDFs y Word)
             archivos_generados = {}
-
+            lista_formularios = []
             # Procesar cada formulario PDF (como antes)
             formularios = []
             if request.form.get("2.91_Guarda_Documental"):
                 formularios.append("datos/formularios/2.91_Guarda_Documental.pdf")
+                lista_formularios.append("2.91 Guarda Documental")
                 
             if request.form.get("6.18_Solicitud_Prestaciones_Previsionales"):
                 formularios.append("datos/formularios/6.18_Solicitud_Prestaciones_Previsionales.pdf")
+                lista_formularios.append("6.18 Solicitud Prestaciones Previsionales")
                 
             if request.form.get("6.18_Solicitud_Prestaciones_Previsionales_pension"):
                 formularios.append("datos/formularios/6.18_Solicitud_Prestaciones_Previsionales_pension.pdf")
+                lista_formularios.append("6.18 Solicitud Prestaciones Previsionales pension")
                 
             if request.form.get("Anexo_Baja_Puam"):
                 formularios.append("datos/formularios/Anexo_Baja_Puam.pdf")
+                lista_formularios.append("Anexo Baja Puam")
                 
             if request.form.get("Anexo_I_Ley_27.625"):
                 formularios.append("datos/formularios/Anexo_I_Ley_27.625.pdf")
+                lista_formularios.append("Anexo I Ley 27.625")
                 
             if request.form.get("Anexo_II_DEC_894_01"):
                 formularios.append("datos/formularios/Anexo_II_DEC_894_01.pdf")
+                lista_formularios.append("Anexo II DEC 894 01")
                 
             if request.form.get("Anexo_II_980_05"):
                 formularios.append("datos/formularios/Anexo_II_980_05.pdf")
+                lista_formularios.append("Anexo II 980 05")
                 
             if request.form.get("Anexo_II_Socioeconómico_24.476"):
                 formularios.append("datos/formularios/Anexo_II_Socioeconómico_24.476.pdf")
+                lista_formularios.append("Anexo II Socioeconómico 24.476")
                 
             if request.form.get("Baja_PNC"):
                 formularios.append("datos/formularios/Baja_PNC.pdf")
+                lista_formularios.append("Baja PNC")
                 
             if request.form.get("Carta_Poder_SRT"):
                 formularios.append("datos/formularios/Carta_Poder_SRT.pdf")
+                lista_formularios.append("Carta Poder SRT")
                 
             if request.form.get("DDJJ_de_salud_resol_300"):
                 formularios.append("datos/formularios/DDJJ_de_salud_resol_300.pdf")
+                lista_formularios.append("DDJJ de salud resol 300")
                 
             if request.form.get("DDJJ_Ley_17562_6.9"):
                 formularios.append("datos/formularios/DDJJ_Ley_17562_6.9.pdf")
+                lista_formularios.append("DDJJ Ley 17562 6.9")
                 
             if request.form.get("F_3283_Autorización_ARCA"):
                 formularios.append("datos/formularios/F_3283_Autorización_ARCA.pdf")
+                lista_formularios.append("F 3283 Autorización ARCA")
                 
             if request.form.get("Formulario_Carta_Poder_(CSS)"):
                 formularios.append("datos/formularios/Formulario_Carta_Poder_(CSS).pdf")
+                lista_formularios.append("Formulario Carta Poder (CSS)")
                 
             if request.form.get("Formulario_encuesta_RTI"):
                 formularios.append("datos/formularios/Formulario_encuesta_RTI.pdf")
+                lista_formularios.append("Formulario encuesta RTI")
                 
             if request.form.get("PS_1.75_Carta_Poder_Cap_III_27.705"):
                 formularios.append("datos/formularios/PS_1.75_Carta_Poder_Cap_III_27.705.pdf")
+                lista_formularios.append("PS 1.75 Carta Poder Cap III 27.705")
 
             if request.form.get("PS_5.7_Derivacion_aportes_Obra_Social"):
                 formularios.append("datos/formularios/PS_5.7_Derivacion_aportes_Obra_Social.pdf")
+                lista_formularios.append("PS 5.7 Derivacion aportes Obra Social")
 
             if request.form.get("PS_5.11_Aceptacion_de_la_Obra_Social"):
                 formularios.append("datos/formularios/PS_5.11_Aceptacion_de_la_Obra_Social.pdf")
+                lista_formularios.append("PS 5.11 Aceptacion de la Obra Social")
 
             if request.form.get("PS_6.292_DDJJ_solicitante_SDM"):
                 formularios.append("datos/formularios/PS_6.292_DDJJ_solicitante_SDM.pdf")
+                lista_formularios.append("PS 6.292 DDJJ solicitante SDM")
 
             if request.form.get("PS_6.293_DDJJ_Dador_de_trabajo_SDM"):
                 formularios.append("datos/formularios/PS_6.293_DDJJ_Dador_de_trabajo_SDM.pdf")
+                lista_formularios.append("PS 6.293 DDJJ Dador de trabajo SDM")
 
             if request.form.get("PS_6.294_DDJJ_renuncia_SDM"):
                 formularios.append("datos/formularios/PS_6.294_DDJJ_renuncia_SDM.pdf")
+                lista_formularios.append("PS 6.294 DDJJ renuncia SDM")
 
             if request.form.get("PS_6.2_Certific_de_Servicios"):
                 formularios.append("datos/formularios/PS_6.2_Certific_de_Servicios.pdf")
+                lista_formularios.append("PS 6.2 Certific de Servicios")
 
             if request.form.get("PS_6.3_Nivel_de_estudios_RTI"):
                 formularios.append("datos/formularios/PS_6.3_Nivel_de_estudios_RTI.pdf")
+                lista_formularios.append("PS 6.3 Nivel de estudios RTI")
 
             if request.form.get("PS_6.4_Carta_Poder"):
                 formularios.append("datos/formularios/PS_6.4_Carta_Poder.pdf")
+                lista_formularios.append("PS 6.4 Carta Poder")
 
             if request.form.get("PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS"):
                 formularios.append("datos/formularios/PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS.pdf")
+                lista_formularios.append("PS 6.8 DDJJ TESTIMONIAL ACRED SERVICIOS")
 
             if request.form.get("PS_6.13_DDJJ_Testimonial_dependencia_económica"):
                 formularios.append("datos/formularios/PS_6.13_DDJJ_Testimonial_dependencia_económica.pdf")
+                lista_formularios.append("PS 6.13 DDJJ Testimonial dependencia económica")
 
             if request.form.get("PS_6.268_Certific_de_Servicios_(Ampliatoria)"):
                 formularios.append("datos/formularios/PS_6.268_Certific_de_Servicios_(Ampliatoria).pdf")
+                lista_formularios.append("PS 6.268 Certific de Servicios (Ampliatoria)")
 
             if request.form.get("PS_6.273_Certific_complementaria_investigadores"):
                 formularios.append("datos/formularios/PS_6.273_Certific_complementaria_investigadores.pdf")
+                lista_formularios.append("PS 6.273 Certific complementaria investigadores")
 
             if request.form.get("PS_6.278_Dto_de_cuotas_jubilación"):
                 formularios.append("datos/formularios/PS_6.278_Dto_de_cuotas_jubilación.pdf")
+                lista_formularios.append("PS 6.278 Dto de cuotas jubilación")
 
             if request.form.get("PS_6.279_Dto_de_cuotas_pensión"):
                 formularios.append("datos/formularios/PS_6.279_Dto_de_cuotas_pensión.pdf")
+                lista_formularios.append("PS 6.279 Dto de cuotas pensión")
 
             if request.form.get("PS_6.284_DDJJ_Fzas_Armadas"):
                 formularios.append("datos/formularios/PS_6.284_DDJJ_Fzas_Armadas.pdf")
+                lista_formularios.append("PS 6.284 DDJJ Fzas Armadas")
 
             if request.form.get("PS_6.305_Carta_Poder"):
                 formularios.append("datos/formularios/PS_6.305_Carta_Poder.pdf")
+                lista_formularios.append("PS 6.305 Carta Poder")
 
             if request.form.get("Renuncia_condicionada"):
                 formularios.append("datos/formularios/Renuncia_condicionada.pdf")
+                lista_formularios.append("Renuncia condicionada")
 
             if request.form.get("Telegrama_revocando_poder"):
                 formularios.append("datos/formularios/Telegrama_revocando_poder.pdf")
+                lista_formularios.append("Telegrama revocando poder") 
 
             for idx, formulario in enumerate(formularios):
                 reader = PdfReader(formulario)
                 writer = PdfWriter()
                 writer.clone_reader_document_root(reader)
+
                 # Verifica que el PDF tenga al menos una página
                 if len(writer.pages) == 0:
                     flash(f"El archivo {formulario} no tiene páginas o está dañado.", "error")
                     return redirect(url_for('ver_cliente', id=id))
+
                 writer.update_page_form_field_values(writer.pages[0], datos)
 
+                # Obtener nombre del archivo sin extensión y sin ruta
+                nombre_formulario = os.path.splitext(os.path.basename(formulario))[0]
+                nombre_formulario = secure_filename(nombre_formulario)  # por si tiene caracteres raros
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                output_pdf_name = f"formulario_anses_{timestamp}_{idx}.pdf"
+                output_pdf_name = f"{nombre_formulario}_{timestamp}.pdf"
 
                 output = BytesIO()
                 writer.write(output)
@@ -1919,18 +1957,23 @@ def ver_cliente(id):
             word_templates = []
             if request.form.get("Acta_Poder"):
                 word_templates.append(("acta_poder", "datos/formularios/Acta_Poder.docx"))
+                lista_formularios.append("Acta Poder")
 
             if request.form.get("(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado"):
                 word_templates.append(("(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado", "datos/formularios/(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado.docx"))
+                lista_formularios.append("(Beneficios) NUEVO CONVENIO DE HONORARIOS Numerado")
 
             if request.form.get("(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado"):
                 word_templates.append(("(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado", "datos/formularios/(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado.docx"))
+                lista_formularios.append("(Juicios) NUEVO CONVENIO DE HONORARIOS Numerado")
 
             if request.form.get("CONVENIO_MAGISTRADOS"):
                 word_templates.append(("CONVENIO_MAGISTRADOS", "datos/formularios/CONVENIO_MAGISTRADOS.docx"))
+                lista_formularios.append("CONVENIO MAGISTRADOS")
 
             if request.form.get("CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES"):
                 word_templates.append(("CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES", "datos/formularios/CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES.docx"))
+                lista_formularios.append("CONVENIO DE GASTOS ADMINISTRATIVOS JUDICIALES")
             
 
             # Procesar cada template Word
@@ -1946,17 +1989,41 @@ def ver_cliente(id):
                     output_word_name = f"{nombre_base}_{timestamp}.docx"
                     archivos_generados[output_word_name] = output_word
 
-            # Crear un archivo ZIP en memoria que contenga todos los archivos generados
+            # 1) Generar el PDF en memoria
+            rendered = render_template(
+                'consultas/formularios_impresos.html',
+                filas=lista_formularios
+            )
+            pdf_buffer = BytesIO()
+            pisa_status = pisa.CreatePDF(rendered, dest=pdf_buffer)
+            if pisa_status.err:
+                return "Error al crear el PDF", 500
+            pdf_buffer.seek(0)
+
+            # 2) Crear el ZIP en memoria y agregar todos los archivos
             zip_buffer = BytesIO()
             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                # a) Archivos previamente generados
                 for filename, file_data in archivos_generados.items():
+                    # file_data es un BytesIO; obtenemos sus bytes
                     zip_file.writestr(filename, file_data.getvalue())
+
+                # b) El PDF recién creado
+                # Le puedes dar el nombre que quieras dentro del ZIP
+                zip_file.writestr('formularios_impresos.pdf', pdf_buffer.getvalue())
+
             zip_buffer.seek(0)
 
+            # 3) Enviar el ZIP como attachment
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             zip_filename = f"formularios_{timestamp}.zip"
+            return send_file(
+                zip_buffer,
+                as_attachment=True,
+                download_name=zip_filename,
+                mimetype='application/zip'
+            )
 
-            return send_file(zip_buffer, as_attachment=True, download_name=zip_filename, mimetype='application/zip')
 
         elif accion == 'guardar_cambios':
             flash("Caso actualizado correctamente", "success")

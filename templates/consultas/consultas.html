@@ -382,7 +382,14 @@
                         <td>{{ data.apellido }}</td>
                         <td>{{ data.numero_dni }}</td>
                         <td>{{ data.nacionalidad }}</td>
-                        <td>{{ data.fecha_de_nacimiento.strftime('%d/%m/%Y') }}</td>
+                        <td>
+                          {% if data.fecha_de_nacimiento %}
+                            {{ data.fecha_de_nacimiento.strftime('%d/%m/%Y') }}
+                          {% else %}
+                            -
+                          {% endif %}
+                        </td>
+
                         <td>
                             <div class="acciones-contenedor">
                                 <a href="{{ url_for('ver_cliente', id=data.id) }}" class="btn-editar">Ver</a>
