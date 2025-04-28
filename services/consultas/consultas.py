@@ -9,6 +9,70 @@ from io import BytesIO
 import fitz  # PyMuPDF
 from PIL import Image
 
+# En consultas.py, define esta lista (puede ir al inicio del archivo, por ejemplo)
+# Mapeo de nombres de checkboxes HTML a nombres de columnas en la base de datos
+CHECKBOX_MAPPING = {
+    "formularios_Reconocimiento_de_Servicios": "formularios_reconocimiento_servicios",
+    "formularios_Jubilación": "formularios_jubilacion",
+    "formularios_Jubilación_con_24.476": "formularios_jubilacion_con_24_476",
+    "formularios_Jubilación_con_27.705": "formularios_jubilacion_con_27_705",
+    "formularios_Jubilación_docente": "formularios_jubilacion_docente",
+    "formularios_Jubilación_serv_diferenciales": "formularios_jubilacion_serv_diferenciales",
+    "formularios_Jubilación_Servicio_Doméstico": "formularios_jubilacion_servicio_domestico",
+    "formularios_Jubilación_HIV": "formularios_jubilacion_hiv",
+    "formularios_Jubilación_trabajadores_minusvalidos_ceguera": "formularios_jubilacion_minusvalidos_ceguera",
+    "formularios_Pension_Directa_casados": "formularios_pension_directa_casados",
+    "formularios_Pension_Directa_convivientes": "formularios_pension_directa_convivientes",
+    "formularios_Pension_Deriva_casados": "formularios_pension_derivada_casados",
+    "formularios_Pension_Deriva_convivientes": "formularios_pension_derivada_convivientes",
+    "formularios_Pension_Directa_Derivada_hijo_discapacitada": "formularios_pension_directa_derivada_hijo_discapacitada",
+    "formularios_Retiro_Transitorio_por_invalidez": "formularios_retiro_transitorio_por_invalidez",
+    "formularios_Retiro_Transitorio_por_invalidez_SDM": "formularios_retiro_transitorio_por_invalidez_sdm",
+    "formularios_PUAM": "formularios_puam",
+    "formularios_UCAP": "formularios_ucap",
+    "formularios_Reajuste_de_Haberes": "formularios_reajuste_de_haberes",
+    "formularios_asignacion_fliar_hijo_discapacitado": "formularios_asignacion_fliar_hijo_discapacitado",
+    "(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado": "beneficios_nuevo_convenio_de_honorarios_numerado",
+    "(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado": "juicios_nuevo_convenio_de_honorarios_numerado",
+    "CONVENIO_MAGISTRADOS": "convenio_magistrados",
+    "CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES": "convenio_de_gastos_administrativos_judiciales",
+    "2.91_Guarda_Documental": "_2_91_guarda_documental",
+    "6.18_Solicitud_Prestaciones_Previsionales": "_6_18_solicitud_prestaciones_previsionales",
+    "6.18_Solicitud_Prestaciones_Previsionales_pension": "_6_18_solicitud_prestaciones_previsionales_pension",
+    "Acta_Poder": "acta_poder",
+    "Anexo_Baja_Puam": "anexo_baja_puam",
+    "Anexo_I_Ley_27.625": "anexo_i_ley_27625",
+    "Anexo_II_DEC_894_01": "anexo_ii_dec_894_01",
+    "Anexo_II_980_05": "anexo_ii_980_05",
+    "Anexo_II_Socioeconómico_24.476": "anexo_ii_socioeconomico_24_476",
+    "Baja_PNC": "baja_pnc",
+    "Carta_Poder_SRT": "carta_poder_srt",
+    "DDJJ_de_salud_resol_300": "ddjj_de_salud_resol_300",
+    "DDJJ_Ley_17562_6.9": "ddjj_ley_17562_6_9",
+    "F_3283_Autorización_ARCA": "f_3283_autorizacion_arca",
+    "Formulario_Carta_Poder_(CSS)": "formulario_carta_poder_css",
+    "Formulario_encuesta_RTI": "formulario_encuesta_rti",
+    "PS_1.75_Carta_Poder_Cap_III_27.705": "ps_1_75_carta_poder_cap_iii_27705",
+    "PS_5.7_Derivacion_aportes_Obra_Social": "ps_5_7_derivacion_aportes_obra_social",
+    "PS_5.11_Aceptacion_de_la_Obra_Social": "ps_5_11_aceptacion_de_la_obra_social",
+    "PS_6.292_DDJJ_solicitante_SDM": "ps_6_292_ddjj_solicitante_sdm",
+    "PS_6.293_DDJJ_Dador_de_trabajo_SDM": "ps_6_293_ddjj_dador_de_trabajo_sdm",
+    "PS_6.294_DDJJ_renuncia_SDM": "ps_6_294_ddjj_renuncia_sdm",
+    "PS_6.2_Certific_de_Servicios": "ps_6_2_certific_de_servicios",
+    "PS_6.3_Nivel_de_estudios_RTI": "ps_6_3_nivel_de_estudios_rti",
+    "PS_6.4_Carta_Poder": "ps_6_4_carta_poder",
+    "PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS": "ps_6_8_ddjj_testimonial_acred_servicios",
+    "PS_6.13_DDJJ_Testimonial_dependencia_economica": "ps_6_13_ddjj_testimonial_dependencia_economica",
+    "PS_6.268_Certific_de_Servicios_(Ampliatoria)": "ps_6_268_certific_de_servicios_ampliatoria",
+    "PS_6.273_Certific_complementaria_investigadores": "ps_6_273_certific_complementaria_investigadores",
+    "PS_6.278_Dto_de_cuotas_jubilación": "ps_6_278_dto_de_cuotas_jubilacion",
+    "PS_6.279_Dto_de_cuotas_pensión": "ps_6_279_dto_de_cuotas_pension",
+    "PS_6.284_DDJJ_Fzas_Armadas": "ps_6_284_ddjj_fzas_armadas",
+    "PS_6.305_Carta_Poder": "ps_6_305_carta_poder",
+    "Renuncia_condicionada": "renuncia_condicionada",
+    "Telegrama_revocando_poder": "telegrama_revocando_poder",
+}
+
 def convertir_fecha(fecha_str):
     formatos = [
         "%Y-%m-%d",  # Formato ISO (input date)
@@ -112,66 +176,73 @@ def procesar_datos_extraidos(json_texto):
         return None
 
 def update_cliente_in_db(data):
-        print("Datos recibidos:", data)  # Para depurar los datos recibidos
+    print("Datos recibidos para actualización:", data) # Para depurar los datos recibidos
 
-        fecha_str = data.get("fecha_de_nacimiento")
-        fecha_date = convertir_fecha(fecha_str) if fecha_str else None
-        fecha_str = data.get("fecha_de_ingreso")
-        fecha_ingreso = convertir_fecha(fecha_str) if fecha_str else None
+    fecha_str = data.get("fecha_de_nacimiento")
+    fecha_date = convertir_fecha(fecha_str) if fecha_str else None
+    fecha_str = data.get("fecha_de_ingreso")
+    fecha_ingreso = convertir_fecha(fecha_str) if fecha_str else None
 
+    cliente_data = {
+        "id": data.get("id"),
+        "nombre": data.get("nombre"),
+        "apellido": data.get("apellido"),
+        "numero_celular": data.get("numero_celular"),
+        "nombre_completo": data.get("nombre_completo"),
+        "nombre_completo_2": data.get("nombre_completo_2"),
+        "sexo": data.get("sexo"),
+        "sexo_femenino": data.get("sexo_femenino"), # <-- Mantienes estos si son campos de texto o cálculo
+        "sexo_masculino": data.get("sexo_masculino"), # <-- Mantienes estos si son campos de texto o cálculo
+        "numero_dni": data.get("numero_dni"),
+        "fecha_de_nacimiento": fecha_date,
+        "fecha_de_ingreso": fecha_ingreso,
+        "numero_cuil": data.get("numero_cuil"),
+        "nacionalidad": data.get("nacionalidad"),
+        "direccion": data.get("direccion"),
+        "numero_direccion": data.get("numero_direccion"),
+        "provincia": data.get("provincia"),
+        "departamento": data.get("departamento"),
+        "ciudad": data.get("ciudad"),
+    }
 
-        cliente_data = {
-            "id": data.get("id"),
-            "nombre": data.get("nombre"),
-            "apellido": data.get("apellido"),
-            "numero_celular": data.get("numero_celular"),
-            "nombre_completo": data.get("nombre_completo"),
-            "nombre_completo_2": data.get("nombre_completo_2"),
-            "sexo": data.get("sexo"),
-            "sexo_femenino": data.get("sexo_femenino"),
-            "sexo_masculino": data.get("sexo_masculino"),
-            "numero_dni": data.get("numero_dni"),
-            "fecha_de_nacimiento": fecha_date,
-            "fecha_de_ingreso": fecha_ingreso,
-            "numero_cuil": data.get("numero_cuil"),
-            "nacionalidad": data.get("nacionalidad"),
-            "direccion": data.get("direccion"),
-            "numero_direccion": data.get("numero_direccion"),
-            "provincia": data.get("provincia"),
-            "departamento": data.get("departamento"),
-            "ciudad": data.get("ciudad"),
-        }
+    # --- Añadir el estado de los checkboxes al diccionario cliente_data ---
+    for html_name, db_column_name in CHECKBOX_MAPPING.items():
+        # Si el nombre del checkbox está en los datos del formulario, significa que estaba marcado ('on').
+        # Si no está, significa que no estaba marcado.
+        cliente_data[db_column_name] = (data.get(html_name) == 'on') # Esto evalúa a True o False
 
-        update_query = text("""
-          UPDATE data_clientes SET
-                nombre = :nombre,
-                apellido = :apellido,
-                numero_celular = :numero_celular,
-                nombre_completo = :nombre_completo,
-                nombre_completo_2 = :nombre_completo_2,
-                sexo = :sexo,
-                sexo_femenino = :sexo_femenino,
-                sexo_masculino = :sexo_masculino,
-                numero_dni = :numero_dni,
-                fecha_de_nacimiento = :fecha_de_nacimiento,
-                fecha_de_ingreso = :fecha_de_ingreso,
-                numero_cuil = :numero_cuil,
-                nacionalidad = :nacionalidad,
-                direccion = :direccion,
-                numero_direccion = :numero_direccion,
-                provincia = :provincia,
-                departamento = :departamento,
-                ciudad = :ciudad
-            WHERE id = :id
-        """)
-    
-        try:
-            with engine.begin() as connection:
-                result = connection.execute(update_query, cliente_data)
-                print("Filas actualizadas:", result.rowcount)
-            print("Datos actualizados en la base de datos.")
-        except Exception as e:
-            print("Error al actualizar en la base de datos:", e)
+    # --- Construir dinámicamente la parte SET de la consulta SQL ---
+    # Lista de columnas a actualizar (incluyendo las originales y las de los checkboxes)
+    columns_to_update = [
+        "nombre", "apellido", "numero_celular", "nombre_completo",
+        "nombre_completo_2", "sexo", "sexo_femenino", "sexo_masculino",
+        "numero_dni", "fecha_de_nacimiento", "fecha_de_ingreso",
+        "numero_cuil", "nacionalidad", "direccion", "numero_direccion",
+        "provincia", "departamento", "ciudad"
+    ]
+    # Añadir las columnas de checkboxes a la lista
+    columns_to_update.extend(CHECKBOX_MAPPING.values())
+
+    # Crear la parte 'SET columna = :parametro, ...' de la consulta
+    set_clauses = [f"{col} = :{col}" for col in columns_to_update]
+    set_sql = ", ".join(set_clauses)
+
+    # Construir la consulta UPDATE completa
+    update_query = text(f"""
+        UPDATE data_clientes SET
+            {set_sql}
+        WHERE id = :id
+    """)
+
+    try:
+        with engine.begin() as connection:
+            result = connection.execute(update_query, cliente_data)
+            print("Filas actualizadas:", result.rowcount)
+        print("Datos del cliente y checkboxes actualizados en la base de datos.")
+    except Exception as e:
+        print("Error al actualizar en la base de datos:", e)
+        # Considera si quieres re-lanzar la excepción o manejarla de otra manera
+        # raise e
 
 
 
