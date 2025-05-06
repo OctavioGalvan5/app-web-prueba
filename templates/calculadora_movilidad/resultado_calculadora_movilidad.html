@@ -284,6 +284,22 @@
             <td class="confiscatoriedad">{{ comparacion.conf_anses_alanis_ripte }}</td>
         </tr>
         {% endif %}
+        {% if Caliva_Palavecino  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Caliva Palavecino</td>
+            <td>{{valor_Caliva_Palavecino}}</td>
+            <td>{{ comparacion.dif_anses_Caliva_Palavecino }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_Caliva_Palavecino }}</td>
+        </tr>
+        {% endif %}
+        {% if Anses_Palavecino  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Anses Palavecino</td>
+            <td>{{valor_Anses_Palavecino}}</td>
+            <td>{{ comparacion.dif_anses_Anses_Palavecino }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_Anses_Palavecino }}</td>
+        </tr>
+        {% endif %}
         {% if movilidad_personalizada %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Movilidad Personalizada</td>
@@ -408,6 +424,22 @@
             <td class="confiscatoriedad">{{ comparacion.conf_alanis_alanis_ripte }}</td>
         </tr>
         {% endif %}
+        {% if Caliva_Palavecino  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Caliva Palavecino</td>
+            <td>{{valor_Caliva_Palavecino}}</td>
+            <td>{{ comparacion.dif_alanis_Caliva_Palavecino }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_Caliva_Palavecino }}</td>
+        </tr>
+        {% endif %}
+        {% if Anses_Palavecino  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Anses Palavecino</td>
+            <td>{{valor_Anses_Palavecino}}</td>
+            <td>{{ comparacion.dif_alanis_Anses_Palavecino }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_Anses_Palavecino }}</td>
+        </tr>
+        {% endif %}
         {% if movilidad_personalizada %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Movilidad Personalizada</td>
@@ -512,12 +544,28 @@
             <td class="confiscatoriedad">{{ comparacion.conf_caliva_alanis_ipc }}</td>
         </tr>
         {% endif %}
-        {% if alanis_ipc  %}
+        {% if alanis_ripte  %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Alanis con RIPTE</td>
             <td>{{valor_alanis_ripte}}</td>
             <td>{{ comparacion.dif_caliva_alanis_ripte}}</td>
             <td class="confiscatoriedad">{{ comparacion.conf_caliva_alanis_ripte }}</td>
+        </tr>
+        {% endif %}
+        {% if Caliva_Palavecino  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Caliva Palavecino</td>
+            <td>{{valor_Caliva_Palavecino}}</td>
+            <td>{{ comparacion.dif_caliva_Caliva_Palavecino }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_Caliva_Palavecino }}</td>
+        </tr>
+        {% endif %}
+        {% if Anses_Palavecino  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Anses Palavecino</td>
+            <td>{{valor_Anses_Palavecino}}</td>
+            <td>{{ comparacion.dif_caliva_Anses_Palavecino }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_Anses_Palavecino }}</td>
         </tr>
         {% endif %}
         {% if movilidad_personalizada %}
@@ -580,6 +628,12 @@
                 {% if alanis_ripte %}
                 <td class="negrita">Alanis con Ripte </td>
                 {% endif %}
+                {% if Caliva_Palavecino %}
+                <td class="negrita">Caliva Palavecino </td>
+                {% endif %}
+                {% if Anses_Palavecino %}
+                <td class="negrita">Anses Palavecino </td>
+                {% endif %}
                 {% if movilidad_personalizada %}
                 <td class="negrita">Movilidad Personalizada</td>
                 {% endif %}
@@ -625,6 +679,12 @@
                 {% endif %}
                 {% if alanis_ripte %}
                 <td class="haber">{{ fila[14] }}</td>
+                {% endif %}
+                {% if Caliva_Palavecino %}
+                <td class="haber">{{ fila[15] }}</td>
+                {% endif %}
+                {% if Anses_Palavecino %}
+                <td class="haber">{{ fila[16] }}</td>
                 {% endif %}
                 {% if movilidad_personalizada %}
                 <td class="haber">{{ fila[15] }}</td>
@@ -729,6 +789,24 @@
             ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
             31/12/2020 y desde ahi RIPTE (Remuneración Imponible Promedio de Trabajadores Estables) hasta el 30/06/2024 y desde ahi
             Aumentos Generales de la ANSeS por movilidad</td>
+        </tr>
+        {% endif %}
+        {% if Caliva_Palavecino  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Caliva Palavecino</td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el
+            31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+            ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
+            desde ahi Aumentos Fallo Palavecino 30/06/2024 y desde ahi Aumentos
+            Generales de la ANSeS por movilidad</td>
+        </tr>
+        {% endif %}
+        {% if Anses_Palavecino  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Anses Palavecino</td>
+            <td>Aumentos Generales de la ANSeS por movilidad hasta el
+            31/12/2020 desde ahi Aumentos Fallo Palavecino 30/06/2024 y desde ahi Aumentos
+            Generales de la ANSeS por movilidad</td>
         </tr>
         {% endif %}
         {% if movilidad_personalizada %}

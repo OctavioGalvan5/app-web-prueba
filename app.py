@@ -388,6 +388,8 @@ def resultado_calculado_movilidad():
         fallo_martinez= request.form.get('fallo_martinez', False)
         alanis_ipc= request.form.get('alanis_ipc', False)
         alanis_ripte= request.form.get('alanis_ripte', False)
+        Caliva_Palavecino = request.form.get('Caliva_Palavecino', False)
+        Anses_Palavecino= request.form.get('Anses_Palavecino', False)
         movilidad_personalizada = request.form.get('movilidad_personalizada', False)
 
         comparacion_mov_sentencia_si = request.form.get('comparacion_mov_sentencia_si', False)
@@ -437,7 +439,7 @@ def resultado_calculado_movilidad():
         tupla_haber_reajustado=((fecha_haber_reajustado_1,monto_reajustado_1),(fecha_haber_reajustado_2,monto_reajustado_2), (fecha_haber_reajustado_3,monto_reajustado_3),(fecha_haber_reajustado_4,monto_reajustado_4))
 
 
-        calculo = CalculadorMovilidad(datos_del_actor, fallecido, fecha_fallecimiento,cobrador_pension,  expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis, movilidad_personalizada, movilidad_1, tupla, tupla_haber_reajustado, haber_reajustado)
+        calculo = CalculadorMovilidad(datos_del_actor, fallecido, fecha_fallecimiento,cobrador_pension,  expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis, movilidad_personalizada, Caliva_Palavecino, Anses_Palavecino, movilidad_1, tupla, tupla_haber_reajustado, haber_reajustado)
 
         resultado = calculo.generar_pdf()
         return resultado

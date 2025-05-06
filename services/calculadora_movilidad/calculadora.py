@@ -198,6 +198,8 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
             monto_columna13 = Decimal(fila_dict['martinez']) * Decimal(monto)
             monto_columna14 = Decimal(fila_dict['alanis_ipc']) * Decimal(monto)
             monto_columna15 = Decimal(fila_dict['alanis_ripte']) * Decimal(monto)
+            monto_columna16 = Decimal(fila_dict['Caliva_Palavecino']) * Decimal(monto)
+            monto_columna17 = Decimal(fila_dict['Anses_Palavecino']) * Decimal(monto)
 
 
 
@@ -218,12 +220,14 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                 formatear_dinero(monto_columna13),
                 formatear_dinero(monto_columna14),
                 formatear_dinero(monto_columna15),
+                formatear_dinero(monto_columna16),
+                formatear_dinero(monto_columna17),
 
 
 
             ))
             lista_montos.append((monto_columna2, monto_columna3, monto_columna4, monto_columna5, monto_columna6, monto_columna7,
-                                 monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13, monto_columna14, monto_columna15))
+                                 monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13, monto_columna14, monto_columna15, monto_columna16, monto_columna17))
         else:
             print("No se encontró una fecha menor a la ingresada.")
             return []
@@ -267,12 +271,20 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                     monto_columna11 = monto_columna11 * Decimal(0.7)
                     monto_columna12 *= Decimal(fila_dict['Alanis_con_27551_con_3_meses_rezago'])
                     monto_columna12 = monto_columna12 * Decimal(0.7)
-                    monto_columna13 *= Decimal(fila_dict['martinez'])
-                    monto_columna13 = monto_columna13 * Decimal(0.7)
+                    if fila_dict['id'] == 243:
+                        monto_columna13= (monto_columna13 * Decimal(fila_dict['martinez']) + Decimal(1500)) * Decimal(0.7)
+                    else:
+                        monto_columna13= (monto_columna13 * Decimal(fila_dict['martinez'])) * Decimal(0.7)
                     monto_columna14 *= Decimal(fila_dict['alanis_ipc'])
                     monto_columna14 = monto_columna14 * Decimal(0.7)
                     monto_columna15 *= Decimal(fila_dict['alanis_ripte'])
                     monto_columna15 = monto_columna15 * Decimal(0.7)
+                    monto_columna16 *= Decimal(fila_dict['Caliva_Palavecino'])
+                    monto_columna16 = monto_columna16 * Decimal(0.7)
+                    if fila_dict['id'] == 243:
+                        monto_columna17= (monto_columna17 * Decimal(fila_dict['Anses_Palavecino']) + Decimal(1500)) * Decimal(0.7)
+                    else:
+                        monto_columna17= (monto_columna17 * Decimal(fila_dict['Anses_Palavecino'])) * Decimal(0.7)
 
                 else:  
                     if fila_dict['id'] == 243:
@@ -296,9 +308,18 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                     monto_columna10 *= Decimal(fila_dict['alanis_ripte'])
                     monto_columna11 *= Decimal(fila_dict['Alanis_Mas_Anses'])
                     monto_columna12 *= Decimal(fila_dict['Alanis_con_27551_con_3_meses_rezago'])
-                    monto_columna13 *= Decimal(fila_dict['martinez'])
+                    if fila_dict['id'] == 243:
+                        monto_columna13= monto_columna13 * Decimal(fila_dict['martinez']) + Decimal(1500)
+                    else:
+                        monto_columna13= monto_columna13 * Decimal(fila_dict['martinez'])
                     monto_columna14 *= Decimal(fila_dict['alanis_ipc'])
                     monto_columna15 *= Decimal(fila_dict['alanis_ripte'])
+                    monto_columna16 *= Decimal(fila_dict['Caliva_Palavecino'])
+                    if fila_dict['id'] == 243:
+                        monto_columna17= monto_columna17 * Decimal(fila_dict['Anses_Palavecino']) + Decimal(1500)
+                    else:
+                        monto_columna17= monto_columna17 * Decimal(fila_dict['Anses_Palavecino'])
+
 
 
                 lista_filas.append((
@@ -316,11 +337,14 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                     formatear_dinero(monto_columna12),
                     formatear_dinero(monto_columna13),
                     formatear_dinero(monto_columna14),
-                    formatear_dinero(monto_columna15)
+                    formatear_dinero(monto_columna15),
+                    formatear_dinero(monto_columna16),
+                    formatear_dinero(monto_columna17)
+
 
                 ))
                 lista_montos.append((monto_columna2, monto_columna3, monto_columna4, monto_columna5, monto_columna6, monto_columna7,
-                                     monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13, monto_columna14, monto_columna15))
+                                     monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13, monto_columna14, monto_columna15, monto_columna16, monto_columna17))
 
                 if fila_dict['fechas'].year == fecha_fin_dt.year and fila_dict['fechas'].month == fecha_fin_dt.month:
                     break
@@ -363,38 +387,118 @@ def convertir_fecha_periodo(fecha):
     return fecha.strftime('%m/%Y')
 
 
-def generar_grafico_linea(lista_filas, ipc, ripte, uma, movilidad_sentencia, ley_27426_rezago, 
-                          caliva_mas_anses, caliva_marquez_con_27551_con_3_rezago, 
-                          caliva_marquez_con_27551_con_6_rezago, alanis_mas_anses, 
-                          alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, movilidad_personalizada, titulo, filas_dinero):
+def generar_grafico_linea(
+    # Datos y flags para las series calculadas en buscar_fechas:
+    lista_filas_bf,  # Esta es la 'lista_filas' que retorna buscar_fechas
+    ipc_flag,
+    ripte_flag,
+    uma_flag,
+    movilidad_sentencia_flag, # Flag para 'Mov de Sentencia'
+    ley_27426_rezago_flag,
+    caliva_marquez_3_rezago_flag, # Flag para 'Caliva mas Cendan' (o como lo llames)
+    caliva_mas_anses_flag,
+    caliva_marquez_6_rezago_flag, # Flag para 'Caliva 6 Rezago' (o como lo llames)
+    alanis_mas_anses_flag,
+    alanis_3_meses_rezago_flag,
+    fallo_martinez_flag,
+    alanis_ipc_flag,
+    alanis_ripte_flag,
+    caliva_palavecino_bf_flag, # Flag para 'Caliva Palavecino' (de monto_columna16)
+    anses_palavecino_bf_flag,  # Flag para 'Anses Palavecino' (de monto_columna17) <-- ¡Este es el que te interesa!
 
+    # Datos y flag para la serie de funcion_movilidad_personalizada:
+    datos_mov_personalizada,   # Esta es 'filas_dinero' de funcion_movilidad_personalizada
+    movilidad_personalizada_flag, # Este es el booleano self.movilidad_personalizada
 
-    lista_filas = [fila + (dinero,) for fila, dinero in zip(lista_filas, filas_dinero)]
-    fechas = [transformar_fecha_2(fila[0]) for fila in lista_filas]  # Primer elemento de cada tupla (fecha)
-    montos_por_concepto = list(zip(*[fila[1:] for fila in lista_filas]))  # Montos desde el segundo elemento en adelante
+    titulo
+):
+    # --- Procesar datos de buscar_fechas ---
+    # Asegúrate de que transformar_fecha_2 maneje los datos correctamente
+    fechas = [transformar_fecha_2(fila[0]) for fila in lista_filas_bf]
+    # montos_bf contendrá 16 series de datos (correspondientes a monto_columna2 hasta monto_columna17)
+    montos_bf = list(zip(*[fila[1:] for fila in lista_filas_bf]))
 
-    # Nombres de los conceptos
-    conceptos = ['ANSES', 'IPC', 'RIPTE', 'UMA', 'Mov de Sentencia', 'Ley 27426', 
-                 'Caliva mas Cendan', 'Caliva mas Anses', 'Caliva 6 Rezago', 
-                 'Alanis mas Anses', 'Alanis con 3 meses Rezago', 'Martínez', 'Alanis con IPC', 'Alanis con RIPTE', 'Movilidad Personalizada']
+    conceptos_bf = [
+        'ANSES',                                  # Índice 0 (monto_columna2)
+        'IPC',                                    # Índice 1 (monto_columna3)
+        'RIPTE',                                  # Índice 2 (monto_columna4)
+        'UMA',                                    # Índice 3 (monto_columna5)
+        'Mov de Sentencia',                       # Índice 4 (monto_columna6) - Asumo que es 'movilidad_sentencia_flag'
+        'Ley 27426',                              # Índice 5 (monto_columna7)
+        'Caliva mas Cendan',                      # Índice 6 (monto_columna8) - Asumo que es 'caliva_marquez_3_rezago_flag'
+        'Caliva mas Anses',                       # Índice 7 (monto_columna9)
+        'Caliva 6 Rezago',                        # Índice 8 (monto_columna10) - Asumo que es 'caliva_marquez_6_rezago_flag'
+        'Alanis mas Anses',                       # Índice 9 (monto_columna11)
+        'Alanis con 3 meses Rezago',              # Índice 10 (monto_columna12)
+        'Martínez',                               # Índice 11 (monto_columna13)
+        'Alanis con IPC',                         # Índice 12 (monto_columna14)
+        'Alanis con RIPTE',                       # Índice 13 (monto_columna15)
+        'Caliva Palavecino',                      # Índice 14 (monto_columna16)
+        'Anses Palavecino'                        # Índice 15 (monto_columna17) <-- Los datos que quieres con esta etiqueta
+    ]
 
-    # Lista de booleanos y sus correspondientes conceptos
-    booleanos = [True, ipc, ripte, uma, movilidad_sentencia, ley_27426_rezago, 
-                 caliva_marquez_con_27551_con_3_rezago, caliva_mas_anses, 
-                 caliva_marquez_con_27551_con_6_rezago, alanis_mas_anses, 
-                 alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, movilidad_personalizada]
+    booleanos_bf = [
+        True, # ANSES siempre se muestra
+        ipc_flag,
+        ripte_flag,
+        uma_flag,
+        movilidad_sentencia_flag,
+        ley_27426_rezago_flag,
+        caliva_marquez_3_rezago_flag,
+        caliva_mas_anses_flag,
+        caliva_marquez_6_rezago_flag,
+        alanis_mas_anses_flag,
+        alanis_3_meses_rezago_flag,
+        fallo_martinez_flag,
+        alanis_ipc_flag,
+        alanis_ripte_flag,
+        caliva_palavecino_bf_flag,
+        anses_palavecino_bf_flag # El flag para mostrar la línea Anses Palavecino con datos de buscar_fechas
+    ]
 
-    # Crear una figura con una línea por cada concepto que tenga el booleano en True
     fig = go.Figure()
 
-    for i, (monto, incluir) in enumerate(zip(montos_por_concepto, booleanos)):
-        if incluir:  # Solo agregar la línea si el booleano es True
-            fig.add_trace(go.Scatter(
-                x=fechas,
-                y=[float(m.replace('$', '').replace('.', '').replace(',', '.').replace(' ', '').strip()) for m in monto],
-                mode='lines',
-                name=conceptos[i]
-            ))
+    # Graficar las series provenientes de buscar_fechas
+    for i, (serie_monto_bf, incluir_bf) in enumerate(zip(montos_bf, booleanos_bf)):
+        if i < len(conceptos_bf): # Para evitar errores si las longitudes no coinciden
+            if incluir_bf:
+                # Lógica de limpieza corregida: Quitar $, espacios, puntos, y reemplazar coma por punto
+                # Asegurarse de que 'm' es un string antes de procesar
+                y_values = [
+                    float(
+                        str(m).replace('$', '')
+                              .replace(' ', '')
+                              .replace('.', '')  # Quitar todos los puntos (separadores de miles)
+                              .replace(',', '.') # Reemplazar la coma por punto (separador decimal)
+                    )
+                    for m in serie_monto_bf
+                ]
+                fig.add_trace(go.Scatter(
+                    x=fechas,
+                    y=y_values,
+                    mode='lines',
+                    name=conceptos_bf[i]
+                ))
+
+    # --- Procesar y graficar datos de funcion_movilidad_personalizada ---
+    if movilidad_personalizada_flag:
+        # datos_mov_personalizada ya es una lista de strings formateados
+        # Lógica de limpieza corregida: Quitar $, espacios, puntos, y reemplazar coma por punto
+        y_values_mp = [
+            float(
+                str(m).replace('$', '')
+                      .replace(' ', '')
+                      .replace('.', '')  # Quitar todos los puntos (separadores de miles)
+                      .replace(',', '.') # Reemplazar la coma por punto (separador decimal)
+            )
+            for m in datos_mov_personalizada
+        ]
+        fig.add_trace(go.Scatter(
+            x=fechas, # Asume mismas fechas; si no, pasar fechas específicas para estos datos
+            y=y_values_mp,
+            mode='lines',
+            name='Movilidad Personalizada' # Etiqueta para esta serie específica
+        ))
 
     # Configurar el layout del gráfico
     fig.update_layout(
@@ -403,18 +507,26 @@ def generar_grafico_linea(lista_filas, ipc, ripte, uma, movilidad_sentencia, ley
         yaxis_title='Monto ($)',
         legend_title='Conceptos',
         xaxis=dict(type='category'),
-        yaxis=dict(tickformat=',', title='Monto ($)'),  # Formato con separadores de miles
+        # Usar ',' para separador de miles y '.' para decimales (formato internacional)
+        # o '.' para miles y ',' para decimales (formato local).
+        # Como convertimos todo a formato float estándar (punto decimal), el tickformat debería reflejar eso
+        # Si quieres punto para miles y coma para decimales en la visualización:
+        # yaxis=dict(tickformat=".2f", # O '.0f' si son enteros
+        #           tickprefix='$', # opcional
+        #           separators=".,", # punto para miles, coma para decimales
+        #           title='Monto ($)'),
+        # O si quieres el formato estándar de Python (punto decimal, coma miles si es grande)
+        yaxis=dict(tickformat=',.0f', # Ejemplo: '.0f' para enteros, '.2f' para 2 decimales
+                   title='Monto ($)'), # Plotly usa "," por defecto para miles en algunos locales
         template='plotly_white',
-        plot_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del área de trazado transparente
-        paper_bgcolor='rgba(0, 0, 0, 0)',  # Fondo del gráfico transparente
+        plot_bgcolor='rgba(0, 0, 0, 0)',
+        paper_bgcolor='rgba(0, 0, 0, 0)',
     )
 
-    # Crear un buffer en memoria y guardar la imagen en formato PNG
     buffer = io.BytesIO()
+    # Es posible que necesites instalar kaleido para exportar a PNG: pip install kaleido
     fig.write_image(buffer, format='png')
     buffer.seek(0)
-
-    # Codificar la imagen en Base64
     imagen_base64 = base64.b64encode(buffer.read()).decode('utf-8')
     buffer.close()
 
@@ -433,7 +545,7 @@ def crear_graficos(datos, etiquetas, titulo):
     fig = go.Figure(data=go.Bar(
         x=etiquetas, 
         y=valores, 
-        marker_color=['#7671FA','#00c4ff', '#E5EAF3', '#07244C', '#178DAD', '#7E7F9C', '#9e73a3', '#3cd7c4', '#83007f','#bb73b3'],
+        marker_color=['#7671FA','#00c4ff', '#E5EAF3', '#07244C', '#178DAD', '#7E7F9C', '#9e73a3', '#3cd7c4', '#83007f','#bb73b3', '#5F9EA0', '#4682B4', '#DA70D6', '#20B2AA', '#CD5C5C', '#FFA07A', '#BA55D3', '#6495ED', '#98FB98', '#FFD700'],
         text=resultados, textposition='auto',
         textfont=dict(size=14)
     ))
@@ -476,7 +588,7 @@ def crear_graficos(datos, etiquetas, titulo):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor,fallecido, fecha_fallecimiento, cobrador_pension, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis,movilidad_personalizada,movilidad_1, tupla, tupla_reajuste, haber_reajustado ):
+    def __init__(self, datos_del_actor,fallecido, fecha_fallecimiento, cobrador_pension, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis,movilidad_personalizada, Caliva_Palavecino, Anses_Palavecino,movilidad_1, tupla, tupla_reajuste, haber_reajustado ):
         self.datos_del_actor = datos_del_actor
         self.fallecido = fallecido
         self.fecha_fallecimiento = fecha_fallecimiento
@@ -507,6 +619,8 @@ class CalculadorMovilidad:
         self.comparacion_mov_caliva = comparacion_mov_caliva
         self.comparacion_mov_alanis = comparacion_mov_alanis
         self.movilidad_personalizada = movilidad_personalizada
+        self.Caliva_Palavecino = Caliva_Palavecino
+        self.Anses_Palavecino = Anses_Palavecino
         self.movilidad_1 = movilidad_1 
         self.tupla = tupla
         self.resultado = procesar_tuplas(self.tupla, self.movilidad_1)
@@ -632,6 +746,23 @@ class CalculadorMovilidad:
                'conf_caliva_movilidad_personalizada': str(round((ultimo_valor_personalizado - ultimos_valores[7]) / ultimos_valores[7] * 100, 2)) + "%",
                'dif_alanis_movilidad_personalizada': formatear_dinero(ultimo_valor_personalizado - ultimos_valores[9]),
                'conf_alanis_movilidad_personalizada': str(round((ultimo_valor_personalizado - ultimos_valores[9]) / ultimos_valores[9] * 100, 2)) + "%",
+                #
+                'dif_anses_Caliva_Palavecino': formatear_dinero(ultimos_valores[14] - ultimos_valores[0]),
+                'conf_anses_Caliva_Palavecino': str(round((ultimos_valores[14] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+
+                'dif_caliva_Caliva_Palavecino': formatear_dinero(ultimos_valores[14] - ultimos_valores[7]),
+                'conf_caliva_Caliva_Palavecino': str(round((ultimos_valores[14] - ultimos_valores[7]) / ultimos_valores[7] * 100, 2)) + "%",
+                'dif_alanis_Caliva_Palavecino': formatear_dinero(ultimos_valores[14] - ultimos_valores[9]),
+                'conf_alanis_Caliva_Palavecino': str(round((ultimos_valores[14] - ultimos_valores[9]) / ultimos_valores[9] * 100, 2)) + "%",
+
+                #
+                'dif_anses_Anses_Palavecino': formatear_dinero(ultimos_valores[15] - ultimos_valores[0]),
+                'conf_anses_Anses_Palavecino': str(round((ultimos_valores[15] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+
+                'dif_caliva_Anses_Palavecino': formatear_dinero(ultimos_valores[15] - ultimos_valores[7]),
+                'conf_caliva_Anses_Palavecino': str(round((ultimos_valores[15] - ultimos_valores[7]) / ultimos_valores[7] * 100, 2)) + "%",
+                'dif_alanis_Anses_Palavecino': formatear_dinero(ultimos_valores[15] - ultimos_valores[9]),
+                'conf_alanis_Anses_Palavecino': str(round((ultimos_valores[15] - ultimos_valores[9]) / ultimos_valores[9] * 100, 2)) + "%",
            }    
         datos = [ultimos_valores[0]]
         etiquetas = ['Anses']
@@ -687,6 +818,14 @@ class CalculadorMovilidad:
             datos.append(ultimos_valores[13])
             #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
             etiquetas.append('Alanis con RIPTE')
+        if self.Caliva_Palavecino:
+            datos.append(ultimos_valores[14])
+            #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+            etiquetas.append('Caliva Palavecino')
+        if self.Anses_Palavecino:
+            datos.append(ultimos_valores[15])
+            #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+            etiquetas.append('Anses Palavecino')
         if self.movilidad_personalizada:
             datos.append(ultimo_valor_personalizado)
             #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
@@ -740,6 +879,14 @@ class CalculadorMovilidad:
                     datos_2.append(ultimos_valores[13])
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
                     etiquetas_2.append('Alanis con RIPTE')
+                if self.Caliva_Palavecino:
+                    datos_2.append(ultimos_valores[14])
+                    #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+                    etiquetas_2.append('Caliva Palavecino')
+                if self.Anses_Palavecino:
+                    datos_2.append(ultimos_valores[15])
+                    #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+                    etiquetas_2.append('Anses Palavecino')
                 if self.movilidad_personalizada:
                     datos_2.append(ultimo_valor_personalizado)
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
@@ -794,6 +941,14 @@ class CalculadorMovilidad:
                     datos_3.append(ultimos_valores[13])
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
                     etiquetas_3.append('Alanis con RIPTE')
+                if self.Caliva_Palavecino:
+                    datos_3.append(ultimos_valores[14])
+                    #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+                    etiquetas_3.append('Caliva Palavecino')
+                if self.Anses_Palavecino:
+                    datos_3.append(ultimos_valores[15])
+                    #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+                    etiquetas_3.append('Anses Palavecino')
                 if self.movilidad_personalizada:
                     datos_3.append(ultimo_valor_personalizado)
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
@@ -808,7 +963,32 @@ class CalculadorMovilidad:
         filas_dinero,ultimo_valor_personalizado, lista_filas, grafico1, grafico2,grafico3, diccionario_comparacion, montos_a_fecha_cierre = self.obtener_datos()
         lista_filas = [fila + (dinero,) for fila, dinero in zip(lista_filas, filas_dinero)]
 
-        grafico_4 = generar_grafico_linea(lista_filas, self.ipc, self.ripte, self.uma, self.movilidad_sentencia, self.Ley_27426_rezago, self.caliva_mas_anses, self.Caliva_Marquez_con_27551_con_3_rezago, self.Caliva_Marquez_con_27551_con_6_rezago, self.Alanis_Mas_Anses, self.Alanis_con_27551_con_3_meses_rezago, self.fallo_martinez, self.alanis_ipc, self.alanis_ripte,self.movilidad_personalizada ,self.datos_del_actor, filas_dinero)
+        grafico_4 = generar_grafico_linea(
+            # Argumentos para datos de buscar_fechas:
+            lista_filas,  # Datos de buscar_fechas
+            self.ipc,
+            self.ripte,
+            self.uma,
+            self.movilidad_sentencia,            # Flag para 'Mov de Sentencia'
+            self.Ley_27426_rezago,               # Flag para 'Ley 27426'
+            self.Caliva_Marquez_con_27551_con_3_rezago, # Flag para 'Caliva mas Cendan' (ajusta el nombre del concepto si es necesario)
+            self.caliva_mas_anses,               # Flag para 'Caliva mas Anses'
+            self.Caliva_Marquez_con_27551_con_6_rezago, # Flag para 'Caliva 6 Rezago' (ajusta el nombre del concepto si es necesario)
+            self.Alanis_Mas_Anses,               # Flag para 'Alanis mas Anses'
+            self.Alanis_con_27551_con_3_meses_rezago, # Flag para 'Alanis con 3 meses Rezago'
+            self.fallo_martinez,                 # Flag para 'Martínez'
+            self.alanis_ipc,                     # Flag para 'Alanis con IPC'
+            self.alanis_ripte,                   # Flag para 'Alanis con RIPTE'
+            self.Caliva_Palavecino,              # Flag para 'Caliva Palavecino' (datos de monto_columna16)
+            self.Anses_Palavecino,               # Flag para 'Anses Palavecino' (datos de monto_columna17)
+
+            # Argumentos para datos de funcion_movilidad_personalizada:
+            filas_dinero,                        # Datos para 'Movilidad Personalizada'
+            self.movilidad_personalizada,        # Flag para 'Movilidad Personalizada'
+
+            # Título:
+            self.datos_del_actor
+        )
         # Extraer fechas y montos de lista_fila
 
         rendered = render_template(
@@ -845,6 +1025,8 @@ class CalculadorMovilidad:
             fallo_martinez = self.fallo_martinez,
             alanis_ipc = self.alanis_ipc,
             alanis_ripte = self.alanis_ripte,
+            Caliva_Palavecino = self.Caliva_Palavecino,
+            Anses_Palavecino= self.Anses_Palavecino,
             comparacion_mov_sentencia_si = self.comparacion_mov_sentencia_si,
             comparacion_mov_caliva= self.comparacion_mov_caliva,
             comparacion_mov_alanis= self.comparacion_mov_alanis,
@@ -864,7 +1046,10 @@ class CalculadorMovilidad:
             valor_fallo_martinez = formatear_dinero(montos_a_fecha_cierre[11]),
             valor_alanis_ipc = formatear_dinero(montos_a_fecha_cierre[12]),
             valor_alanis_ripte = formatear_dinero(montos_a_fecha_cierre[13]),
-            valor_mov_personalizada = formatear_dinero(ultimo_valor_personalizado)
+            valor_Caliva_Palavecino = formatear_dinero(montos_a_fecha_cierre[14]),
+            valor_Anses_Palavecino = formatear_dinero(montos_a_fecha_cierre[15]),
+            valor_mov_personalizada = formatear_dinero(ultimo_valor_personalizado),
+            
 
 
 
