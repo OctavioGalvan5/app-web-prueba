@@ -4,32 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base de Datos de Clientes</title>
+    <!-- Bootstrap 5 CSS desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #6a0dad;
+            --primary-light: #9b59b6;
+            --primary-dark: #4a0080;
+            --secondary-color: #f0e6fa;
+            --text-color: #333;
+            --light-gray: #f8f9fa;
+            --border-color: #e0d8e8;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #E6E6FA, #9370DB);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f0ff, #e6d9f2);
             min-height: 100vh;
-            color: #333;
+            color: var(--text-color);
         }
 
         .container {
             max-width: 1200px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-
-        .form-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
+            margin: 30px auto;
+            padding: 0 15px;
         }
 
         h2 {
-            color: #4B0082;
+            color: var(--primary-color);
             text-align: center;
             margin-bottom: 30px;
             font-size: 28px;
@@ -41,8 +52,9 @@
             max-height: 600px;
             overflow-y: auto;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
 
         .tabla-casos {
@@ -55,19 +67,20 @@
         .tabla-casos td {
             padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .tabla-casos th {
-            background-color: #4B0082;
+            background-color: var(--primary-color);
             color: white;
             position: sticky;
             top: 0;
             z-index: 1;
+            font-weight: 500;
         }
 
         .tabla-casos tr:hover {
-            background-color: #f5f5f5;
+            background-color: var(--secondary-color);
         }
 
         /* Personalización del scroll */
@@ -76,55 +89,65 @@
         }
 
         .tabla-contenedor::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
+            background: var(--secondary-color);
+            border-radius: 10px;
         }
 
         .tabla-contenedor::-webkit-scrollbar-thumb {
-            background: #9370DB;
-            border-radius: 4px;
+            background: var(--primary-light);
+            border-radius: 10px;
         }
 
         .tabla-contenedor::-webkit-scrollbar-thumb:hover {
-            background: #7B68EE;
+            background: var(--primary-color);
         }
 
         /* Estilos para botones */
         .acciones-contenedor {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
         }
 
         .btn-editar {
-            background-color: #9370DB;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 8px 15px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn-editar:hover {
-            background-color: #7B68EE;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
         }
 
         .btn-eliminar {
-            background-color: #dc3545;
+            background-color: var(--danger-color);
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 8px 15px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
             font-size: 14px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn-eliminar:hover {
             background-color: #c82333;
+            transform: translateY(-2px);
         }
 
         /* Estilos para filtros */
@@ -135,63 +158,125 @@
         }
 
         .busqueda-input {
-            flex: 2;
-            padding: 12px;
-            border: 2px solid #4B0082;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-
-        .filtro-select {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #4B0082;
-            border-radius: 6px;
-            background-color: white;
+            padding: 12px 15px;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
             font-size: 16px;
-            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .btn-reset {
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-reset:hover {
-            background-color: #5a6268;
+        .busqueda-input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 0.2rem rgba(106, 13, 173, 0.25);
+            outline: none;
         }
 
         .contador-resultados {
             margin: 15px 0;
-            font-size: 14px;
-            color: #4B0082;
-            font-weight: bold;
+            font-size: 16px;
+            color: var(--primary-color);
+            font-weight: 500;
         }
 
         .filtros-activos {
-            margin: 10px 0;
+            margin: 10px 0 20px;
             font-size: 14px;
-            color: #4B0082;
         }
 
         .filtro-activo {
-            background-color: #e6e6fa;
-            padding: 4px 8px;
-            border-radius: 12px;
-            margin-right: 8px;
+            background-color: var(--secondary-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-right: 10px;
             display: inline-block;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        /* Estilos para el formulario */
+        .form-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            margin-top: 50px;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--primary-color);
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            background-color: var(--light-gray);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .drop-zone:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .file-list {
+            margin-top: 15px;
+        }
+
+        .file-item {
+            background-color: var(--light-gray);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .file-item:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .remove-file {
+            color: var(--danger-color);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .remove-file:hover {
+            transform: scale(1.2);
+        }
+
+        .submit-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
+                margin: 20px auto;
             }
 
             .form-container {
@@ -210,154 +295,79 @@
 
             .acciones-contenedor {
                 flex-direction: column;
+                gap: 5px;
             }
 
             .btn-editar, 
             .btn-eliminar {
                 width: 100%;
                 text-align: center;
+                justify-content: center;
             }
 
             .filtros-container {
                 flex-direction: column;
+                gap: 10px;
+            }
+
+            h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
             }
         }
-        .drop-zone {
-            border: 2px dashed #4B0082;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 6px;
-            background-color: #f9f9f9;
-        }
-        .drop-zone:hover {
-            background-color: #e0e0e0;
-        }
-        .file-list {
-            margin-top: 10px;
-        }
-        .file-item {
-            background-color: #eee;
-            padding: 8px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 5px;
-        }
-        .remove-file {
-            color: red;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .submit-button {
-            background-color: #4B0082;
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
-        .submit-button:hover {
-            background-color: #3a0066;
+
+        /* Animaciones */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        .chat-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 40px;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .chat-box {
-            height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: #f9f9f9;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* Estilos para alertas */
+        .alert {
+            border-radius: 8px;
+            font-weight: 500;
         }
 
-        .chat-input {
-            display: flex;
-            gap: 10px;
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
         }
 
-        .chat-input input {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #4B0082;
-            border-radius: 6px;
-            font-size: 14px;
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
         }
 
-        .chat-input button {
-            background-color: #4B0082;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .chat-input button:hover {
-            background-color: #3a0066;
-        }
-
-        .mensaje-usuario {
-            background: #4B0082;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 15px;
-            max-width: 80%;
-            align-self: flex-end;
-            word-break: break-word;
-        }
-
-        .mensaje-ia {
-            background: #e6e6fa;
-            padding: 10px 15px;
-            border-radius: 15px;
-            max-width: 80%;
-            word-break: break-word;
-        }
-
-        .error {
-            color: #dc3545;
-            background: #ffe6e6;
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            color: #856404;
         }
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     {% include 'navs/nav.html' %}
 
     <div class="container">
         <!-- Sección de casos -->
-        <h2>Clientes Registrados</h2>
+        <h2><i class="fas fa-users me-2"></i>Clientes Registrados</h2>
 
         <!-- Filtros -->
         <div class="filtros-container">
             <input type="text" 
                    class="busqueda-input" 
-                   placeholder="Buscar por nombre o dni..."
+                   placeholder="Buscar por nombre, apellido o DNI..."
                    id="busquedaInput">
-
         </div>
 
         <div class="contador-resultados">
-            Mostrando <span id="contador">0</span> de {{ data_clientes|length }} clientes
+            <i class="fas fa-list-check me-2"></i>Mostrando <span id="contador">0</span> de {{ data_clientes|length }} clientes
         </div>
 
         <div class="filtros-activos" id="filtrosActivos"></div>
@@ -369,7 +379,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Apellido</th>
-                        <th>Dni</th>
+                        <th>DNI</th>
                         <th>Nacionalidad</th>
                         <th>Fecha de Nacimiento</th>
                         <th>Acciones</th>
@@ -389,13 +399,14 @@
                             -
                           {% endif %}
                         </td>
-
                         <td>
                             <div class="acciones-contenedor">
-                                <a href="{{ url_for('ver_cliente', id=data.id) }}" class="btn-editar">Ver</a>
+                                <a href="{{ url_for('ver_cliente', id=data.id) }}" class="btn-editar">
+                                    <i class="fas fa-eye"></i> Ver
+                                </a>
                                 <form class="form-eliminar" action="{{ url_for('eliminar_cliente', id=data.id) }}" method="POST">
                                     <button type="submit" class="btn-eliminar" onclick="return confirm('¿Estás seguro de eliminar este cliente?')">
-                                        Eliminar
+                                        <i class="fas fa-trash-alt"></i> Eliminar
                                     </button>
                                 </form>
                             </div>
@@ -407,15 +418,18 @@
         </div>
 
         <!-- Formulario de carga -->
-        <div class="form-container" style="margin-top: 70px;">
-            <h2>Ingresar Nuevo Cliente</h2>
+        <div class="form-container">
+            <h2><i class="fas fa-file-upload me-2"></i>Ingresar Nuevo Cliente</h2>
             <form action="{{ url_for('upload_dni') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
-                <div class="form-group drop-zone" id="drop-zone">
+                <div class="drop-zone" id="drop-zone">
+                    <i class="fas fa-cloud-upload-alt fa-2x mb-3"></i><br>
                     Arrastra y suelta fotos o PDFs del DNI aquí o haz clic para seleccionar
                     <input type="file" id="documentos" name="documentos" accept=".jpg,.jpeg,.pdf" multiple hidden>
                 </div>
                 <div class="file-list" id="file-list"></div>
-                <button type="submit" class="submit-button">Cargar Cliente</button>
+                <button type="submit" class="submit-button">
+                    <i class="fas fa-upload me-2"></i>Cargar Cliente
+                </button>
             </form>
         </div>
 
@@ -424,6 +438,13 @@
                 <div class="container mt-3">
                     {% for category, message in messages %}
                         <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {% if category == 'success' %}
+                                <i class="fas fa-check-circle me-2"></i>
+                            {% elif category == 'danger' %}
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                            {% elif category == 'warning' %}
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                            {% endif %}
                             {{ message }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
@@ -432,16 +453,22 @@
             {% endif %}
         {% endwith %}
 
-        <div class="form-container" style="margin-top: 70px;">
-            <h2>Ingresar Cliente Manualmente</h2>
-            <form action="{{ url_for('agregar_cliente') }}" method="POST" enctype="multipart/form-data" onsubmit="return">
-                <button type="submit" class="submit-button">Cargar Cliente</button>
+        <div class="form-container">
+            <h2><i class="fas fa-user-plus me-2"></i>Ingresar Cliente Manualmente</h2>
+            <form action="{{ url_for('agregar_cliente') }}" method="POST" enctype="multipart/form-data">
+                <button type="submit" class="submit-button">
+                    <i class="fas fa-plus-circle me-2"></i>Cargar Cliente
+                </button>
             </form>
         </div>
-
     </div>
 
     {% include 'footers/footer.html' %}
+
+    <!-- Bootstrap JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery desde CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         // Script para el drag and drop
@@ -474,10 +501,29 @@
             for (let file of fileInput.files) {
                 const fileItem = document.createElement('div');
                 fileItem.classList.add('file-item');
-                fileItem.textContent = file.name;
+
+                // Agregar icono según tipo de archivo
+                const fileIcon = document.createElement('i');
+                if (file.type.includes('pdf')) {
+                    fileIcon.className = 'fas fa-file-pdf me-2';
+                    fileIcon.style.color = '#dc3545';
+                } else if (file.type.includes('image')) {
+                    fileIcon.className = 'fas fa-file-image me-2';
+                    fileIcon.style.color = '#6a0dad';
+                } else {
+                    fileIcon.className = 'fas fa-file me-2';
+                }
+
+                const fileName = document.createElement('span');
+                fileName.textContent = file.name;
+
+                const fileInfo = document.createElement('div');
+                fileInfo.appendChild(fileIcon);
+                fileInfo.appendChild(fileName);
+                fileItem.appendChild(fileInfo);
 
                 const removeBtn = document.createElement('span');
-                removeBtn.textContent = '✖';
+                removeBtn.innerHTML = '<i class="fas fa-times-circle"></i>';
                 removeBtn.classList.add('remove-file');
                 removeBtn.addEventListener('click', () => removeFile(file));
 
@@ -495,6 +541,15 @@
             }
             fileInput.files = dt.files;
             updateFileList();
+        }
+
+        // Validación de archivos antes de enviar
+        function validateFiles() {
+            if (fileInput.files.length === 0) {
+                alert('Por favor, selecciona al menos un archivo.');
+                return false;
+            }
+            return true;
         }
 
         // Función para eliminar acentos
@@ -547,14 +602,18 @@
 
             let html = '';
             if (busqueda) {
-                html += `<span class="filtro-activo">Búsqueda: "${busqueda}"</span>`;
+                html += `<span class="filtro-activo"><i class="fas fa-search me-1"></i>Búsqueda: "${busqueda}"</span>`;
             }
             contenedor.innerHTML = html;
         }
 
         // Inicialización del filtro al escribir en el input
         document.getElementById('busquedaInput').addEventListener('input', filtrarCasos);
-        filtrarCasos();
+
+        // Ejecutar filtro al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            filtrarCasos();
+        });
     </script>
 </body>
 </html>
