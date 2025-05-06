@@ -3,81 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Carga de Sentencias</title>
+    <title>Detalles del Cliente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #6a0dad;
+            --primary-light: #9b59b6;
+            --primary-dark: #4a0080;
+            --secondary-color: #f0e6fa;
+            --text-color: #333;
+            --light-gray: #f8f9fa;
+            --border-color: #e0d8e8;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #E6E6FA, #9370DB);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f0ff, #e6d9f2);
             min-height: 100vh;
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-        .form-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            color: #4B0082;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-            font-weight: 600;
+            color: var(--text-color);
         }
 
-        h3 {
-            color: #4B0082;
+        /* Navbar - Puedes ajustar esto para integrar tu nav.html si es diferente */
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             margin-bottom: 30px;
-            font-size: 20px;
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: none;
+            padding: 20px;
             font-weight: 600;
-        }
-        .form-group {
-            margin-bottom: 25px;
-        }
-        .form-row {
+            font-size: 1.5rem;
             display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            align-items: center;
         }
-        .form-row .form-group {
-            flex: 1;
+
+        .card-body {
+            padding: 30px;
+            background-color: white;
         }
-        label {
-            display: block;
+
+        .form-label {
+            font-weight: 500;
+            color: var(--primary-dark);
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #2c5282;
-            font-size: 14px;
         }
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        select,
-        textarea {
-            width: 100%;
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
             padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-            background-color: #f9f9f9;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
-        input[type="text"]:focus,
-        input[type="date"]:focus,
-        input[type="number"]:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #4B0082;
-            outline: none;
-            background-color: #fff;
+
+        .form-control:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 0.2rem rgba(106, 13, 173, 0.25);
         }
+
+        /* Mantener estilo específico para date input si lo necesitas */
         input[type="date"] {
             appearance: none;
             -webkit-appearance: none;
@@ -86,784 +99,1090 @@
             background-position: right 10px center;
             background-size: 20px;
         }
-        .submit-button {
-            background-color: #4B0082;
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-align: center;
-            display: block;
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
-        .submit-button:hover {
-            background-color: #3a0066;
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
         }
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        @media (max-width: 600px) {
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            .container {
-                padding: 10px;
-            }
-            .form-container {
-                padding: 20px;
-            }
-            h2 {
-                font-size: 24px;
-            }
-        }
-        /* Nuevos estilos para botones */
-        .botones-container {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        .botones-container .submit-button {
-            flex: 1;
-        }
-        .btn-cancelar {
+
+        .btn-secondary { /* Estilo para el botón Volver */
             background-color: #6c757d !important;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-color: #6c757d !important;
+            color: white !important; /* Ensure text is white */
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Vertically center content */
+            justify-content: center; /* Horizontally center content */
+            text-decoration: none; /* Remove underline from link */
         }
-        .btn-cancelar:hover {
+
+        .btn-secondary:hover {
             background-color: #5a6268 !important;
+            border-color: #545b62 !important;
+            transform: translateY(-2px);
         }
-        @media (max-width: 480px) {
-            .botones-container {
-                flex-direction: column;
-            }
-            .botones-container .submit-button {
-                width: 100%;
-            }
+
+        .nav-tabs {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
-        .drop-zone {
-            border: 2px dashed #4B0082;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 6px;
-            background-color: #f9f9f9;
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
         }
-        .drop-zone:hover {
-            background-color: #e0e0e0;
+
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            background-color: rgba(106, 13, 173, 0.05);
         }
-        .file-list {
-            margin-top: 10px;
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            background-color: white;
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: 600;
         }
-        .file-item {
-            background-color: #eee;
-            padding: 8px;
-            border-radius: 4px;
+
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 5px;
-        }
-        .remove-file {
-            color: red;
             cursor: pointer;
-            font-weight: bold;
         }
-        .submit-button {
-            background-color: #4B0082;
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
+
+        .section-title i {
+            transition: transform 0.3s ease;
         }
-        .submit-button:hover {
-            background-color: #3a0066;
+
+        .section-title.collapsed i {
+            transform: rotate(180deg);
         }
-        .checkbox-group {
+
+        .form-check {
+            margin-bottom: 10px;
+        }
+
+        .form-check-input {
+            width: 18px;
+            height: 18px;
+            margin-top: 0.25rem;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .form-check-label {
+            margin-left: 8px;
+            font-weight: 400;
+        }
+
+        .checkbox-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
         }
-        .checkbox-item {
+
+        .tab-pane {
+            padding: 20px 0 10px 0; /* Reducido el padding inferior */
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 0;
+        }
+
+        .btn-icon {
             display: flex;
             align-items: center;
+            gap: 8px;
         }
-        .checkbox-item input[type="checkbox"] {
-            margin-right: 5px;
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
         }
+
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .card-header {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+             /* Ajustar la vista de los tabs en pantallas pequeñas si es necesario */
+             .nav-tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .nav-tabs .nav-item {
+                flex: 1 0 auto;
+                text-align: center;
+            }
+            .nav-tabs .nav-link {
+                 border-radius: 8px !important;
+                 margin-bottom: 5px;
+            }
+             .nav-tabs .nav-link.active {
+                 border-bottom: none !important;
+                 border: 2px solid var(--primary-color) !important;
+            }
+        }
+         @media (max-width: 480px) {
+             .action-buttons .btn {
+                 width: 100%; /* Full width buttons on very small screens */
+             }
+         }
+
+        /* Animaciones */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Estilos para el scrollbar */
+        .scrollable-section {
+            max-height: 400px; /* Altura máxima antes de que aparezca el scroll */
+            overflow-y: auto;
+            padding-right: 10px; /* Espacio para el scrollbar */
+        }
+
+        .scrollable-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollable-section::-webkit-scrollbar-track {
+            background: var(--secondary-color);
+            border-radius: 10px;
+        }
+
+        .scrollable-section::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 10px;
+        }
+
+        .scrollable-section::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        /* Eliminados estilos de Drop Zone y Lista de Archivos */
+
+
     </style>
 </head>
-    <body>
-        {% include 'navs/nav.html' %}
-        <div class="container">
-          <div class="form-container">
-            <h2>{{ data_cliente.nombre }}</h2>
-            <form action="{{ url_for('ver_cliente', id=data_cliente.id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Nombre:</label>
-                        <input type="text" name="nombre" value="{{ data_cliente.nombre }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Apellido:</label>
-                        <input type="text" name="apellido" value="{{ data_cliente.apellido if data_cliente.apellido else '' }}">
-                    </div>
+<body>
+
+    {# Aquí podrías incluir tu barra de navegación si usas un template aparte #}
+    {% include 'navs/nav.html' %}
+    {# Si tu navbar.html no usa la estructura Bootstrap, elimina la etiqueta <nav> de arriba #}
+
+    <div class="container" style="margin-top: 100px;">
+        <div class="card">
+            <div class="card-header">
+                {# Usar el nombre del cliente del data_cliente #}
+                <span>{{ data_cliente.nombre if data_cliente.nombre else 'Nuevo Cliente' }} {{ data_cliente.apellido if data_cliente.apellido else '' }}</span>
+                <div>
+                    {# Botón Volver usando estilo Bootstrap secondary #}
+                    <a href="{{ url_for('consultas') }}" class="btn btn-secondary btn-sm btn-icon" role="button">
+                         <i class="fas fa-arrow-left me-1"></i> Volver
+                    </a>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Fecha de Nacimiento:</label>
-                        <input type="date" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Fecha de Ingreso al Pais:</label>
-                        <input type="date" name="fecha_de_ingreso" value="{% if data_cliente.fecha_de_ingreso %}{{ data_cliente.fecha_de_ingreso.strftime('%Y-%m-%d') }}{% endif %}">
-                    </div>
-                </div>
+            </div>
+            <div class="card-body">
+                {# FORMULARIO PRINCIPAL #}
+                {# Asegúrate de que la acción, método, etc. son los correctos de tu app #}
+                <form action="{{ url_for('ver_cliente', id=data_cliente.id) }}" method="POST" id="clientForm"> {# Eliminado enctype="multipart/form-data" ya no se cargan archivos #}
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Nro de Cuil:</label>
-                        <input type="text" name="numero_cuil" value="{{ data_cliente.numero_cuil if data_cliente.numero_cuil else '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label>Nro de Dni:</label>
-                        <input type="text" name="numero_dni" value="{{ data_cliente.numero_dni if data_cliente.numero_dni else '' }}">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Nacionalidad:</label>
-                        <input type="text" name="nacionalidad" value="{{ data_cliente.nacionalidad if data_cliente.nacionalidad else '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label>Sexo:</label>
-                        <input type="text" name="sexo" value="{{ data_cliente.sexo if data_cliente.sexo else '' }}">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Direccion:</label>
-                        <input type="text" name="direccion" value="{{ data_cliente.direccion if data_cliente.direccion else '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label>Numero:</label>
-                        <input type="text" name="numero_direccion" value="{{ data_cliente.numero_direccion if data_cliente.numero_direccion else '' }}">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Provincia:</label>
-                        <input type="text" name="provincia" value="{{ data_cliente.provincia if data_cliente.provincia else '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label>Departamento:</label>
-                        <input type="text" name="departamento" value="{{ data_cliente.departamento if data_cliente.departamento else '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label>Ciudad:</label>
-                        <input type="text" name="ciudad" value="{{ data_cliente.ciudad if data_cliente.ciudad else '' }}">
-                    </div>
-                </div>
-                <div style="display: none;" class="form-row">
-                    <div class="form-group">
-                        <input type="hidden" name="id" value="{{ data_cliente.id }}">
-                    </div>
-                </div>
-                <div style="display: none;" class="form-row">
-                    <div class="form-group">
-                        <input name="nombre_completo" value="{{ data_cliente.nombre_completo }}">
-                    </div>                  
-                </div>
-                <div style="display: none;" class="form-row">
-                    <div class="form-group">
-                        <input name="nombre_completo_2" value="{{ data_cliente.nombre_completo_2 }}">
-                    </div>                  
-                </div>
-                <div style="display: none;" class="form-row">
-                    <div class="form-group">
-                        <input name="sexo_femenino" value="{{ data_cliente.sexo_femenino }}">
-                    </div>                  
-                </div>
-                <div style="display: none;" class="form-row">
-                    <div class="form-group">
-                        <input name="sexo_masculino" value="{{ data_cliente.sexo_masculino }}">
-                    </div>                  
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Numero Celular:</label>
-                        <input type="text" name="numero_celular" 
-                               placeholder="Ingrese el número de celular" value="{{ data_cliente.numero_celular if data_cliente.numero_celular else '' }}">
-                    </div>
-                </div>
+                    {# Campo ID oculto, necesario para la actualización #}
+                    <input type="hidden" name="id" value="{{ data_cliente.id }}">
 
-                <h3>Formularios por Opciones</h3>
+                    <ul class="nav nav-tabs" id="formTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab" aria-controls="personal" aria-selected="true">
+                                <i class="fas fa-user me-1"></i> Datos Personales
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="options-tab" data-bs-toggle="tab" data-bs-target="#options" type="button" role="tab" aria-controls="options" aria-selected="false">
+                                <i class="fas fa-list-check me-1"></i> Opciones de Formularios
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="documents-tab" data-bs-toggle="tab" data-bs-target="#documents" type="button" role="tab" aria-controls="documents" aria-selected="false">
+                                <i class="fas fa-file-contract me-1"></i> Documentos
+                            </button>
+                        </li>
+                         {# Puedes añadir más pestañas aquí si es necesario #}
+                    </ul>
 
-                <div class="form-row">
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Reconocimiento_de_Servicios" id="formularios_Reconocimiento_de_Servicios" {% if data_cliente.formularios_reconocimiento_servicios %}checked{% endif %}>
-                            <label for="formularios_Reconocimiento_de_Servicios">Formularios Reconocimiento de Servicios</label>
+                    <div class="tab-content" id="formTabsContent">
+                        <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
+                             <h3 class="section-title" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true" aria-controls="personalInfo">
+                                Información Personal <i class="fas fa-chevron-up"></i>
+                            </h3>
+                            <div id="personalInfo" class="collapse show fade-in">
+                                <div class="row g-3">
+                                    {# Campos de tu HTML original, adaptados a Bootstrap Grid y clases #}
+                                    <div class="col-md-6 col-lg-4"> {# Usar columnas responsivas #}
+                                        <label for="nombre" class="form-label">Nombre:</label>
+                                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ data_cliente.nombre }}" required>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <label for="apellido" class="form-label">Apellido:</label>
+                                        <input type="text" class="form-control" id="apellido" name="apellido" value="{{ data_cliente.apellido if data_cliente.apellido else '' }}">
+                                    </div>
+                                     <div class="col-md-6 col-lg-4">
+                                        <label for="numero_celular" class="form-label">Numero Celular:</label>
+                                        <input type="text" class="form-control" id="numero_celular" name="numero_celular"
+                                               placeholder="Ingrese el número de celular" value="{{ data_cliente.numero_celular if data_cliente.numero_celular else '' }}">
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <label for="fecha_de_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                                        <input type="date" class="form-control" id="fecha_de_nacimiento" name="fecha_de_nacimiento" value="{% if data_cliente.fecha_de_nacimiento %}{{ data_cliente.fecha_de_nacimiento.strftime('%Y-%m-%d') }}{% endif %}" required>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <label for="fecha_de_ingreso" class="form-label">Fecha de Ingreso al Pais:</label>
+                                        <input type="date" class="form-control" id="fecha_de_ingreso" name="fecha_de_ingreso" value="{% if data_cliente.fecha_de_ingreso %}{{ data_cliente.fecha_de_ingreso.strftime('%Y-%m-%d') }}{% endif %}">
+                                    </div>
+                                     <div class="col-md-6 col-lg-4">
+                                        <label for="numero_dni" class="form-label">Nro de Dni:</label>
+                                        <input type="text" class="form-control" id="numero_dni" name="numero_dni" value="{{ data_cliente.numero_dni if data_cliente.numero_dni else '' }}">
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <label for="numero_cuil" class="form-label">Nro de Cuil:</label>
+                                        <input type="text" class="form-control" id="numero_cuil" name="numero_cuil" value="{{ data_cliente.numero_cuil if data_cliente.numero_cuil else '' }}">
+                                    </div>
+
+                                     <div class="col-md-6 col-lg-4">
+                                        <label for="nacionalidad" class="form-label">Nacionalidad:</label>
+                                        <input type="text" class="form-control" id="nacionalidad" name="nacionalidad" value="{{ data_cliente.nacionalidad if data_cliente.nacionalidad else '' }}">
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                         {# Usar select para Sexo como en la version de la otra IA #}
+                                        <label for="sexo" class="form-label">Sexo:</label>
+                                        <select class="form-select" id="sexo" name="sexo">
+                                             {# La opcion seleccionada debe ser la guardada en la BD #}
+                                             <option value="" {% if not data_cliente.sexo %}selected{% endif %}>Seleccionar</option>
+                                             <option value="Masculino" {% if data_cliente.sexo == 'Masculino' %}selected{% endif %}>Masculino</option>
+                                             <option value="Femenino" {% if data_cliente.sexo == 'Femenino' %}selected{% endif %}>Femenino</option>
+                                             <option value="Otro" {% if data_cliente.sexo == 'Otro' %}selected{% endif %}>Otro</option>
+                                        </select>
+                                    </div>
+
+                                     <div class="col-md-8 col_lg_6">
+                                        <label for="direccion" class="form-label">Direccion:</label>
+                                        <input type="text" class="form-control" id="direccion" name="direccion" value="{{ data_cliente.direccion if data_cliente.direccion else '' }}">
+                                    </div>
+                                    <div class="col-md-4 col-lg-2">
+                                        <label for="numero_direccion" class="form-label">Numero:</label>
+                                        <input type="text" class="form-control" id="numero_direccion" name="numero_direccion" value="{{ data_cliente.numero_direccion if data_cliente.numero_direccion else '' }}">
+                                    </div>
+                                    <div class="col-md-4 col-lg-4">
+                                        <label for="provincia" class="form-label">Provincia:</label>
+                                        <input type="text" class="form-control" id="provincia" name="provincia" value="{{ data_cliente.provincia if data_cliente.provincia else '' }}">
+                                    </div>
+                                    <div class="col-md-4 col-lg-4">
+                                        <label for="departamento" class="form-label">Departamento:</label>
+                                        <input type="text" class="form-control" id="departamento" name="departamento" value="{{ data_cliente.departamento if data_cliente.departamento else '' }}">
+                                    </div>
+                                    <div class="col-md-4 col-lg-4">
+                                        <label for="ciudad" class="form-label">Ciudad:</label>
+                                        <input type="text" class="form-control" id="ciudad" name="ciudad" value="{{ data_cliente.ciudad if data_cliente.ciudad else '' }}">
+                                    </div>
+
+                                    {# Campos ocultos extra de tu HTML original #}
+                                     <input type="hidden" name="nombre_completo" value="{{ data_cliente.nombre_completo }}">
+                                     <input type="hidden" name="nombre_completo_2" value="{{ data_cliente.nombre_completo_2 }}">
+                                     {# Mantener estos si son usados por gemini_api_extract_data #}
+                                     <input type="hidden" name="sexo_femenino" value="{{ data_cliente.sexo_femenino }}">
+                                     <input type="hidden" name="sexo_masculino" value="{{ data_cliente.sexo_masculino }}">
+                                </div>
+                            </div>
                         </div>
+                    
+                        <div class="tab-pane fade" id="options" role="tabpanel" aria-labelledby="options-tab">
+                            <h3 class="section-title" data-bs-toggle="collapse" data-bs-target="#formOptions" aria-expanded="true" aria-controls="formOptions">
+                                Formularios por Opciones <i class="fas fa-chevron-up"></i>
+                            </h3>
+                            <div id="formOptions" class="collapse show fade-in">
+                                <div class="scrollable-section">
+                                    <div class="checkbox-grid">
+                                        {# Checkboxes de tu HTML original - SECCION 1 #}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Reconocimiento_de_Servicios" name="formularios_Reconocimiento_de_Servicios" {% if data_cliente.formularios_reconocimiento_servicios %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Reconocimiento_de_Servicios">
+                                                Formularios Reconocimiento de Servicios
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Jubilación" id="formularios_Jubilación" {% if data_cliente.formularios_jubilacion %}checked{% endif %}>
-                            <label for="formularios_Jubilación">Formularios Jubilación</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Jubilación" name="formularios_Jubilación" {% if data_cliente.formularios_jubilacion %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Jubilación">
+                                                Formularios Jubilación
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Jubilación_con_24.476" id="formularios_Jubilación_con_24.476" {% if data_cliente.formularios_jubilacion_con_24_476 %}checked{% endif %}>
-                            <label for="formularios_Jubilación_con_24.476">Formularios Jubilación con 24.476</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Jubilación_con_24.476" name="formularios_Jubilación_con_24.476" {% if data_cliente.formularios_jubilacion_con_24_476 %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Jubilación_con_24.476">
+                                                Formularios Jubilación con 24.476
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Jubilación_con_27.705" id="formularios_Jubilación_con_27.705" {% if data_cliente.formularios_jubilacion_con_27_705 %}checked{% endif %}>
-                            <label for="formularios_Jubilación_con_27.705">Formularios Jubilación con 27.705</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Jubilación_con_27.705" name="formularios_Jubilación_con_27.705" {% if data_cliente.formularios_jubilacion_con_27_705 %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Jubilación_con_27.705">
+                                                Formularios Jubilación con 27.705
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Jubilación_docente" id="formularios_Jubilación_docente" {% if data_cliente.formularios_jubilacion_docente %}checked{% endif %}>
-                            <label for="formularios_Jubilación_docente"> Formularios Jubilación docente (1)</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Jubilación_docente" name="formularios_Jubilación_docente" {% if data_cliente.formularios_jubilacion_docente %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Jubilación_docente">
+                                                Formularios Jubilación docente (1)
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Jubilación_serv_diferenciales" id="formularios_Jubilación_serv_diferenciales" {% if data_cliente.formularios_jubilacion_serv_diferenciales %}checked{% endif %}>
-                            <label for="formularios_Jubilación_serv_diferenciales">Formularios Jubilación serv diferenciales</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Jubilación_serv_diferenciales" name="formularios_Jubilación_serv_diferenciales" {% if data_cliente.formularios_jubilacion_serv_diferenciales %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Jubilación_serv_diferenciales">
+                                                Formularios Jubilación serv diferenciales
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Jubilación_Servicio_Doméstico" id="formularios_Jubilación_Servicio_Doméstico" {% if data_cliente.formularios_jubilacion_servicio_domestico %}checked{% endif %}>
-                            <label for="formularios_Jubilación_Servicio_Doméstico">Formularios Jubilación Servicio Doméstico</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Jubilación_Servicio_Doméstico" name="formularios_Jubilación_Servicio_Doméstico" {% if data_cliente.formularios_jubilacion_servicio_domestico %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Jubilación_Servicio_Doméstico">
+                                                Formularios Jubilación Servicio Doméstico
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Jubilación_HIV" id="formularios_Jubilación_HIV" {% if data_cliente.formularios_jubilacion_hiv %}checked{% endif %}>
-                            <label for="formularios_Jubilación_HIV">Formularios Jubilación HIV</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Jubilación_HIV" name="formularios_Jubilación_HIV" {% if data_cliente.formularios_jubilacion_hiv %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Jubilación_HIV">
+                                                Formularios Jubilación HIV
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Jubilación_trabajadores_minusvalidos_ceguera" id="formularios_Jubilación_trabajadores_minusvalidos_ceguera" {% if data_cliente.formularios_jubilacion_minusvalidos_ceguera %}checked{% endif %}>
-                            <label for="formularios_Jubilación_trabajadores_minusvalidos_ceguera">Formularios Jubilación Trabajadores minusvalidos/ceguera</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Jubilación_trabajadores_minusvalidos_ceguera" name="formularios_Jubilación_trabajadores_minusvalidos_ceguera" {% if data_cliente.formularios_jubilacion_minusvalidos_ceguera %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Jubilación_trabajadores_minusvalidos_ceguera">
+                                                Formularios Jubilación Trabajadores minusvalidos/ceguera
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Pension_Directa_casados" id="formularios_Pension_Directa_casados" {% if data_cliente.formularios_pension_directa_casados %}checked{% endif %}>
-                            <label for="formularios_Pension_Directa_casados">Formularios Pension Directa (Casados)</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Pension_Directa_casados" name="formularios_Pension_Directa_casados" {% if data_cliente.formularios_pension_directa_casados %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Pension_Directa_casados">
+                                                Formularios Pension Directa (Casados)
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Pension_Directa_convivientes" id="formularios_Pension_Directa_convivientes" {% if data_cliente.formularios_pension_directa_convivientes %}checked{% endif %}>
-                            <label for="formularios_Pension_Directa_convivientes">Formularios Pension Directa (Convivientes)</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Pension_Directa_convivientes" name="formularios_Pension_Directa_convivientes" {% if data_cliente.formularios_pension_directa_convivientes %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Pension_Directa_convivientes">
+                                                Formularios Pension Directa (Convivientes)
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Pension_Deriva_casados" id="formularios_Pension_Deriva_casados" {% if data_cliente.formularios_pension_derivada_casados %}checked{% endif %}>
-                            <label for="formularios_Pension_Deriva_casados">Formularios Pension Derivada (Casados)</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Pension_Deriva_casados" name="formularios_Pension_Deriva_casados" {% if data_cliente.formularios_pension_derivada_casados %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Pension_Deriva_casados">
+                                                Formularios Pension Derivada (Casados)
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Pension_Deriva_convivientes" id="formularios_Pension_Deriva_convivientes" {% if data_cliente.formularios_pension_derivada_convivientes %}checked{% endif %}>
-                            <label for="formularios_Pension_Deriva_convivientes">Formularios Pension Derivada (Convivientes)</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Pension_Deriva_convivientes" name="formularios_Pension_Deriva_convivientes" {% if data_cliente.formularios_pension_derivada_convivientes %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Pension_Deriva_convivientes">
+                                                Formularios Pension Derivada (Convivientes)
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Pension_Directa_Derivada_hijo_discapacitada" id="formularios_Pension_Directa_Derivada_hijo_discapacitada" {% if data_cliente.formularios_pension_directa_derivada_hijo_discapacitada %}checked{% endif %}>
-                            <label for="formularios_Pension_Directa_Derivada_hijo_discapacitada">Formularios Pensión Directa o Derivada hijo/a discapacitada</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Pension_Directa_Derivada_hijo_discapacitada" name="formularios_Pension_Directa_Derivada_hijo_discapacitada" {% if data_cliente.formularios_pension_directa_derivada_hijo_discapacitada %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Pension_Directa_Derivada_hijo_discapacitada">
+                                                Formularios Pensión Directa o Derivada hijo/a discapacitada
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Retiro_Transitorio_por_invalidez" id="formularios_Retiro_Transitorio_por_invalidez" {% if data_cliente.formularios_retiro_transitorio_por_invalidez %}checked{% endif %}>
-                            <label for="formularios_Retiro_Transitorio_por_invalidez">Formularios Retiro Transitorio por invalidez</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Retiro_Transitorio_por_invalidez" name="formularios_Retiro_Transitorio_por_invalidez" {% if data_cliente.formularios_retiro_transitorio_por_invalidez %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Retiro_Transitorio_por_invalidez">
+                                                Formularios Retiro Transitorio por invalidez
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Retiro_Transitorio_por_invalidez_SDM" id="formularios_Retiro_Transitorio_por_invalidez_SDM" {% if data_cliente.formularios_retiro_transitorio_por_invalidez_sdm %}checked{% endif %}>
-                            <label for="formularios_Retiro_Transitorio_por_invalidez_SDM">Formularios Retiro Transitorio por invalidez - SDM</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Retiro_Transitorio_por_invalidez_SDM" name="formularios_Retiro_Transitorio_por_invalidez_SDM" {% if data_cliente.formularios_retiro_transitorio_por_invalidez_sdm %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Retiro_Transitorio_por_invalidez_SDM">
+                                                Formularios Retiro Transitorio por invalidez - SDM
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_PUAM" id="formularios_PUAM" {% if data_cliente.formularios_puam %}checked{% endif %}>
-                            <label for="formularios_PUAM">Formularios PUAM</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_PUAM" name="formularios_PUAM" {% if data_cliente.formularios_puam %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_PUAM">
+                                                Formularios PUAM
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_UCAP" id="formularios_UCAP" {% if data_cliente.formularios_ucap %}checked{% endif %}>
-                            <label for="formularios_UCAP">Formularios UCAP</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_UCAP" name="formularios_UCAP" {% if data_cliente.formularios_ucap %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_UCAP">
+                                                Formularios UCAP
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_Reajuste_de_Haberes" id="formularios_Reajuste_de_Haberes" {% if data_cliente.formularios_reajuste_de_haberes %}checked{% endif %}>
-                            <label for="formularios_Reajuste_de_Haberes">Formularios Reajuste de Haberes</label>
-                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_Reajuste_de_Haberes" name="formularios_Reajuste_de_Haberes" {% if data_cliente.formularios_reajuste_de_haberes %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_Reajuste_de_Haberes">
+                                                Formularios Reajuste de Haberes
+                                            </label>
+                                        </div>
 
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="formularios_asignacion_fliar_hijo_discapacitado" id="formularios_asignacion_fliar_hijo_discapacitado" {% if data_cliente.formularios_asignacion_fliar_hijo_discapacitado %}checked{% endif %}>
-                            <label for="formularios_asignacion_fliar_hijo_discapacitado">Formularios ASIGNACION FLIAR HIJO DISCAP.</label>
-                        </div>
-                    </div>
-                </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="formularios_asignacion_fliar_hijo_discapacitado" name="formularios_asignacion_fliar_hijo_discapacitado" {% if data_cliente.formularios_asignacion_fliar_hijo_discapacitado %}checked{% endif %}>
+                                            <label class="form-check-label" for="formularios_asignacion_fliar_hijo_discapacitado">
+                                                Formularios ASIGNACION FLIAR HIJO DISCAP.
+                                            </label>
+                                        </div>
+                                    </div> {# Fin checkbox-grid #}
+                                </div> {# Fin scrollable-section #}
+                            </div> {# Fin collapse #}
+                        </div> {# Fin tab-pane #}
 
-                <h3>Formularios</h3>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" id="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" {% if data_cliente.beneficios_nuevo_convenio_de_honorarios_numerado %}checked{% endif %}>
-                        <label for="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">(Beneficios) NUEVO CONVENIO DE HONORARIOS Numerado</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" id="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" {% if data_cliente.juicios_nuevo_convenio_de_honorarios_numerado %}checked{% endif %}>
-                        <label for="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">(Juicios) NUEVO CONVENIO DE HONORARIOS Numerado</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="CONVENIO_MAGISTRADOS" id="CONVENIO_MAGISTRADOS" {% if data_cliente.convenio_magistrados %}checked{% endif %}>
-                        <label for="CONVENIO_MAGISTRADOS">CONVENIO MAGISTRADOS</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES" id="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES" {% if data_cliente.convenio_de_gastos_administrativos_judiciales %}checked{% endif %}>
-                        <label for="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES">CONVENIO DE GASTOS ADMINISTRATIVOS JUDICIALES</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="2.91_Guarda_Documental" id="2.91_Guarda_Documental" {% if data_cliente._2_91_guarda_documental %}checked{% endif %}>
-                        <label for="2.91_Guarda_Documental">2.91 Guarda Documental</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="6.18_Solicitud_Prestaciones_Previsionales" id="6.18_Solicitud_Prestaciones_Previsionales" {% if data_cliente._6_18_solicitud_prestaciones_previsionales %}checked{% endif %}>
-                        <label for="6.18_Solicitud_Prestaciones_Previsionales">6.18 Solicitud Prestaciones Previsionales</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="6.18_Solicitud_Prestaciones_Previsionales_pension" id="6.18_Solicitud_Prestaciones_Previsionales_pension" {% if data_cliente._6_18_solicitud_prestaciones_previsionales_pension %}checked{% endif %}>
-                        <label for="6.18_Solicitud_Prestaciones_Previsionales_pension">6.18 Solicitud Prestaciones Previsionales (pension)</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Acta_Poder" id="Acta_Poder" {% if data_cliente.acta_poder %}checked{% endif %}>
-                        <label for="Acta_Poder">Acta Poder</label>
+                        <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                             <h3 class="section-title" data-bs-toggle="collapse" data-bs-target="#formDocumentsCheckboxes" aria-expanded="true" aria-controls="formDocumentsCheckboxes">
+                                Checkboxes de Documentos <i class="fas fa-chevron-up"></i>
+                            </h3>
+                             <div id="formDocumentsCheckboxes" class="collapse show fade-in">
+                                <div class="scrollable-section">
+                                     <div class="checkbox-grid">
+                                        {# Checkboxes de tu HTML original - SECCION 2 #}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" name="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" {% if data_cliente.beneficios_nuevo_convenio_de_honorarios_numerado %}checked{% endif %}>
+                                            <label class="form-check-label" for="(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">
+                                                (Beneficios) NUEVO CONVENIO DE HONORARIOS Numerado
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" name="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado" {% if data_cliente.juicios_nuevo_convenio_de_honorarios_numerado %}checked{% endif %}>
+                                            <label class="form-check-label" for="(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado">
+                                                (Juicios) NUEVO CONVENIO DE HONORARIOS Numerado
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="CONVENIO_MAGISTRADOS" id="CONVENIO_MAGISTRADOS" {% if data_cliente.convenio_magistrados %}checked{% endif %}>
+                                            <label class="form-check-label" for="CONVENIO_MAGISTRADOS">
+                                                CONVENIO MAGISTRADOS
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES" id="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES" {% if data_cliente.convenio_de_gastos_administrativos_judiciales %}checked{% endif %}>
+                                            <label class="form-check-label" for="CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES">
+                                                CONVENIO DE GASTOS ADMINISTRATIVOS JUDICIALES
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="2.91_Guarda_Documental" id="2.91_Guarda_Documental" {% if data_cliente._2_91_guarda_documental %}checked{% endif %}>
+                                            <label class="form-check-label" for="2.91_Guarda_Documental">2.91 Guarda Documental</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="6.18_Solicitud_Prestaciones_Previsionales" id="6.18_Solicitud_Prestaciones_Previsionales" {% if data_cliente._6_18_solicitud_prestaciones_previsionales %}checked{% endif %}>
+                                            <label class="form-check-label" for="6.18_Solicitud_Prestaciones_Previsionales">6.18 Solicitud Prestaciones Previsionales</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="6.18_Solicitud_Prestaciones_Previsionales_pension" id="6.18_Solicitud_Prestaciones_Previsionales_pension" {% if data_cliente._6_18_solicitud_prestaciones_previsionales_pension %}checked{% endif %}>
+                                            <label class="form-check-label" for="6.18_Solicitud_Prestaciones_Previsionales_pension">6.18 Solicitud Prestaciones Previsionales (pension)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Acta_Poder" id="Acta_Poder" {% if data_cliente.acta_poder %}checked{% endif %}>
+                                            <label class="form-check-label" for="Acta_Poder">Acta Poder</label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Anexo_Baja_Puam" id="Anexo_Baja_Puam" {% if data_cliente.anexo_baja_puam %}checked{% endif %}>
+                                            <label class="form-check-label" for="Anexo_Baja_Puam">Anexo Baja Puam</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Anexo_I_Ley_27.625" id="Anexo_I_Ley_27.625" {% if data_cliente.anexo_i_ley_27625 %}checked{% endif %}>
+                                            <label class="form-check-label" for="Anexo_I_Ley_27.625">Anexo I Ley 27.625</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Anexo_II_DEC_894_01" id="Anexo_II_DEC_894_01" {% if data_cliente.anexo_ii_dec_894_01 %}checked{% endif %}>
+                                            <label class="form-check-label" for="Anexo_II_DEC_894_01">Anexo II DEC 894/01</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Anexo_II_980_05" id="Anexo_II_980_05" {% if data_cliente.anexo_ii_980_05 %}checked{% endif %}>
+                                            <label class="form-check-label" for="Anexo_II_980_05">Anexo II 980/05</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Anexo_II_Socioeconómico_24.476" id="Anexo_II_Socioeconómico_24.476" {% if data_cliente.anexo_ii_socioeconomico_24_476 %}checked{% endif %}>
+                                            <label class="form-check-label" for="Anexo_II_Socioeconómico_24.476">Anexo II Socioeconómico 24.476</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Baja_PNC" id="Baja_PNC" {% if data_cliente.baja_pnc %}checked{% endif %}>
+                                            <label class="form-check-label" for="Baja_PNC">Baja PNC</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Carta_Poder_SRT" id="Carta_Poder_SRT" {% if data_cliente.carta_poder_srt %}checked{% endif %}>
+                                            <label class="form-check-label" for="Carta_Poder_SRT">Carta Poder SRT</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="DDJJ_de_salud_resol_300" id="DDJJ_de_salud_resol_300" {% if data_cliente.ddjj_de_salud_resol_300 %}checked{% endif %}>
+                                            <label class="form-check-label" for="DDJJ_de_salud_resol_300">DDJJ de salud resol 300</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="DDJJ_Ley_17562_6.9" id="DDJJ_Ley_17562_6.9" {% if data_cliente.ddjj_ley_17562_6_9 %}checked{% endif %}>
+                                            <label class="form-check-label" for="DDJJ_Ley_17562_6.9">DDJJ Ley 17562 6.9</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="F_3283_Autorización_ARCA" id="F_3283_Autorización_ARCA" {% if data_cliente.f_3283_autorizacion_arca %}checked{% endif %}>
+                                            <label class="form-check-label" for="F_3283_Autorización_ARCA">F 3283 Autorización ARCA</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Formulario_Carta_Poder_(CSS)" id="Formulario_Carta_Poder_(CSS)" {% if data_cliente.formulario_carta_poder_css %}checked{% endif %}>
+                                            <label class="form-check-label" for="Formulario_Carta_Poder_(CSS)">Formulario Carta Poder (CSS)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Formulario_encuesta_RTI" id="Formulario_encuesta_RTI" {% if data_cliente.formulario_encuesta_rti %}checked{% endif %}>
+                                            <label class="form-check-label" for="Formulario_encuesta_RTI">Formulario encuesta RTI</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_1.75_Carta_Poder_Cap_III_27.705" id="PS_1.75_Carta_Poder_Cap_III_27.705" {% if data_cliente.ps_1_75_carta_poder_cap_iii_27705 %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_1.75_Carta_Poder_Cap_III_27.705">PS 1.75 Carta Poder Cap III 27.705</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_5.7_Derivacion_aportes_Obra_Social" id="PS_5.7_Derivacion_aportes_Obra_Social" {% if data_cliente.ps_5_7_derivacion_aportes_obra_social %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_5.7_Derivacion_aportes_Obra_Social">PS 5.7 Derivacion aportes Obra Social</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_5.11_Aceptacion_de_la_Obra_Social" id="PS_5.11_Aceptacion_de_la_Obra_Social" {% if data_cliente.ps_5_11_aceptacion_de_la_obra_social %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_5.11_Aceptacion_de_la_Obra_Social">PS 5.11 Aceptacion de la Obra Social</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.292_DDJJ_solicitante_SDM" id="PS_6.292_DDJJ_solicitante_SDM" {% if data_cliente.ps_6_292_ddjj_solicitante_sdm %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.292_DDJJ_solicitante_SDM">PS 6.292 DDJJ solicitante SDM</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.293_DDJJ_Dador_de_trabajo_SDM" id="PS_6.293_DDJJ_Dador_de_trabajo_SDM" {% if data_cliente.ps_6_293_ddjj_dador_de_trabajo_sdm %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.293_DDJJ_Dador_de_trabajo_SDM">PS 6.293 DDJJ Dador de trabajo SDM</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.294_DDJJ_renuncia_SDM" id="PS_6.294_DDJJ_renuncia_SDM" {% if data_cliente.ps_6_294_ddjj_renuncia_sdm %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.294_DDJJ_renuncia_SDM">PS 6.294 DDJJ renuncia SDM</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.2_Certific_de_Servicios" id="PS_6.2_Certific_de_Servicios" {% if data_cliente.ps_6_2_certific_de_servicios %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.2_Certific_de_Servicios">PS 6.2 Certific de Servicios</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.3_Nivel_de_estudios_RTI" id="PS_6.3_Nivel_de_estudios_RTI" {% if data_cliente.ps_6_3_nivel_de_estudios_rti %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.3_Nivel_de_estudios_RTI">PS 6.3 Nivel de estudios RTI</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.4_Carta_Poder" id="PS_6.4_Carta_Poder" {% if data_cliente.ps_6_4_carta_poder %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.4_Carta_Poder">PS 6.4 Carta Poder</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS" id="PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS" {% if data_cliente.ps_6_8_ddjj_testimonial_acred_servicios %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS">PS 6.8 DDJJ TESTIMONIAL ACRED SERVICIOS </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.13_DDJJ_Testimonial_dependencia_económica" id="PS_6.13_DDJJ_Testimonial_dependencia_económica" {% if data_cliente.ps_6_13_ddjj_testimonial_dependencia_economica %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.13_DDJJ_Testimonial_dependencia_económica">PS 6.13 DDJJ Testimonial dependencia económica</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.268_Certific_de_Servicios_(Ampliatoria)" id="PS_6.268_Certific_de_Servicios_(Ampliatoria)" {% if data_cliente.ps_6_268_certific_de_servicios_ampliatoria %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.268_Certific_de_Servicios_(Ampliatoria)">PS 6.268 Certific. de Servicios (Ampliatoria)</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.273_Certific_complementaria_investigadores" id="PS_6.273_Certific_complementaria_investigadores" {% if data_cliente.ps_6_273_certific_complementaria_investigadores %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.273_Certific_complementaria_investigadores">PS 6.273 Certific. complementaria investigadores</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.278_Dto_de_cuotas_jubilación" id="PS_6.278_Dto_de_cuotas_jubilación" {% if data_cliente.ps_6_278_dto_de_cuotas_jubilacion %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.278_Dto_de_cuotas_jubilación">PS 6.278 Dto de cuotas jubilación</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.279_Dto_de_cuotas_pensión" id="PS_6.279_Dto_de_cuotas_pensión" {% if data_cliente.ps_6_279_dto_de_cuotas_pension %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.279_Dto_de_cuotas_pensión">PS 6.279 Dto de cuotas pensión</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.284_DDJJ_Fzas_Armadas" id="PS_6.284_DDJJ_Fzas_Armadas" {% if data_cliente.ps_6_284_ddjj_fzas_armadas %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.284_DDJJ_Fzas_Armadas">PS 6.284 DDJJ Fzas Armadas</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="PS_6.305_Carta_Poder" id="PS_6.305_Carta_Poder" {% if data_cliente.ps_6_305_carta_poder %}checked{% endif %}>
+                                            <label class="form-check-label" for="PS_6.305_Carta_Poder">PS 6.305 Carta Poder</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Renuncia_condicionada" id="Renuncia_condicionada" {% if data_cliente.renuncia_condicionada %}checked{% endif %}>
+                                            <label class="form-check-label" for="Renuncia_condicionada">Renuncia condicionada</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="Telegrama_revocando_poder" id="Telegrama_revocando_poder" {% if data_cliente.telegrama_revocando_poder %}checked{% endif %}>
+                                            <label class="form-check-label" for="Telegrama_revocando_poder">Telegrama revocando poder</label>
+                                        </div>
+                                    </div> {# Fin checkbox-grid #}
+                                </div> {# Fin scrollable-section #}
+                            </div> {# Fin collapse #}
+                        </div> {# Fin tab-pane Documents #}
+                        {# Puedes añadir más contenido de pestañas aquí #}
+                    </div> {# Fin tab-content #}
+
+                    <div class="action-buttons">
+                        {# Botones de tu HTML original, adaptados a estilos Bootstrap #}
+                         <button type="submit" name="accion" value="guardar_cambios" class="btn btn-primary btn-icon">
+                             <i class="fas fa-save"></i> Guardar Cambios
+                         </button>
+                         <button type="submit" name="accion" value="hacer_formulario" class="btn btn-primary btn-icon">
+                             <i class="fas fa-file-circle-plus"></i> Guardar Cambios y Generar Formularios
+                         </button>
+                         {# El botón Volver se movió al card-header para estar arriba #}
                     </div>
 
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Anexo_Baja_Puam" id="Anexo_Baja_Puam" {% if data_cliente.anexo_baja_puam %}checked{% endif %}>
-                        <label for="Anexo_Baja_Puam">Anexo Baja Puam</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Anexo_I_Ley_27.625" id="Anexo_I_Ley_27.625" {% if data_cliente.anexo_i_ley_27625 %}checked{% endif %}>
-                        <label for="Anexo_I_Ley_27.625">Anexo I Ley 27.625</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Anexo_II_DEC_894_01" id="Anexo_II_DEC_894_01" {% if data_cliente.anexo_ii_dec_894_01 %}checked{% endif %}>
-                        <label for="Anexo_II_DEC_894_01">Anexo II DEC 894/01</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Anexo_II_980_05" id="Anexo_II_980_05" {% if data_cliente.anexo_ii_980_05 %}checked{% endif %}>
-                        <label for="Anexo_II_980_05">Anexo II 980/05</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Anexo_II_Socioeconómico_24.476" id="Anexo_II_Socioeconómico_24.476" {% if data_cliente.anexo_ii_socioeconomico_24_476 %}checked{% endif %}>
-                        <label for="Anexo_II_Socioeconómico_24.476">Anexo II Socioeconómico 24.476</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Baja_PNC" id="Baja_PNC" {% if data_cliente.baja_pnc %}checked{% endif %}>
-                        <label for="Baja_PNC">Baja PNC</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Carta_Poder_SRT" id="Carta_Poder_SRT" {% if data_cliente.carta_poder_srt %}checked{% endif %}>
-                        <label for="Carta_Poder_SRT">Carta Poder SRT</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="DDJJ_de_salud_resol_300" id="DDJJ_de_salud_resol_300" {% if data_cliente.ddjj_de_salud_resol_300 %}checked{% endif %}>
-                        <label for="DDJJ_de_salud_resol_300">DDJJ de salud resol 300</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="DDJJ_Ley_17562_6.9" id="DDJJ_Ley_17562_6.9" {% if data_cliente.ddjj_ley_17562_6_9 %}checked{% endif %}>
-                        <label for="DDJJ_Ley_17562_6.9">DDJJ Ley 17562 6.9</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="F_3283_Autorización_ARCA" id="F_3283_Autorización_ARCA" {% if data_cliente.f_3283_autorizacion_arca %}checked{% endif %}>
-                        <label for="F_3283_Autorización_ARCA">F 3283 Autorización ARCA</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Formulario_Carta_Poder_(CSS)" id="Formulario_Carta_Poder_(CSS)" {% if data_cliente.formulario_carta_poder_css %}checked{% endif %}>
-                        <label for="Formulario_Carta_Poder_(CSS)">Formulario Carta Poder (CSS)</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Formulario_encuesta_RTI" id="Formulario_encuesta_RTI" {% if data_cliente.formulario_encuesta_rti %}checked{% endif %}>
-                        <label for="Formulario_encuesta_RTI">Formulario encuesta RTI</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_1.75_Carta_Poder_Cap_III_27.705" id="PS_1.75_Carta_Poder_Cap_III_27.705" {% if data_cliente.ps_1_75_carta_poder_cap_iii_27705 %}checked{% endif %}>
-                        <label for="PS_1.75_Carta_Poder_Cap_III_27.705">PS 1.75 Carta Poder Cap III 27.705</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_5.7_Derivacion_aportes_Obra_Social" id="PS_5.7_Derivacion_aportes_Obra_Social" {% if data_cliente.ps_5_7_derivacion_aportes_obra_social %}checked{% endif %}>
-                        <label for="PS_5.7_Derivacion_aportes_Obra_Social">PS 5.7 Derivacion aportes Obra Social</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_5.11_Aceptacion_de_la_Obra_Social" id="PS_5.11_Aceptacion_de_la_Obra_Social" {% if data_cliente.ps_5_11_aceptacion_de_la_obra_social %}checked{% endif %}>
-                        <label for="PS_5.11_Aceptacion_de_la_Obra_Social">PS 5.11 Aceptacion de la Obra Social</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.292_DDJJ_solicitante_SDM" id="PS_6.292_DDJJ_solicitante_SDM" {% if data_cliente.ps_6_292_ddjj_solicitante_sdm %}checked{% endif %}>
-                        <label for="PS_6.292_DDJJ_solicitante_SDM">PS 6.292 DDJJ solicitante SDM</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.293_DDJJ_Dador_de_trabajo_SDM" id="PS_6.293_DDJJ_Dador_de_trabajo_SDM" {% if data_cliente.ps_6_293_ddjj_dador_de_trabajo_sdm %}checked{% endif %}>
-                        <label for="PS_6.293_DDJJ_Dador_de_trabajo_SDM">PS 6.293 DDJJ Dador de trabajo SDM</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.294_DDJJ_renuncia_SDM" id="PS_6.294_DDJJ_renuncia_SDM" {% if data_cliente.ps_6_294_ddjj_renuncia_sdm %}checked{% endif %}>
-                        <label for="PS_6.294_DDJJ_renuncia_SDM">PS 6.294 DDJJ renuncia SDM</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.2_Certific_de_Servicios" id="PS_6.2_Certific_de_Servicios" {% if data_cliente.ps_6_2_certific_de_servicios %}checked{% endif %}>
-                        <label for="PS_6.2_Certific_de_Servicios">PS 6.2 Certific de Servicios</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.3_Nivel_de_estudios_RTI" id="PS_6.3_Nivel_de_estudios_RTI" {% if data_cliente.ps_6_3_nivel_de_estudios_rti %}checked{% endif %}>
-                        <label for="PS_6.3_Nivel_de_estudios_RTI">PS 6.3 Nivel de estudios RTI</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.4_Carta_Poder" id="PS_6.4_Carta_Poder" {% if data_cliente.ps_6_4_carta_poder %}checked{% endif %}>
-                        <label for="PS_6.4_Carta_Poder">PS 6.4 Carta Poder</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS" id="PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS" {% if data_cliente.ps_6_8_ddjj_testimonial_acred_servicios %}checked{% endif %}>
-                        <label for="PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS">PS 6.8 DDJJ TESTIMONIAL ACRED SERVICIOS </label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.13_DDJJ_Testimonial_dependencia_económica" id="PS_6.13_DDJJ_Testimonial_dependencia_económica" {% if data_cliente.ps_6_13_ddjj_testimonial_dependencia_economica %}checked{% endif %}>
-                        <label for="PS_6.13_DDJJ_Testimonial_dependencia_económica">PS 6.13 DDJJ Testimonial dependencia económica</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.268_Certific_de_Servicios_(Ampliatoria)" id="PS_6.268_Certific_de_Servicios_(Ampliatoria)" {% if data_cliente.ps_6_268_certific_de_servicios_ampliatoria %}checked{% endif %}>
-                        <label for="PS_6.268_Certific_de_Servicios_(Ampliatoria)">PS 6.268 Certific. de Servicios (Ampliatoria)</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.273_Certific_complementaria_investigadores" id="PS_6.273_Certific_complementaria_investigadores" {% if data_cliente.ps_6_273_certific_complementaria_investigadores %}checked{% endif %}>
-                        <label for="PS_6.273_Certific_complementaria_investigadores">PS 6.273 Certific. complementaria investigadores</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.278_Dto_de_cuotas_jubilación" id="PS_6.278_Dto_de_cuotas_jubilación" {% if data_cliente.ps_6_278_dto_de_cuotas_jubilacion %}checked{% endif %}>
-                        <label for="PS_6.278_Dto_de_cuotas_jubilación">PS 6.278 Dto de cuotas jubilación</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.279_Dto_de_cuotas_pensión" id="PS_6.279_Dto_de_cuotas_pensión" {% if data_cliente.ps_6_279_dto_de_cuotas_pension %}checked{% endif %}>
-                        <label for="PS_6.279_Dto_de_cuotas_pensión">PS 6.279 Dto de cuotas pensión</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.284_DDJJ_Fzas_Armadas" id="PS_6.284_DDJJ_Fzas_Armadas" {% if data_cliente.ps_6_284_ddjj_fzas_armadas %}checked{% endif %}>
-                        <label for="PS_6.284_DDJJ_Fzas_Armadas">PS 6.284 DDJJ Fzas Armadas</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="PS_6.305_Carta_Poder" id="PS_6.305_Carta_Poder" {% if data_cliente.ps_6_305_carta_poder %}checked{% endif %}>
-                        <label for="PS_6.305_Carta_Poder">PS 6.305 Carta Poder</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Renuncia_condicionada" id="Renuncia_condicionada" {% if data_cliente.renuncia_condicionada %}checked{% endif %}>
-                        <label for="Renuncia_condicionada">Renuncia condicionada</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" name="Telegrama_revocando_poder" id="Telegrama_revocando_poder" {% if data_cliente.telegrama_revocando_poder %}checked{% endif %}>
-                        <label for="Telegrama_revocando_poder">Telegrama revocando poder</label>
-                    </div>
+                </form> {# Fin Formulario Principal #}
+            </div> {# Fin card-body #}
+        </div> {# Fin card #}
+    </div> {# Fin container #}
 
-                </div>
-                </div>
+    {# Pie de página opcional #}
+    {% include 'footers/footer.html' %}
 
-                <div class="botones-container">
-                    <button type="submit" name="accion" value="guardar_cambios" class="submit-button">Guardar Cambios</button>
-                    <button type="submit" name="accion" value="hacer_formulario" class="submit-button">Guardar Cambios y Hacer Formularios</button>
-                    <a href="{{ url_for('consultas') }}" class="submit-button btn-cancelar">Volver</a>
-                </div>
-            </form>
-          </div>
-        </div>
-        {% include 'footers/footer.html' %}
-        <script>
-             // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Reconocimiento_de_Servicios').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Renuncia_condicionada', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS'];
+    <script>
+        // Eliminado el array para almacenar archivos seleccionados
 
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+        // --- Lógica que se ejecuta una vez que el DOM está completamente cargado ---
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // 1. Funcionalidad para el icono Chevron en Colapsables
+             document.querySelectorAll('.section-title[data-bs-toggle="collapse"]').forEach(title => {
+                const targetCollapse = document.querySelector(title.getAttribute('data-bs-target'));
+                if (targetCollapse) {
+                    // Function to update icon
+                    const updateIcon = () => {
+                        const icon = title.querySelector('i');
+                        if (icon) {
+                            if (targetCollapse.classList.contains('show')) {
+                                icon.classList.remove('fa-chevron-down');
+                                icon.classList.add('fa-chevron-up');
+                            } else {
+                                icon.classList.remove('fa-chevron-up');
+                                icon.classList.add('fa-chevron-down');
+                            }
+                        }
+                    };
+
+                    // Update icon on load
+                    updateIcon();
+
+                    // Update icon when collapse shows/hides
+                    targetCollapse.addEventListener('shown.bs.collapse', updateIcon);
+                    targetCollapse.addEventListener('hidden.bs.collapse', updateIcon);
+                }
+            });
+
+            // 2. Eliminada la Funcionalidad para Carga de Archivos (Drop Zone)
+
+
+            // 3. Funcionalidad para sincronizar Checkboxes (Tu código) - Renumerado a 3
+            // (Mantenido el código original de sincronización)
+
+            // Escucha el evento change del checkbox principal Formularios Reconocimiento de Servicios
+            const reconocimientoCheckbox = document.getElementById('formularios_Reconocimiento_de_Servicios');
+            if (reconocimientoCheckbox) {
+                 reconocimientoCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Renuncia_condicionada', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS'];
+                    checkboxesDependientes.forEach(function(id) {
+                        const depCheckbox = document.getElementById(id);
+                        if (depCheckbox) depCheckbox.checked = estado;
+                    });
+                 });
+            } else {
+                 console.warn("Checkbox 'formularios_Reconocimiento_de_Servicios' no encontrado. La sincronización no estará activa para este.");
+            }
+
+
+            // Escucha el evento change del checkbox principal Formularios Jubilación
+             const jubilacionCheckbox = document.getElementById('formularios_Jubilación');
+             if (jubilacionCheckbox) {
+                jubilacionCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Jubilación' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Jubilación').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
 
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Jubilación con 24.476
+             const jubilacion24476Checkbox = document.getElementById('formularios_Jubilación_con_24.476');
+             if (jubilacion24476Checkbox) {
+                 jubilacion24476Checkbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_II_Socioeconómico_24.476', 'PS_6.278_Dto_de_cuotas_jubilación'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Jubilación_con_24.476' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Jubilación_con_24.476').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
 
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_II_Socioeconómico_24.476', 'PS_6.278_Dto_de_cuotas_jubilación'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Jubilación con 27.705
+             const jubilacion27705Checkbox = document.getElementById('formularios_Jubilación_con_27.705');
+             if (jubilacion27705Checkbox) {
+                 jubilacion27705Checkbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.305_Carta_Poder'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Jubilación_con_27.705' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Jubilación_con_27.705').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
 
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.305_Carta_Poder'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Jubilación docente
+             const jubilacionDocenteCheckbox = document.getElementById('formularios_Jubilación_docente');
+             if (jubilacionDocenteCheckbox) {
+                 jubilacionDocenteCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Renuncia_condicionada', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Jubilación_docente' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Jubilación_docente').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Renuncia_condicionada', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Jubilación serv diferenciales
+             const jubilacionServDiferencialesCheckbox = document.getElementById('formularios_Jubilación_serv_diferenciales');
+             if (jubilacionServDiferencialesCheckbox) {
+                 jubilacionServDiferencialesCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social'];
+                     checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
-            
+            } else {
+                 console.warn("Checkbox 'formularios_Jubilación_serv_diferenciales' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Jubilación_serv_diferenciales').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
 
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'PS_6.2_Certific_de_Servicios', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Jubilación Servicio Doméstico
+             const jubilacionServicioDomesticoCheckbox = document.getElementById('formularios_Jubilación_Servicio_Doméstico');
+             if (jubilacionServicioDomesticoCheckbox) {
+                jubilacionServicioDomesticoCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.292_DDJJ_solicitante_SDM', 'PS_6.293_DDJJ_Dador_de_trabajo_SDM', 'PS_6.294_DDJJ_renuncia_SDM'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
-            
+            } else {
+                 console.warn("Checkbox 'formularios_Jubilación_Servicio_Doméstico' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Jubilación_Servicio_Doméstico').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
 
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.292_DDJJ_solicitante_SDM', 'PS_6.293_DDJJ_Dador_de_trabajo_SDM', 'PS_6.294_DDJJ_renuncia_SDM'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Jubilación HIV
+             const jubilacionHIVCheckbox = document.getElementById('formularios_Jubilación_HIV');
+             if (jubilacionHIVCheckbox) {
+                 jubilacionHIVCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.292_DDJJ_solicitante_SDM', 'PS_6.293_DDJJ_Dador_de_trabajo_SDM', 'PS_6.294_DDJJ_renuncia_SDM', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Jubilación_HIV' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Jubilación_HIV').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
 
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.292_DDJJ_solicitante_SDM', 'PS_6.293_DDJJ_Dador_de_trabajo_SDM', 'PS_6.294_DDJJ_renuncia_SDM', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Jubilación Trabajadores minusvalidos/ceguera
+             const jubilacionMinusvalidosCheckbox = document.getElementById('formularios_Jubilación_trabajadores_minusvalidos_ceguera');
+             if (jubilacionMinusvalidosCheckbox) {
+                jubilacionMinusvalidosCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', 'Carta_Poder_SRT', 'PS_6.3_Nivel_de_estudios_RTI', 'Formulario_encuesta_RTI', 'DDJJ_de_salud_resol_300', 'PS_6.273_Certific_complementaria_investigadores'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Jubilación_trabajadores_minusvalidos_ceguera' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Jubilación_trabajadores_minusvalidos_ceguera').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '6.18_Solicitud_Prestaciones_Previsionales', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', 'Carta_Poder_SRT', 'PS_6.3_Nivel_de_estudios_RTI', 'Formulario_encuesta_RTI', 'DDJJ_de_salud_resol_300', 'PS_6.273_Certific_complementaria_investigadores'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Pension Directa (Casados)
+             const pensionDirectaCasadosCheckbox = document.getElementById('formularios_Pension_Directa_casados');
+             if (pensionDirectaCasadosCheckbox) {
+                 pensionDirectaCasadosCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.279_Dto_de_cuotas_pensión', 'DDJJ_Ley_17562_6.9', ];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Pension_Directa_casados' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Pension_Directa_casados').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.279_Dto_de_cuotas_pensión', 'DDJJ_Ley_17562_6.9', ];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Pension Directa (Convivientes)
+             const pensionDirectaConvivientesCheckbox = document.getElementById('formularios_Pension_Directa_convivientes');
+             if (pensionDirectaConvivientesCheckbox) {
+                 pensionDirectaConvivientesCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.279_Dto_de_cuotas_pensión', 'PS_6.13_DDJJ_Testimonial_dependencia_economica' ];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Pension_Directa_convivientes' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Pension_Directa_convivientes').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01','Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.2_Certific_de_Servicios', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.279_Dto_de_cuotas_pensión', 'PS_6.13_DDJJ_Testimonial_dependencia_económica' ];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Pension Derivada (Casados)
+             const pensionDerivaCasadosCheckbox = document.getElementById('formularios_Pension_Deriva_casados');
+             if (pensionDerivaCasadosCheckbox) {
+                 pensionDerivaCasadosCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.278_Dto_de_cuotas_jubilación', 'DDJJ_Ley_17562_6.9'];
+                     checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Pension_Deriva_casados' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Pension_Deriva_casados').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.278_Dto_de_cuotas_jubilación', 'DDJJ_Ley_17562_6.9'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Pension Derivada (Convivientes)
+             const pensionDerivaConvivientesCheckbox = document.getElementById('formularios_Pension_Deriva_convivientes');
+             if (pensionDerivaConvivientesCheckbox) {
+                 pensionDerivaConvivientesCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.13_DDJJ_Testimonial_dependencia_económica'];
+                     checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Pension_Deriva_convivientes' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Pension_Deriva_convivientes').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.13_DDJJ_Testimonial_dependencia_económica'];
-
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Pensión Directa o Derivada hijo/a discapacitada
+             const pensionHijoDiscapacitadoCheckbox = document.getElementById('formularios_Pension_Directa_Derivada_hijo_discapacitada');
+             if (pensionHijoDiscapacitadoCheckbox) {
+                 pensionHijoDiscapacitadoCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.13_DDJJ_Testimonial_dependencia_económica', 'Carta_Poder_SRT', 'Formulario_encuesta_RTI', 'PS_6.2_Certific_de_Servicios', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Pension_Directa_Derivada_hijo_discapacitada' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Pension_Directa_Derivada_hijo_discapacitada').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', '6.18_Solicitud_Prestaciones_Previsionales_pension', 'PS_6.13_DDJJ_Testimonial_dependencia_económica', 'Carta_Poder_SRT', 'Formulario_encuesta_RTI', 'PS_6.2_Certific_de_Servicios', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS'];
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Retiro Transitorio por invalidez
+             const retiroInvalidezCheckbox = document.getElementById('formularios_Retiro_Transitorio_por_invalidez');
+             if (retiroInvalidezCheckbox) {
+                 retiroInvalidezCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', 'Carta_Poder_SRT', 'Formulario_encuesta_RTI', 'PS_6.2_Certific_de_Servicios', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'F_3283_Autorización_ARCA', '6.18_Solicitud_Prestaciones_Previsionales', 'Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.3_Nivel_de_estudios_RTI', 'DDJJ_de_salud_resol_300', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.273_Certific_complementaria_investigadores'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Retiro_Transitorio_por_invalidez' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Retiro_Transitorio_por_invalidez').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
 
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', 'Carta_Poder_SRT', 'Formulario_encuesta_RTI', 'PS_6.2_Certific_de_Servicios', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'F_3283_Autorización_ARCA', '6.18_Solicitud_Prestaciones_Previsionales', 'Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.3_Nivel_de_estudios_RTI', 'DDJJ_de_salud_resol_300', 'PS_6.268_Certific_de_Servicios_(Ampliatoria)', 'PS_6.273_Certific_complementaria_investigadores'];
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Retiro Transitorio por invalidez - SDM
+             const retiroInvalidezSdmCheckbox = document.getElementById('formularios_Retiro_Transitorio_por_invalidez_SDM');
+             if (retiroInvalidezSdmCheckbox) {
+                 retiroInvalidezSdmCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', 'Carta_Poder_SRT', 'Formulario_encuesta_RTI', 'PS_6.2_Certific_de_Servicios', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'F_3283_Autorización_ARCA', '6.18_Solicitud_Prestaciones_Previsionales', 'Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.3_Nivel_de_estudios_RTI', 'DDJJ_de_salud_resol_300', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.292_DDJJ_solicitante_SDM', 'PS_6.293_DDJJ_Dador_de_trabajo_SDM', 'PS_6.294_DDJJ_renuncia_SDM'];
+                     checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_Retiro_Transitorio_por_invalidez_SDM' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Retiro_Transitorio_por_invalidez_SDM').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Anexo_I_Ley_27.625', 'Carta_Poder_SRT', 'Formulario_encuesta_RTI', 'PS_6.2_Certific_de_Servicios', 'PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS', 'F_3283_Autorización_ARCA', '6.18_Solicitud_Prestaciones_Previsionales', 'Anexo_II_980_05', 'Anexo_II_Socioeconómico_24.476', 'PS_6.3_Nivel_de_estudios_RTI', 'DDJJ_de_salud_resol_300', 'PS_6.273_Certific_complementaria_investigadores', 'PS_6.278_Dto_de_cuotas_jubilación', 'PS_6.292_DDJJ_solicitante_SDM', 'PS_6.293_DDJJ_Dador_de_trabajo_SDM', 'PS_6.294_DDJJ_renuncia_SDM'];
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios PUAM
+             const puamCheckbox = document.getElementById('formularios_PUAM');
+             if (puamCheckbox) {
+                 puamCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder', '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'F_3283_Autorización_ARCA', '6.18_Solicitud_Prestaciones_Previsionales'];
+                     checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_PUAM' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_PUAM').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder',  '2.91_Guarda_Documental', 'PS_6.284_DDJJ_Fzas_Armadas', 'Anexo_II_DEC_894_01', 'F_3283_Autorización_ARCA', '6.18_Solicitud_Prestaciones_Previsionales'];
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios UCAP
+             const ucapCheckbox = document.getElementById('formularios_UCAP');
+             if (ucapCheckbox) {
+                 ucapCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', '2.91_Guarda_Documental', 'PS_1.75_Carta_Poder_Cap_III_27.705', 'PS_6.305_Carta_Poder', 'DDJJ_de_salud_resol_300', 'PS_6.2_Certific_de_Servicios'];
+                     checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+            } else {
+                 console.warn("Checkbox 'formularios_UCAP' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_UCAP').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', '2.91_Guarda_Documental', 'PS_1.75_Carta_Poder_Cap_III_27.705', 'PS_6.305_Carta_Poder', 'DDJJ_de_salud_resol_300', 'PS_6.2_Certific_de_Servicios'];
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios Reajuste de Haberes
+             const reajusteHaberesCheckbox = document.getElementById('formularios_Reajuste_de_Haberes');
+             if (reajusteHaberesCheckbox) {
+                 reajusteHaberesCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', '2.91_Guarda_Documental', 'PS_6.2_Certific_de_Servicios', 'PS_6.4_Carta_Poder', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Telegrama_revocando_poder'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
-            
+            } else {
+                 console.warn("Checkbox 'formularios_Reajuste_de_Haberes' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_Reajuste_de_Haberes').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
-
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'F_3283_Autorización_ARCA', '2.91_Guarda_Documental', 'PS_6.2_Certific_de_Servicios', 'PS_6.4_Carta_Poder', 'PS_5.11_Aceptacion_de_la_Obra_Social', 'PS_5.7_Derivacion_aportes_Obra_Social', 'Telegrama_revocando_poder'];
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
+            // Escucha el evento change del checkbox principal Formularios ASIGNACION FLIAR HIJO DISCAP.
+             const asignacionFliarCheckbox = document.getElementById('formularios_asignacion_fliar_hijo_discapacitado');
+             if (asignacionFliarCheckbox) {
+                 asignacionFliarCheckbox.addEventListener('change', function() {
+                    const estado = this.checked;
+                    const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder'];
+                    checkboxesDependientes.forEach(function(id) {
+                         const depCheckbox = document.getElementById(id);
+                         if (depCheckbox) depCheckbox.checked = estado;
+                    });
                 });
-              });
+             } else {
+                 console.warn("Checkbox 'formularios_asignacion_fliar_hijo_discapacitado' no encontrado. La sincronización no estará activa para este.");
+            }
 
-            // Escucha el evento change del checkbox principal
-              document.getElementById('formularios_asignacion_fliar_hijo_discapacitado').addEventListener('change', function() {
-                // Estado del checkbox principal (true o false)
-                const estado = this.checked;
 
-                // Array con los IDs de las checkboxes que quieres sincronizar
-                const checkboxesDependientes = ['Formulario_Carta_Poder_(CSS)', 'Acta_Poder', 'CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES', 'PS_6.4_Carta_Poder'];
-                // Para cada checkbox en el array, se actualiza su estado
-                checkboxesDependientes.forEach(function(id) {
-                  document.getElementById(id).checked = estado;
-                });
-              });
-        </script>
-    </body>
+             // 4. (Opcional) Código para recordar la pestaña activa al recargar - Renumerado a 4
+             // Puedes descomentar y ajustar si necesitas esta funcionalidad
+             // let url = location.href.replace(/\/$/, "");
+             // if (location.hash) {
+             //     const hash = url.split("#");
+             //     const activeTab = document.querySelector('#formTabs button[data-bs-target="#' + hash[1] + '"]');
+             //     if (activeTab) {
+             //         new bootstrap.Tab(activeTab).show();
+             //     }
+             // } else {
+             //     const firstTab = document.querySelector('#formTabs button:first-child');
+             //      if (firstTab) {
+             //         new bootstrap.Tab(firstTab).show();
+             //     }
+             // }
+
+        }); // Fin DOMContentLoaded
+
+
+        // --- Funciones helper (fuera de DOMContentLoaded) ---
+
+
+        // 5. Función validateFiles (asociada al onsubmit del formulario) - Renumerado a 5
+        // NOTA: Esta función ya no necesita validar archivos, pero se mantiene porque está en el onsubmit.
+        // Si usas AJAX para enviar, necesitarías una función diferente.
+        function validateFiles() {
+            // Lógica de validación no relacionada con archivos si la necesitas.
+            // Por ahora, simplemente permite el envío.
+
+            console.log("Validando antes de enviar (sin validación de archivos)."); // Para debug
+            // Devuelve true para permitir el envío del formulario
+            return true;
+        }
+
+    </script>
+
+</body>
 </html>
