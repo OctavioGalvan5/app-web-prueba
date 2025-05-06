@@ -278,13 +278,13 @@
                         <label for="fecha_inicio">Fecha de haber de partida:
                             <span class="info-icon" data-tooltip="No debe ser inferior al 01/01/2000">?</span>
                         </label>
-                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2000-01-01" max="2025-02-28">
+                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2000-01-01" max="2025-03-31">
                     </div>
                     <div class="form-group">
                         <label for="fecha_fin">Fecha de cierre del haber:
-                            <span class="info-icon" data-tooltip="No debe ser superior al 28/02/2025">?</span>
+                            <span class="info-icon" data-tooltip="No debe ser superior al 31/03/2025">?</span>
                         </label>
-                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2000-01-01" max="2025-02-28">
+                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2000-01-01" max="2025-03-31">
                     </div>
                 </div>
                 <div class="form-row">
@@ -381,62 +381,20 @@
                             <label for="ipc">IPC</label>
                             <span class="info-icon" data-tooltip="Precios al Consumidor o Costo de Vida (I.P.C.)">?</span>
                         </div>
+
                         <div class="checkbox-item">
-                            <input type="checkbox" id="ripte" name="ripte" value="true">
-                            <label for="ripte">RIPTE</label>
-                            <span class="info-icon" data-tooltip="RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)">?</span>
+                            <input type="checkbox" id="Alanis_Mas_Anses" name="Alanis_Mas_Anses" value="true">
+                            <label for="Alanis_Mas_Anses">Alanis Mas Anses</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad">?</span>
                         </div>
+
                         <div class="checkbox-item">
                             <input type="checkbox" id="uma" name="uma" value="true">
                             <label for="uma">UMA</label>
                             <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el
                                 31/12/2017 y desde ahi Aumentos Poder Judicial de la Nacion">?</span>
                         </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="Ley_27426_rezago" name="Ley_27426_rezago" value="true">
-                            <label for="Ley_27426_rezago">Ley 27426 con rezago</label>
-                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2016 y desde ahi Ley 27426 - IPC y
-                                Ripte Trimestral Diferido 3 meses">?</span>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="caliva_mas_anses" name="caliva_mas_anses" value="true">
-                            <label for="caliva_mas_anses">Caliva mas Anses</label>
-                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
-                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
-                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
-                                desde ahi Aumentos Generales de la ANSeS por movilidad
-">?</span>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="Caliva_Marquez_con_27551_con_3_rezago" name="Caliva_Marquez_con_27551_con_3_rezago" value="true">
-                            <label for="Caliva_Marquez_con_27551_con_3_rezago">Caliva mas Cendan</label>
-                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el
-                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
-                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
-                                desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi Aumentos
-                                Generales de la ANSeS por movilidad">?</span>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="Alanis_Mas_Anses" name="Alanis_Mas_Anses" value="true">
-                            <label for="Alanis_Mas_Anses">Alanis Mas Anses</label>
-                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad">?</span>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="Alanis_con_27551_con_3_meses_rezago" name="Alanis_con_27551_con_3_meses_rezago" value="true">
-                            <label for="Alanis_con_27551_con_3_meses_rezago">Alanis con 27551 con 3 meses rezago</label>
-                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
-                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
-                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
-                                31/12/2020 y desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi
-                                Aumentos Generales de la ANSeS por movilidad">?</span>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="fallo_martinez" name="fallo_martinez" value="true">
-                            <label for="fallo_martinez">Fallo Martinez</label>
-                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos Fallo
-                                Martinez para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad
-">?</span>
-                        </div>
+
                         <div class="checkbox-item">
                             <input type="checkbox" id="alanis_ipc" name="alanis_ipc" value="true">
                             <label for="alanis_ipc">Alanis con IPC</label>
@@ -446,6 +404,13 @@
                                 31/12/2020 y desde ahi Precios al Consumidor o Costo de Vida (I.P.C.) hasta el 30/06/2024 y desde ahi Aumentos Generales de
                                 la ANSeS por movilidad">?</span>
                         </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ripte" name="ripte" value="true">
+                            <label for="ripte">RIPTE</label>
+                            <span class="info-icon" data-tooltip="RIPTE (Remuneración Imponible Promedio de Trabajadores Estables)">?</span>
+                        </div>
+
                         <div class="checkbox-item">
                             <input type="checkbox" id="alanis_ripte" name="alanis_ripte" value="true">
                             <label for="alanis_ripte">Alanis con RIPTE</label>
@@ -455,10 +420,70 @@
                                 31/12/2020 y desde ahi RIPTE (Remuneración Imponible Promedio de Trabajadores Estables) hasta el 30/06/2024 y desde ahi
                                 Aumentos Generales de la ANSeS por movilidad">?</span>
                         </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="caliva_mas_anses" name="caliva_mas_anses" value="true">
+                            <label for="caliva_mas_anses">Caliva mas Anses</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
+                                desde ahi Aumentos Generales de la ANSeS por movilidad
+                        ">?</span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="Alanis_con_27551_con_3_meses_rezago" name="Alanis_con_27551_con_3_meses_rezago" value="true">
+                            <label for="Alanis_con_27551_con_3_meses_rezago">Alanis con 27551 con 3 meses rezago</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020 hasta el
+                                31/12/2020 y desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi
+                                Aumentos Generales de la ANSeS por movilidad">?</span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="Caliva_Palavecino" name="Caliva_Palavecino" value="true">
+                            <label for="Caliva_Palavecino">Caliva mas Palavecino</label>
+                            <span class="info-icon" data-tooltip="Movilidad">?</span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="Ley_27426_rezago" name="Ley_27426_rezago" value="true">
+                            <label for="Ley_27426_rezago">Ley 27426 con rezago</label>
+                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2016 y desde ahi Ley 27426 - IPC y
+                                Ripte Trimestral Diferido 3 meses">?</span>
+                        </div>
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="Anses_Palavecino" name="Anses_Palavecino" value="true">
+                            <label for="Anses_Palavecino">Anses mas Palavecino</label>
+                            <span class="info-icon" data-tooltip="Movilidad">?</span>
+                        </div>
+
+
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="fallo_martinez" name="fallo_martinez" value="true">
+                            <label for="fallo_martinez">Fallo Martinez</label>
+                            <span class="info-icon" data-tooltip="Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos Fallo
+                                Martinez para el año 2020 hasta el 31/12/2020 y desde ahi Aumentos Generales de la ANSeS por movilidad
+">?</span>
+                        </div>
+
+
                         <div class="checkbox-item">
                             <input type="checkbox" id="movilidad_personalizada" name="movilidad_personalizada" value="true">
                             <label for="movilidad_personalizada">Movilidad Personalizada</label>
                             <span class="info-icon" data-tooltip="Seleccione los indices manualmente">?</span>
+                        </div>
+
+                        <div class="checkbox-item" style="display: none;">
+                            <input type="checkbox" id="Caliva_Marquez_con_27551_con_3_rezago" name="Caliva_Marquez_con_27551_con_3_rezago" value="true">
+                            <label for="Caliva_Marquez_con_27551_con_3_rezago">Caliva mas Cendan</label>
+                            <span class="info-icon" data-tooltip=" Aumentos Generales de la ANSeS por movilidad hasta el
+                                31/12/2017 y desde ahi Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahi Aumentos Generales de la
+                                ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y
+                                desde ahi Ley 27551 (50 % IPC y 50% RIPTE Trimestral retrasado 3 meses) hasta el 30/06/2024 y desde ahi Aumentos
+                                Generales de la ANSeS por movilidad">?</span>
                         </div>
                     </div>
                 </div>
