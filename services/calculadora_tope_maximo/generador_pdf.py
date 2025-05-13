@@ -53,10 +53,14 @@ def obtener_monto(fecha_ingresada):
             ocheintados_rem_max = fila_cercana['82% rem.max']
             rem_max = fila_cercana['remuneracion maxima']
             rem_max_imponible_cm_extendido_27551 = fila_cercana['rem max imponible c+m extendido 27551']
+            anses_palavecino= fila_cercana['anses_palavecino']
+            caliva_palavecino= fila_cercana['caliva_palavecino']
+            badaro_cm_palavecino= fila_cercana['badaro_cm_palavecino']
             martinez = fila_cercana['martinez']
 
 
-            return caliva_anses, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max, rem_max_imponible_cm_extendido_27551, martinez
+
+            return caliva_anses, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max, rem_max_imponible_cm_extendido_27551, martinez, anses_palavecino, caliva_palavecino, badaro_cm_palavecino
         else:
             return None
 
@@ -70,7 +74,7 @@ def obtener_datos_para_grafico(fecha_ingresada):
         query = text("""
             SELECT fecha, Caliva_Anses, anses, badaro, `badaro c+m`, 
                    `82% rem.max`, `remuneracion maxima`, 
-                   `rem max imponible c+m extendido 27551`, martinez
+                   `rem max imponible c+m extendido 27551`, martinez, anses_palavecino, caliva_palavecino, badaro_cm_palavecino
             FROM topes_maximo
             WHERE fecha <= :fecha_ingresada
             ORDER BY fecha ASC
@@ -90,7 +94,10 @@ def obtener_datos_para_grafico(fecha_ingresada):
                 row['82% rem.max'],
                 row['remuneracion maxima'],
                 row['rem max imponible c+m extendido 27551'],
-                row['martinez']
+                row['martinez'],
+                row['anses_palavecino'],
+                row['caliva_palavecino'],
+                row['badaro_cm_palavecino'],
             )
             vector_resultado.append(fila)
 
@@ -151,7 +158,7 @@ def crear_grafico_tope_haber_maximo(datos, nombre_grafico, etiquetas):
 
 
 def generar_grafico_linea(lista_filas, anses, caliva_anses, badaro, badaro_cm, ochenta_dos_rem_max, 
-                          rem_max, rem_max_imponible_cm_extendido_27551, martinez, titulo):
+                          rem_max, rem_max_imponible_cm_extendido_27551, martinez, anses_palavecino, caliva_palavecino, badaro_cm_palavecino,  titulo):
     """
     Genera un gráfico de líneas en formato Base64 usando Plotly a partir de los datos proporcionados.
 
@@ -168,11 +175,11 @@ def generar_grafico_linea(lista_filas, anses, caliva_anses, badaro, badaro_cm, o
 
     # Nombres de los conceptos a graficar
     conceptos = ['ANSES', 'Caliva ANSES', 'Badaro', 'Badaro C+M', '82% Rem Max', 
-                 'Remuneración Máxima', 'Rem Max Imponible C+M Extendido 27551', 'Martínez']
+                 'Remuneración Máxima', 'Rem Max Imponible C+M Extendido 27551', 'Martínez', 'Anses Palavecino', 'Caliva Palavecino', 'Badaro C+M Palavecino']
 
     # Lista de booleanos correspondientes a los conceptos
     booleanos = [anses, caliva_anses, badaro, badaro_cm, ochenta_dos_rem_max, 
-                 rem_max, rem_max_imponible_cm_extendido_27551, martinez]
+                 rem_max, rem_max_imponible_cm_extendido_27551, martinez, anses_palavecino, caliva_palavecino, badaro_cm_palavecino]
 
     # Crear la figura con las líneas correspondientes
     fig = go.Figure()
@@ -211,7 +218,7 @@ def generar_grafico_linea(lista_filas, anses, caliva_anses, badaro, badaro_cm, o
     return imagen_base64
 
 class Comparativa:
-  def __init__(self, autos, expediente, periodo_hasta, haber_reclamado, caliva_mas_anses,badaro_mas_anses, badaro_mas_caliva, remuneracion_maxima, ochentaidos_remuneracion_maxima, rem_max_caliva_27551, martinez_mas_anses):
+  def __init__(self, autos, expediente, periodo_hasta, haber_reclamado, caliva_mas_anses,badaro_mas_anses, badaro_mas_caliva, remuneracion_maxima, ochentaidos_remuneracion_maxima, rem_max_caliva_27551, martinez_mas_anses, anses_mas_palavecino, caliva_marquez_mas_palavecino, badaro_cm_palavecino):
       self.autos = autos
       self.expediente = expediente
       self.periodo_hasta = periodo_hasta
@@ -223,10 +230,13 @@ class Comparativa:
       self.ochenintados_remuneracion_maxima = ochentaidos_remuneracion_maxima
       self.rem_max_caliva_27551 = rem_max_caliva_27551
       self.martinez_mas_anses = martinez_mas_anses
+      self.anses_mas_palavecino = anses_mas_palavecino
+      self.caliva_marquez_mas_palavecino = caliva_marquez_mas_palavecino
+      self.badaro_cm_palavecino = badaro_cm_palavecino
       
   def obtener_datos(self):
 
-      caliva_anses, anses_2, badaro_2, badaro_cm_2, ocheintados_rem_max_2, rem_max_2,rem_max_imponible_cm_extendido_27551_2, martinez_2 = obtener_monto(self.periodo_hasta)
+      caliva_anses, anses_2, badaro_2, badaro_cm_2, ocheintados_rem_max_2, rem_max_2,rem_max_imponible_cm_extendido_27551_2, martinez_2, anses_mas_palavecino_2, caliva_marquez_mas_palavecino_2, badaro_cm_palavecino_2 = obtener_monto(self.periodo_hasta)
       
       datos = {}
       
@@ -243,6 +253,9 @@ class Comparativa:
       datos['rem_max_2'] = rem_max_2
       datos['rem_max_imponible_cm_extendido_27551_2'] = rem_max_imponible_cm_extendido_27551_2
       datos['martinez_2'] = martinez_2
+      datos['anses_mas_palavecino_2'] = anses_mas_palavecino_2
+      datos['caliva_marquez_mas_palavecino_2'] = caliva_marquez_mas_palavecino_2
+      datos['badaro_cm_palavecino_2'] = badaro_cm_palavecino_2
 
 
       datos['dif_caliva_anses']  = str(round((caliva_anses / anses_2 - 1) * 100 , 2)) + "%"
@@ -265,6 +278,17 @@ class Comparativa:
 
       datos['dif_martinez_anses']  = str(round((martinez_2 / anses_2 - 1) * 100 , 2)) + "%"
       datos['dif_monto_martinez_anses']  = formatear_dinero(martinez_2 - anses_2)
+
+      datos['dif_palavecino_anses']  = str(round((anses_mas_palavecino_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_palavecino_anses']  = formatear_dinero(anses_mas_palavecino_2 - anses_2)
+
+      datos['dif_palavecino_caliva_anses']  = str(round((caliva_marquez_mas_palavecino_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_palavecino_caliva_anses']  = formatear_dinero(caliva_marquez_mas_palavecino_2 - anses_2)
+
+      datos['dif_palavecino_badaro_cm_anses']  = str(round((badaro_cm_palavecino_2 / anses_2 - 1) * 100 , 2)) + "%"
+      datos['dif_monto_palavecino_badaro_cm_anses']  = formatear_dinero(badaro_cm_palavecino_2 - anses_2)
+
+      
 
       datos['dif_haber_reclamado_anses'] = formatear_dinero(Decimal(self.haber_reclamado) - anses_2)
       datos['dif_haber_reclamado_anses_graf'] = (Decimal(self.haber_reclamado) - anses_2)
@@ -297,12 +321,24 @@ class Comparativa:
       datos['porc_haber_reclamado_martinez_2'] = str(round((Decimal(self.haber_reclamado) / martinez_2 - 1) * 100, 2)) + "%"
 
 
+      datos['dif_haber_reclamado_anses_mas_palavecino_2'] = formatear_dinero(Decimal(self.haber_reclamado) - anses_mas_palavecino_2)
+      datos['dif_haber_reclamado_anses_mas_palavecino_2_graf'] = (Decimal(self.haber_reclamado) - anses_mas_palavecino_2)
+      datos['porc_haber_reclamado_anses_mas_palavecino_2'] = str(round((Decimal(self.haber_reclamado) / anses_mas_palavecino_2 - 1) * 100, 2)) + "%"
+
+      datos['dif_haber_reclamado_caliva_marquez_mas_palavecino_2'] = formatear_dinero(Decimal(self.haber_reclamado) - caliva_marquez_mas_palavecino_2)
+      datos['dif_haber_reclamado_caliva_marquez_mas_palavecino_2_graf'] = (Decimal(self.haber_reclamado) - caliva_marquez_mas_palavecino_2)
+      datos['porc_haber_reclamado_caliva_marquez_mas_palavecino_2'] = str(round((Decimal(self.haber_reclamado) / caliva_marquez_mas_palavecino_2 - 1) * 100, 2)) + "%"
+
+      datos['dif_haber_reclamado_badaro_cm_palavecino_2'] = formatear_dinero(Decimal(self.haber_reclamado) - badaro_cm_palavecino_2)
+      datos['dif_haber_reclamado_badaro_cm_palavecino_2_graf'] = (Decimal(self.haber_reclamado) - badaro_cm_palavecino_2)
+      datos['porc_haber_reclamado_badaro_cm_palavecino_2'] = str(round((Decimal(self.haber_reclamado) / badaro_cm_palavecino_2 - 1) * 100, 2)) + "%"
+
 
       return datos
 
   def generar_pdf(self):
       vector_grafico = obtener_datos_para_grafico(self.periodo_hasta)
-      grafico_3 = generar_grafico_linea(vector_grafico, True, self.caliva_mas_anses, self.badaro_mas_anses, self.badaro_mas_caliva, self.ochenintados_remuneracion_maxima,self.remuneracion_maxima,self.rem_max_caliva_27551,self.martinez_mas_anses, ("Evolucion de los Topes a lo largo del periodo"))
+      grafico_3 = generar_grafico_linea(vector_grafico, True, self.caliva_mas_anses, self.badaro_mas_anses, self.badaro_mas_caliva, self.ochenintados_remuneracion_maxima,self.remuneracion_maxima,self.rem_max_caliva_27551,self.martinez_mas_anses, self.anses_mas_palavecino, self.caliva_marquez_mas_palavecino, self.badaro_cm_palavecino, ("Evolucion de los Topes a lo largo del periodo"))
       
       datos = self.obtener_datos()
       datos_grafico = []
@@ -330,6 +366,16 @@ class Comparativa:
       if self.martinez_mas_anses:
           datos_grafico.append(datos['martinez_2'])
           etiquetas.append('Martinez mas Anses')
+      if self.anses_mas_palavecino:
+            datos_grafico.append(datos['anses_mas_palavecino_2'])
+            etiquetas.append('Anses mas Palavecino')
+      if self.caliva_marquez_mas_palavecino:
+            datos_grafico.append(datos['caliva_marquez_mas_palavecino_2'])
+            etiquetas.append('Caliva Marquez mas Palavecino')
+      if self.badaro_cm_palavecino:
+            datos_grafico.append(datos['badaro_cm_palavecino_2'])
+            etiquetas.append('Badaro CM Palavecino')
+          
       
 
       
@@ -358,6 +404,15 @@ class Comparativa:
       if self.martinez_mas_anses:
             datos_grafico_2.append(datos['dif_haber_reclamado_martinez_2_graf'])
             etiquetas_2.append('Martinez mas Anses')
+      if self.anses_mas_palavecino:
+          datos_grafico_2.append(datos['dif_haber_reclamado_anses_mas_palavecino_2_graf'])
+          etiquetas_2.append('Anses mas Palavecino')
+      if self.caliva_marquez_mas_palavecino:
+          datos_grafico_2.append(datos['dif_haber_reclamado_caliva_marquez_mas_palavecino_2_graf'])
+          etiquetas_2.append('Caliva Marquez mas Palavecino')
+      if self.badaro_cm_palavecino:
+          datos_grafico_2.append(datos['dif_haber_reclamado_badaro_cm_palavecino_2_graf'])
+          etiquetas_2.append('Badaro CM Palavecino')
 
       
       grafico = crear_grafico_tope_haber_maximo(datos_grafico, "Diferencia en $ entre Topes", etiquetas)
@@ -375,7 +430,10 @@ class Comparativa:
           remuneracion_maxima = self.remuneracion_maxima,  
           ochentaidos_remuneracion_maxima = self.ochenintados_remuneracion_maxima,  
           rem_max_caliva_27551 = self.rem_max_caliva_27551,  
-          martinez_mas_anses = self.martinez_mas_anses,  
+          martinez_mas_anses = self.martinez_mas_anses,
+          anses_mas_palavecino = self.anses_mas_palavecino,
+          caliva_marquez_mas_palavecino = self.caliva_marquez_mas_palavecino,
+          badaro_cm_palavecino = self.badaro_cm_palavecino,
           
           caliva_anses=formatear_dinero(datos['caliva_anses']),
           anses_2=formatear_dinero(datos['anses_2']),
@@ -385,6 +443,9 @@ class Comparativa:
           rem_max_2=formatear_dinero(datos['rem_max_2']),
           rem_max_imponible_cm_extendido_27551_2=formatear_dinero(datos['rem_max_imponible_cm_extendido_27551_2']),
           martinez_2=formatear_dinero(datos['martinez_2']),
+          anses_mas_palavecino_2=formatear_dinero(datos['anses_mas_palavecino_2']),
+          caliva_marquez_mas_palavecino_2=formatear_dinero(datos['caliva_marquez_mas_palavecino_2']),
+          badaro_cm_palavecino_2=formatear_dinero(datos['badaro_cm_palavecino_2']),
 
 
           dif_caliva_anses=datos['dif_caliva_anses'],
@@ -407,6 +468,15 @@ class Comparativa:
 
           dif_martinez_anses=datos['dif_martinez_anses'],
           dif_monto_martinez_anses=datos['dif_monto_martinez_anses'],
+
+          dif_anses_palavecino=datos['dif_palavecino_anses'],
+          dif_monto_anses_palavecino=datos['dif_monto_palavecino_anses'],
+
+          dif_caliva_palavecino=datos['dif_palavecino_caliva_anses'],
+          dif_monto_caliva_palavecino=datos['dif_monto_palavecino_caliva_anses'],
+
+          dif_badaro_cm_palavecino=datos['dif_palavecino_badaro_cm_anses'],
+          dif_monto_badaro_cm_palavecino=datos['dif_monto_palavecino_badaro_cm_anses'],
           
           dif_haber_reclamado_anses = datos['dif_haber_reclamado_anses'],
           porc_haber_reclamado_anses = datos['porc_haber_reclamado_anses'],
@@ -431,7 +501,16 @@ class Comparativa:
 
           dif_haber_reclamado_martinez_2= datos['dif_haber_reclamado_martinez_2'],
           porc_haber_reclamado_martinez_2 = datos['porc_haber_reclamado_martinez_2'],
-          
+
+          dif_haber_reclamado_anses_mas_palavecino_2= datos['dif_haber_reclamado_anses_mas_palavecino_2'],
+          porc_haber_reclamado_anses_mas_palavecino_2 = datos['porc_haber_reclamado_anses_mas_palavecino_2'],
+
+          dif_haber_reclamado_caliva_marquez_mas_palavecino_2= datos['dif_haber_reclamado_caliva_marquez_mas_palavecino_2'],
+          porc_haber_reclamado_caliva_marquez_mas_palavecino_2 = datos['porc_haber_reclamado_caliva_marquez_mas_palavecino_2'],
+
+          dif_haber_reclamado_badaro_cm_palavecino_2= datos['dif_haber_reclamado_badaro_cm_palavecino_2'],
+          porc_haber_reclamado_badaro_cm_palavecino_2 = datos['porc_haber_reclamado_badaro_cm_palavecino_2'],
+      
           dif_haber_reclamado_anses_graf = datos['dif_haber_reclamado_anses_graf'],
           dif_haber_reclamado_Caliva_graf = datos['dif_haber_reclamado_Caliva_graf'],
           dif_haber_reclamado_Badaro_graf = datos['dif_haber_reclamado_Badaro_graf'],
@@ -440,6 +519,9 @@ class Comparativa:
           dif_haber_reclamado_rem_max_2_graf = datos['dif_haber_reclamado_rem_max_2_graf'],
           dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf = datos['dif_haber_reclamado_rem_max_imponible_cm_extendido_27551_2_graf'],
           dif_haber_reclamado_martinez_2_graf = datos['dif_haber_reclamado_martinez_2_graf'],
+          dif_haber_reclamado_anses_mas_palavecino_2_graf = datos['dif_haber_reclamado_anses_mas_palavecino_2_graf'],
+          dif_haber_reclamado_caliva_marquez_mas_palavecino_2_graf = datos['dif_haber_reclamado_caliva_marquez_mas_palavecino_2_graf'],
+          dif_haber_reclamado_badaro_cm_palavecino_2_graf = datos['dif_haber_reclamado_badaro_cm_palavecino_2_graf'],
           
           grafico = grafico,
           grafico_2 = grafico_2,

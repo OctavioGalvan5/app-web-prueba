@@ -157,6 +157,15 @@
             {% if martinez_mas_anses %}
             <td class="negrita">Martinez mas Anses</td>
             {% endif %}
+            {% if anses_mas_palavecino %}
+            <td class="negrita">Anses mas Palavecino</td>
+            {% endif %}
+            {% if caliva_marquez_mas_palavecino %}
+            <td class="negrita">Caliva Marquez mas Palavecino</td>
+            {% endif %}
+            {% if badaro_cm_palavecino %}
+            <td class="negrita">Badaro CM Palavecino</td>
+            {% endif %}
 
 
 
@@ -185,6 +194,15 @@
             {% if martinez_mas_anses %}
                 <td>{{ martinez_2 }}</td>
             {% endif %}
+            {% if anses_mas_palavecino %}
+                <td>{{ anses_mas_palavecino_2 }}</td>
+            {% endif %}
+            {% if caliva_marquez_mas_palavecino %}
+                <td>{{ caliva_marquez_mas_palavecino_2 }}</td>
+            {% endif %}
+            {% if badaro_cm_palavecino %}
+                <td>{{ badaro_cm_palavecino_2 }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
                 <td class="negrita first-column-cell" colspan="2">Diferencia con Haber maximo Anses</td>
@@ -209,6 +227,15 @@
             {% if martinez_mas_anses %}
                 <td class="confiscatoriedad">{{ dif_monto_martinez_anses }}</td>
             {% endif %}
+            {% if anses_mas_palavecino %}
+                <td class="confiscatoriedad">{{ dif_monto_anses_palavecino }}</td>
+            {% endif %}
+            {% if caliva_marquez_mas_palavecino %}
+                <td class="confiscatoriedad">{{ dif_monto_caliva_palavecino }}</td>
+            {% endif %}
+            {% if badaro_cm_palavecino %}
+                <td class="confiscatoriedad">{{ dif_monto_badaro_cm_palavecino }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell" colspan="2">Porcentaje de Diferencia con Haber maximo Anses</td>
@@ -232,6 +259,15 @@
             {% endif %}
             {% if martinez_mas_anses %}
                 <td style="color: red;">{{ dif_martinez_anses }}</td>
+            {% endif %}
+            {% if anses_mas_palavecino %}
+                <td style="color: red;">{{ dif_anses_palavecino }}</td>
+            {% endif %}
+            {% if caliva_marquez_mas_palavecino %}
+                <td style="color: red;">{{ dif_caliva_palavecino }}</td>
+            {% endif %}
+            {% if badaro_cm_palavecino %}
+                <td style="color: red;">{{ dif_badaro_cm_palavecino }}</td>
             {% endif %}
         </tr>
     </table>
@@ -320,6 +356,33 @@
             <td>{{ martinez_2 }}</td>
             <td class="confiscatoriedad">{{ dif_haber_reclamado_martinez_2 }}</td>
             <td style="color: red;">{{ porc_haber_reclamado_martinez_2 }}</td>
+        </tr>
+        {% endif %}
+
+        {% if anses_mas_palavecino %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Anses mas Palavecino</td>
+            <td>{{ anses_mas_palavecino_2 }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_anses_mas_palavecino_2 }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_anses_mas_palavecino_2 }}</td>
+        </tr>
+        {% endif %}
+
+        {% if caliva_marquez_mas_palavecino %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Caliva Marquez mas Palavecino</td>
+            <td>{{ caliva_marquez_mas_palavecino_2 }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_caliva_marquez_mas_palavecino_2 }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_caliva_marquez_mas_palavecino_2 }}</td>
+        </tr>
+        {% endif %}
+
+        {% if badaro_cm_palavecino %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Badaro + CM + Palavecino</td>
+            <td>{{ badaro_cm_palavecino_2 }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_badaro_cm_palavecino_2 }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_badaro_cm_palavecino_2 }}</td>
         </tr>
         {% endif %}
     </table>

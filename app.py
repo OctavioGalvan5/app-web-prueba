@@ -550,11 +550,14 @@ def resultado_comparativa_tope_maximo():
     ochentaidos_remuneracion_maxima= request.form.get('ochentaidos_remuneracion_maxima', False)
     rem_max_caliva_27551= request.form.get('rem_max_caliva_27551', False)
     martinez_mas_anses= request.form.get('martinez_mas_anses', False)
+    anses_mas_palavecino= request.form.get('anses_mas_palavecino', False)
+    caliva_marquez_mas_palavecino= request.form.get('caliva_marquez_mas_palavecino',False)
+    badaro_cm_palavecino= request.form.get('badaro_cm_palavecino',False)
 
     
 
     pdf_generator = Comparativa(
-        autos, expediente, segunda_fecha, haber_reclamado,caliva_mas_anses,badaro_mas_anses, badaro_mas_caliva, remuneracion_maxima, ochentaidos_remuneracion_maxima, rem_max_caliva_27551, martinez_mas_anses
+        autos, expediente, segunda_fecha, haber_reclamado,caliva_mas_anses,badaro_mas_anses, badaro_mas_caliva, remuneracion_maxima, ochentaidos_remuneracion_maxima, rem_max_caliva_27551, martinez_mas_anses, anses_mas_palavecino, caliva_marquez_mas_palavecino, badaro_cm_palavecino
     )
     pdf = pdf_generator.generar_pdf()
 
