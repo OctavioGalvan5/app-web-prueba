@@ -1384,26 +1384,27 @@ def editar_caso(id):
     return render_template('base_datos_casos/editar_caso.html', caso=caso)
 
 
-
 @app.route('/upload_file', methods=['POST'])
 def upload_file():
+    origen = request.form.get('origen', 'privado')  # Por defecto asumimos privado
+
     if 'documentos[]' not in request.files:
         flash("No se enviaron archivos", "danger")
+        if origen == 'publico':
+            return redirect(url_for('casos_publicos'))  # cambia esto por la ruta real
         return redirect(url_for('ver_casos'))
 
     archivos = request.files.getlist('documentos[]')
     processed = False
-    new_file_hash = None  # Guardaremos el hash del primer archivo procesado correctamente
+    new_file_hash = None
 
     for archivo in archivos:
         if archivo.filename == '':
             continue
 
-        # Calcular el hash del archivo (asegúrate de tener implementada la función calculate_file_hash)
         file_hash = calculate_file_hash(archivo.stream)
         archivo.stream.seek(0)
 
-        # Llama a la función que procesa el archivo (si update es False, inserta un nuevo registro)
         drive_link, error = process_and_save_file(archivo.stream, archivo.filename)
         if error:
             flash(error, "danger")
@@ -1411,14 +1412,14 @@ def upload_file():
             processed = True
             new_file_hash = file_hash
             flash(f"Archivo {archivo.filename} subido y analizado correctamente.", "success")
-            # Si solo procesas un archivo nuevo, puedes romper el bucle aquí
             break
 
     if not processed:
         flash("No se pudo procesar ningún archivo.", "danger")
+        if origen == 'publico':
+            return redirect(url_for('casos_publicos'))  # cambia esto por la ruta real
         return redirect(url_for('ver_casos'))
 
-    # Buscar en la base de datos el ID del caso recién insertado usando el file_hash
     with engine.connect() as connection:
         result = connection.execute(
             text("SELECT id FROM sentencias WHERE file_hash = :file_hash"),
@@ -1427,10 +1428,14 @@ def upload_file():
         new_id = result.scalar()
 
     if new_id:
-        # Redirigir a la función editar_caso para el caso insertado
-        return redirect(url_for('editar_caso', id=new_id))
+        if origen == 'publico':
+            return redirect(url_for('ver_casos_publicos', id=new_id))
+        else:
+            return redirect(url_for('editar_caso', id=new_id))
     else:
         flash("No se encontró el caso subido.", "danger")
+        if origen == 'publico':
+            return redirect(url_for('casos_publicos'))  # cambia esto por la ruta real
         return redirect(url_for('ver_casos'))
 
 @app.route('/eliminar_caso/<int:id>', methods=['POST'])
