@@ -1226,7 +1226,6 @@ def casos_publicos():
     return render_template('base_datos_casos/casos_publicos.html', casos=casos)
 
 @app.route('/ver_casos_publicos/<int:id>', methods=['GET', 'POST'])
-@login_required
 def ver_casos_publicos(id):
     if request.method == 'POST':
         # Primero, obtenemos el caso existente para contar con el link anterior y otros datos.
@@ -1306,7 +1305,6 @@ def ver_casos_publicos(id):
     return render_template('base_datos_casos/ver_casos_publicos.html', caso=caso)
 
 @app.route('/editar_caso/<int:id>', methods=['GET', 'POST'])
-@login_required
 def editar_caso(id):
     if request.method == 'POST':
         # Primero, obtenemos el caso existente para contar con el link anterior y otros datos.
@@ -1388,7 +1386,6 @@ def editar_caso(id):
 
 
 @app.route('/upload_file', methods=['POST'])
-@login_required
 def upload_file():
     if 'documentos[]' not in request.files:
         flash("No se enviaron archivos", "danger")
