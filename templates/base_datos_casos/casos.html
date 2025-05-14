@@ -4,45 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jurisprudencia Previsional</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body, html {
+        :root {
+            --primary: #5e35b1;
+            --primary-light: #9162e4;
+            --primary-dark: #3c1f8b;
+            --primary-bg: #f5f2ff;
+            --secondary: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #6c757d;
+            --white: #ffffff;
+            --danger: #dc3545;
+            --danger-hover: #c82333;
+            --border-radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #E6E6FA, #9370DB);
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
             min-height: 100vh;
-            color: #333;
+            color: var(--text-dark);
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 50px auto;
+            max-width: 1300px;
+            margin: 40px auto;
             padding: 20px;
         }
 
-        .form-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        .card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
             margin-bottom: 40px;
+            border: none;
         }
 
-        h2 {
-            color: #4B0082;
+        .card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        h2, h3 {
+            color: var(--primary);
             text-align: center;
             margin-bottom: 30px;
-            font-size: 28px;
-            font-weight: 600;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2::after, h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
         }
 
         /* Estilos para la tabla con scroll */
         .tabla-contenedor {
             max-height: 600px;
             overflow-y: auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            background-color: var(--white);
         }
 
         .tabla-casos {
@@ -53,21 +100,27 @@
 
         .tabla-casos th, 
         .tabla-casos td {
-            padding: 12px 15px;
+            padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #eee;
         }
 
         .tabla-casos th {
-            background-color: #4B0082;
+            background-color: var(--primary);
             color: white;
             position: sticky;
             top: 0;
             z-index: 1;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .tabla-casos tr:hover {
-            background-color: #f5f5f5;
+            background-color: var(--primary-bg);
+        }
+
+        .tabla-casos tr:last-child td {
+            border-bottom: none;
         }
 
         /* Personalización del scroll */
@@ -81,210 +134,325 @@
         }
 
         .tabla-contenedor::-webkit-scrollbar-thumb {
-            background: #9370DB;
+            background: var(--primary-light);
             border-radius: 4px;
         }
 
         .tabla-contenedor::-webkit-scrollbar-thumb:hover {
-            background: #7B68EE;
+            background: var(--primary);
         }
 
         /* Estilos para botones */
         .acciones-contenedor {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
         }
 
         .btn-editar {
-            background-color: #9370DB;
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: var(--transition);
             text-decoration: none;
             font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn-editar:hover {
-            background-color: #7B68EE;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            color: white;
         }
 
         .btn-eliminar {
-            background-color: #dc3545;
+            background-color: var(--danger);
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: var(--transition);
             font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn-eliminar:hover {
-            background-color: #c82333;
+            background-color: var(--danger-hover);
+            transform: translateY(-2px);
         }
 
         /* Estilos para filtros */
         .filtros-container {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 25px;
+            flex-wrap: wrap;
         }
 
         .busqueda-input {
             flex: 2;
-            padding: 12px;
-            border: 2px solid #4B0082;
-            border-radius: 6px;
+            padding: 12px 15px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
             font-size: 16px;
+            transition: var(--transition);
+            min-width: 200px;
+        }
+
+        .busqueda-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.1);
         }
 
         .filtro-select {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #4B0082;
-            border-radius: 6px;
+            padding: 12px 15px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
             background-color: white;
             font-size: 16px;
             cursor: pointer;
+            transition: var(--transition);
+            min-width: 150px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235e35b1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 40px;
+        }
+
+        .filtro-select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.1);
         }
 
         .btn-reset {
-            background-color: #6c757d;
+            background-color: var(--text-light);
             color: white;
             border: none;
             padding: 12px 20px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            transition: background-color 0.3s;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-reset:hover {
             background-color: #5a6268;
+            transform: translateY(-2px);
         }
 
         .contador-resultados {
             margin: 15px 0;
+            font-size: 15px;
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contador-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 14px;
-            color: #4B0082;
-            font-weight: bold;
         }
 
         .filtros-activos {
-            margin: 10px 0;
-            font-size: 14px;
-            color: #4B0082;
+            margin: 10px 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .filtro-activo {
-            background-color: #e6e6fa;
-            padding: 4px 8px;
-            border-radius: 12px;
-            margin-right: 8px;
-            display: inline-block;
+            background-color: var(--primary-bg);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--primary-dark);
+            font-weight: 500;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .form-container {
-                padding: 20px;
-            }
-
-            .tabla-contenedor {
-                max-height: 500px;
-            }
-
-            .tabla-casos th, 
-            .tabla-casos td {
-                padding: 8px;
-                font-size: 14px;
-            }
-
-            .acciones-contenedor {
-                flex-direction: column;
-            }
-
-            .btn-editar, 
-            .btn-eliminar {
-                width: 100%;
-                text-align: center;
-            }
-
-            .filtros-container {
-                flex-direction: column;
-            }
+        .filtro-activo i {
+            font-size: 12px;
         }
+
+        /* Estilos para el formulario de carga */
         .drop-zone {
-            border: 2px dashed #4B0082;
-            padding: 20px;
+            border: 2px dashed var(--primary);
+            padding: 40px 20px;
             text-align: center;
             cursor: pointer;
-            border-radius: 6px;
-            background-color: #f9f9f9;
+            border-radius: var(--border-radius);
+            background-color: var(--primary-bg);
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
+
         .drop-zone:hover {
-            background-color: #e0e0e0;
+            background-color: rgba(94, 53, 177, 0.1);
         }
+
+        .drop-zone-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .drop-zone-hint {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
         .file-list {
-            margin-top: 10px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
+
         .file-item {
-            background-color: #eee;
-            padding: 8px;
-            border-radius: 4px;
+            background-color: var(--secondary);
+            padding: 12px 16px;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 5px;
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
         }
+
+        .file-item:hover {
+            background-color: #f0f2f5;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            color: var(--primary);
+        }
+
+        .file-name {
+            font-weight: 500;
+            word-break: break-all;
+        }
+
         .remove-file {
-            color: red;
+            color: var(--danger);
             cursor: pointer;
-            font-weight: bold;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
         }
+
+        .remove-file:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
         .submit-button {
-            background-color: #4B0082;
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 16px 20px;
             font-size: 16px;
-            border-radius: 6px;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
-        .submit-button:hover {
-            background-color: #3a0066;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
+        .submit-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        /* Estilos para el chat */
         .chat-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
             margin-top: 40px;
         }
 
         .chat-box {
             height: 300px;
             overflow-y: auto;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: #f9f9f9;
+            border: 1px solid #e1e5eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: var(--secondary);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
+        }
+
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-box::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
         }
 
         .chat-input {
@@ -294,132 +462,225 @@
 
         .chat-input input {
             flex: 1;
-            padding: 10px;
-            border: 2px solid #4B0082;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 14px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .chat-input input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.1);
         }
 
         .chat-input button {
-            background-color: #4B0082;
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 0 20px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: var(--transition);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .chat-input button:hover {
-            background-color: #3a0066;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
         }
 
         .mensaje-usuario {
-            background: #4B0082;
+            background: var(--primary);
             color: white;
-            padding: 10px 15px;
-            border-radius: 15px;
+            padding: 12px 18px;
+            border-radius: 18px 18px 0 18px;
             max-width: 80%;
             align-self: flex-end;
             word-break: break-word;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease forwards;
         }
 
         .mensaje-ia {
-            background: #e6e6fa;
-            padding: 10px 15px;
-            border-radius: 15px;
+            background: var(--primary-bg);
+            padding: 12px 18px;
+            border-radius: 18px 18px 18px 0;
             max-width: 80%;
             word-break: break-word;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 3px solid var(--primary);
+            animation: fadeIn 0.3s ease forwards;
         }
 
         .error {
-            color: #dc3545;
+            color: var(--danger);
             background: #ffe6e6;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .file-item, .mensaje-usuario, .mensaje-ia {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 20px auto;
+            }
+            .card {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 24px;
+            }
+            .filtros-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .busqueda-input, .filtro-select {
+                width: 100%;
+            }
+            .tabla-casos th, 
+            .tabla-casos td {
+                padding: 10px;
+                font-size: 14px;
+            }
+            .acciones-contenedor {
+                flex-direction: column;
+                gap: 5px;
+            }
+            .btn-editar, 
+            .btn-eliminar {
+                width: 100%;
+                justify-content: center;
+            }
+            .drop-zone {
+                padding: 30px 15px;
+            }
+            .drop-zone-icon {
+                font-size: 36px;
+            }
+            .drop-zone-text {
+                font-size: 16px;
+            }
         }
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     {% include 'navs/nav.html' %}
 
     <div class="container">
         <!-- Sección de casos -->
-        <h2>Casos Registrados</h2>
+        <div class="card">
+            <h2>Casos Registrados</h2>
 
-        <!-- Filtros -->
-        <div class="filtros-container">
-            <input type="text" 
-                   class="busqueda-input" 
-                   placeholder="Buscar por nombre o expediente..."
-                   id="busquedaInput">
+            <!-- Filtros -->
+            <div class="filtros-container">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" 
+                        class="busqueda-input form-control border-start-0"
+                        placeholder="Buscar por nombre o expediente..."
+                        id="busquedaInput">
+                </div>
 
-            <select class="filtro-select" id="filtroInstancia">
-                <option value="">Todas las instancias</option>
-                <option value="Primera Instancia">Primera Instancia</option>
-                <option value="Segunda Instancia">Segunda Instancia</option>
-                <option value="Instancia Extraordinaria">Instancia Extraordinaria</option>
-                <option value="Organo Autonomo extrapoder (MP)">Organo Autonomo extrapoder (MP)</option>
-            </select>
+                <select class="filtro-select" id="filtroInstancia">
+                    <option value="">Todas las instancias</option>
+                    <option value="Primera Instancia">Primera Instancia</option>
+                    <option value="Segunda Instancia">Segunda Instancia</option>
+                    <option value="Instancia Extraordinaria">Instancia Extraordinaria</option>
+                    <option value="Organo Autonomo extrapoder (MP)">Organo Autonomo extrapoder (MP)</option>
+                </select>
 
-            <button class="btn-reset" onclick="resetearFiltros()">
-                Limpiar Filtros
-            </button>
-        </div>
+                <button class="btn-reset" onclick="resetearFiltros()">
+                    <i class="fas fa-times"></i>
+                    Limpiar Filtros
+                </button>
+            </div>
 
-        <div class="contador-resultados">
-            Mostrando <span id="contador">0</span> de {{ casos|length }} casos
-        </div>
+            <div class="contador-resultados">
+                <i class="fas fa-list-ul"></i>
+                Mostrando <span class="contador-badge" id="contador">0</span> de <span class="contador-badge">{{ casos|length }}</span> casos
+            </div>
 
-        <div class="filtros-activos" id="filtrosActivos"></div>
+            <div class="filtros-activos" id="filtrosActivos"></div>
 
-        <!-- Tabla de casos -->
-        <div class="tabla-contenedor">
-            <table class="tabla-casos">
-                <thead>
-                    <tr>
-                        <th>Nombre del Caso</th>
-                        <th>N° Expediente</th>
-                        <th>Fecha Sentencia</th>
-                        <th>Instancia</th>
-                        <th>Juzgado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for caso in casos %}
-                    <tr>
-                        <td>{{ caso.nombre_caso }}</td>
-                        <td>{{ caso.numero_expediente }}</td>
-                        <td>{{ caso.fecha_sentencia.strftime('%d/%m/%Y') if caso.fecha_sentencia else '' }}</td>
-                        <td>{{ caso.instancia }}</td>
-                        <td>{{ caso.juzgado }}</td>
-                        <td>
-                            <div class="acciones-contenedor">
-                                <a href="{{ url_for('editar_caso', id=caso.id) }}" class="btn-editar">Ver</a>
-                                <form class="form-eliminar" action="{{ url_for('eliminar_caso', id=caso.id) }}" method="POST">
-                                    <button type="submit" class="btn-eliminar" onclick="return confirm('¿Estás seguro de eliminar este caso?')">
-                                        Eliminar
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <!-- Tabla de casos -->
+            <div class="tabla-contenedor">
+                <table class="tabla-casos">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Caso</th>
+                            <th>N° Expediente</th>
+                            <th>Fecha Sentencia</th>
+                            <th>Instancia</th>
+                            <th>Juzgado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for caso in casos %}
+                        <tr>
+                            <td>{{ caso.nombre_caso }}</td>
+                            <td>{{ caso.numero_expediente }}</td>
+                            <td>{{ caso.fecha_sentencia.strftime('%d/%m/%Y') if caso.fecha_sentencia else '' }}</td>
+                            <td>{{ caso.instancia }}</td>
+                            <td>{{ caso.juzgado }}</td>
+                            <td>
+                                <div class="acciones-contenedor">
+                                    <a href="{{ url_for('editar_caso', id=caso.id) }}" class="btn-editar">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </a>
+                                    <form class="form-eliminar" action="{{ url_for('eliminar_caso', id=caso.id) }}" method="POST">
+                                        <button type="submit" class="btn-eliminar" onclick="return confirm('¿Estás seguro de eliminar este caso?')">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Formulario de carga -->
-        <div class="form-container" style="margin-top: 70px;">
+        <div class="card">
             <h2>Ingresar Nueva Sentencia</h2>
             <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateFiles()">
+                <input type="hidden" name="origen" value="privado">
                 <div class="form-group drop-zone" id="drop-zone">
-                    Arrastra y suelta archivos aquí o haz clic para seleccionar
+                    <i class="fas fa-cloud-upload-alt drop-zone-icon"></i>
+                    <div class="drop-zone-text">Arrastra y suelta archivos aquí</div>
+                    <div class="drop-zone-hint">o haz clic para seleccionar archivos PDF</div>
                     <input type="file" id="documentos" name="documentos[]" accept=".pdf" multiple hidden>
                 </div>
                 <div class="file-list" id="file-list"></div>
-                <button type="submit" class="submit-button">Cargar Sentencia</button>
+                <button type="submit" class="submit-button">
+                    <i class="fas fa-upload"></i>
+                    Cargar Sentencia
+                </button>
             </form>
         </div>
 
@@ -436,58 +697,95 @@
             {% endif %}
         {% endwith %}
 
-        <div class="chat-container">
-                <h3>Asistente Legal IA</h3>
-                <div class="chat-box" id="chatBox"></div>
-                <div class="chat-input">
-                    <input type="text" id="chatInput" placeholder="Pregunta sobre los casos...">
-                    <button onclick="enviarMensaje()">Enviar</button>
-                </div>
+        <div class="card">
+            <h3>Asistente Legal IA</h3>
+            <div class="chat-box" id="chatBox"></div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Pregunta sobre los casos...">
+                <button onclick="enviarMensaje()">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar
+                </button>
             </div>
         </div>
-        
     </div>
 
     {% include 'footers/footer.html' %}
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Script para el drag and drop
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('documentos');
         const fileList = document.getElementById('file-list');
 
+        // Efecto visual al hacer hover en la zona de drop
+        dropZone.addEventListener('mouseover', () => {
+            dropZone.style.transform = 'scale(1.01)';
+        });
+
+        dropZone.addEventListener('mouseout', () => {
+            dropZone.style.transform = 'scale(1)';
+        });
+
         dropZone.addEventListener('click', () => fileInput.click());
 
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropZone.style.backgroundColor = '#e0e0e0';
+            dropZone.style.backgroundColor = 'rgba(94, 53, 177, 0.15)';
+            dropZone.style.borderStyle = 'solid';
         });
 
         dropZone.addEventListener('dragleave', () => {
-            dropZone.style.backgroundColor = '#f9f9f9';
+            dropZone.style.backgroundColor = 'var(--primary-bg)';
+            dropZone.style.borderStyle = 'dashed';
         });
 
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropZone.style.backgroundColor = '#f9f9f9';
-            fileInput.files = e.dataTransfer.files;
-            updateFileList();
+            dropZone.style.backgroundColor = 'var(--primary-bg)';
+            dropZone.style.borderStyle = 'dashed';
+
+            // Verificar si hay archivos
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                updateFileList();
+            }
         });
 
         fileInput.addEventListener('change', updateFileList);
 
         function updateFileList() {
             fileList.innerHTML = '';
+
+            if (fileInput.files.length === 0) {
+                return;
+            }
+
             for (let file of fileInput.files) {
                 const fileItem = document.createElement('div');
                 fileItem.classList.add('file-item');
-                fileItem.textContent = file.name;
+
+                const fileInfo = document.createElement('div');
+                fileInfo.classList.add('file-info');
+
+                const fileIcon = document.createElement('i');
+                fileIcon.classList.add('fas', 'fa-file-pdf', 'file-icon');
+
+                const fileName = document.createElement('span');
+                fileName.classList.add('file-name');
+                fileName.textContent = file.name;
+
+                fileInfo.appendChild(fileIcon);
+                fileInfo.appendChild(fileName);
 
                 const removeBtn = document.createElement('span');
-                removeBtn.textContent = '✖';
+                removeBtn.innerHTML = '<i class="fas fa-times"></i>';
                 removeBtn.classList.add('remove-file');
+                removeBtn.title = 'Eliminar archivo';
                 removeBtn.addEventListener('click', () => removeFile(file));
 
+                fileItem.appendChild(fileInfo);
                 fileItem.appendChild(removeBtn);
                 fileList.appendChild(fileItem);
             }
@@ -506,13 +804,42 @@
 
         function validateFiles() {
             const files = fileInput.files;
+
+            if (files.length === 0) {
+                showError('Por favor, selecciona al menos un archivo.');
+                return false;
+            }
+
             for (let file of files) {
                 if (file.type !== 'application/pdf') {
-                    alert('Solo se permiten archivos PDF.');
+                    showError('Solo se permiten archivos PDF.');
                     return false;
                 }
             }
             return true;
+        }
+
+        function showError(message) {
+            // Eliminar error anterior si existe
+            const existingError = document.querySelector('.error');
+            if (existingError) {
+                existingError.remove();
+            }
+
+            const errorDiv = document.createElement('div');
+            errorDiv.classList.add('error');
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+
+            // Insertar después de la lista de archivos
+            fileList.parentNode.insertBefore(errorDiv, fileList.nextSibling);
+
+            // Desaparecer después de 5 segundos
+            setTimeout(() => {
+                errorDiv.style.opacity = '0';
+                setTimeout(() => {
+                    errorDiv.remove();
+                }, 300);
+            }, 5000);
         }
 
         // Función para eliminar acentos
@@ -544,6 +871,7 @@
             actualizarContador();
             mostrarFiltrosActivos();
         }
+
         // Funciones adicionales
         function actualizarContador() {
             const filasVisibles = document.querySelectorAll('.tabla-casos tbody tr[style=""]').length;
@@ -563,10 +891,10 @@
 
             let html = '';
             if (busqueda) {
-                html += `<span class="filtro-activo">Búsqueda: "${busqueda}"</span>`;
+                html += `<span class="filtro-activo"><i class="fas fa-search"></i> Búsqueda: "${busqueda}"</span>`;
             }
             if (instancia) {
-                html += `<span class="filtro-activo">Instancia: ${instancia}</span>`;
+                html += `<span class="filtro-activo"><i class="fas fa-filter"></i> Instancia: ${instancia}</span>`;
             }
             contenedor.innerHTML = html;
         }
@@ -575,7 +903,6 @@
         document.getElementById('busquedaInput').addEventListener('input', filtrarCasos);
         document.getElementById('filtroInstancia').addEventListener('change', filtrarCasos);
         filtrarCasos();
-
 
         // Script para el chat
         async function enviarMensaje() {
@@ -618,7 +945,7 @@
             } catch (error) {
                 chatBox.innerHTML += `
                     <div class="mensaje-ia error">
-                        Error: ${error.message}
+                        <i class="fas fa-exclamation-triangle"></i> Error: ${error.message}
                     </div>
                 `;
             }
