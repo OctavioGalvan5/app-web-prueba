@@ -166,6 +166,9 @@
             {% if badaro_cm_palavecino %}
             <td class="negrita">Badaro CM Palavecino</td>
             {% endif %}
+            {% if RM_Badaro_FP_CM_P_Anses %}
+            <td class="negrita">RM + Badaro + FP + CM +  P+ Anses</td>
+            {% endif %}
 
 
 
@@ -203,6 +206,9 @@
             {% if badaro_cm_palavecino %}
                 <td>{{ badaro_cm_palavecino_2 }}</td>
             {% endif %}
+            {% if RM_Badaro_FP_CM_P_Anses %}
+                <td>{{ RM_Badaro_FP_CM_P_Anses_2 }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
                 <td class="negrita first-column-cell" colspan="2">Diferencia con Haber maximo Anses</td>
@@ -236,6 +242,9 @@
             {% if badaro_cm_palavecino %}
                 <td class="confiscatoriedad">{{ dif_monto_badaro_cm_palavecino }}</td>
             {% endif %}
+            {% if RM_Badaro_FP_CM_P_Anses %}
+                <td class="confiscatoriedad">{{ dif_monto_RM_Badaro_FP_CM_P_Anses }}</td>
+            {% endif %}
         </tr>
         <tr class="font-large">
             <td class="negrita first-column-cell" colspan="2">Porcentaje de Diferencia con Haber maximo Anses</td>
@@ -268,6 +277,9 @@
             {% endif %}
             {% if badaro_cm_palavecino %}
                 <td style="color: red;">{{ dif_badaro_cm_palavecino }}</td>
+            {% endif %}
+            {% if RM_Badaro_FP_CM_P_Anses %}
+                <td style="color: red;">{{ dif_RM_Badaro_FP_CM_P_Anses }}</td>
             {% endif %}
         </tr>
     </table>
@@ -383,6 +395,15 @@
             <td>{{ badaro_cm_palavecino_2 }}</td>
             <td class="confiscatoriedad">{{ dif_haber_reclamado_badaro_cm_palavecino_2 }}</td>
             <td style="color: red;">{{ porc_haber_reclamado_badaro_cm_palavecino_2 }}</td>
+        </tr>
+        {% endif %}
+
+        {% if RM_Badaro_FP_CM_P_Anses %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">RM+Badaro+FP+CM+P+Anses</td>
+            <td>{{ RM_Badaro_FP_CM_P_Anses_2 }}</td>
+            <td class="confiscatoriedad">{{ dif_haber_reclamado_RM_Badaro_FP_CM_P_Anses }}</td>
+            <td style="color: red;">{{ porc_haber_reclamado_RM_Badaro_FP_CM_P_Anses }}</td>
         </tr>
         {% endif %}
     </table>
