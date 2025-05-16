@@ -3,119 +3,505 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Footer Responsivo</title>
+    <title>Footer Moderno</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body, html {
+        :root {
+            --primary: #5e35b1;
+            --primary-light: #9162e4;
+            --primary-dark: #3c1f8b;
+            --secondary: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #6c757d;
+            --white: #ffffff;
+            --border-radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
         }
+
+        body, html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #f5f7fa;
+        }
+
+        /* Main Footer Styles */
         .footer {
-            background-color: #69017c;
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: var(--white);
             position: relative;
-            box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
+
+        /* Background Pattern */
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="0" y="0" width="10" height="100" fill="rgba(255,255,255,0.03)"/><rect x="20" y="0" width="10" height="100" fill="rgba(255,255,255,0.03)"/><rect x="40" y="0" width="10" height="100" fill="rgba(255,255,255,0.03)"/><rect x="60" y="0" width="10" height="100" fill="rgba(255,255,255,0.03)"/><rect x="80" y="0" width="10" height="100" fill="rgba(255,255,255,0.03)"/></svg>');
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        /* Footer Top Section */
+        .footer-top {
+            position: relative;
+            z-index: 1;
+            padding: 60px 40px 40px;
+        }
+
         .footer-content {
             display: flex;
-            justify-content: space-around;
-            align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
             max-width: 1200px;
             margin: 0 auto;
+            gap: 40px;
         }
+
+        /* Footer Sections */
         .footer-section {
-            margin: 10px;
             flex: 1;
-            min-width: 200px;
+            min-width: 250px;
         }
-        .footer h3 {
-            color: white; /* Cambiado a blanco */
+
+        .footer-section h3 {
+            color: var(--white);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        /* Company Info Section */
+        .company-info {
+            margin-bottom: 20px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 15px;
         }
+
+        .footer-logo i {
+            font-size: 2rem;
+        }
+
+        .footer-logo span {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .company-description {
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        /* Quick Links */
         .footer-links {
             list-style: none;
             padding: 0;
         }
+
         .footer-links li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
-        .footer a {
-            color: white;
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .footer a:hover {
-            color: #FFD700;
-        }
-        .social-icons {
+            transition: var(--transition);
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+            transform: translateX(5px);
+        }
+
+        .footer-links a i {
+            font-size: 0.8rem;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .contact-item i {
+            font-size: 1.2rem;
+            color: var(--white);
+            margin-top: 3px;
+        }
+
+        .contact-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .contact-item a:hover {
+            color: var(--white);
+        }
+
+        /* Newsletter */
+        .newsletter-form {
             margin-top: 20px;
         }
+
+        .newsletter-form p {
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .form-group button {
+            background-color: var(--white);
+            color: var(--primary);
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .form-group button:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Social Icons */
+        .social-icons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
         .social-icons a {
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 40px;
             height: 40px;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            color: #6A0DAD;
-            text-align: center;
-            line-height: 40px;
-            font-size: 20px;
-            transition: all 0.3s ease;
+            color: var(--white);
+            font-size: 1.2rem;
+            transition: var(--transition);
         }
+
         .social-icons a:hover {
-            background-color: #FFD700;
+            background-color: var(--white);
+            color: var(--primary);
             transform: translateY(-3px);
         }
+
+        /* Footer Bottom */
         .footer-bottom {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 20px 40px;
+            text-align: center;
         }
-        @media (max-width: 768px) {
+
+        .footer-bottom-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-bottom-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--white);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: absolute;
+            right: 40px;
+            top: -25px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--white);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 2;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
             .footer-content {
+                gap: 30px;
+            }
+
+            .footer-section {
+                min-width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-top {
+                padding: 50px 30px 30px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .footer-section {
+                width: 100%;
+            }
+
+            .footer-bottom {
+                padding: 20px 30px;
+            }
+
+            .footer-bottom-content {
                 flex-direction: column;
                 text-align: center;
             }
-            .footer-section {
-                margin: 20px 0;
+
+            .footer-bottom-links {
+                justify-content: center;
             }
+
+            .back-to-top {
+                right: 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer-top {
+                padding: 40px 20px 30px;
+            }
+
+            .footer-bottom {
+                padding: 20px;
+            }
+
+            .back-to-top {
+                right: 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .footer-section {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .footer-section:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .footer-section:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .footer-section:nth-child(4) {
+            animation-delay: 0.3s;
         }
     </style>
 </head>
 <body>
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Enlaces Rápidos</h3>
-                <ul class="footer-links">
-                    <li><a href="#">Contáctanos</a></li>
-                    <li><a href="#about">Más acerca de nosotros</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Contacto</h3>
-                <p>Email: info@miempresa.com</p>
-                <p>Teléfono: +1 234 567 890</p>
-            </div>
-            <div class="footer-section">
-                <h3>Síguenos</h3>
-                <div class="social-icons">
-                    <a href="#" aria-label="Facebook">f</a>
-                    <a href="#" aria-label="Twitter">t</a>
-                    <a href="#" aria-label="Instagram">i</a>
-                    <a href="#" aria-label="LinkedIn">in</a>
+        <div class="footer-top">
+            <div class="footer-content">
+                <!-- Company Info Section -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-balance-scale"></i>
+                        <span>TyE</span>
+                    </div>
+                    <p class="company-description">
+                        Proporcionamos herramientas de cálculo jurídico precisas y confiables para profesionales del derecho, facilitando su trabajo diario con soluciones tecnológicas avanzadas.
+                    </p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links Section -->
+
+                <!-- Contact Info Section -->
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Av. Belgrano 1188, Salta Capital<br>Salta, Argentina</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span><a href="tel:+541123456789">+54 11 2345-6789</a></span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span><a href="mailto:info@juriscalc.com">info@TyE.com</a></span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Lunes - Viernes: 9:00 - 18:00<br>Sábados: 10:00 - 14:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Newsletter Section -->
+                <div class="footer-section">
+                    <h3>Boletín Informativo</h3>
+                    <p>Suscríbete para recibir actualizaciones sobre nuevas funcionalidades y recursos legales.</p>
+                    <form class="newsletter-form">
+                        <div class="form-group">
+                            <input type="email" placeholder="Tu correo electrónico" required>
+                            <button type="submit">Suscribirse</button>
+                        </div>
+                    </form>
+                    <p style="font-size: 0.8rem; margin-top: 10px; color: rgba(255, 255, 255, 0.6);">
+                        Al suscribirte, aceptas nuestra política de privacidad y términos de servicio.
+                    </p>
                 </div>
             </div>
         </div>
+
+        <!-- Back to Top Button -->
+        <a href="#top" class="back-to-top" aria-label="Volver arriba">
+            <i class="fas fa-chevron-up"></i>
+        </a>
+
+        <!-- Footer Bottom Section -->
         <div class="footer-bottom">
-            <p>&copy; 2024 Mi Empresa. Todos los derechos reservados.</p>
+            <div class="footer-bottom-content">
+                <div class="copyright">
+                    &copy; 2024 TyE. Todos los derechos reservados.
+                </div>
+                <div class="footer-bottom-links">
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
         </div>
     </footer>
+
+    <script>
+        // Back to top button functionality
+        document.querySelector('.back-to-top').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Newsletter form submission
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+
+            // Here you would typically send the email to your server
+            // For demo purposes, we'll just show an alert
+            alert(`¡Gracias por suscribirte con ${email}! Pronto recibirás nuestras actualizaciones.`);
+
+            // Reset the form
+            this.reset();
+        });
+    </script>
 </body>
 </html>

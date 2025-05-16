@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navigation Component</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #69017c;
-            --secondary-color: #f72585;
-            --background-color: #f0f0f0;
-            --text-color: #333;
-            --nav-height: 60px;
+            --primary: #5e35b1;
+            --primary-light: #9162e4;
+            --primary-dark: #3c1f8b;
+            --secondary: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #6c757d;
+            --white: #ffffff;
+            --nav-height: 70px;
+            --border-radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * {
@@ -21,14 +27,17 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--text-dark);
             overflow-x: hidden;
+            padding-top: var(--nav-height);
+            line-height: 1.6;
         }
 
+        /* Main Navigation */
         .navbar {
-            background-color: var(--primary-color);
+            background-color: var(--white);
             position: fixed;
             top: 0;
             left: 0;
@@ -37,94 +46,249 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0 24px;
+            box-shadow: var(--shadow);
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .navbar-brand {
             font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
+            font-weight: 700;
+            color: var(--primary);
             text-decoration: none;
-            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand i {
+            font-size: 1.8rem;
         }
 
         .navbar-links {
             display: flex;
             align-items: center;
+            height: 100%;
         }
 
-        .navbar-links a {
-            color: white;
+        .nav-item {
+            height: 100%;
+            position: relative;
+        }
+
+        .nav-link {
+            color: var(--text-dark);
             text-decoration: none;
-            padding: 0 15px;
-            height: var(--nav-height);
+            padding: 0 20px;
+            height: 100%;
             display: flex;
             align-items: center;
-            transition: background-color 0.3s ease;
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
         }
 
-        .navbar-links a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .nav-link:hover {
+            color: var(--primary);
         }
 
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 70%;
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* User Credits Badge */
         .credits {
-            background-color: var(--secondary-color);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 0.9rem;
-            margin-left: auto;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 20px;
+            box-shadow: 0 2px 8px rgba(94, 53, 177, 0.3);
+            transition: var(--transition);
         }
 
+        .credits:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(94, 53, 177, 0.4);
+        }
+
+        .credits i {
+            font-size: 1rem;
+        }
+
+        /* Hamburger Menu */
         .menu-toggle {
             display: none;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
             cursor: pointer;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1001;
+        }
+
+        .menu-toggle:hover {
+            background-color: var(--primary);
         }
 
         .menu-toggle span {
-            width: 25px;
-            height: 3px;
+            width: 20px;
+            height: 2px;
             background-color: white;
             margin: 2px 0;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            border-radius: 2px;
         }
 
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Side Navigation */
         .sidenav {
             height: 100%;
-            width: 250px;
+            width: 280px;
             position: fixed;
             top: 0;
-            left: -250px;
-            background-color: var(--primary-color);
+            left: -280px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: var(--nav-height);
+            transition: var(--transition);
+            padding-top: calc(var(--nav-height) + 20px);
             z-index: 999;
+            box-shadow: var(--shadow);
         }
 
-        .sidenav a {
-            padding: 15px 25px;
+        .sidenav-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .sidenav-header {
+            padding: 0 24px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidenav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidenav-brand i {
+            font-size: 1.8rem;
+        }
+
+        .sidenav-links {
+            flex: 1;
+            padding: 0 12px;
+        }
+
+        .sidenav-link {
+            padding: 14px 24px;
             text-decoration: none;
             font-size: 1rem;
             color: white;
-            display: block;
-            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            border-radius: var(--border-radius);
+            margin-bottom: 8px;
+            font-weight: 500;
         }
 
-        .sidenav a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .sidenav-link:hover,
+        .sidenav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
         }
 
-        .sidenav .closebtn {
-            position: absolute;
+        .sidenav-link i {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidenav-footer {
+            padding: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+
+        .sidenav .credits {
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: none;
+            width: 100%;
+            margin: 0;
+            justify-content: center;
+        }
+
+        .overlay {
+            position: fixed;
             top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 992px) {
+            .navbar {
+                padding: 0 16px;
+            }
+
+            .nav-link {
+                padding: 0 15px;
+            }
         }
 
         @media screen and (max-width: 768px) {
@@ -136,72 +300,159 @@
                 display: flex;
             }
 
-            .credits {
+            .navbar-actions {
+                margin-left: auto;
+                margin-right: 20px;
+            }
+
+            .navbar-actions .credits {
                 display: none;
             }
 
             .sidenav {
-                padding-top: calc(var(--nav-height) + 20px);
+                padding-top: 80px;
             }
 
-            .sidenav .credits {
-                display: block;
-                margin: 20px 25px;
+            body.nav-open {
+                overflow: hidden;
             }
+
+            body.nav-open .overlay {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            body.nav-open .sidenav {
+                left: 0;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .navbar, .sidenav-link, .credits {
+            animation: fadeIn 0.5s ease forwards;
         }
     </style>
 </head>
-
 <body>
+    <!-- Main Navigation -->
     <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <i class="fas fa-balance-scale"></i>
+            <span>TyE</span>
+        </a>
+
         <div class="navbar-links">
-            <a href="/">Volver</a>
+            <div class="nav-item">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Volver
+                </a>
+            </div>
         </div>
-        <div class="menu-toggle" onclick="toggleNav()">
+
+        <div class="menu-toggle" id="menuToggle">
             <span></span>
             <span></span>
             <span></span>
         </div>
     </nav>
 
+    <!-- Side Navigation -->
     <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="/">Volver</a>
+        <div class="sidenav-content">
+            <div class="sidenav-header">
+                <div class="sidenav-brand">
+                    <i class="fas fa-balance-scale"></i>
+                    <span>TyE</span>
+                </div>
+            </div>
+
+            <div class="sidenav-links">
+                <a href="/" class="sidenav-link">
+                    <i class="fas fa-sign-out-alt"></i> Volver
+                </a>
+            </div>
+
+            <div class="sidenav-footer">
+            </div>
+        </div>
     </div>
+
+    <!-- Overlay for mobile -->
+    <div class="overlay" id="overlay"></div>
+
     <script>
+        // DOM Elements
+        const menuToggle = document.getElementById('menuToggle');
+        const sidenav = document.getElementById('mySidenav');
+        const overlay = document.getElementById('overlay');
+        const body = document.body;
+
+        // State
         let isNavOpen = false;
 
+        // Toggle navigation
         function toggleNav() {
-            const sidenav = document.getElementById("mySidenav");
-            const menuToggle = document.querySelector(".menu-toggle");
-
             if (isNavOpen) {
-                sidenav.style.left = "-250px";
-                menuToggle.classList.remove("active");
+                closeNav();
             } else {
-                sidenav.style.left = "0";
-                menuToggle.classList.add("active");
+                openNav();
             }
-
-            isNavOpen = !isNavOpen;
         }
 
+        // Open navigation
+        function openNav() {
+            sidenav.style.left = "0";
+            menuToggle.classList.add("active");
+            body.classList.add("nav-open");
+            isNavOpen = true;
+        }
+
+        // Close navigation
         function closeNav() {
-            document.getElementById("mySidenav").style.left = "-250px";
-            document.querySelector(".menu-toggle").classList.remove("active");
+            sidenav.style.left = "-280px";
+            menuToggle.classList.remove("active");
+            body.classList.remove("nav-open");
             isNavOpen = false;
         }
 
+        // Event Listeners
+        menuToggle.addEventListener('click', toggleNav);
+        overlay.addEventListener('click', closeNav);
+
+        // Close nav on window resize if screen becomes large
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768 && isNavOpen) {
                 closeNav();
             }
         });
 
-        document.querySelector(".menu-toggle").addEventListener('click', function () {
-            this.classList.toggle("active");
+        // Set active link based on current page
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname;
+
+            // Set active class for main navbar
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            // Set active class for sidenav
+            document.querySelectorAll('.sidenav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
         });
     </script>
 </body>
-
 </html>
