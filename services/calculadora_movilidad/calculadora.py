@@ -1049,7 +1049,7 @@ class CalculadorMovilidad:
             valor_Caliva_Palavecino = formatear_dinero(montos_a_fecha_cierre[14]),
             valor_Anses_Palavecino = formatear_dinero(montos_a_fecha_cierre[15]),
             valor_mov_personalizada = formatear_dinero(ultimo_valor_personalizado),
-            
+
 
 
 
