@@ -523,14 +523,14 @@ def generar_grafico_linea(
         paper_bgcolor='rgba(0, 0, 0, 0)',
     )
 
-    buffer = io.BytesIO()
-    # Es posible que necesites instalar kaleido para exportar a PNG: pip install kaleido
-    fig.write_image(buffer, format='png')
-    buffer.seek(0)
-    imagen_base64 = base64.b64encode(buffer.read()).decode('utf-8')
-    buffer.close()
+    try:
+        img_bytes = fig.to_image(format="png")
+        imagen_base64 = base64.b64encode(img_bytes).decode('utf-8')
+    except Exception as e:
+        print("⚠️ Error al generar grafico4:", e)
+        imagen_base64 = ""  # Retornar string vacío en caso de error
 
-    return imagen_base64
+    return imagen_base64  # asegurate de siempre retornar un string
 
 
 
