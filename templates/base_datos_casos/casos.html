@@ -586,38 +586,6 @@
 </head>
 <body>
     {% include 'navs/nav.html' %}
-    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-    <script type="module">
-        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-
-        createChat({
-            webhookUrl: 'https://mathxpert.app.n8n.cloud/webhook/61e6d562-cb68-4241-81e5-f3b183ff6061/chat',
-            webhookConfig: {
-                method: 'POST',
-                headers: {}
-            },
-            target: '#n8n-chat',
-            mode: 'window',
-            chatInputKey: 'chatInput',
-            chatSessionKey: 'sessionId',
-            metadata: {},
-            showWelcomeScreen: false,
-            defaultLanguage: 'en',
-            initialMessages: [
-                'Hola! 👋',
-                'Soy el asistente de TyE ¿Como puedo ayudarte hoy?'
-            ],
-            i18n: {
-                en: {
-                    title: 'Hola! 👋',
-                    subtitle: "Busca informacion de casos de manera mas rapida",
-                    footer: '',
-                    getStarted: 'Nueva conversacion',
-                    inputPlaceholder: 'Ingresa tu consulta...',
-                },
-            },
-        });
-    </script>
     <div class="container">
         <!-- Sección de casos -->
         <div class="card">
