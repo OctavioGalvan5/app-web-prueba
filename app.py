@@ -2053,7 +2053,6 @@ def ver_cliente(id):
     return render_template('consultas/ver_cliente.html', data_cliente=data_cliente)
 
 @app.route("/datos_cruzados")
-@login_required
 def datos_cruzados():
     SCOPE = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
