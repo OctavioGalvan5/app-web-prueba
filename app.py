@@ -2052,6 +2052,39 @@ def ver_cliente(id):
 
     return render_template('consultas/ver_cliente.html', data_cliente=data_cliente)
 
+@app.route("/datos_cruzados")
+@login_required
+def datos_cruzados():
+    SCOPE = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+
+    credentials_json = os.getenv("GOOGLE_CREDENTIALS")
+    if credentials_json is None:
+        raise Exception("La variable de entorno 'GOOGLE_CREDENTIALS' no está definida.")
+
+    credentials_info = json.loads(credentials_json)
+    creds = Credentials.from_service_account_info(credentials_info, scopes=SCOPE)
+
+    gc = gspread.authorize(creds)
+
+    # ID de la hoja de cálculo que me pasaste
+    SPREADSHEET_ID = "167m4jgbXfm8y2Z2csbxEwIdPtBgGc4g_Kp9wfSQPQ8M"
+
+    sheet = gc.open_by_key(SPREADSHEET_ID).sheet1
+
+    data = sheet.get_all_records()
+
+    datos = []
+    for row in data:
+        datos.append({
+            'nombre_planilla': row.get('NOMBRE_Planilla', 'No disponible'),
+            'n_beneficio_planilla': row.get('N_BENEFICIO_Planilla', 'No disponible'),
+            'nombre_aprobadas': row.get('Nombre y Apellido_Aprobadas', 'No disponible'),
+            'beneficio_aprobadas': row.get('Beneficio_Aprobadas', 'No disponible'),
+            'detalle_aprobadas': row.get('Detalle_Aprobadas', 'No disponible'),
+            'mes_aprobadas': row.get('Mes_Aprobadas', 'No disponible'),
+        })
+
+    return render_template("datos_cruzados/datos_cruzados.html", datos=datos)
 
 if __name__ == '__main__':
     app.run(debug=True)

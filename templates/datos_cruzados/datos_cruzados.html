@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos Cruzados</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5e35b1;
+            --primary-light: #9162e4;
+            --primary-dark: #3c1f8b;
+            --primary-bg: #f5f2ff;
+            --secondary: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #6c757d;
+            --white: #ffffff;
+            --border-radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            margin-bottom: 40px;
+            border: none;
+        }
+
+        .card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+            font-size: 32px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Library Hero Section */
+        .library-hero {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 60px 20px;
+            border-radius: var(--border-radius);
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .library-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="0" y="0" width="10" height="100" fill="rgba(255,255,255,0.05)"/><rect x="20" y="0" width="10" height="100" fill="rgba(255,255,255,0.05)"/><rect x="40" y="0" width="10" height="100" fill="rgba(255,255,255,0.05)"/><rect x="60" y="0" width="10" height="100" fill="rgba(255,255,255,0.05)"/><rect x="80" y="0" width="10" height="100" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .library-hero h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 36px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .library-hero h2::after {
+            background: white;
+        }
+
+        .library-hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Search Section */
+        .search-container {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+            z-index: 1;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        /* Table Styles */
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            background-color: var(--white);
+            margin-top: 30px;
+            position: relative; /* Added for proper stacking context */
+        }
+
+        .book-table {
+            width: 100%;
+            border-collapse: collapse;
+            position: relative;
+        }
+
+        .book-table th, 
+        .book-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Fixed header styles */
+        .book-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10; /* Increased z-index */
+        }
+
+        .book-table th {
+            background-color: var(--primary); /* Solid color */
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .book-table tr:hover {
+            background-color: var(--primary-bg);
+        }
+
+        .book-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Custom Scrollbar */
+        .table-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* View Button */
+        .btn-view {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-view:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* Results Counter */
+        .results-counter {
+            margin: 20px 0;
+            font-size: 16px;
+            color: var(--primary);
+            font-weight: 600;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .counter-badge {
+            background-color: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .active-filters {
+            margin: 10px 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .filter-tag {
+            background-color: var(--primary-bg);
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .filter-tag i {
+            font-size: 12px;
+        }
+
+        /* Category Badge */
+        .category-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: var(--primary-light);
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .book-table tr {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .book-table th:nth-child(4),
+            .book-table td:nth-child(4),
+            .book-table th:nth-child(5),
+            .book-table td:nth-child(5) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 20px auto;
+            }
+            .card {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 24px;
+            }
+            .library-hero {
+                padding: 40px 15px;
+            }
+            .library-hero h2 {
+                font-size: 28px;
+            }
+            .library-hero p {
+                font-size: 16px;
+            }
+            .book-table th:nth-child(3),
+            .book-table td:nth-child(3),
+            .book-table th:nth-child(6),
+            .book-table td:nth-child(6) {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .book-table th, 
+            .book-table td {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-98REL9JCTR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-98REL9JCTR');
+    </script>
+</head>
+<body>
+    {% include 'navs/nav.html' %}
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="library-hero">
+            <h2>Datos Cruzados</h2>
+            <p></p>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="Buscar por nombre, estado, beneficio..."
+                    id="busquedaInput">
+            </div>
+        </div>
+
+        <!-- Results Counter -->
+        <div class="results-counter">
+            <i class="fas fa-book"></i>
+            Mostrando <span class="counter-badge" id="contador">0</span> de <span class="counter-badge">{{ datos|length }}</span> beneficios
+        </div>
+
+        <!-- Active Filters -->
+        <div class="active-filters" id="filtrosActivos"></div>
+
+        <!-- Books Table -->
+        <div class="card">
+            <div class="table-container">
+                <table class="book-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-user-edit"></i> NOMBRE EN NUESTRA BASE</th>
+                            <th><i class="fas fa-book"></i> BENEFICIO</th>
+                            <th><i class="fas fa-user-edit"></i> RESULTADO DEL
+                            CRUCE</th>
+                            <th><i class="fas fa-book"></i> BASE
+                            BUSQUEDA </th>
+                            <th><i class="fas fa-tag"></i> ESTADO</th>
+                            <th><i class="fas fa-calendar-alt"></i> MES</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dato in datos %}
+                        <tr>
+                            <td>{{ dato['nombre_planilla'] }}</td>
+                            <td>{{ dato['n_beneficio_planilla'] }}</td>
+                            <td>{{ dato['nombre_aprobadas'] }}</td>
+                            <td>{{ dato['beneficio_aprobadas'] }}</td>
+                            <td><span class="category-badge">{{ dato['detalle_aprobadas'] or 'Beneficia' }}</span></td>
+                            <td>{{ dato['mes_aprobadas'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div id="empty-state" class="empty-state" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <p>No se encontraron libros que coincidan con tu búsqueda.</p>
+                    <p>Intenta con otros términos o limpia los filtros.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footers/footer.html' %}
+
+    <script>
+        // Filtrado de libros
+        function filtrarLibros() {
+            const inputBusqueda = document.getElementById('busquedaInput');
+            const tabla = document.querySelector('.book-table tbody');
+            const filas = tabla.querySelectorAll('tr');
+            const emptyState = document.getElementById('empty-state');
+
+            const textoBusqueda = inputBusqueda.value.toLowerCase();
+            let filasVisibles = 0;
+
+            filas.forEach(fila => {
+                // Obtenemos el contenido de las celdas que nos interesan:
+                const autor = fila.cells[0].textContent.toLowerCase();
+                const titulo = fila.cells[1].textContent.toLowerCase();
+                const categoria = fila.cells[2].textContent.toLowerCase();
+                const ano = fila.cells[4].textContent.toLowerCase();
+                const palabras = fila.cells[5].textContent.toLowerCase();
+
+                // Verificamos si el texto de búsqueda se encuentra en alguna de estas celdas
+                const coincideTexto = autor.includes(textoBusqueda) ||
+                                      titulo.includes(textoBusqueda) ||
+                                      categoria.includes(textoBusqueda) ||
+                                      ano.includes(textoBusqueda) ||
+                                      palabras.includes(textoBusqueda);
+
+                // Mostramos u ocultamos la fila según la coincidencia
+                if (coincideTexto) {
+                    fila.style.display = '';
+                    filasVisibles++;
+                } else {
+                    fila.style.display = 'none';
+                }
+            });
+
+            // Mostrar estado vacío si no hay resultados
+            if (filasVisibles === 0 && textoBusqueda !== '') {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+
+            actualizarContador();
+            mostrarFiltrosActivos();
+        }
+
+        function actualizarContador() {
+            // Contamos solo las filas que estén visibles
+            const filasVisibles = document.querySelectorAll('.book-table tbody tr:not([style*="display: none"])').length;
+            document.getElementById('contador').textContent = filasVisibles;
+        }
+
+        function resetearFiltros() {
+            document.getElementById('busquedaInput').value = '';
+            filtrarLibros();
+        }
+
+        function mostrarFiltrosActivos() {
+            const contenedor = document.getElementById('filtrosActivos');
+            const busqueda = document.getElementById('busquedaInput').value;
+
+            let html = '';
+            if (busqueda) {
+                html += `<span class="filter-tag"><i class="fas fa-search"></i> Búsqueda: "${busqueda}" <i class="fas fa-times" onclick="resetearFiltros()" style="cursor: pointer;"></i></span>`;
+            }
+            contenedor.innerHTML = html;
+        }
+
+        // Inicialización: se ejecuta la función al escribir en la barra de búsqueda
+        document.getElementById('busquedaInput').addEventListener('input', filtrarLibros);
+
+        // Ejecutar al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            filtrarLibros();
+        });
+    </script>
+</body>
+</html>
