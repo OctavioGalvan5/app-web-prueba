@@ -3,175 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escrito de Liquidacion</title>
+    <title>Escrito de Liquidación</title>
+    <!-- Bootstrap 5 CSS desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
+        :root {
+            --primary-color: #6a0dad;
+            --primary-light: #9b59b6;
+            --primary-dark: #4a0080;
+            --secondary-color: #f0e6fa;
+            --text-color: #333;
+            --light-gray: #f8f9fa;
+            --border-color: #e0d8e8;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+
+        body, html {
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f0ff, #e6d9f2);
+            min-height: 100vh;
+            color: var(--text-color);
         }
+
         form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 0 auto;
-            margin-top: 50px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            margin: 50px auto;
         }
-        h2, h3, h4 {
-            color: #333;
-            margin-bottom: 10px;
+
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 600;
         }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 30px;
+        }
+
+        h3 {
+            font-size: 20px;
+            margin-top: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h4 {
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-dark);
         }
+
         input[type="text"],
         input[type="number"],
         input[type="date"],
         select {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 0.2rem rgba(106, 13, 173, 0.25);
+            outline: none;
+        }
+
         .checkbox-container {
             display: flex;
             align-items: center;
             gap: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
+
         .checkbox-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
             margin-bottom: 20px;
         }
-        .checkbox-group input[type="checkbox"] {
-            margin-right: 5px;
+
+        .checkbox-group input[type="checkbox"],
+        .checkbox-group input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
         }
+
         .inline-checkbox-container {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            background-color: var(--secondary-color);
+            padding: 12px 15px;
+            border-radius: 8px;
         }
+
         .inline-checkbox-container h4 {
             margin: 0;
-            margin-right: 10px;
+            margin-right: 15px;
+            min-width: 200px;
         }
+
         .inline-checkbox-group {
             display: flex;
             align-items: center;
-            margin-right: 15px;
+            margin-right: 20px;
         }
+
         .inline-checkbox-group input[type="checkbox"] {
-            margin-right: 5px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
+            margin-right: 8px;
             cursor: pointer;
-            margin-top: 20px;
+            width: 18px;
+            height: 18px;
         }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         button:hover {
-            background-color: #45a049;
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
         }
+
         .conditional-section {
             display: none;
             margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--light-gray);
+            animation: fadeIn 0.3s ease-in-out;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         .form-row {
             display: flex;
             gap: 20px;
+            margin-bottom: 15px;
         }
+
         .form-row .form-group {
             flex: 1;
+            margin-bottom: 0;
         }
+
         .checkbox-item {
             display: flex;
             align-items: center;
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
-        .checkbox-item input[type="checkbox"] {
-            margin-right: 5px;
+
+        .checkbox-item:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--primary-light);
         }
+
+        .checkbox-item input[type="checkbox"],
+        .checkbox-item input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
         .label-with-icon {
             display: flex;
             align-items: center;
         }
+
         .info-icon {
-            margin-left: 5px;
+            margin-left: 8px;
             cursor: help;
             position: relative;
         }
+
         .info-icon::after {
             content: "?";
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            line-height: 16px;
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
             text-align: center;
             border-radius: 50%;
-            background-color: #6a1b9a;
+            background-color: var(--primary-color);
             color: white;
             font-size: 12px;
             font-weight: bold;
         }
+
         .info-icon .tooltip {
             visibility: hidden;
-            width: 200px;
-            background-color: #555;
-            color: #fff;
+            width: 250px;
+            background-color: #333;
+            color: white;
             text-align: center;
-            border-radius: 6px;
-            padding: 5px;
+            border-radius: 8px;
+            padding: 10px;
             position: absolute;
             z-index: 1;
             bottom: 125%;
             left: 50%;
-            margin-left: -100px;
+            margin-left: -125px;
             opacity: 0;
             transition: opacity 0.3s;
+            font-size: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
+
         .info-icon:hover .tooltip {
             visibility: visible;
             opacity: 1;
         }
 
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-98REL9JCTR"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-          gtag('config', 'G-98REL9JCTR');
-        </script>
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .section-divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 30px 0;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            form {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .inline-checkbox-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .inline-checkbox-container h4 {
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+
+            .inline-checkbox-group {
+                margin-bottom: 5px;
+            }
+        }
     </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-98REL9JCTR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-98REL9JCTR');
+    </script>
 </head>
 <body>
     {% include 'navs/nav.html' %}
-    <form id="liquidacionForm" action="{{ url_for('resultado_escrito_liquidacion') }}" method="POST">
-        <h1>Escrito de Liquidacion</h1>
 
-        <h3>Tipo de Escrito</h3>
+    <form id="liquidacionForm" action="{{ url_for('resultado_escrito_liquidacion') }}" method="POST">
+        <h1><i class="fas fa-file-invoice-dollar me-2"></i>Escrito de Liquidación</h1>
+
+        <div class="section-title">
+            <i class="fas fa-file-alt"></i>
+            <h3>Tipo de Escrito</h3>
+        </div>
         <div class="checkbox-group">
             <div class="checkbox-item">
                 <input type="radio" id="liquidacion_1ra_vez" name="tipo_escrito" value="liquidacion_1ra_vez">
-                <label for="liquidacion_1ra_vez">Liquidacion 1ra vez</label>
+                <label for="liquidacion_1ra_vez">Liquidación 1ra vez</label>
             </div>
             <div class="checkbox-item">
                 <input type="radio" id="descuento_pago" name="tipo_escrito" value="descuento_pago">
@@ -179,15 +351,15 @@
             </div>
             <div class="checkbox-item">
                 <input type="radio" id="ampliacion" name="tipo_escrito" value="ampliacion">
-                <label for="ampliacion">Ampliacion</label>
+                <label for="ampliacion">Ampliación</label>
             </div>
             <div class="checkbox-item" style="visibility: hidden;">
                 <input type="checkbox" id="ampliacion_inconstitucionalidad" name="ampliacion_inconstitucionalidad">
-                <label for="ampliacion_inconstitucionalidad">Ampliacion con inconstitucionalidad</label>
+                <label for="ampliacion_inconstitucionalidad">Ampliación con inconstitucionalidad</label>
             </div>
             <div class="checkbox-item" style="visibility: hidden;">
                 <input type="radio" id="liquidacion_1ra_vez_inconstitucionalidad" name="tipo_escrito" value="liquidacion_1ra_vez_inconstitucionalidad">
-                <label for="liquidacion_1ra_vez_inconstitucionalidad">Liquidacion 1ra vez con inconstitucionalidad</label>
+                <label for="liquidacion_1ra_vez_inconstitucionalidad">Liquidación 1ra vez con inconstitucionalidad</label>
             </div>
             <div class="checkbox-item" style="visibility: hidden;">
                 <input type="radio" id="descuento_pago_inconstitucionalidad" name="tipo_escrito" value="descuento_pago_inconstitucionalidad">
@@ -195,7 +367,10 @@
             </div>
         </div>
 
-        <h2>Inconstitucionalidades a aplicar:</h2>
+        <div class="section-title">
+            <i class="fas fa-gavel"></i>
+            <h2>Inconstitucionalidades a aplicar</h2>
+        </div>
         <div class="form-group">
             <div class="inline-checkbox-container">
                 <h4>Inconstitucionalidad de la ley 27.609:</h4>
@@ -238,46 +413,51 @@
             </div>
         </div>
 
+        <div class="section-divider"></div>
 
-        <h3>Datos del Escrito</h3>    
+        <div class="section-title">
+            <i class="fas fa-info-circle"></i>
+            <h3>Datos del Escrito</h3>
+        </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="cliente">Cliente:</label>
-                <input type="text" id="cliente" name="cliente" required>
+                <label for="cliente"><i class="fas fa-user me-2"></i>Cliente:</label>
+                <input type="text" id="cliente" name="cliente" required placeholder="Nombre del cliente">
             </div>
             <div class="form-group">
-                <label for="expediente">Expediente:</label>
-                <input type="text" id="expediente" name="expediente" required>
+                <label for="expediente"><i class="fas fa-folder me-2"></i>Expediente:</label>
+                <input type="text" id="expediente" name="expediente" required placeholder="Número de expediente">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label for="fecha_sentencia_primera">Fecha de Sentencia de Primera:</label>
+                <label for="fecha_sentencia_primera"><i class="fas fa-calendar-alt me-2"></i>Fecha de Sentencia de Primera:</label>
                 <input type="date" id="fecha_sentencia_primera" name="Fecha_Sentencia_Primera" required>
             </div>
             <div class="form-group">
-                <label>¿Tiene Sentencia de 2da?:</label>
+                <label><i class="fas fa-question-circle me-2"></i>¿Tiene Sentencia de 2da?:</label>
                 <div class="checkbox-container">
-                    <div class="checkbox-group">
+                    <div class="inline-checkbox-group">
                         <input type="checkbox" id="Sentencia_2da_Si" name="Sentencia_2da_Si">
                         <label for="Sentencia_2da_Si">Si</label>
                     </div>
-                    <div class="checkbox-group">
+                    <div class="inline-checkbox-group">
                         <input type="checkbox" id="Sentencia_2da_No" name="Sentencia_2da_No">
                         <label for="Sentencia_2da_No">No</label>
                     </div>
                 </div>
             </div>
         </div>
+
         <div id="Sentencia_de_Segunda" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="Sentencia_de_Segunda">Fecha de Sentencia de 2da:</label>
+                    <label for="Sentencia_de_Segunda"><i class="fas fa-calendar-alt me-2"></i>Fecha de Sentencia de 2da:</label>
                     <input type="date" id="sentencia_interlocutoria_costas" name="Sentencia_de_Segunda">
                 </div>
                 <div class="form-group">
-                    <label for="sala">Sala:</label>
+                    <label for="sala"><i class="fas fa-university me-2"></i>Sala:</label>
                     <select id="sala" name="Sala">
                         <option value="">Seleccione una Sala</option>
                         <option value="Sala I">Sala I</option>
@@ -286,31 +466,34 @@
                 </div>
             </div>
         </div>
+
         <div class="form-row">
             <div class="form-group">
-                <label for="fecha_inicial_pago">Fecha Inicial de Pago:</label>
+                <label for="fecha_inicial_pago"><i class="fas fa-calendar-check me-2"></i>Fecha Inicial de Pago:</label>
                 <input type="date" id="fecha_inicial_pago" name="Fecha_Inicial_de_Pago" required>
             </div>
             <div class="form-group">
-                <label for="fecha_cierre_liquidacion">Fecha de Cierre de Liquidacion:</label>
+                <label for="fecha_cierre_liquidacion"><i class="fas fa-calendar-times me-2"></i>Fecha de Cierre de Liquidación:</label>
                 <input type="date" id="fecha_cierre_liquidacion" name="Fecha_de_cierre_de_liquidación" required>
             </div>
             <div class="form-group">
-                <label for="Fecha_de_cierre_de_intereses">Fecha de Cierre de Intereses:</label>
+                <label for="Fecha_de_cierre_de_intereses"><i class="fas fa-calendar-minus me-2"></i>Fecha de Cierre de Intereses:</label>
                 <input type="date" id="Fecha_de_cierre_de_intereses" name="Fecha_de_cierre_de_intereses" required>
             </div>
         </div>
+
         <div id="ampliacion_section" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="Sentencia_de_Segunda">Fecha de Aprobacion de Planilla:</label>
+                    <label for="Sentencia_de_Segunda"><i class="fas fa-calendar-alt me-2"></i>Fecha de Aprobación de Planilla:</label>
                     <input type="date" id="sentencia_interlocutoria_costas" name="fecha_aprobacion_planilla">
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Es Badaro?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Es Badaro?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Badaro_Si" name="Badaro_Si">
                     <label for="Badaro_Si">Si</label>
@@ -321,12 +504,13 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Se liquida unicamente por honorarios?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Se liquida únicamente por honorarios?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Honorarios_Si" name="Honorarios_Si">
-                    <label for="">Si</label>
+                    <label for="Honorarios_Si">Si</label>
                 </div>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Honorarios_No" name="Honorarios_No">
@@ -334,9 +518,10 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Es una Pension?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Es una Pensión?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Pension_Si" name="Pension_Si">
                     <label for="Pension_Si">Si</label>
@@ -347,17 +532,18 @@
                 </div>
             </div>
         </div>
+
         <div id="Pension_Section" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="fecha_fallecimiento">Fecha de fallecimiento:</label>
+                    <label for="fecha_fallecimiento"><i class="fas fa-calendar-alt me-2"></i>Fecha de fallecimiento:</label>
                     <input type="date" id="fecha_fallecimiento" name="fecha_fallecimiento">
                 </div>
                 <div class="form-group">
-                    <label for="sala">Quien recibe la pension:</label>
+                    <label for="sala"><i class="fas fa-user me-2"></i>Quien recibe la pensión:</label>
                     <select id="sala" name="Receptor">
-                        <option value="">Seleccione una opcion</option>
-                        <option value="Conyuje">Conyuje</option>
+                        <option value="">Seleccione una opción</option>
+                        <option value="Conyuje">Cónyuge</option>
                         <option value="Hijo">Hijo</option>
                         <option value="Hija">Hija</option>
                     </select>
@@ -365,22 +551,23 @@
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="nombre_receptor">Nombre del receptor de la Pension:</label>
-                    <input type="text" id="nombre_receptor" name="nombre_receptor">
+                    <label for="nombre_receptor"><i class="fas fa-user-tag me-2"></i>Nombre del receptor de la Pensión:</label>
+                    <input type="text" id="nombre_receptor" name="nombre_receptor" placeholder="Nombre completo">
                 </div>
                 <div class="form-group">
-                    <label for="sala">Porcentaje de Pension:</label>
+                    <label for="sala"><i class="fas fa-percentage me-2"></i>Porcentaje de Pensión:</label>
                     <select id="sala" name="Porcentaje_Pension">
-                        <option value="">Seleccione una opcion</option>
+                        <option value="">Seleccione una opción</option>
                         <option value="100%">100%</option>
                         <option value="70%">70%</option>
                     </select>
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Tiene Edad Avanzada?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Tiene Edad Avanzada?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Edad_Avanzada_Si" name="Edad_Avanzada_Si">
                     <label for="Edad_Avanzada_Si">Si</label>
@@ -391,9 +578,10 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Tiene Error Material?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Tiene Error Material?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Error_Material_Si" name="Error_Material_Si">
                     <label for="Error_Material_Si">Si</label>
@@ -408,18 +596,19 @@
         <div id="Error_Material_section" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="Error_Material_primer_fecha">Fecha donde empieza el error material:</label>
+                    <label for="Error_Material_primer_fecha"><i class="fas fa-calendar-alt me-2"></i>Fecha donde empieza el error material:</label>
                     <input type="date" id="Error_Material_primer_fecha" name="Error_Material_primer_fecha">
                 </div>
                 <div class="form-group">
-                    <label for="Error_Material_ultima_fecha">Fecha en donde termina el error material:</label>
+                    <label for="Error_Material_ultima_fecha"><i class="fas fa-calendar-alt me-2"></i>Fecha en donde termina el error material:</label>
                     <input type="date" id="Error_Material_ultima_fecha" name="Error_Material_ultima_fecha">
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Tiene Sumas no Remunerativas?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Tiene Sumas no Remunerativas?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Sumas_Si" name="Sumas_Si">
                     <label for="Sumas_Si">Si</label>
@@ -430,9 +619,10 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Tiene PBU?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Tiene PBU?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="PBU_Si" name="PBU_Si">
                     <label for="PBU_Si">Si</label>
@@ -447,38 +637,41 @@
         <div id="PBU_section" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="monto_pbu">Monto PBU:</label>
-                    <input type="text" id="monto_pbu" name="Monto_PBU">
+                    <label for="monto_pbu"><i class="fas fa-dollar-sign me-2"></i>Monto PBU:</label>
+                    <input type="text" id="monto_pbu" name="Monto_PBU" placeholder="Ingrese el monto">
                 </div>
                 <div class="form-group">
-                    <label for="porcentaje_pbu">Porcentaje PBU:</label>
-                    <input type="text" id="porcentaje_pbu" name="Porcentaje_PBU">
+                    <label for="porcentaje_pbu"><i class="fas fa-percentage me-2"></i>Porcentaje PBU:</label>
+                    <input type="text" id="porcentaje_pbu" name="Porcentaje_PBU" placeholder="Ingrese el porcentaje">
                 </div>
             </div>
         </div>
 
+        <div class="section-divider"></div>
+
         <div class="form-group">
             <label for="percibido" class="label-with-icon">
-                Percibido:
+                <i class="fas fa-hand-holding-usd me-2"></i>Percibido:
                 <span class="info-icon">
-                    <div class="tooltip">En esta seccion se debe ingresar el parrafo de percibido del retroactivo, para hacerlo se marca el parrafo que desea copiar y luego click derecho en la parte seleccionada, luego selecciona la opcion "Buscar ... en Google" y una vez en el navegador puedes copiarlo normalmente</div>
+                    <div class="tooltip">En esta sección se debe ingresar el párrafo de percibido del retroactivo. Para hacerlo, marque el párrafo que desea copiar, haga clic derecho y seleccione "Buscar ... en Google". Una vez en el navegador, puede copiarlo normalmente.</div>
                 </span>
             </label>
-            <input type="text" id="percibido" name="Percibido">
+            <input type="text" id="percibido" name="Percibido" placeholder="Ingrese el texto de percibido">
         </div>
+
         <div class="form-group">
             <label for="reclamado" class="label-with-icon">
-                Reclamado:
+                <i class="fas fa-file-invoice-dollar me-2"></i>Reclamado:
                 <span class="info-icon">
-                    <div class="tooltip">En esta seccion se debe ingresar el parrafo de reclamado del retroactivo, para hacerlo se marca el parrafo que desea copiar y luego click derecho en la parte seleccionada, luego selecciona la opcion "Buscar ... en Google" y una vez en el navegador puedes copiarlo normalmente</div>
+                    <div class="tooltip">En esta sección se debe ingresar el párrafo de reclamado del retroactivo. Para hacerlo, marque el párrafo que desea copiar, haga clic derecho y seleccione "Buscar ... en Google". Una vez en el navegador, puede copiarlo normalmente.</div>
                 </span>
             </label>
-            <input type="text" id="reclamado" name="Reclamado">
+            <input type="text" id="reclamado" name="Reclamado" placeholder="Ingrese el texto de reclamado">
         </div>
 
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Percibio Reparacion Historica?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Percibió Reparación Histórica?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="RH_Si" name="RH_Si">
                     <label for="RH_Si">Si</label>
@@ -493,11 +686,11 @@
         <div id="RH_section" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="primer_fecha_RH">Fecha de comienzo:</label>
+                    <label for="primer_fecha_RH"><i class="fas fa-calendar-alt me-2"></i>Fecha de comienzo:</label>
                     <input type="date" id="primer_fecha_RH" name="primer_fecha_RH">
                 </div>
                 <div class="form-group">
-                    <label for="ultima_fecha_RH">Fecha Final:</label>
+                    <label for="ultima_fecha_RH"><i class="fas fa-calendar-alt me-2"></i>Fecha Final:</label>
                     <input type="date" id="ultima_fecha_RH" name="ultima_fecha_RH">
                 </div>
             </div>
@@ -505,7 +698,7 @@
 
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Percibio Asignacion Complementaria?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Percibió Asignación Complementaria?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="AC_Si" name="AC_Si">
                     <label for="AC_Si">Si</label>
@@ -520,11 +713,11 @@
         <div id="AC_section" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="primer_fecha_AC">Fecha de comienzo:</label>
+                    <label for="primer_fecha_AC"><i class="fas fa-calendar-alt me-2"></i>Fecha de comienzo:</label>
                     <input type="date" id="primer_fecha_AC" name="primer_fecha_AC">
                 </div>
                 <div class="form-group">
-                    <label for="ultima_fecha_AC">Fecha Final:</label>
+                    <label for="ultima_fecha_AC"><i class="fas fa-calendar-alt me-2"></i>Fecha Final:</label>
                     <input type="date" id="ultima_fecha_AC" name="ultima_fecha_AC">
                 </div>
             </div>
@@ -532,7 +725,7 @@
 
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Percibio Suplemento Dinerario?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Percibió Suplemento Dinerario?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="SP_Si" name="SP_Si">
                     <label for="SP_Si">Si</label>
@@ -544,25 +737,33 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="movilidad">Movilidad:</label>
-            <input type="text" id="movilidad" name="Movilidad" required>
+        <div class="section-divider"></div>
+
+        <div class="section-title">
+            <i class="fas fa-calculator"></i>
+            <h3>Datos de Liquidación</h3>
         </div>
 
         <div class="form-group">
-            <label for="haber_alta">Haber de Alta:</label>
+            <label for="movilidad"><i class="fas fa-chart-line me-2"></i>Movilidad:</label>
+            <input type="text" id="movilidad" name="Movilidad" required placeholder="Ingrese la movilidad">
+        </div>
+
+        <div class="form-group">
+            <label for="haber_alta"><i class="fas fa-dollar-sign me-2"></i>Haber de Alta:</label>
             <input 
                 type="text" 
                 id="haber_alta" 
                 name="Haber_de_Alta" 
                 required 
                 pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
-                title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77">
+                title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77"
+                placeholder="Ejemplo: 1.483.802,27">
         </div>
 
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Tuvo pagos previos?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Tuvo pagos previos?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="pagos_Si" name="pagos_Si">
                     <label for="pagos_Si">Si</label>
@@ -577,41 +778,41 @@
         <div id="pagos_section" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="monto_descontado_1">Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_1" name="monto_descontado_1">
+                    <label for="monto_descontado_1"><i class="fas fa-dollar-sign me-2"></i>Monto Descontado:</label>
+                    <input type="text" id="monto_descontado_1" name="monto_descontado_1" placeholder="Ingrese el monto">
                 </div>
                 <div class="form-group">
-                    <label for="fecha_descuento_1">Fecha:</label>
+                    <label for="fecha_descuento_1"><i class="fas fa-calendar-alt me-2"></i>Fecha:</label>
                     <input type="date" id="fecha_descuento_1" name="fecha_descuento_1">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="monto_descontado_2">Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_2" name="monto_descontado_2">
+                    <label for="monto_descontado_2"><i class="fas fa-dollar-sign me-2"></i>Monto Descontado:</label>
+                    <input type="text" id="monto_descontado_2" name="monto_descontado_2" placeholder="Ingrese el monto">
                 </div>
                 <div class="form-group">
-                    <label for="fecha_descuento_2">Fecha:</label>
+                    <label for="fecha_descuento_2"><i class="fas fa-calendar-alt me-2"></i>Fecha:</label>
                     <input type="date" id="fecha_descuento_2" name="fecha_descuento_2">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="monto_descontado_3">Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_3" name="monto_descontado_3">
+                    <label for="monto_descontado_3"><i class="fas fa-dollar-sign me-2"></i>Monto Descontado:</label>
+                    <input type="text" id="monto_descontado_3" name="monto_descontado_3" placeholder="Ingrese el monto">
                 </div>
                 <div class="form-group">
-                    <label for="fecha_descuento_3">Fecha:</label>
+                    <label for="fecha_descuento_3"><i class="fas fa-calendar-alt me-2"></i>Fecha:</label>
                     <input type="date" id="fecha_descuento_3" name="fecha_descuento_3">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="monto_descontado_4">Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_4" name="monto_descontado_4">
+                    <label for="monto_descontado_4"><i class="fas fa-dollar-sign me-2"></i>Monto Descontado:</label>
+                    <input type="text" id="monto_descontado_4" name="monto_descontado_4" placeholder="Ingrese el monto">
                 </div>
                 <div class="form-group">
-                    <label for="fecha_descuento_4">Fecha:</label>
+                    <label for="fecha_descuento_4"><i class="fas fa-calendar-alt me-2"></i>Fecha:</label>
                     <input type="date" id="fecha_descuento_4" name="fecha_descuento_4">
                 </div>
             </div>
@@ -619,22 +820,22 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label for="Capital">Capital:</label>
-                <input type="text" id="Capital" name="Capital" required>
+                <label for="Capital"><i class="fas fa-dollar-sign me-2"></i>Capital:</label>
+                <input type="text" id="Capital" name="Capital" required placeholder="Ingrese el capital">
             </div>
             <div class="form-group">
-                <label for="Intereses">Intereses:</label>
-                <input type="text" id="Intereses" name="Intereses" required>
+                <label for="Intereses"><i class="fas fa-percentage me-2"></i>Intereses:</label>
+                <input type="text" id="Intereses" name="Intereses" required placeholder="Ingrese los intereses">
             </div>
             <div class="form-group">
-                <label for="total_liquidacion">Total:</label>
-                <input type="text" id="total_liquidacion" name="total_liquidacion" required>
+                <label for="total_liquidacion"><i class="fas fa-equals me-2"></i>Total:</label>
+                <input type="text" id="total_liquidacion" name="total_liquidacion" required placeholder="Ingrese el total">
             </div>
         </div>
 
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Tiene Segunda Liquidacion?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Tiene Segunda Liquidación?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Segunda_Liquidacion_Si" name="Segunda_Liquidacion_Si">
                     <label for="Segunda_Liquidacion_Si">Si</label>
@@ -648,38 +849,41 @@
 
         <div id="Segunda_Liquidacion_section" class="conditional-section">
             <div class="form-group">
-                <label for="Movilidad_Segunda_Liquidacion">Movilidad Segunda Liquidacion:</label>
-                <input type="text" id="Movilidad_Segunda_Liquidacion" name="Movilidad_Segunda_Liquidacion">
+                <label for="Movilidad_Segunda_Liquidacion"><i class="fas fa-chart-line me-2"></i>Movilidad Segunda Liquidación:</label>
+                <input type="text" id="Movilidad_Segunda_Liquidacion" name="Movilidad_Segunda_Liquidacion" placeholder="Ingrese la movilidad">
             </div>
 
             <div class="form-group">
-                <label for="haber_alta_segunda_liquidacion">Haber de Alta Segunda Liquidación:</label>
+                <label for="haber_alta_segunda_liquidacion"><i class="fas fa-dollar-sign me-2"></i>Haber de Alta Segunda Liquidación:</label>
                 <input 
                     type="text" 
                     id="haber_alta_segunda_liquidacion" 
                     name="Haber_de_Alta_Segunda_Liquidacion" 
                     pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
-                    title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77">
+                    title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77"
+                    placeholder="Ejemplo: 1.483.802,27">
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="Capital_Segunda_Liquidacion">Capital Segunda Liquidacion:</label>
-                    <input type="text" id="Capital_Segunda_Liquidacion" name="Capital_Segunda_Liquidacion">
+                    <label for="Capital_Segunda_Liquidacion"><i class="fas fa-dollar-sign me-2"></i>Capital Segunda Liquidación:</label>
+                    <input type="text" id="Capital_Segunda_Liquidacion" name="Capital_Segunda_Liquidacion" placeholder="Ingrese el capital">
                 </div>
                 <div class="form-group">
-                    <label for="Intereses_Segunda_Liquidacion">Intereses Segunda Liquidacion:</label>
-                    <input type="text" id="Intereses_Segunda_Liquidacion" name="Intereses_Segunda_Liquidacion">
+                    <label for="Intereses_Segunda_Liquidacion"><i class="fas fa-percentage me-2"></i>Intereses Segunda Liquidación:</label>
+                    <input type="text" id="Intereses_Segunda_Liquidacion" name="Intereses_Segunda_Liquidacion" placeholder="Ingrese los intereses">
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group">
-                    <label for="Total_Segunda_Liquidacion">Total Segunda Liquidacion:</label>
-                    <input type="text" id="Total_Segunda_Liquidacion" name="Total_Segunda_Liquidacion">
+                    <label for="Total_Segunda_Liquidacion"><i class="fas fa-equals me-2"></i>Total Segunda Liquidación:</label>
+                    <input type="text" id="Total_Segunda_Liquidacion" name="Total_Segunda_Liquidacion" placeholder="Ingrese el total">
                 </div>
             </div>
         </div>
 
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Tiene Liquidacion con IPC?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Tiene Liquidación con IPC?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="IPC_Liquidacion_Si" name="IPC_Liquidacion_Si">
                     <label for="IPC_Liquidacion_Si">Si</label>
@@ -693,60 +897,79 @@
 
         <div id="Liquidacion_IPC_section" class="conditional-section">
             <div class="form-group">
-                <label for="Movilidad_Primera_Liquidacion_IPC">Movilidad:</label>
-                <input type="text" id="Movilidad_Primera_Liquidacion_IPC" name="Movilidad_Primera_Liquidacion_IPC">
+                <label for="Movilidad_Primera_Liquidacion_IPC"><i class="fas fa-chart-line me-2"></i>Movilidad:</label>
+                <input type="text" id="Movilidad_Primera_Liquidacion_IPC" name="Movilidad_Primera_Liquidacion_IPC" placeholder="Ingrese la movilidad">
             </div>
 
             <div class="form-group">
-                <label for="Haber_de_Alta_Primera_Liquidacion_IPC">Haber de Alta:</label>
-                <input type="text" id="Haber_de_Alta_Primera_Liquidacion_IPC" name="Haber_de_Alta_Primera_Liquidacion_IPC"                     pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
-                    title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77">
+                <label for="Haber_de_Alta_Primera_Liquidacion_IPC"><i class="fas fa-dollar-sign me-2"></i>Haber de Alta:</label>
+                <input 
+                    type="text" 
+                    id="Haber_de_Alta_Primera_Liquidacion_IPC" 
+                    name="Haber_de_Alta_Primera_Liquidacion_IPC" 
+                    pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
+                    title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77"
+                    placeholder="Ejemplo: 1.483.802,27">
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="Capital_Primera_Liquidacion_IPC">Capital:</label>
-                    <input type="text" id="Capital_Primera_Liquidacion_IPC" name="Capital_Primera_Liquidacion_IPC">
+                    <label for="Capital_Primera_Liquidacion_IPC"><i class="fas fa-dollar-sign me-2"></i>Capital:</label>
+                    <input type="text" id="Capital_Primera_Liquidacion_IPC" name="Capital_Primera_Liquidacion_IPC" placeholder="Ingrese el capital">
                 </div>
                 <div class="form-group">
-                    <label for="Intereses_Primera_Liquidacion_IPC">Intereses:</label>
-                    <input type="text" id="Intereses_Primera_Liquidacion_IPC" name="Intereses_Primera_Liquidacion_IPC" >
+                    <label for="Intereses_Primera_Liquidacion_IPC"><i class="fas fa-percentage me-2"></i>Intereses:</label>
+                    <input type="text" id="Intereses_Primera_Liquidacion_IPC" name="Intereses_Primera_Liquidacion_IPC" placeholder="Ingrese los intereses">
                 </div>
                 <div class="form-group">
-                    <label for="Total_Primera_Liquidacion_IPC">Total:</label>
-                    <input type="text" id="Total_Primera_Liquidacion_IPC" name="Total_Primera_Liquidacion_IPC">
+                    <label for="Total_Primera_Liquidacion_IPC"><i class="fas fa-equals me-2"></i>Total:</label>
+                    <input type="text" id="Total_Primera_Liquidacion_IPC" name="Total_Primera_Liquidacion_IPC" placeholder="Ingrese el total">
                 </div>
             </div>
             <div id="Segunda_Liquidacion_IPC_section" class="conditional-section">
                 <div class="form-group">
-                    <label for="Movilidad_Segunda_Liquidacion_IPC">Movilidad Segunda Liquidacion:</label>
-                    <input type="text" id="Movilidad_Segunda_Liquidacion_IPC" name="Movilidad_Segunda_Liquidacion_IPC">
+                    <label for="Movilidad_Segunda_Liquidacion_IPC"><i class="fas fa-chart-line me-2"></i>Movilidad Segunda Liquidación:</label>
+                    <input type="text" id="Movilidad_Segunda_Liquidacion_IPC" name="Movilidad_Segunda_Liquidacion_IPC" placeholder="Ingrese la movilidad">
                 </div>
 
                 <div class="form-group">
-                    <label for="Haber_de_Alta_Segunda_Liquidacion_IPC">Haber de Alta Segunda Liquidacion:</label>
-                    <input type="text" id="Haber_de_Alta_Segunda_Liquidacion_IPC" name="Haber_de_Alta_Segunda_Liquidacion_IPC"                     pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
-                        title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77">
+                    <label for="Haber_de_Alta_Segunda_Liquidacion_IPC"><i class="fas fa-dollar-sign me-2"></i>Haber de Alta Segunda Liquidación:</label>
+                    <input 
+                        type="text" 
+                        id="Haber_de_Alta_Segunda_Liquidacion_IPC" 
+                        name="Haber_de_Alta_Segunda_Liquidacion_IPC" 
+                        pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
+                        title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77"
+                        placeholder="Ejemplo: 1.483.802,27">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="Capital_Segunda_Liquidacion_IPC">Capital Segunda Liquidacion:</label>
-                        <input type="text" id="Capital_Segunda_Liquidacion_IPC" name="Capital_Segunda_Liquidacion_IPC">
+                        <label for="Capital_Segunda_Liquidacion_IPC"><i class="fas fa-dollar-sign me-2"></i>Capital Segunda Liquidación:</label>
+                        <input type="text" id="Capital_Segunda_Liquidacion_IPC" name="Capital_Segunda_Liquidacion_IPC" placeholder="Ingrese el capital">
                     </div>
                     <div class="form-group">
-                        <label for="Intereses_Segunda_Liquidacion_IPC">Intereses Segunda Liquidacion:</label>
-                        <input type="text" id="Intereses_Segunda_Liquidacion_IPC" name="Intereses_Segunda_Liquidacion_IPC">
+                        <label for="Intereses_Segunda_Liquidacion_IPC"><i class="fas fa-percentage me-2"></i>Intereses Segunda Liquidación:</label>
+                        <input type="text" id="Intereses_Segunda_Liquidacion_IPC" name="Intereses_Segunda_Liquidacion_IPC" placeholder="Ingrese los intereses">
                     </div>
+                </div>
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="Total_Segunda_Liquidacion_IPC">Total Segunda Liquidacion:</label>
-                        <input type="text" id="Total_Segunda_Liquidacion_IPC" name="Total_Segunda_Liquidacion_IPC">
+                        <label for="Total_Segunda_Liquidacion_IPC"><i class="fas fa-equals me-2"></i>Total Segunda Liquidación:</label>
+                        <input type="text" id="Total_Segunda_Liquidacion_IPC" name="Total_Segunda_Liquidacion_IPC" placeholder="Ingrese el total">
                     </div>
                 </div>
             </div>
         </div>
-        <h3 style="color: blueviolet;">Parrafos a agregar</h3>
+
+        <div class="section-divider"></div>
+
+        <div class="section-title">
+            <i class="fas fa-paragraph"></i>
+            <h3 style="color: var(--primary-color);">Párrafos a agregar</h3>
+        </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Tope de Haber Maximo?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Tope de Haber Máximo?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Tope_Haber_Maximo_Si" name="Tope_Haber_Maximo_Si">
                     <label for="Tope_Haber_Maximo_Si">Si</label>
@@ -757,20 +980,22 @@
                 </div>
             </div>
         </div>
+
         <div id="Tope_section" class="conditional-section">
             <div class="form-group">
                 <label for="percibido" class="label-with-icon">
-                    Haber de Alta:
+                    <i class="fas fa-dollar-sign me-2"></i>Haber de Alta:
                     <span class="info-icon">
-                        <div class="tooltip">En esta seccion se debe ingresar el haber de alta que supere el Tope, si hay varios, ingresar el de mayor valor</div>
+                        <div class="tooltip">En esta sección se debe ingresar el haber de alta que supere el Tope. Si hay varios, ingrese el de mayor valor.</div>
                     </span>
                 </label>
-                <input type="number" id="haber_tope_maximo" name="haber_tope_maximo" step="0.01">
+                <input type="number" id="haber_tope_maximo" name="haber_tope_maximo" step="0.01" placeholder="Ingrese el haber de alta">
             </div>
         </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Indemnizacion por daños?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Indemnización por daños?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Daños_Si" name="Daños_Si">
                     <label for="Daños_Si">Si</label>
@@ -781,12 +1006,13 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             <div class="inline-checkbox-container">
-                <h4>¿Intereses Sancionatorios?:</h4>
+                <h4><i class="fas fa-question-circle me-2"></i>¿Intereses Sancionatorios?:</h4>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Sancionatorios_Si" name="Sancionatorios_Si">
-                    <label for="Daños_Si">Si</label>
+                    <label for="Sancionatorios_Si">Si</label>
                 </div>
                 <div class="inline-checkbox-group">
                     <input type="checkbox" id="Sancionatorios_No" name="Sancionatorios_No">
@@ -794,11 +1020,21 @@
                 </div>
             </div>
         </div>
-        <div style="text-align: center;">
-            <button type="submit">Crear</button>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button type="submit">
+                <i class="fas fa-file-alt me-2"></i>Crear Escrito
+            </button>
         </div>
     </form>
+
     {% include 'footers/footer.html' %}
+
+    <!-- Bootstrap JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery desde CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('liquidacionForm');
@@ -815,8 +1051,8 @@
                 Segunda_Liquidacion_Si: document.getElementById('Segunda_Liquidacion_Si'),
                 IPC_Liquidacion_Si: document.getElementById('IPC_Liquidacion_Si'),
                 Tope_Haber_Maximo_Si: document.getElementById('Tope_Haber_Maximo_Si')
-
             };
+
             const sections = {
                 ampliacion_section : document.getElementById('ampliacion_section'),
                 Sentencia_de_Segunda: document.getElementById('Sentencia_de_Segunda'),
@@ -830,7 +1066,6 @@
                 Liquidacion_IPC_section: document.getElementById('Liquidacion_IPC_section'),
                 Segunda_Liquidacion_IPC_section: document.getElementById('Segunda_Liquidacion_IPC_section'),
                 Tope_section: document.getElementById('Tope_section')
-
             };
 
             function toggleSection(checkbox, section) {
@@ -853,6 +1088,56 @@
             toggleSection(checkboxes.Segunda_Liquidacion_Si, sections.Segunda_Liquidacion_IPC_section);
             toggleSection(checkboxes.Tope_Haber_Maximo_Si, sections.Tope_section);
 
+            // Inicializar el estado de las secciones condicionales
+            for (const [key, checkbox] of Object.entries(checkboxes)) {
+                if (checkbox && sections[key.replace('_Si', '_section')]) {
+                    sections[key.replace('_Si', '_section')].style.display = checkbox.checked ? 'block' : 'none';
+                }
+            }
+
+            // Manejar los checkboxes mutuamente excluyentes
+            const exclusiveGroups = [
+                ['27.609_Si', '27.609_No'],
+                ['27.541_Si', '27.541_No'],
+                ['27.426_Si', '27.426_No'],
+                ['Sentencia_2da_Si', 'Sentencia_2da_No'],
+                ['Badaro_Si', 'Badaro_No'],
+                ['Honorarios_Si', 'Honorarios_No'],
+                ['Pension_Si', 'Pension_No'],
+                ['Edad_Avanzada_Si', 'Edad_Avanzada_No'],
+                ['Error_Material_Si', 'Error_Material_No'],
+                ['Sumas_Si', 'Sumas_No'],
+                ['PBU_Si', 'PBU_No'],
+                ['RH_Si', 'RH_No'],
+                ['AC_Si', 'AC_No'],
+                ['SP_Si', 'SP_No'],
+                ['pagos_Si', 'pagos_No'],
+                ['Segunda_Liquidacion_Si', 'Segunda_Liquidacion_No'],
+                ['IPC_Liquidacion_Si', 'IPC_Liquidacion_No'],
+                ['Tope_Haber_Maximo_Si', 'Tope_Haber_Maximo_No'],
+                ['Daños_Si', 'Daños_No'],
+                ['Sancionatorios_Si', 'Sancionatorios_No']
+            ];
+
+            exclusiveGroups.forEach(group => {
+                group.forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                group.forEach(otherId => {
+                                    if (otherId !== id) {
+                                        const otherCheckbox = document.getElementById(otherId);
+                                        if (otherCheckbox) {
+                                            otherCheckbox.checked = false;
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            });
         });
     </script>
 </body>
