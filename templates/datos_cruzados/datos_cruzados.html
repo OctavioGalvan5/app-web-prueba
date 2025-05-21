@@ -424,6 +424,7 @@
                             BUSQUEDA </th>
                             <th><i class="fas fa-tag"></i> ESTADO</th>
                             <th><i class="fas fa-calendar-alt"></i> MES</th>
+                            <th><i class="fas fa-link"></i> Enlace</th>
 
 
                         </tr>
@@ -437,6 +438,11 @@
                             <td>{{ dato['beneficio_aprobadas'] }}</td>
                             <td><span class="category-badge">{{ dato['detalle_aprobadas'] or 'Beneficia' }}</span></td>
                             <td>{{ dato['mes_aprobadas'] }}</td>
+                            <td>
+                                <a href="{{ dato['link'] }}" target="_blank" class="btn-view">
+                                    <i class="fas fa-eye"></i> Link
+                                </a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

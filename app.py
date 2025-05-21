@@ -2081,6 +2081,8 @@ def datos_cruzados():
             'beneficio_aprobadas': row.get('Beneficio_Aprobadas', 'No disponible'),
             'detalle_aprobadas': row.get('Detalle_Aprobadas', 'No disponible'),
             'mes_aprobadas': row.get('Mes_Aprobadas', 'No disponible'),
+            'link': row.get('Link_Aprobadas', 'No disponible'),
+
         })
 
     return render_template("datos_cruzados/datos_cruzados.html", datos=datos)
