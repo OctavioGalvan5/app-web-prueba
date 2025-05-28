@@ -1186,6 +1186,11 @@ def resultado_herramientas_demandas():
 def base_datos_casos():
     return render_template('base_datos_casos/casos.html')
 
+@app.route('/ejemplo')
+@login_required
+def ejemplo():
+    return render_template('ejemplo/ejemplo.html')
+
 @app.route('/calculadora_movilidad_publica')
 def calculadora_movilidad_publica():
     return render_template('herramientas_publicas/calculadora_movilidad_publica.html')
