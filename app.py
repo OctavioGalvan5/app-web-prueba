@@ -40,6 +40,7 @@ from services.calculadora_movilidad.calculadora import CalculadorMovilidad
 from services.calculos import formatear_dinero, transformar_fecha
 from services.generador_regulacion.generador_regulacion import Regulacion
 from services.generador_escritos_liquidacion.generador_escritos_liquidacion import Escrito_liquidacion
+from services.generador_escritos_liquidacion.automatizacion import analizar_con_gemini, extraer_texto_pdf
 from services.calculadora_tope_maximo.generador_pdf import Comparativa
 from services.comparador_productos.comparador_productos import Comparador_productos
 from services.movilizador_de_haber.movilizador_de_haber import calculo_retroactivo
@@ -57,6 +58,9 @@ from models.entities.User import User
 app = Flask(__name__)
 
 app.secret_key = '3e5f7eaf0f9c4bcfa25c0a6e16d19743' 
+
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 csrf = CSRFProtect()
@@ -613,11 +617,6 @@ def resultado_movilizador_de_haber():
                                   fecha_adquisicion_del_derecho, monto, movilidad_1, tupla)
     resultado = calculo.generar_pdf()
     return resultado
-
-@app.route('/generador_escrito_liquidacion')
-@login_required
-def generador_escrito_liquidacion():
-    return render_template('generador_escritos/generador_escritos_liquidacion.html')
 
 @app.route('/resultado_escrito_liquidacion', methods=['POST'])
 @login_required
@@ -2092,6 +2091,38 @@ def datos_cruzados():
 
     return render_template("datos_cruzados/datos_cruzados.html", datos=datos)
 
+@app.route('/generador_escrito_liquidacion', methods=['GET', 'POST'])
+def generador_escrito_liquidacion():
+    if request.method == 'POST':
+        archivo = request.files['pdf']
+        if archivo.filename != '':
+            ruta = os.path.join(app.config['UPLOAD_FOLDER'], archivo.filename)
+            archivo.save(ruta)
+
+            # Extraer el texto
+            texto = extraer_texto_pdf(ruta)
+
+            # Eliminar el archivo después de usarlo
+            try:
+                os.remove(ruta)
+            except Exception as e:
+                print(f"Error al eliminar el archivo: {e}")
+
+            json_generado = analizar_con_gemini(texto)
+
+            # Verificamos si es string y no está vacío
+            if isinstance(json_generado, str):
+                if json_generado.strip() != '':
+                    try:
+                        json_generado = json.loads(json_generado)
+                    except json.JSONDecodeError:
+                        return "Error: El JSON generado no es válido.", 400
+                else:
+                    return "Error: El JSON generado está vacío.", 400
+
+            return render_template('generador_escritos/generador_escritos_liquidacion.html', datos=json_generado)
+    return render_template('generador_escritos/index.html')
+    
 if __name__ == '__main__':
     app.run(debug=True)
 

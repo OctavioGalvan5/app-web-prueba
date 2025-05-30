@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir PDF para Análisis</title>
+    <!-- Bootstrap 5 CSS desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a0dad;
+            --primary-light: #9b59b6;
+            --primary-dark: #4a0080;
+            --secondary-color: #f0e6fa;
+            --text-color: #333;
+            --light-gray: #f8f9fa;
+            --border-color: #e0d8e8;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f0ff, #e6d9f2);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .main-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .card-header .subtitle {
+            margin-top: 10px;
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        .upload-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .drop-zone {
+            border: 3px dashed var(--primary-light);
+            border-radius: 15px;
+            padding: 60px 30px;
+            background: linear-gradient(135deg, #faf9ff, var(--secondary-color));
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--secondary-color), #e6d9f2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(106, 13, 173, 0.15);
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--secondary-color), #e6d9f2);
+            transform: scale(1.02);
+        }
+
+        .drop-zone-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .drop-zone-icon {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .drop-zone-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-subtext {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .browse-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .browse-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .file-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            border-left: 4px solid var(--success-color);
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-size {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .remove-file {
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: auto;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .remove-file:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(106, 13, 173, 0.3);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .features-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            color: var(--primary-color);
+            min-width: 30px;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: var(--light-gray);
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .processing {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 0 15px;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .drop-zone {
+                padding: 40px 20px;
+            }
+
+            .card-header h1 {
+                font-size: 24px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'navs/nav.html' %}
+
+    <div class="container">
+        <div class="main-card">
+            <div class="card-header">
+                <h1>
+                    <i class="fas fa-file-pdf"></i>
+                    Creador de Escritos
+                </h1>
+                <div class="subtitle">
+                    Sube tu documento PDF para procesamiento automático
+                </div>
+            </div>
+
+            <div class="card-body">
+                <form action="/generador_escrito_liquidacion" method="post" enctype="multipart/form-data" id="uploadForm">
+                    <div class="upload-section">
+                        <div class="drop-zone" id="dropZone">
+                            <div class="drop-zone-content">
+                                <i class="fas fa-cloud-upload-alt drop-zone-icon"></i>
+                                <div class="drop-zone-text">
+                                    Arrastra y suelta tu archivo PDF aquí
+                                </div>
+                                <div class="drop-zone-subtext">
+                                    o haz clic para seleccionar un archivo
+                                </div>
+                                <button type="button" class="browse-button" onclick="document.getElementById('pdfFile').click()">
+                                    <i class="fas fa-folder-open"></i>
+                                    Seleccionar Archivo
+                                </button>
+                            </div>
+                        </div>
+
+                        <input type="file" name="pdf" id="pdfFile" class="file-input" accept=".pdf" required>
+
+                        <div class="file-info" id="fileInfo">
+                            <div class="file-name" id="fileName">
+                                <i class="fas fa-file-pdf"></i>
+                                <span></span>
+                                <button type="button" class="remove-file" onclick="removeFile()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="file-size" id="fileSize"></div>
+                        </div>
+
+                        <div class="progress-bar" id="progressBar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+
+                    <div class="submit-section">
+                        <button type="submit" class="submit-button" id="submitButton" disabled>
+                            <i class="fas fa-cogs"></i>
+                            Procesar Documento
+                        </button>
+                    </div>
+                </form>
+
+                <div class="features-section">
+                    <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 20px;">
+                        <i class="fas fa-star me-2"></i>Características del Procesamiento
+                    </h3>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-search feature-icon"></i>
+                            <div class="feature-text">
+                                El orden de los retroactivos importa
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt feature-icon"></i>
+                            <div class="feature-text">
+                                Puede haber errores, revisa el formulario
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-clock feature-icon"></i>
+                            <div class="feature-text">
+                                El proceso puede tardar unos segundos
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-file-alt feature-icon"></i>
+                            <div class="feature-text">
+                                El documento debe ser un PDF unido con el LexDoctor
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footers/footer.html' %}
+
+    <!-- Bootstrap JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('pdfFile');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName').querySelector('span');
+            const fileSize = document.getElementById('fileSize');
+            const submitButton = document.getElementById('submitButton');
+            const uploadForm = document.getElementById('uploadForm');
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+
+            // Eventos de drag and drop
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type === 'application/pdf') {
+                    fileInput.files = files;
+                    handleFileSelect(files[0]);
+                } else {
+                    alert('Por favor, selecciona un archivo PDF válido.');
+                }
+            });
+
+            // Evento de selección de archivo
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+
+            // Función para manejar la selección de archivo
+            function handleFileSelect(file) {
+                if (file.type !== 'application/pdf') {
+                    alert('Por favor, selecciona un archivo PDF válido.');
+                    return;
+                }
+
+                // Mostrar información del archivo
+                fileName.textContent = file.name;
+                fileSize.textContent = `Tamaño: ${formatFileSize(file.size)}`;
+                fileInfo.classList.add('show');
+
+                // Habilitar botón de envío
+                submitButton.disabled = false;
+
+                // Cambiar el icono y texto del drop zone
+                const dropZoneIcon = dropZone.querySelector('.drop-zone-icon');
+                const dropZoneText = dropZone.querySelector('.drop-zone-text');
+                const dropZoneSubtext = dropZone.querySelector('.drop-zone-subtext');
+
+                dropZoneIcon.className = 'fas fa-check-circle drop-zone-icon';
+                dropZoneIcon.style.color = 'var(--success-color)';
+                dropZoneText.textContent = 'Archivo seleccionado correctamente';
+                dropZoneSubtext.textContent = 'Haz clic en "Procesar Documento" para continuar';
+            }
+
+            // Función para remover archivo
+            window.removeFile = function() {
+                fileInput.value = '';
+                fileInfo.classList.remove('show');
+                submitButton.disabled = true;
+
+                // Restaurar el drop zone
+                const dropZoneIcon = dropZone.querySelector('.drop-zone-icon');
+                const dropZoneText = dropZone.querySelector('.drop-zone-text');
+                const dropZoneSubtext = dropZone.querySelector('.drop-zone-subtext');
+
+                dropZoneIcon.className = 'fas fa-cloud-upload-alt drop-zone-icon';
+                dropZoneIcon.style.color = 'var(--primary-color)';
+                dropZoneText.textContent = 'Arrastra y suelta tu archivo PDF aquí';
+                dropZoneSubtext.textContent = 'o haz clic para seleccionar un archivo';
+            }
+
+            // Función para formatear el tamaño del archivo
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Manejar envío del formulario con barra de progreso
+            uploadForm.addEventListener('submit', function(e) {
+                if (!fileInput.files.length) {
+                    e.preventDefault();
+                    alert('Por favor, selecciona un archivo PDF antes de continuar.');
+                    return;
+                }
+
+                // Mostrar barra de progreso
+                progressBar.style.display = 'block';
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+                submitButton.classList.add('processing');
+
+                // Simular progreso (en una implementación real, esto vendría del servidor)
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress > 90) progress = 90;
+                    progressFill.style.width = progress + '%';
+                }, 200);
+
+                // Limpiar el intervalo cuando el formulario se envíe realmente
+                setTimeout(() => {
+                    clearInterval(interval);
+                    progressFill.style.width = '100%';
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>

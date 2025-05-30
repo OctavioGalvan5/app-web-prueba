@@ -410,7 +410,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="cliente"><i class="fas fa-user me-2"></i>Cliente:</label>
-                <input type="text" id="cliente" name="cliente" required placeholder="Nombre del cliente">
+                <input type="text" id="cliente" name="cliente" required placeholder="Nombre del cliente" value="{{ datos.cliente }}">
             </div>
             <div class="form-group">
                 <label for="expediente"><i class="fas fa-folder me-2"></i>Expediente:</label>
@@ -438,7 +438,7 @@
             </div>
         </div>
 
-        <div id="Sentencia_de_Segunda" class="conditional-section">
+        <div id="Sentencia_de_Segunda_section" class="conditional-section">
             <div class="form-row">
                 <div class="form-group">
                     <label for="Sentencia_de_Segunda"><i class="fas fa-calendar-alt me-2"></i>Fecha de Sentencia de 2da:</label>
@@ -458,15 +458,15 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="fecha_inicial_pago"><i class="fas fa-calendar-check me-2"></i>Fecha Inicial de Pago:</label>
-                <input type="date" id="fecha_inicial_pago" name="Fecha_Inicial_de_Pago" required>
+                <input type="date" id="fecha_inicial_pago" name="Fecha_Inicial_de_Pago" value="{{ datos.fecha_inicial_pago }}" required>
             </div>
             <div class="form-group">
                 <label for="fecha_cierre_liquidacion"><i class="fas fa-calendar-times me-2"></i>Fecha de Cierre de Liquidación:</label>
-                <input type="date" id="fecha_cierre_liquidacion" name="Fecha_de_cierre_de_liquidación" required>
+                <input type="date" id="fecha_cierre_liquidacion" name="Fecha_de_cierre_de_liquidación" value="{{ datos.Fecha_de_cierre_de_liquidacion }}" required>
             </div>
             <div class="form-group">
                 <label for="Fecha_de_cierre_de_intereses"><i class="fas fa-calendar-minus me-2"></i>Fecha de Cierre de Intereses:</label>
-                <input type="date" id="Fecha_de_cierre_de_intereses" name="Fecha_de_cierre_de_intereses" required>
+                <input type="date" id="Fecha_de_cierre_de_intereses" name="Fecha_de_cierre_de_intereses" value="{{ datos.Fecha_de_cierre_de_intereses }}" required>
             </div>
         </div>
 
@@ -483,7 +483,7 @@
             <div class="inline-checkbox-container">
                 <h4><i class="fas fa-question-circle me-2"></i>¿Es Badaro?:</h4>
                 <div class="inline-checkbox-group">
-                    <input type="checkbox" id="Badaro_Si" name="Badaro_Si">
+                    <input type="checkbox" id="Badaro_Si" name="Badaro_Si" value="{{ datos.Badaro_Si }}">
                     <label for="Badaro_Si">Si</label>
                 </div>
                 <div class="inline-checkbox-group">
@@ -612,7 +612,7 @@
             <div class="inline-checkbox-container">
                 <h4><i class="fas fa-question-circle me-2"></i>¿Tiene PBU?:</h4>
                 <div class="inline-checkbox-group">
-                    <input type="checkbox" id="PBU_Si" name="PBU_Si">
+                    <input type="checkbox" id="PBU_Si" name="PBU_Si" value="true" {% if datos.PBU_Si %}checked{% endif %}>
                     <label for="PBU_Si">Si</label>
                 </div>
                 <div class="inline-checkbox-group">
@@ -626,11 +626,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_pbu"><i class="fas fa-dollar-sign me-2"></i>Monto PBU:</label>
-                    <input type="text" id="monto_pbu" name="Monto_PBU" placeholder="Ingrese el monto">
+                    <input type="text" id="monto_pbu" name="Monto_PBU" placeholder="Ingrese el monto" value="{{ datos.Monto_PBU }}">
                 </div>
                 <div class="form-group">
                     <label for="porcentaje_pbu"><i class="fas fa-percentage me-2"></i>Porcentaje PBU:</label>
-                    <input type="text" id="porcentaje_pbu" name="Porcentaje_PBU" placeholder="Ingrese el porcentaje">
+                    <input type="text" id="porcentaje_pbu" name="Porcentaje_PBU" placeholder="Ingrese el porcentaje" value="{{ datos.Porcentaje_PBU }}">
                 </div>
             </div>
         </div>
@@ -644,7 +644,7 @@
                     <div class="tooltip">En esta sección se debe ingresar el párrafo de percibido del retroactivo. Para hacerlo, marque el párrafo que desea copiar, haga clic derecho y seleccione "Buscar ... en Google". Una vez en el navegador, puede copiarlo normalmente.</div>
                 </span>
             </label>
-            <input type="text" id="percibido" name="Percibido" placeholder="Ingrese el texto de percibido">
+            <input type="text" id="percibido" name="Percibido" placeholder="Ingrese el texto de percibido" value="{{ datos.Percibido }}">
         </div>
 
         <div class="form-group">
@@ -654,7 +654,7 @@
                     <div class="tooltip">En esta sección se debe ingresar el párrafo de reclamado del retroactivo. Para hacerlo, marque el párrafo que desea copiar, haga clic derecho y seleccione "Buscar ... en Google". Una vez en el navegador, puede copiarlo normalmente.</div>
                 </span>
             </label>
-            <input type="text" id="reclamado" name="Reclamado" placeholder="Ingrese el texto de reclamado">
+            <input type="text" id="reclamado" name="Reclamado" placeholder="Ingrese el texto de reclamado" value="{{ datos.Reclamado }}">
         </div>
 
         <div class="form-group">
@@ -734,7 +734,7 @@
 
         <div class="form-group">
             <label for="movilidad"><i class="fas fa-chart-line me-2"></i>Movilidad:</label>
-            <input type="text" id="movilidad" name="Movilidad" required placeholder="Ingrese la movilidad">
+            <input type="text" id="movilidad" name="Movilidad" required placeholder="Ingrese la movilidad" value="{{ datos.Movilidad }}">
         </div>
 
         <div class="form-group">
@@ -746,14 +746,15 @@
                 required 
                 pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
                 title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77"
-                placeholder="Ejemplo: 1.483.802,27">
+                placeholder="Ejemplo: 1.483.802,27"
+                value="{{ datos.Haber_de_Alta }}">
         </div>
 
         <div class="form-group">
             <div class="inline-checkbox-container">
                 <h4><i class="fas fa-question-circle me-2"></i>¿Tuvo pagos previos?:</h4>
                 <div class="inline-checkbox-group">
-                    <input type="checkbox" id="pagos_Si" name="pagos_Si">
+                    <input type="checkbox" id="pagos_Si" name="pagos_Si" {% if datos.pagos_Si %}checked{% endif %}>
                     <label for="pagos_Si">Si</label>
                 </div>
                 <div class="inline-checkbox-group">
@@ -767,11 +768,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_descontado_1"><i class="fas fa-dollar-sign me-2"></i>Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_1" name="monto_descontado_1" placeholder="Ingrese el monto">
+                    <input type="text" id="monto_descontado_1" name="monto_descontado_1" placeholder="Ingrese el monto" value="{{ datos.monto_descontado_1 }}">
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_1"><i class="fas fa-calendar-alt me-2"></i>Fecha:</label>
-                    <input type="date" id="fecha_descuento_1" name="fecha_descuento_1">
+                    <input type="date" id="fecha_descuento_1" name="fecha_descuento_1" value="{{ datos.fecha_descuento_1 }}">
                 </div>
             </div>
             <div class="form-row">
@@ -809,15 +810,15 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="Capital"><i class="fas fa-dollar-sign me-2"></i>Capital:</label>
-                <input type="text" id="Capital" name="Capital" required placeholder="Ingrese el capital">
+                <input type="text" id="Capital" name="Capital" required placeholder="Ingrese el capital" value="{{ datos.Capital }}">
             </div>
             <div class="form-group">
                 <label for="Intereses"><i class="fas fa-percentage me-2"></i>Intereses:</label>
-                <input type="text" id="Intereses" name="Intereses" required placeholder="Ingrese los intereses">
+                <input type="text" id="Intereses" name="Intereses" required placeholder="Ingrese los intereses" value="{{ datos.Intereses }}">
             </div>
             <div class="form-group">
                 <label for="total_liquidacion"><i class="fas fa-equals me-2"></i>Total:</label>
-                <input type="text" id="total_liquidacion" name="total_liquidacion" required placeholder="Ingrese el total">
+                <input type="text" id="total_liquidacion" name="total_liquidacion" required placeholder="Ingrese el total" value="{{ datos.total_liquidacion }}">
             </div>
         </div>
 
@@ -825,7 +826,7 @@
             <div class="inline-checkbox-container">
                 <h4><i class="fas fa-question-circle me-2"></i>¿Tiene Segunda Liquidación?:</h4>
                 <div class="inline-checkbox-group">
-                    <input type="checkbox" id="Segunda_Liquidacion_Si" name="Segunda_Liquidacion_Si">
+                    <input type="checkbox" id="Segunda_Liquidacion_Si" name="Segunda_Liquidacion_Si" {% if datos.Segunda_Liquidacion_Si %}checked{% endif %}>
                     <label for="Segunda_Liquidacion_Si">Si</label>
                 </div>
                 <div class="inline-checkbox-group">
@@ -838,7 +839,7 @@
         <div id="Segunda_Liquidacion_section" class="conditional-section">
             <div class="form-group">
                 <label for="Movilidad_Segunda_Liquidacion"><i class="fas fa-chart-line me-2"></i>Movilidad Segunda Liquidación:</label>
-                <input type="text" id="Movilidad_Segunda_Liquidacion" name="Movilidad_Segunda_Liquidacion" placeholder="Ingrese la movilidad">
+                <input type="text" id="Movilidad_Segunda_Liquidacion" name="Movilidad_Segunda_Liquidacion" placeholder="Ingrese la movilidad" value="{{ datos.Movilidad_Segunda_Liquidacion}}">
             </div>
 
             <div class="form-group">
@@ -849,22 +850,23 @@
                     name="Haber_de_Alta_Segunda_Liquidacion" 
                     pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
                     title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77"
-                    placeholder="Ejemplo: 1.483.802,27">
+                    placeholder="Ejemplo: 1.483.802,27"
+                    value="{{ datos.Haber_de_Alta_Segunda_Liquidacion}}">
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="Capital_Segunda_Liquidacion"><i class="fas fa-dollar-sign me-2"></i>Capital Segunda Liquidación:</label>
-                    <input type="text" id="Capital_Segunda_Liquidacion" name="Capital_Segunda_Liquidacion" placeholder="Ingrese el capital">
+                    <input type="text" id="Capital_Segunda_Liquidacion" name="Capital_Segunda_Liquidacion" placeholder="Ingrese el capital" value="{{ datos.Capital_Segunda_Liquidacion}}">
                 </div>
                 <div class="form-group">
                     <label for="Intereses_Segunda_Liquidacion"><i class="fas fa-percentage me-2"></i>Intereses Segunda Liquidación:</label>
-                    <input type="text" id="Intereses_Segunda_Liquidacion" name="Intereses_Segunda_Liquidacion" placeholder="Ingrese los intereses">
+                    <input type="text" id="Intereses_Segunda_Liquidacion" name="Intereses_Segunda_Liquidacion" placeholder="Ingrese los intereses" value="{{ datos.Intereses_Segunda_Liquidacion}}">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="Total_Segunda_Liquidacion"><i class="fas fa-equals me-2"></i>Total Segunda Liquidación:</label>
-                    <input type="text" id="Total_Segunda_Liquidacion" name="Total_Segunda_Liquidacion" placeholder="Ingrese el total">
+                    <input type="text" id="Total_Segunda_Liquidacion" name="Total_Segunda_Liquidacion" placeholder="Ingrese el total" value="{{ datos.Total_Segunda_Liquidacion}}">
                 </div>
             </div>
         </div>
@@ -873,7 +875,7 @@
             <div class="inline-checkbox-container">
                 <h4><i class="fas fa-question-circle me-2"></i>¿Tiene Liquidación con IPC?:</h4>
                 <div class="inline-checkbox-group">
-                    <input type="checkbox" id="IPC_Liquidacion_Si" name="IPC_Liquidacion_Si">
+                    <input type="checkbox" id="IPC_Liquidacion_Si" name="IPC_Liquidacion_Si" {% if datos.IPC_Liquidacion_Si %}checked{% endif %}>
                     <label for="IPC_Liquidacion_Si">Si</label>
                 </div>
                 <div class="inline-checkbox-group">
@@ -886,7 +888,7 @@
         <div id="Liquidacion_IPC_section" class="conditional-section">
             <div class="form-group">
                 <label for="Movilidad_Primera_Liquidacion_IPC"><i class="fas fa-chart-line me-2"></i>Movilidad:</label>
-                <input type="text" id="Movilidad_Primera_Liquidacion_IPC" name="Movilidad_Primera_Liquidacion_IPC" placeholder="Ingrese la movilidad">
+                <input type="text" id="Movilidad_Primera_Liquidacion_IPC" name="Movilidad_Primera_Liquidacion_IPC" placeholder="Ingrese la movilidad" value="{{ datos.Movilidad_Primera_Liquidacion_IPC}}" >
             </div>
 
             <div class="form-group">
@@ -897,26 +899,27 @@
                     name="Haber_de_Alta_Primera_Liquidacion_IPC" 
                     pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
                     title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77"
-                    placeholder="Ejemplo: 1.483.802,27">
+                    placeholder="Ejemplo: 1.483.802,27"
+                    value="{{ datos.Haber_de_Alta_Primera_Liquidacion_IPC}}">
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="Capital_Primera_Liquidacion_IPC"><i class="fas fa-dollar-sign me-2"></i>Capital:</label>
-                    <input type="text" id="Capital_Primera_Liquidacion_IPC" name="Capital_Primera_Liquidacion_IPC" placeholder="Ingrese el capital">
+                    <input type="text" id="Capital_Primera_Liquidacion_IPC" name="Capital_Primera_Liquidacion_IPC" placeholder="Ingrese el capital" value="{{ datos.Capital_Primera_Liquidacion_IPC}}">
                 </div>
                 <div class="form-group">
                     <label for="Intereses_Primera_Liquidacion_IPC"><i class="fas fa-percentage me-2"></i>Intereses:</label>
-                    <input type="text" id="Intereses_Primera_Liquidacion_IPC" name="Intereses_Primera_Liquidacion_IPC" placeholder="Ingrese los intereses">
+                    <input type="text" id="Intereses_Primera_Liquidacion_IPC" name="Intereses_Primera_Liquidacion_IPC" placeholder="Ingrese los intereses" value="{{ datos.Intereses_Primera_Liquidacion_IPC }}">
                 </div>
                 <div class="form-group">
                     <label for="Total_Primera_Liquidacion_IPC"><i class="fas fa-equals me-2"></i>Total:</label>
-                    <input type="text" id="Total_Primera_Liquidacion_IPC" name="Total_Primera_Liquidacion_IPC" placeholder="Ingrese el total">
+                    <input type="text" id="Total_Primera_Liquidacion_IPC" name="Total_Primera_Liquidacion_IPC" placeholder="Ingrese el total" value="{{ datos.Total_Primera_Liquidacion_IPC }}">
                 </div>
             </div>
             <div id="Segunda_Liquidacion_IPC_section" class="conditional-section">
                 <div class="form-group">
                     <label for="Movilidad_Segunda_Liquidacion_IPC"><i class="fas fa-chart-line me-2"></i>Movilidad Segunda Liquidación:</label>
-                    <input type="text" id="Movilidad_Segunda_Liquidacion_IPC" name="Movilidad_Segunda_Liquidacion_IPC" placeholder="Ingrese la movilidad">
+                    <input type="text" id="Movilidad_Segunda_Liquidacion_IPC" name="Movilidad_Segunda_Liquidacion_IPC" placeholder="Ingrese la movilidad" value="{{ datos.Movilidad_Segunda_Liquidacion_IPC }}">
                 </div>
 
                 <div class="form-group">
@@ -927,22 +930,23 @@
                         name="Haber_de_Alta_Segunda_Liquidacion_IPC" 
                         pattern="^\d{1,3}(\.\d{3})*,\d{2}$" 
                         title="El formato debe ser: números separados por puntos, seguido de una coma y dos dígitos. Ejemplo: 1.483.802,27 o 365.633,77"
-                        placeholder="Ejemplo: 1.483.802,27">
+                        placeholder="Ejemplo: 1.483.802,27"
+                        value="{{ datos.Haber_de_Alta_Segunda_Liquidacion_IPC }}">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="Capital_Segunda_Liquidacion_IPC"><i class="fas fa-dollar-sign me-2"></i>Capital Segunda Liquidación:</label>
-                        <input type="text" id="Capital_Segunda_Liquidacion_IPC" name="Capital_Segunda_Liquidacion_IPC" placeholder="Ingrese el capital">
+                        <input type="text" id="Capital_Segunda_Liquidacion_IPC" name="Capital_Segunda_Liquidacion_IPC" placeholder="Ingrese el capital" value="{{ datos.Capital_Segunda_Liquidacion_IPC }}">
                     </div>
                     <div class="form-group">
                         <label for="Intereses_Segunda_Liquidacion_IPC"><i class="fas fa-percentage me-2"></i>Intereses Segunda Liquidación:</label>
-                        <input type="text" id="Intereses_Segunda_Liquidacion_IPC" name="Intereses_Segunda_Liquidacion_IPC" placeholder="Ingrese los intereses">
+                        <input type="text" id="Intereses_Segunda_Liquidacion_IPC" name="Intereses_Segunda_Liquidacion_IPC" placeholder="Ingrese los intereses" value="{{ datos.Intereses_Segunda_Liquidacion_IPC }}">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="Total_Segunda_Liquidacion_IPC"><i class="fas fa-equals me-2"></i>Total Segunda Liquidación:</label>
-                        <input type="text" id="Total_Segunda_Liquidacion_IPC" name="Total_Segunda_Liquidacion_IPC" placeholder="Ingrese el total">
+                        <input type="text" id="Total_Segunda_Liquidacion_IPC" name="Total_Segunda_Liquidacion_IPC" placeholder="Ingrese el total" value="{{ datos.Total_Segunda_Liquidacion_IPC }}">
                     </div>
                 </div>
             </div>
@@ -1024,109 +1028,158 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('liquidacionForm');
-            const checkboxes = {
-                ampliacion : document.getElementById('ampliacion'),
-                ampliacion_inconstitucionalidad : document.getElementById('ampliacion_inconstitucionalidad'),
-                Sentencia_2da_Si: document.getElementById('Sentencia_2da_Si'),
-                Pension_Si: document.getElementById('Pension_Si'),
-                Error_Material_Si: document.getElementById('Error_Material_Si'),
-                PBU_Si: document.getElementById('PBU_Si'),
-                RH_Si: document.getElementById('RH_Si'),
-                AC_Si: document.getElementById('AC_Si'),
-                pagos_Si: document.getElementById('pagos_Si'),
-                Segunda_Liquidacion_Si: document.getElementById('Segunda_Liquidacion_Si'),
-                IPC_Liquidacion_Si: document.getElementById('IPC_Liquidacion_Si'),
-                Tope_Haber_Maximo_Si: document.getElementById('Tope_Haber_Maximo_Si')
-            };
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Helper: Lógica para Checkboxes Sí/No que controlan una sección ---
+            function setupConditionalSection(checkboxSiId, checkboxNoId, sectionId) {
+                const checkboxSi = document.getElementById(checkboxSiId);
+                const checkboxNo = document.getElementById(checkboxNoId);
+                const section = document.getElementById(sectionId);
 
-            const sections = {
-                ampliacion_section : document.getElementById('ampliacion_section'),
-                Sentencia_de_Segunda: document.getElementById('Sentencia_de_Segunda'),
-                Pension_section: document.getElementById('Pension_Section'),
-                Error_Material_section: document.getElementById('Error_Material_section'),
-                PBU_section: document.getElementById('PBU_section'),
-                RH_section: document.getElementById('RH_section'),
-                AC_section: document.getElementById('AC_section'),
-                pagos_section: document.getElementById('pagos_section'),
-                Segunda_Liquidacion_section: document.getElementById('Segunda_Liquidacion_section'),
-                Liquidacion_IPC_section: document.getElementById('Liquidacion_IPC_section'),
-                Segunda_Liquidacion_IPC_section: document.getElementById('Segunda_Liquidacion_IPC_section'),
-                Tope_section: document.getElementById('Tope_section')
-            };
-
-            function toggleSection(checkbox, section) {
-                checkbox.addEventListener('change', function() {
-                    section.style.display = this.checked ? 'block' : 'none';
-                });
-            }
-
-            toggleSection(checkboxes.ampliacion,sections.ampliacion_section);
-            toggleSection(checkboxes.ampliacion_inconstitucionalidad, sections.ampliacion_section);
-            toggleSection(checkboxes.Sentencia_2da_Si, sections.Sentencia_de_Segunda);
-            toggleSection(checkboxes.Pension_Si, sections.Pension_section);
-            toggleSection(checkboxes.Error_Material_Si, sections.Error_Material_section);
-            toggleSection(checkboxes.PBU_Si, sections.PBU_section);
-            toggleSection(checkboxes.RH_Si, sections.RH_section);
-            toggleSection(checkboxes.AC_Si, sections.AC_section);
-            toggleSection(checkboxes.pagos_Si, sections.pagos_section);
-            toggleSection(checkboxes.IPC_Liquidacion_Si, sections.Liquidacion_IPC_section);
-            toggleSection(checkboxes.Segunda_Liquidacion_Si, sections.Segunda_Liquidacion_section);
-            toggleSection(checkboxes.Segunda_Liquidacion_Si, sections.Segunda_Liquidacion_IPC_section);
-            toggleSection(checkboxes.Tope_Haber_Maximo_Si, sections.Tope_section);
-
-            // Inicializar el estado de las secciones condicionales
-            for (const [key, checkbox] of Object.entries(checkboxes)) {
-                if (checkbox && sections[key.replace('_Si', '_section')]) {
-                    sections[key.replace('_Si', '_section')].style.display = checkbox.checked ? 'block' : 'none';
+                if (!checkboxSi || !checkboxNo || !section) {
+                    // console.warn(`Elementos no encontrados para ${checkboxSiId}, ${checkboxNoId}, ${sectionId}`);
+                    return;
                 }
+
+                function updateVisibility() {
+                    if (checkboxSi.checked) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                }
+
+                checkboxSi.addEventListener('change', function () {
+                    if (this.checked) {
+                        checkboxNo.checked = false;
+                    }
+                    updateVisibility();
+                });
+
+                checkboxNo.addEventListener('change', function () {
+                    if (this.checked) {
+                        checkboxSi.checked = false;
+                    }
+                    updateVisibility();
+                });
+
+                // Estado inicial
+                if (checkboxSi.checked) checkboxNo.checked = false;
+                else if (checkboxNo.checked) checkboxSi.checked = false; // Asegurar consistencia si "No" está premarcado
+                updateVisibility();
             }
 
-            // Manejar los checkboxes mutuamente excluyentes
-            const exclusiveGroups = [
-                ['27.609_Si', '27.609_No'],
-                ['27.541_Si', '27.541_No'],
-                ['27.426_Si', '27.426_No'],
-                ['Sentencia_2da_Si', 'Sentencia_2da_No'],
-                ['Badaro_Si', 'Badaro_No'],
-                ['Honorarios_Si', 'Honorarios_No'],
-                ['Pension_Si', 'Pension_No'],
-                ['Edad_Avanzada_Si', 'Edad_Avanzada_No'],
-                ['Error_Material_Si', 'Error_Material_No'],
-                ['Sumas_Si', 'Sumas_No'],
-                ['PBU_Si', 'PBU_No'],
-                ['RH_Si', 'RH_No'],
-                ['AC_Si', 'AC_No'],
-                ['SP_Si', 'SP_No'],
-                ['pagos_Si', 'pagos_No'],
-                ['Segunda_Liquidacion_Si', 'Segunda_Liquidacion_No'],
-                ['IPC_Liquidacion_Si', 'IPC_Liquidacion_No'],
-                ['Tope_Haber_Maximo_Si', 'Tope_Haber_Maximo_No'],
-                ['Daños_Si', 'Daños_No'],
-                ['Sancionatorios_Si', 'Sancionatorios_No']
-            ];
+            // --- Helper: Lógica para Checkboxes Sí/No mutuamente excluyentes (sin controlar sección directamente aquí) ---
+            function setupExclusiveCheckboxes(checkboxSiId, checkboxNoId) {
+                const checkboxSi = document.getElementById(checkboxSiId);
+                const checkboxNo = document.getElementById(checkboxNoId);
 
-            exclusiveGroups.forEach(group => {
-                group.forEach(id => {
-                    const checkbox = document.getElementById(id);
-                    if (checkbox) {
-                        checkbox.addEventListener('change', function() {
-                            if (this.checked) {
-                                group.forEach(otherId => {
-                                    if (otherId !== id) {
-                                        const otherCheckbox = document.getElementById(otherId);
-                                        if (otherCheckbox) {
-                                            otherCheckbox.checked = false;
-                                        }
-                                    }
-                                });
-                            }
-                        });
+                if (!checkboxSi || !checkboxNo) {
+                    // console.warn(`Checkboxes no encontrados para ${checkboxSiId}, ${checkboxNoId}`);
+                    return;
+                }
+
+                checkboxSi.addEventListener('change', function () {
+                    if (this.checked) {
+                        checkboxNo.checked = false;
                     }
                 });
-            });
+
+                checkboxNo.addEventListener('change', function () {
+                    if (this.checked) {
+                        checkboxSi.checked = false;
+                    }
+                });
+                 // Estado inicial
+                if (checkboxSi.checked) checkboxNo.checked = false;
+                else if (checkboxNo.checked) checkboxSi.checked = false;
+            }
+
+            // --- Configurar secciones condicionales y checkboxes exclusivos para elementos existentes en el HTML ---
+            setupConditionalSection('Sentencia_2da_Si', 'Sentencia_2da_No', 'Sentencia_de_Segunda_section');
+            setupConditionalSection('Pension_Si', 'Pension_No', 'Pension_Section');
+            setupConditionalSection('Error_Material_Si', 'Error_Material_No', 'Error_Material_section');
+            setupConditionalSection('PBU_Si', 'PBU_No', 'PBU_section');
+            setupConditionalSection('RH_Si', 'RH_No', 'RH_section');
+            setupConditionalSection('AC_Si', 'AC_No', 'AC_section');
+            setupConditionalSection('pagos_Si', 'pagos_No', 'pagos_section');
+
+            setupExclusiveCheckboxes('27.609_Si', '27.609_No');
+            setupExclusiveCheckboxes('27.541_Si', '27.541_No');
+            setupExclusiveCheckboxes('27.426_Si', '27.426_No');
+            setupExclusiveCheckboxes('Badaro_Si', 'Badaro_No');
+            setupExclusiveCheckboxes('Honorarios_Si', 'Honorarios_No');
+            setupExclusiveCheckboxes('Edad_Avanzada_Si', 'Edad_Avanzada_No');
+            setupExclusiveCheckboxes('Sumas_Si', 'Sumas_No');
+            setupExclusiveCheckboxes('SP_Si', 'SP_No'); // Asume que SP_Si/No no controlan una sección visible directamente
+
+
+            // --- Lógica para Radio Buttons "Tipo de Escrito" y checkbox "ampliacion_inconstitucionalidad_Si" ---
+            const ampliacionRadio = document.getElementById('ampliacion');
+            const otrosRadiosTipoEscrito = document.querySelectorAll('input[name="tipo_escrito"]:not(#ampliacion)');
+            const ampliacionSection = document.getElementById('ampliacion_section');
+            // ID ASUMIDO: 'ampliacion_inconstitucionalidad_Si' basado en tu script. Asegúrate que el HTML tenga este ID.
+            const ampliacionInconstSiCheckbox = document.getElementById('ampliacion_inconstitucionalidad_Si'); 
+
+            function handleAmpliacionSectionVisibility() {
+                if (!ampliacionSection) return;
+                let showAmpliacion = false;
+                if (ampliacionRadio && ampliacionRadio.checked) {
+                    showAmpliacion = true;
+                }
+                // Si el checkbox ampliacionInconstSiCheckbox existe y está marcado, también muestra la sección.
+                if (ampliacionInconstSiCheckbox && ampliacionInconstSiCheckbox.checked) {
+                    showAmpliacion = true;
+                }
+                ampliacionSection.style.display = showAmpliacion ? 'block' : 'none';
+            }
+
+            if (ampliacionRadio) { // Y otrosRadiosTipoEscrito
+                document.querySelectorAll('input[name="tipo_escrito"]').forEach(radio => {
+                     radio.addEventListener('change', handleAmpliacionSectionVisibility);
+                });
+            }
+            if (ampliacionInconstSiCheckbox) {
+                ampliacionInconstSiCheckbox.addEventListener('change', handleAmpliacionSectionVisibility);
+                // Si 'ampliacion_inconstitucionalidad_Si' tiene un '_No' asociado para exclusividad:
+                // setupExclusiveCheckboxes('ampliacion_inconstitucionalidad_Si', 'ampliacion_inconstitucionalidad_No');
+            }
+            handleAmpliacionSectionVisibility(); // Llamada inicial para el estado correcto de la sección
+
+
+            // --- Lógica para elementos del script anterior del usuario (NECESITAN HTML CORRESPONDIENTE) ---
+
+            // Para Segunda Liquidación (controla 2 secciones)
+            setupConditionalSection('Segunda_Liquidacion_Si', 'Segunda_Liquidacion_No', 'Segunda_Liquidacion_section');
+            const slSi = document.getElementById('Segunda_Liquidacion_Si');
+            const slNo = document.getElementById('Segunda_Liquidacion_No');
+            const slIpcSection = document.getElementById('Segunda_Liquidacion_IPC_section');
+            if (slSi && slNo && slIpcSection) {
+                function updateSlIpcSectionVisibility() {
+                    // Muestra slIpcSection solo si slSi está marcado.
+                    // setupConditionalSection ya maneja la exclusividad entre slSi y slNo.
+                    slIpcSection.style.display = slSi.checked ? 'block' : 'none';
+                }
+                slSi.addEventListener('change', updateSlIpcSectionVisibility);
+                slNo.addEventListener('change', updateSlIpcSectionVisibility); // slNo al cambiar desmarcará slSi
+                updateSlIpcSectionVisibility(); // Estado inicial
+            } else {
+                // console.warn("Elementos para Segunda_Liquidacion_IPC_section no encontrados completamente.");
+            }
+
+            // Para IPC Liquidación
+            setupConditionalSection('IPC_Liquidacion_Si', 'IPC_Liquidacion_No', 'Liquidacion_IPC_section');
+
+            // Para Tope Haber Máximo
+            setupConditionalSection('Tope_Haber_Maximo_Si', 'Tope_Haber_Maximo_No', 'Tope_section');
+
+            // Para Daños (solo exclusividad)
+            setupExclusiveCheckboxes('Daños_Si', 'Daños_No');
+
+            // Para Sancionatorios (solo exclusividad)
+            setupExclusiveCheckboxes('Sancionatorios_Si', 'Sancionatorios_No');
+
         });
     </script>
+        
 </body>
 </html>
