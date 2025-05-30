@@ -2096,7 +2096,10 @@ def generador_escrito_liquidacion():
     if request.method == 'POST':
         archivo = request.files['pdf']
         if archivo.filename != '':
-            ruta = os.path.join(app.config['UPLOAD_FOLDER'], archivo.filename)
+            upload_folder = app.config.get('UPLOAD_FOLDER', 'static/uploads')
+            os.makedirs(upload_folder, exist_ok=True)
+
+            ruta = os.path.join(upload_folder, archivo.filename)
             archivo.save(ruta)
 
             # Extraer el texto
@@ -2110,7 +2113,6 @@ def generador_escrito_liquidacion():
 
             json_generado = analizar_con_gemini(texto)
 
-            # Verificamos si es string y no está vacío
             if isinstance(json_generado, str):
                 if json_generado.strip() != '':
                     try:
