@@ -40,6 +40,8 @@ from services.calculadora_movilidad.calculadora import CalculadorMovilidad
 from services.calculos import formatear_dinero, transformar_fecha
 from services.generador_regulacion.generador_regulacion import Regulacion
 from services.generador_escritos_liquidacion.generador_escritos_liquidacion import Escrito_liquidacion
+from services.generador_escritos_agravios.generador_escritos_agravios import Escrito_agravios
+
 from services.generador_escritos_liquidacion.automatizacion import analizar_con_gemini, extraer_texto_pdf
 from services.calculadora_tope_maximo.generador_pdf import Comparativa
 from services.comparador_productos.comparador_productos import Comparador_productos
@@ -140,6 +142,10 @@ def generar_pdf_route():
     monto_aprobado = request.form.get('Monto_Aprobado')
     monto_aprobado_actualizado = request.form.get('Monto_Aprobado_Actualizado')
 
+    incluirAprobacion = request.form.get('incluirAprobacion') == 'on'
+    incluirRegulacion = request.form.get('incluirRegulacion') == 'on'
+    incluirMontoActualizado= request.form.get('incluirMontoActualizado') == 'on'
+
 
 
 
@@ -157,7 +163,7 @@ def generar_pdf_route():
         pdf_generator = PDFGenerator(
             autos, expediente, periodo_desde, periodo_hasta,
             fecha_de_cierre_de_liquidacion, fecha_de_regulacion, 
-            fecha_aprobacion_sentencia, monto_aprobado, monto_aprobado_actualizado
+            fecha_aprobacion_sentencia, monto_aprobado, monto_aprobado_actualizado, incluirAprobacion, incluirRegulacion, incluirMontoActualizado
         )
         pdf = pdf_generator.generar_pdf()
 
@@ -2124,6 +2130,50 @@ def generador_escrito_liquidacion():
 
             return render_template('generador_escritos/generador_escritos_liquidacion.html', datos=json_generado)
     return render_template('generador_escritos/index.html')
+
+@app.route('/generador_escrito_agravios')
+def generador_escrito_agravios():
+    return render_template('escritos_agravios/generador_escritos_agravios.html')
+
+@app.route('/resultado_escrito_agravios', methods=['POST'])
+@login_required
+def resultado_escrito_agravios():
+    datos = {}
+
+    #Tipo de liquidacion
+
+    #Inconstitucionalidades
+    datos['Decreto_274_24_Si'] = request.form.get('Decreto_274/24_Si', False) == 'on'
+    datos['Decreto_274/24_Omite_Si'] = request.form.get('Decreto_274/24_Omite_Si', False) == 'on'
+    datos['Decreto_274/24_Difiere_Si'] = request.form.get('Decreto_274/24_Difiere_Si', False) == 'on'
+
+    datos['Movilidad_Ley_27609_Si'] = request.form.get('Movilidad_Ley_27.609_Si', False) == 'on'
+    datos['Movilidad_Ley_27.609_Omite_Si'] = request.form.get('Movilidad_Ley_27.609_Omite_Si', False) == 'on'
+    datos['Movilidad_Ley_27.609_Difiere_Si'] = request.form.get('Movilidad_Ley_27.609_Difiere_Si', False) == 'on'
+
+
+
+    #Datos Cliente
+    datos['cliente'] = request.form.get('cliente')
+    datos['expediente'] = request.form.get('expediente')
+
+    # Fechas clave y sentencias
+    datos['Fecha_Sentencia_Primera'] = request.form.get('Fecha_Sentencia_Primera') or "2022-02-01"
+    datos['Sentencia_2da_Si'] = request.form.get('Sentencia_2da_Si', False) == 'on'
+    datos['Sentencia_2da_No'] = request.form.get('Sentencia_2da_No', False) == 'on'
+    datos['Sentencia_de_Segunda'] = request.form.get('Sentencia_de_Segunda') or "2022-02-01"
+    datos['Sala'] = request.form.get('Sala')
+
+    # Fechas relacionadas a liquidaciones
+    datos['Fecha_Inicial_de_Pago'] = request.form.get('Fecha_Inicial_de_Pago') or "2022-02-01"
+    datos['Fecha_de_cierre_de_liquidación'] = request.form.get('Fecha_de_cierre_de_liquidación') or "2022-02-01"
+    datos['Fecha_de_cierre_de_intereses'] = request.form.get('Fecha_de_cierre_de_intereses') or "2022-02-01"
+    datos['fecha_aprobacion_planilla'] = request.form.get('fecha_aprobacion_planilla') or "2022-02-01"
+
+    escrito = Escrito_agravios(datos)
+    resultado = escrito.crear_documento_agravios()
+
+    return resultado
     
 if __name__ == '__main__':
     app.run(debug=True)
