@@ -75,6 +75,9 @@
         .fuente-grande{
             font-size: 15px;
         }
+        .fuente-grande_2{
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -236,7 +239,39 @@
                 {% endif %}
             </tr>
             <tr class="font-large">
-                <td class="negrita first-column-cell">Art 58 inc B</td>
+                <td class="negrita first-column-cell">Reducción del 10% si no hubo excepciones Art 29</td>
+                <td>{{reduccionFCL}}</td>
+                
+                {% if incluirAprobacion %}
+                <td>{{reduccionAS}}</td>
+                {% endif %}
+
+                {% if incluirRegulacion %}
+                <td>{{reduccionR}}</td>
+                {% endif %}
+
+                {% if incluirMontoActualizado %}
+                <td>{{reduccionTP}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">1 sola etapa la ejecución 50% Art 34</td>
+                <td>{{ejecucionFCL}}</td>
+
+                {% if incluirAprobacion %}
+                <td>{{ejecucionAS}}</td>
+                {% endif %}
+
+                {% if incluirRegulacion %}
+                <td>{{ejecucionR}}</td>
+                {% endif %}
+
+                {% if incluirMontoActualizado %}
+                <td>{{ejecucionTP}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Art 58 inc B (Honorarios Minimos en Ejecucion)</td>
                 {% set columnas_adicionales = 0 %}
                 {% if incluirAprobacion %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
                 {% if incluirRegulacion %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
@@ -244,22 +279,6 @@
                 {% set colspan_total = 1 + columnas_adicionales %}
                 <td colspan="{{ colspan_total }}" class="negrita fuente-grande" style="text-align: center;">Mínimo 6 UMA</td>
 
-            </tr>
-            <tr class="font-large">
-                <td class="negrita first-column-cell">Incidencia 25%</td>
-                <td class="fuente-grande">{{incidenciaFCL}}</td>
-
-                {% if incluirAprobacion %}
-                <td class="fuente-grande">{{incidenciaAS}}</td>
-                {% endif %}
-
-                {% if incluirRegulacion %}
-                <td class="fuente-grande">{{incidenciaR}}</td>
-                {% endif %}
-
-                {% if incluirMontoActualizado %}
-                <td class="fuente-grande">{{incidenciaTP}}</td>
-                {% endif %}
             </tr>
         </tbody>
     </table>

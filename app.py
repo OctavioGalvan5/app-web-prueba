@@ -2100,18 +2100,17 @@ def datos_cruzados():
 @app.route('/generador_escrito_liquidacion', methods=['GET', 'POST'])
 def generador_escrito_liquidacion():
     if request.method == 'POST':
-        archivo = request.files['pdf']
-        if archivo.filename != '':
+        archivo = request.files.get('pdf')
+
+        if archivo and archivo.filename != '':
             upload_folder = app.config.get('UPLOAD_FOLDER', 'static/uploads')
             os.makedirs(upload_folder, exist_ok=True)
 
             ruta = os.path.join(upload_folder, archivo.filename)
             archivo.save(ruta)
 
-            # Extraer el texto
             texto = extraer_texto_pdf(ruta)
 
-            # Eliminar el archivo después de usarlo
             try:
                 os.remove(ruta)
             except Exception as e:
@@ -2129,6 +2128,51 @@ def generador_escrito_liquidacion():
                     return "Error: El JSON generado está vacío.", 400
 
             return render_template('generador_escritos/generador_escritos_liquidacion.html', datos=json_generado)
+        else:
+            # POST sin archivo -> mostrar formulario vacío
+            datos_vacios = {
+                "27.609_Si": False,
+                "27.541_Si": False,
+                "27.426_Si": False,
+                "cliente": "",
+                "fecha_inicial_pago": "",
+                "Fecha_de_cierre_de_liquidacion": "",
+                "Fecha_de_cierre_de_intereses": "",
+                "Badaro_Si": False,
+                "PBU_Si": False,
+                "Monto_PBU": "",
+                "Porcentaje_PBU": "",
+                "Percibido": "",
+                "Reclamado": "",
+                "Movilidad": "",
+                "Haber_de_Alta": "",
+                "pagos_Si": False,
+                "monto_descontado_1": "",
+                "fecha_descuento_1": "",
+                "Capital": "",
+                "Intereses": "",
+                "total_liquidacion": "",
+                "Segunda_Liquidacion_Si": False,
+                "Movilidad_Segunda_Liquidacion": "",
+                "Haber_de_Alta_Segunda_Liquidacion": "",
+                "Capital_Segunda_Liquidacion": "",
+                "Intereses_Segunda_Liquidacion": "",
+                "Total_Segunda_Liquidacion": "",
+                "IPC_Liquidacion_Si": False,
+                "Movilidad_Primera_Liquidacion_IPC": "",
+                "Haber_de_Alta_Primera_Liquidacion_IPC": "",
+                "Capital_Primera_Liquidacion_IPC": "",
+                "Intereses_Primera_Liquidacion_IPC": "",
+                "Total_Primera_Liquidacion_IPC": "",
+                "Movilidad_Segunda_Liquidacion_IPC": "",
+                "Haber_de_Alta_Segunda_Liquidacion_IPC": "",
+                "Capital_Segunda_Liquidacion_IPC": "",
+                "Intereses_Segunda_Liquidacion_IPC": "",
+                "Total_Segunda_Liquidacion_IPC": ""
+            }
+            return render_template('generador_escritos/generador_escritos_liquidacion.html', datos=datos_vacios)
+
+    # GET request
     return render_template('generador_escritos/index.html')
 
 @app.route('/generador_escrito_agravios')

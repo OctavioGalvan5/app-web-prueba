@@ -3,6 +3,7 @@ from docxtpl import DocxTemplate
 from datetime import datetime
 from services.calculadora_uma.generador_pdf import obtener_acordada, obtener_valor_uma
 from services.calculadora_tope_maximo.generador_pdf import obtener_monto
+from services.generador_escritos_liquidacion.honorarios import PDFGenerator
 from services.calculos import formatear_dinero
 import re
 import plotly.graph_objects as go
@@ -12,6 +13,28 @@ import tempfile
 from babel.numbers import format_currency
 from decimal import Decimal
 
+import fitz  # PyMuPDF
+from PIL import Image
+
+def cortar_primera_pagina_a_la_mitad(pdf_bytes, output_image_path, posicion='superior'):
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+    page = doc.load_page(0)  # Primera página
+
+    rect = page.rect
+    mitad_alto = rect.height / 2
+
+    # Elegimos qué mitad tomar: 'superior' o 'inferior'
+    if posicion == 'superior':
+        clip = fitz.Rect(rect.x0, rect.y0, rect.x1, mitad_alto)
+    else:  # 'inferior'
+        clip = fitz.Rect(rect.x0, mitad_alto, rect.x1, rect.y1)
+
+    # Renderizar solo esa parte (clip)
+    pix = page.get_pixmap(clip=clip, dpi=300)
+    img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+    img.save(output_image_path)
+    doc.close()
+    return output_image_path
 
 def replace_pic(doc, marker, img_path):
     """Reemplaza un marcador en un documento Word por una imagen."""
@@ -132,28 +155,44 @@ class Escrito_liquidacion:
       # UMA
       liquidaciones = [
         ]
+      self.Fecha_de_cierre_de_intereses = self.datos['Fecha_de_cierre_de_intereses']
       self.datos['Valor_UMA'] = obtener_valor_uma(self.datos['Fecha_de_cierre_de_intereses'])
       self.datos['total_liquidacion'] = transformar_a_float(self.datos['total_liquidacion'])
+      self.total_liquidacion = self.datos['total_liquidacion']
       self.datos['total_liquidacion_en_UMA'] = round(float(self.datos['total_liquidacion']) / float(self.datos['Valor_UMA']),2)
       self.datos['total_liquidacion'] = formatear_dinero(self.datos['total_liquidacion'])
       liquidaciones.append({"monto": self.datos['total_liquidacion'], "monto_en_uma": self.datos['total_liquidacion_en_UMA'], "numero_liquidacion":"1ra"})
+
+      
       if self.datos['Total_Segunda_Liquidacion'] != "0":
           self.datos['Total_Segunda_Liquidacion'] = transformar_a_float(self.datos['Total_Segunda_Liquidacion'])
+      self.Total_Segunda_Liquidacion = self.datos['Total_Segunda_Liquidacion']
+      if self.datos['Total_Segunda_Liquidacion'] != "0":
           self.datos['Total_Segunda_Liquidacion_en_UMA'] = round(float(self.datos['Total_Segunda_Liquidacion']) / float(self.datos['Valor_UMA']),2)
           self.datos['Total_Segunda_Liquidacion'] = formatear_dinero(self.datos['Total_Segunda_Liquidacion'])
           liquidaciones.append({"monto": self.datos['Total_Segunda_Liquidacion'], "monto_en_uma": self.datos['Total_Segunda_Liquidacion_en_UMA'], "numero_liquidacion":"2da"})
 
+      
+
       if self.datos['Total_Primera_Liquidacion_IPC'] != "0":
           self.datos['Total_Primera_Liquidacion_IPC'] = transformar_a_float(self.datos['Total_Primera_Liquidacion_IPC'])
+      self.Total_Primera_Liquidacion_IPC = self.datos['Total_Primera_Liquidacion_IPC']
+      if self.datos['Total_Primera_Liquidacion_IPC'] != "0":
           self.datos['Total_Primera_Liquidacion_IPC_en_UMA'] = round(float(self.datos['Total_Primera_Liquidacion_IPC']) / float(self.datos['Valor_UMA']),2)
           self.datos['Total_Primera_Liquidacion_IPC'] = formatear_dinero(self.datos['Total_Primera_Liquidacion_IPC'])
           liquidaciones.append({"monto": self.datos['Total_Primera_Liquidacion_IPC'], "monto_en_uma": self.datos['Total_Primera_Liquidacion_IPC_en_UMA'], "numero_liquidacion":"3ra"})
 
+      
+
       if self.datos['Total_Segunda_Liquidacion_IPC'] != "0":
           self.datos['Total_Segunda_Liquidacion_IPC'] = transformar_a_float(self.datos['Total_Segunda_Liquidacion_IPC'])
+      self.Total_Segunda_Liquidacion_IPC = self.datos['Total_Segunda_Liquidacion_IPC']
+      if self.datos['Total_Segunda_Liquidacion_IPC'] != "0":
           self.datos['Total_Segunda_Liquidacion_IPC_en_UMA'] = round(float(self.datos['Total_Segunda_Liquidacion_IPC']) / float(self.datos['Valor_UMA']),2)
           self.datos['Total_Segunda_Liquidacion_IPC'] = formatear_dinero(self.datos['Total_Segunda_Liquidacion_IPC'])
           liquidaciones.append({"monto": self.datos['Total_Segunda_Liquidacion_IPC'], "monto_en_uma": self.datos['Total_Segunda_Liquidacion_IPC_en_UMA'], "numero_liquidacion":"4ta"})
+
+      
       self.datos['Valor_UMA'] = formatear_dinero(self.datos['Valor_UMA'])
       self.datos["liquidaciones"] = liquidaciones
       
@@ -219,6 +258,19 @@ class Escrito_liquidacion:
 
 
   def crear_documento(self):
+
+        pdf_generator = PDFGenerator(
+          "", "", "2020-01-01", "2020-01-01",
+          self.Fecha_de_cierre_de_intereses, self.total_liquidacion, 
+          self.Total_Segunda_Liquidacion, self.Total_Primera_Liquidacion_IPC, self.Total_Segunda_Liquidacion_IPC, self.datos["Segunda_Liquidacion_Si"], self.datos["IPC_Liquidacion_Si"]
+        )
+        pdf = pdf_generator.generar_pdf()
+
+        imagen_path = cortar_primera_pagina_a_la_mitad(
+            pdf, 'datos/escritos_liquidacion/temp_liquidacion.png', posicion='superior'
+        )
+
+      
         plantilla_path = 'datos/escritos_liquidacion/plantilla_liquidacion_1ra_vez.docx'
         if self.datos['tipo_escrito'] == 'liquidacion_1ra_vez':
             plantilla_path = "datos/escritos_liquidacion/plantilla_liquidacion_1ra_vez.docx"
@@ -238,6 +290,7 @@ class Escrito_liquidacion:
       # Reemplazar el marcador con la imagen del gráfico
         replace_pic(doc, 'Comparacion_1', self.datos['grafico_1'])
         replace_pic(doc, 'Comparacion_2', self.datos['grafico_2'])
+        replace_pic(doc, 'LIQUIDACION_IMG', imagen_path)
 
 
       # Guardar el documento renderizado
