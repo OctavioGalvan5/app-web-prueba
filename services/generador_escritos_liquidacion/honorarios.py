@@ -95,16 +95,16 @@ class PDFGenerator:
       fecha_normalizada = normalizar_fecha(self.fecha_de_cierre_de_liquidacion)
       datos['Acordada_fecha_de_cierre_de_liquidacion'] = obtener_acordada(fecha_normalizada)
       datos['UMA_fecha_de_cierre_de_liquidacion'] = obtener_valor_uma(fecha_normalizada)
-      datos['porcentajesFCL'], datos['cantidadFCL'], datos['minimoFCL'], datos['apoderadoFCL'], datos['reduccionFCL'], datos['ejecucionFCL'], datos['incidenciaFCL'] = calcular_porcentajes(self.total_liquidacion, datos['UMA_fecha_de_cierre_de_liquidacion'])
+      datos['cantidad_FCL'], datos['valor_dividido_FCL'], datos['porcentajes_FCL'], datos['porcentaje_anterior_FCL'], datos['primera_valor_uma_final_FCL'], datos['segunda_valor_uma_final_FCL'], datos['total_uma_FCL'], datos['apoderado_FCL'], datos['reduccion_excepciones_FCL']= calcular_porcentajes(self.total_liquidacion, datos['UMA_fecha_de_cierre_de_liquidacion'])
 
       if self.IPC_Liquidacion_Si:
-          datos['porcentajesR'], datos['cantidadR'], datos['minimoR'], datos['apoderadoR'], datos['reduccionR'], datos['ejecucionR'], datos['incidenciaR'] = calcular_porcentajes(self.Total_Primera_Liquidacion_IPC, datos['UMA_fecha_de_cierre_de_liquidacion'])
+          datos['cantidad_R'], datos['valor_dividido_R'], datos['porcentajes_R'], datos['porcentaje_anterior_R'], datos['primera_valor_uma_final_R'], datos['segunda_valor_uma_final_R'], datos['total_uma_R'], datos['apoderado_R'], datos['reduccion_excepciones_R']= calcular_porcentajes(self.Total_Primera_Liquidacion_IPC, datos['UMA_fecha_de_cierre_de_liquidacion'])
 
       if self.Segunda_Liquidacion_Si:
-          datos['porcentajesAS'], datos['cantidadAS'], datos['minimoAS'], datos['apoderadoAS'], datos['reduccionAS'], datos['ejecucionAS'], datos['incidenciaAS'] = calcular_porcentajes(self.Total_Segunda_Liquidacion, datos['UMA_fecha_de_cierre_de_liquidacion'])
+          datos['cantidad_AS'], datos['valor_dividido_AS'],  datos['porcentajes_AS'], datos['porcentaje_anterior_AS'], datos['primera_valor_uma_final_AS'], datos['segunda_valor_uma_final_AS'], datos['total_uma_AS'], datos['apoderado_AS'], datos['reduccion_excepciones_AS']= calcular_porcentajes(self.Total_Segunda_Liquidacion, datos['UMA_fecha_de_cierre_de_liquidacion'])
 
       if self.IPC_Liquidacion_Si and self.Segunda_Liquidacion_Si:
-          datos['porcentajesTP'], datos['cantidadTP'], datos['minimoTP'], datos['apoderadoTP'], datos['reduccionTP'], datos['ejecucionTP'], datos['incidenciaTP'] = calcular_porcentajes(self.Total_Segunda_Liquidacion_IPC, datos['UMA_fecha_de_cierre_de_liquidacion'])
+          datos['cantidad_TP'], datos['valor_dividido_TP'], datos['porcentajes_TP'], datos['porcentaje_anterior_TP'], datos['primera_valor_uma_final_TP'], datos['segunda_valor_uma_final_TP'], datos['total_uma_TP'], datos['apoderado_TP'], datos['reduccion_excepciones_TP']= calcular_porcentajes(self.Total_Segunda_Liquidacion_IPC, datos['UMA_fecha_de_cierre_de_liquidacion'])
 
       #esta bandera me dice si existe o no el total de la segunda liquidacion IPC
       if self.Total_Segunda_Liquidacion_IPC != 0:
@@ -131,15 +131,17 @@ class PDFGenerator:
           'fecha_de_cierre_de_liquidacion': transformar_fecha(self.fecha_de_cierre_de_liquidacion),
           'Acordada_fecha_de_cierre_de_liquidacion': datos['Acordada_fecha_de_cierre_de_liquidacion'],
           'UMA_fecha_de_cierre_de_liquidacion': formatear_dinero(datos['UMA_fecha_de_cierre_de_liquidacion']),
-          'porcentajesFCL': datos['porcentajesFCL'],
-          'cantidadFCL': datos['cantidadFCL'],
-          'minimoFCL': datos['minimoFCL'],
-          'apoderadoFCL': datos['apoderadoFCL'],
-          'reduccionFCL': datos['reduccionFCL'],
-          'ejecucionFCL': datos['ejecucionFCL'],
-          'incidenciaFCL': datos['incidenciaFCL'],
-          'menos_incidenciaFCL': datos['apoderadoFCL'] - datos['incidenciaFCL'],
-          'total_honorarios_FCL': (datos['apoderadoFCL'] - datos['incidenciaFCL']) / 2,
+          'porcentajes_FCL': datos['porcentajes_FCL'],
+          'cantidad_FCL': datos['cantidad_FCL'],
+          'valor_dividido_FCL' : datos['valor_dividido_FCL'],
+          'porcentaje_anterior_FCL': datos['porcentaje_anterior_FCL'],
+          'primera_valor_uma_final_FCL': datos['primera_valor_uma_final_FCL'],
+          'segunda_valor_uma_final_FCL': datos['segunda_valor_uma_final_FCL'],
+          'total_uma_FCL': datos['total_uma_FCL'],
+          'apoderado_FCL': datos['apoderado_FCL'],
+          'reduccion_excepciones_FCL': datos['reduccion_excepciones_FCL'],
+          #'menos_incidenciaFCL': datos['apoderadoFCL'] - datos['incidenciaFCL'],
+          #'total_honorarios_FCL': (datos['apoderadoFCL'] - datos['incidenciaFCL']) / 2,
           'total_liquidacion': formatear_dinero(self.total_liquidacion),
           #'porcentaje_aplicable': formatear_dinero(datos['porcentaje_aplicable']),
           #'apoderada': formatear_dinero(datos['apoderada']),
@@ -153,37 +155,43 @@ class PDFGenerator:
 
       if self.IPC_Liquidacion_Si:
           context.update({
-              'porcentajesR': datos['porcentajesR'],
-              'cantidadR': datos['cantidadR'],
-              'minimoR': datos['minimoR'],
-              'apoderadoR': datos['apoderadoR'],
-              'reduccionR': datos['reduccionR'],
-              'ejecucionR': datos['ejecucionR'],
-              'incidenciaR': datos['incidenciaR'],
+              'porcentajes_R': datos['porcentajes_R'],
+              'cantidad_R': datos['cantidad_R'],
+              'valor_dividido_R' : datos['valor_dividido_R'],
+              'porcentaje_anterior_R': datos['porcentaje_anterior_R'],
+              'primera_valor_uma_final_R': datos['primera_valor_uma_final_R'],
+              'segunda_valor_uma_final_R': datos['segunda_valor_uma_final_R'],
+              'total_uma_R': datos['total_uma_R'],
+              'apoderado_R': datos['apoderado_R'],
+              'reduccion_excepciones_R': datos['reduccion_excepciones_R'],
               'Total_Primera_Liquidacion_IPC': formatear_dinero(self.Total_Primera_Liquidacion_IPC)
           })
 
       if self.Segunda_Liquidacion_Si:
           context.update({
-              'porcentajesAS': datos['porcentajesAS'],
-              'cantidadAS': datos['cantidadAS'],
-              'minimoAS': datos['minimoAS'],
-              'apoderadoAS': datos['apoderadoAS'],
-              'reduccionAS': datos['reduccionAS'],
-              'ejecucionAS': datos['ejecucionAS'],
-              'incidenciaAS': datos['incidenciaAS'],
+              'porcentajes_AS': datos['porcentajes_AS'],
+              'cantidad_AS': datos['cantidad_AS'],
+              'valor_dividido_AS' : datos['valor_dividido_AS'],
+              'porcentaje_anterior_AS': datos['porcentaje_anterior_AS'],
+              'primera_valor_uma_final_AS': datos['primera_valor_uma_final_AS'],
+              'segunda_valor_uma_final_AS': datos['segunda_valor_uma_final_AS'],
+              'total_uma_AS': datos['total_uma_AS'],
+              'apoderado_AS': datos['apoderado_AS'],
+              'reduccion_excepciones_AS': datos['reduccion_excepciones_AS'],
               'Total_Segunda_Liquidacion': formatear_dinero(self.Total_Segunda_Liquidacion)
           })
 
       if self.Segunda_Liquidacion_Si and self.IPC_Liquidacion_Si and self.Total_Segunda_Liquidacion_IPC != 0:
           context.update({
-              'porcentajesTP': datos['porcentajesTP'],
-              'cantidadTP': datos['cantidadTP'],
-              'minimoTP': datos['minimoTP'],
-              'apoderadoTP': datos['apoderadoTP'],
-              'reduccionTP': datos['reduccionTP'],
-              'ejecucionTP': datos['ejecucionTP'],
-              'incidenciaTP': datos['incidenciaTP'],
+              'porcentajes_TP': datos['porcentajes_TP'],
+              'cantidad_TP': datos['cantidad_TP'],
+              'valor_dividido_TP' : datos['valor_dividido_TP'],
+              'porcentaje_anterior_TP': datos['porcentaje_anterior_TP'],
+              'primera_valor_uma_final_TP': datos['primera_valor_uma_final_TP'],
+              'segunda_valor_uma_final_TP': datos['segunda_valor_uma_final_TP'],
+              'total_uma_TP': datos['total_uma_TP'],
+              'apoderado_TP': datos['apoderado_TP'],
+              'reduccion_excepciones_TP': datos['reduccion_excepciones_TP'],
               'Total_Segunda_Liquidacion_IPC': formatear_dinero(self.Total_Segunda_Liquidacion_IPC),
               'bandera_segunda_liquidacion_ipc' : datos['bandera_segunda_liquidacion_ipc']
           })

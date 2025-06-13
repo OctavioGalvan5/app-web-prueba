@@ -175,101 +175,224 @@
                 {% endif %}
             </tr>
             <tr class="font-large">
-                <td class="negrita first-column-cell">Cantidad UMA</td>
-                <td class="fuente-grande">{{cantidadFCL}}</td>
+                <td class="negrita first-column-cell">Cantidad en UMA</td>
+                <td class="fuente-grande">{{cantidad_FCL}}</td>
 
                 {% if incluirAprobacion %}
-                <td class="fuente-grande">{{cantidadAS}}</td>
+                <td class="fuente-grande">{{cantidad_AS}}</td>
                 {% endif %}
 
                 {% if incluirRegulacion %}
-                <td class="fuente-grande">{{cantidadR}}</td>
+                <td class="fuente-grande">{{cantidad_R}}</td>
                 {% endif %}
 
                 {% if incluirMontoActualizado %}
-                <td class="fuente-grande">{{cantidadTP}}</td>
+                <td class="fuente-grande">{{cantidad_TP}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Cantidad en UMA divido 2</td>
+                <td class="fuente-grande">{{valor_dividido_FCL}}</td>
+
+                {% if incluirAprobacion %}
+                <td class="fuente-grande">{{valor_dividido_AS}}</td>
+                {% endif %}
+
+                {% if incluirRegulacion %}
+                <td class="fuente-grande">{{valor_dividido_R}}</td>
+                {% endif %}
+
+                {% if incluirMontoActualizado %}
+                <td class="fuente-grande">{{valor_dividido_TP}}</td>
                 {% endif %}
             </tr>
             <tr class="font-large">
                 <td class="negrita first-column-cell">Escala del art 21 de la ley 27.423</td>
-                <td class="fuente-grande">{{porcentajesFCL}}</td>
+                <td class="fuente-grande">{{porcentajes_FCL}}</td>
 
                 {% if incluirAprobacion %}
-                <td class="fuente-grande">{{porcentajesAS}}</td>
+                <td class="fuente-grande">{{porcentajes_AS}}</td>
                 {% endif %}
 
                 {% if incluirRegulacion %}
-                <td class="fuente-grande">{{porcentajesR}}</td>
+                <td class="fuente-grande">{{porcentajes_R}}</td>
                 {% endif %}
 
                 {% if incluirMontoActualizado %}
-                <td class="fuente-grande">{{porcentajesTP}}</td>
+                <td class="fuente-grande">{{porcentajes_TP}}</td>
                 {% endif %}
             </tr>
             <tr class="font-large">
-                <td class="negrita first-column-cell">Mínimo en UMA</td>
-                <td class="fuente-grande">{{minimoFCL}}</td>
+                <td class="negrita first-column-cell">Escala del art 21 de la ley 27.423 anterior</td>
+
+                <td class="fuente-grande">
+                    {% if porcentaje_anterior_FCL == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ porcentaje_anterior_FCL }}
+                    {% endif %}
+                </td>
 
                 {% if incluirAprobacion %}
-                <td class="fuente-grande">{{minimoAS}}</td>
+                <td class="fuente-grande">
+                    {% if porcentaje_anterior_AS == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ porcentaje_anterior_AS }}
+                    {% endif %}
+                </td>
                 {% endif %}
 
                 {% if incluirRegulacion %}
-                <td class="fuente-grande">{{minimoR}}</td>
+                <td class="fuente-grande">
+                    {% if porcentaje_anterior_R == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ porcentaje_anterior_R }}
+                    {% endif %}
+                </td>
                 {% endif %}
 
                 {% if incluirMontoActualizado %}
-                <td class="fuente-grande">{{minimoTP}}</td>
+                <td class="fuente-grande">
+                    {% if porcentaje_anterior_TP == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ porcentaje_anterior_TP }}
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Máx. de la escala anterior x Porcentaje Máximo</td>
+                <td class="fuente-grande">
+                    {% if primera_valor_uma_final_FCL == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ primera_valor_uma_final_FCL }}
+                    {% endif %}
+                </td>
+
+                {% if incluirAprobacion %}
+                <td class="fuente-grande">
+                    {% if primera_valor_uma_final_AS == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ primera_valor_uma_final_AS }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if incluirRegulacion %}
+                <td class="fuente-grande">
+                    {% if primera_valor_uma_final_R == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ primera_valor_uma_final_R }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if incluirMontoActualizado %}
+                <td class="fuente-grande">
+                    {% if primera_valor_uma_final_TP == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ primera_valor_uma_final_TP }}
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Alicuota mínima excedente</td>
+                <td class="fuente-grande">
+                    {% if segunda_valor_uma_final_FCL == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ segunda_valor_uma_final_FCL }}
+                    {% endif %}
+                </td>
+
+                {% if incluirAprobacion %}
+                <td class="fuente-grande">
+                    {% if segunda_valor_uma_final_AS == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ segunda_valor_uma_final_AS }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if incluirRegulacion %}
+                <td class="fuente-grande">
+                    {% if segunda_valor_uma_final_R == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ segunda_valor_uma_final_R }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if incluirMontoActualizado %}
+                <td class="fuente-grande">
+                    {% if segunda_valor_uma_final_TP == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ segunda_valor_uma_final_TP }}
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Total</td>
+                <td class="fuente-grande">{{total_uma_FCL}}</td>
+
+                {% if incluirAprobacion %}
+                <td class="fuente-grande">{{total_uma_AS}}</td>
+                {% endif %}
+
+                {% if incluirRegulacion %}
+                <td class="fuente-grande">{{total_uma_R}}</td>
+                {% endif %}
+
+                {% if incluirMontoActualizado %}
+                <td class="fuente-grande">{{total_uma_TP}}</td>
                 {% endif %}
             </tr>
             <tr class="font-large">
                 <td class="negrita first-column-cell">40% por ser apoderado Art 20</td>
-                <td class="fuente-grande">{{apoderadoFCL}}</td>
+                <td class="fuente-grande">{{apoderado_FCL}}</td>
 
                 {% if incluirAprobacion %}
-                <td class="fuente-grande">{{apoderadoAS}}</td>
+                <td class="fuente-grande">{{apoderado_AS}}</td>
                 {% endif %}
 
                 {% if incluirRegulacion %}
-                <td class="fuente-grande">{{apoderadoR}}</td>
+                <td class="fuente-grande">{{apoderado_R}}</td>
                 {% endif %}
 
                 {% if incluirMontoActualizado %}
-                <td class="fuente-grande">{{apoderadoTP}}</td>
+                <td class="fuente-grande">{{apoderado_TP}}</td>
                 {% endif %}
             </tr>
             <tr class="font-large">
                 <td class="negrita first-column-cell">Reducción del 10% si no hubo excepciones Art 29</td>
-                <td>{{reduccionFCL}}</td>
+                <td>{{reduccion_excepciones_FCL}}</td>
                 
                 {% if incluirAprobacion %}
-                <td>{{reduccionAS}}</td>
+                <td>{{reduccion_excepciones_AS}}</td>
                 {% endif %}
 
                 {% if incluirRegulacion %}
-                <td>{{reduccionR}}</td>
+                <td>{{reduccion_excepciones_R}}</td>
                 {% endif %}
 
                 {% if incluirMontoActualizado %}
-                <td>{{reduccionTP}}</td>
+                <td>{{reduccion_excepciones_TP}}</td>
                 {% endif %}
             </tr>
-            <tr class="font-large">
-                <td class="negrita first-column-cell">1 sola etapa la ejecución 50% Art 34</td>
-                <td>{{ejecucionFCL}}</td>
-
-                {% if incluirAprobacion %}
-                <td>{{ejecucionAS}}</td>
-                {% endif %}
-
-                {% if incluirRegulacion %}
-                <td>{{ejecucionR}}</td>
-                {% endif %}
-
-                {% if incluirMontoActualizado %}
-                <td>{{ejecucionTP}}</td>
-                {% endif %}
-            </tr>
+            
             <tr class="font-large">
                 <td class="negrita first-column-cell">Art 58 inc B (Honorarios Minimos en Ejecucion)</td>
                 {% set columnas_adicionales = 0 %}

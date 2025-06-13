@@ -21,10 +21,10 @@ def cortar_dos_tercios_superiores(pdf_bytes, output_image_path):
     page = doc.load_page(0)  # Primera página
 
     rect = page.rect
-    dos_tercios_alto = rect.height * (2 / 3)
+    tres_cuartos_alto = rect.height * (3 / 4)
 
-    # Definimos el rectángulo desde el tope hasta los 2/3 de altura
-    clip = fitz.Rect(rect.x0, rect.y0, rect.x1, rect.y0 + dos_tercios_alto)
+    # Definimos el rectángulo desde el tope hasta los 3/4 de altura
+    clip = fitz.Rect(rect.x0, rect.y0, rect.x1, rect.y0 + tres_cuartos_alto)
 
     # Renderizar solo esa parte
     pix = page.get_pixmap(clip=clip, dpi=300)
