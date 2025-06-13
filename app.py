@@ -141,15 +141,6 @@ def generar_pdf_route():
     incluirRegulacion = request.form.get('incluirRegulacion') == 'on'
     incluirMontoActualizado= request.form.get('incluirMontoActualizado') == 'on'
 
-
-
-
-    # Descontar 1 crédito al usuario
-    current_user.credito -= 1
-    ModelUser.update_credito(current_user.id, current_user.credito)  # Actualiza el crédito en la base de datos
-
-    # Vuelve a cargar la información del usuario para reflejar el cambio en current_user
-    login_user(ModelUser.get_by_id(current_user.id))  # Esto actualizará la información del usuario en Flask-Login
     # Verificar qué botón fue presionado
     action = request.form.get('action')
 
