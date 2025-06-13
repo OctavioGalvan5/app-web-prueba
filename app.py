@@ -124,13 +124,8 @@ def calculadora_uma_publica():
     return render_template('calculadora_uma/calculadora_uma_publica.html')
 
 @app.route('/resultado_uma', methods=['POST'])
-@login_required
 def generar_pdf_route():
-    # Verificar si el usuario tiene suficientes créditos
-    if current_user.credito <= 0:
-        flash("No tienes suficientes créditos para realizar esta operación.")
-        return redirect(url_for('calculadora_uma'))
-
+    
     # Obtener los datos del formulario
     autos = request.form.get('Autos')
     expediente = request.form.get('Expediente')
@@ -172,6 +167,7 @@ def generar_pdf_route():
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
         return response
+        
 @app.route('/formulario_demandas', methods=['GET', 'POST'])
 @login_required
 def formulario_demandas():
