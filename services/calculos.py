@@ -13,7 +13,7 @@ def obtener_porcentajes_fila_anterior(valor_ingresado):
           valor1 = row[1]  # Suponiendo que la columna 1 es valor1
           valor2 = row[2]  # Suponiendo que la columna 2 es valor2
 
-          if valor1 <= valor_ingresado <= valor2:
+          if valor1 <= valor_ingresado < valor2:
               return fila_anterior[3] if fila_anterior else None
 
           fila_anterior = row  # Guarda la fila actual como la "anterior" para la siguiente iteración
@@ -29,7 +29,7 @@ def obtener_porcentajes(valor_ingresado):
           valor2 = row[2]  # Asumiendo que la columna 2 es el segundo elemento
 
           # Verificar si valor_ingresado está entre valor1 y valor2
-          if valor1 <= valor_ingresado <= valor2:
+          if valor1 <= valor_ingresado < valor2:
               # Devolver el elemento 3 de la fila
               return row[3]  # Asumiendo que la columna 3 es el tercer elemento
 
@@ -44,7 +44,7 @@ def obtener_porcentaje_minimo(valor_ingresado):
           valor2 = row[2]  # Asumiendo que la columna 2 es el segundo elemento
 
           # Verificar si valor_ingresado está entre valor1 y valor2
-          if valor1 <= valor_ingresado <= valor2:
+          if valor1 <= valor_ingresado < valor2:
               # Devolver el elemento 3 de la fila
               return row[4]  # Asumiendo que la columna 3 es el tercer elemento
   return None  # Si no se encuentra ningún rango que contenga el valor ingresado
@@ -59,27 +59,40 @@ def obtener_porcentaje_maximo(valor_ingresado):
           valor2 = row[2]  # Asumiendo que la columna 2 es el segundo elemento
 
           # Verificar si valor_ingresado está entre valor1 y valor2
-          if valor1 <= valor_ingresado <= valor2:
+          if valor1 <= valor_ingresado < valor2:
               # Devolver el elemento 3 de la fila
               return row[5]  # Asumiendo que la columna 3 es el tercer elemento
   return None  # Si no se encuentra ningún rango que contenga el valor ingresado
 
+
 def obtener_porcentaje_maximo_fila_anterior(valor_ingresado):
-  with engine.connect() as conn:
-      result = conn.execute(text("SELECT * FROM porcentaje_uma"))
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM porcentaje_uma"))
 
-      fila_anterior = None
+        fila_anterior = None
 
-      for row in result:
-          valor1 = row[1]  # Rango inferior
-          valor2 = row[2]  # Rango superior
+        for row in result:
+            try:
+                valor1 = float(row[1])
+                valor2 = float(row[2])
+                print(f"Comparando: {valor1} <= {valor_ingresado} < {valor2}")
 
-          if valor1 <= valor_ingresado <= valor2:
-              return fila_anterior[5] if fila_anterior else None
+                if valor1 <= valor_ingresado < valor2:
+                    if fila_anterior:
+                        return float(fila_anterior[5])
+                    else:
+                        print("⚠️ El valor está en la primera fila, no hay anterior.")
+                        return 0
 
-          fila_anterior = row  # Guarda la fila actual para la próxima iteración
+                fila_anterior = row
 
-  return None
+            except Exception as e:
+                print(f"❌ Error al procesar fila: {row} → {e}")
+                continue
+
+    print("❌ No se encontró ningún rango que contenga el valor.")
+    return 0
+
 
 def obtener_monto_uma_maximo_fila_anterior(valor_ingresado):
   with engine.connect() as conn:
@@ -91,7 +104,7 @@ def obtener_monto_uma_maximo_fila_anterior(valor_ingresado):
           valor1 = row[1]  # Valor mínimo del rango
           valor2 = row[2]  # Valor máximo del rango (el monto UMA máximo actual)
 
-          if valor1 <= valor_ingresado <= valor2:
+          if valor1 <= valor_ingresado < valor2:
               return fila_anterior[2] if fila_anterior else None  # Retorna el UMA máximo de la fila anterior
 
           fila_anterior = row  # Guarda la fila actual como "anterior" para la próxima vuelta
@@ -120,7 +133,7 @@ def restar_porcentaje(porcentaje, numero):
 def calcular_porcentajes(monto_aprobado, valor_uma):
   cantidad_uma = dividir(monto_aprobado, valor_uma)
   valor_divido_2 = dividir(cantidad_uma, 2)
-  if valor_divido_2 < 15:
+  if valor_divido_2 <= 15.99:
     porcentaje = obtener_porcentaje_maximo(valor_divido_2)
     porcentajes = obtener_porcentajes(valor_divido_2)
     total_uma = calcular_porcentaje(porcentaje, valor_divido_2)
@@ -140,6 +153,8 @@ def calcular_porcentajes(monto_aprobado, valor_uma):
     porcentaje_minimo = obtener_porcentaje_minimo(valor_divido_2)
     porcentaje_maximo = obtener_porcentaje_maximo_fila_anterior(valor_divido_2)
     primer_valor_uma = obtener_monto_uma_maximo_fila_anterior(valor_divido_2)
+    print(valor_divido_2)
+    print(porcentaje_maximo)
     primera_valor_uma_final = calcular_porcentaje(porcentaje_maximo,primer_valor_uma)
     segundo_valor_uma = round(valor_divido_2 - primer_valor_uma,2)
     segunda_valor_uma_final = calcular_porcentaje(porcentaje_minimo, segundo_valor_uma)
