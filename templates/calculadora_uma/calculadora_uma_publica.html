@@ -655,7 +655,6 @@
                 input.addEventListener('input', function(e) {
                     let value = e.target.value.replace(/[^\d.]/g, '');
 
-                    // Validar formato de decimal
                     const parts = value.split('.');
                     if (parts.length > 2) {
                         value = parts[0] + '.' + parts[1];
@@ -691,11 +690,8 @@
         // Función para manejar los checkboxes y mostrar/ocultar secciones
         function toggleCheckbox(checkboxId) {
             const checkbox = document.getElementById(checkboxId);
-
-
             checkbox.checked = !checkbox.checked;
 
-            // Determinar qué sección mostrar/ocultar según el checkbox
             let sectionId;
             switch(checkboxId) {
                 case 'incluirAprobacion':
@@ -714,18 +710,25 @@
             if (checkbox.checked) {
                 section.classList.add('show');
 
-                // Si se muestra la sección, hacer que los campos sean requeridos
                 if (sectionId === 'seccionAprobacion') {
                     document.getElementById('fechaAprobacion').required = true;
                 } else if (sectionId === 'seccionRegulacion') {
                     document.getElementById('fechaRegulacion').required = true;
                 } else if (sectionId === 'seccionMontoActualizado') {
                     document.getElementById('montoActualizado').required = true;
+
+                    // Activar también incluirRegulacion manualmente y su lógica completa
+                    const incluirRegulacionCheckbox = document.getElementById('incluirRegulacion');
+                    const seccionRegulacion = document.getElementById('seccionRegulacion');
+                    const fechaRegulacion = document.getElementById('fechaRegulacion');
+
+                    incluirRegulacionCheckbox.checked = true;
+                    seccionRegulacion.classList.add('show');
+                    fechaRegulacion.required = true;
                 }
             } else {
                 section.classList.remove('show');
 
-                // Si se oculta la sección, quitar el atributo required
                 if (sectionId === 'seccionAprobacion') {
                     document.getElementById('fechaAprobacion').required = false;
                 } else if (sectionId === 'seccionRegulacion') {
