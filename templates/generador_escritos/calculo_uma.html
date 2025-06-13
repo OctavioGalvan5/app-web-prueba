@@ -242,7 +242,7 @@
                     {% if primera_valor_uma_final_FCL == 0 %}
                         No aplica
                     {% else %}
-                        {{ primera_valor_uma_final_FCL }}
+                        {{ primera_valor_uma_FCL }} x 0.{{ porcentaje_maximo_FCL }} = {{ primera_valor_uma_final_FCL }}
                     {% endif %}
                 </td>
 
@@ -251,7 +251,7 @@
                     {% if primera_valor_uma_final_AS == 0 %}
                         No aplica
                     {% else %}
-                        {{ primera_valor_uma_final_AS }}
+                        {{ primera_valor_uma_AS }} x 0.{{ porcentaje_maximo_AS }} = {{ primera_valor_uma_final_AS }}
                     {% endif %}
                 </td>
                 {% endif %}
@@ -261,7 +261,7 @@
                     {% if primera_valor_uma_final_R == 0 %}
                         No aplica
                     {% else %}
-                        {{ primera_valor_uma_final_R }}
+                        {{ primera_valor_uma_R }} x 0.{{ porcentaje_maximo_R }} = {{ primera_valor_uma_final_R }}
                     {% endif %}
                 </td>
                 {% endif %}
@@ -271,19 +271,19 @@
                     {% if primera_valor_uma_final_TP == 0 %}
                         No aplica
                     {% else %}
-                        {{ primera_valor_uma_final_TP }}
+                        {{ primera_valor_uma_TP }} x 0.{{ porcentaje_maximo_TP }} = {{ primera_valor_uma_final_TP }}
                     {% endif %}
                 </td>
                 {% endif %}
             </tr>
 
             <tr class="font-large">
-                <td class="negrita first-column-cell">Alicuota mínima excedente</td>
+                <td class="negrita first-column-cell">Alicuota mínima excedente x Porcentaje Minimo</td>
                 <td class="fuente-grande">
                     {% if segunda_valor_uma_final_FCL == 0 %}
                         No aplica
                     {% else %}
-                        {{ segunda_valor_uma_final_FCL }}
+                        {{ segundo_valor_uma_FCL }} x 0.{{ porcentaje_minimo_FCL }} = {{ segunda_valor_uma_final_FCL }}
                     {% endif %}
                 </td>
 
@@ -292,7 +292,7 @@
                     {% if segunda_valor_uma_final_AS == 0 %}
                         No aplica
                     {% else %}
-                        {{ segunda_valor_uma_final_AS }}
+                        {{ segundo_valor_uma_AS }} x 0.{{ porcentaje_minimo_AS }} = {{ segunda_valor_uma_final_AS }}
                     {% endif %}
                 </td>
                 {% endif %}
@@ -302,7 +302,7 @@
                     {% if segunda_valor_uma_final_R == 0 %}
                         No aplica
                     {% else %}
-                        {{ segunda_valor_uma_final_R }}
+                        {{ segundo_valor_uma_R }} x 0.{{ porcentaje_minimo_R }} = {{ segunda_valor_uma_final_R }}
                     {% endif %}
                 </td>
                 {% endif %}
@@ -312,7 +312,7 @@
                     {% if segunda_valor_uma_final_TP == 0 %}
                         No aplica
                     {% else %}
-                        {{ segunda_valor_uma_final_TP }}
+                        {{ segundo_valor_uma_TP }} x 0.{{ porcentaje_minimo_TP }} = {{ segunda_valor_uma_final_TP }}
                     {% endif %}
                 </td>
                 {% endif %}

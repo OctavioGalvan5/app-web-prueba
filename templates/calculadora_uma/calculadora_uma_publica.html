@@ -1,299 +1,740 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Liquidación</title>
+    <title>Formulario UMA - Cálculo de Liquidación</title>
+    <!-- Bootstrap 5 CSS desde CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #6a0dad;
+            --primary-light: #9b59b6;
+            --primary-dark: #4a0080;
+            --secondary-color: #f0e6fa;
+            --text-color: #333;
+            --light-gray: #f8f9fa;
+            --border-color: #e0d8e8;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #E6E6FA, #9370DB);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f0ff, #e6d9f2);
             min-height: 100vh;
+            color: var(--text-color);
         }
+
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 80px 20px 40px;
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1200px; /* Aumentado para acomodar inputs más grandes */
+            margin: 50px auto;
+            padding: 0 20px;
         }
-        .title {
-            font-size: 32px;
-            font-weight: bold;
-            color: #4B0082;
+
+        .main-card {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             margin-bottom: 30px;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 40px 30px;
             text-align: center;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-        .flash-messages {
-            width: 100%;
-            max-width: 500px;
-            margin-bottom: 20px;
-        }
-        .alert {
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            font-weight: bold;
             position: relative;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            animation: fadeIn 0.5s ease-out;
+            overflow: hidden;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .card-header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
         }
+
+        .card-header .subtitle {
+            margin-top: 15px;
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        .flash-messages {
+            margin-bottom: 30px;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            font-weight: 500;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .alert.error {
-            background-color: #FFD2D2;
-            color: #D8000C;
-            border: 1px solid #D8000C;
+            background: linear-gradient(135deg, #ffe6e6, #ffcccc);
+            color: var(--danger-color);
+            border-left: 4px solid var(--danger-color);
         }
+
         .alert.success {
-            background-color: #DFF2BF;
-            color: #4F8A10;
-            border: 1px solid #4F8A10;
+            background: linear-gradient(135deg, #e6ffe6, #ccffcc);
+            color: var(--success-color);
+            border-left: 4px solid var(--success-color);
         }
+
+        .alert-icon {
+            font-size: 18px;
+        }
+
         .close {
             position: absolute;
-            top: 5px;
-            right: 10px;
+            top: 10px;
+            right: 15px;
             cursor: pointer;
             font-weight: bold;
             color: inherit;
-            font-size: 18px;
-            transition: transform 0.3s ease;
+            font-size: 20px;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
+
         .close:hover {
-            transform: scale(1.2);
+            background-color: rgba(0,0,0,0.1);
         }
-        .form-container {
-            background-color: white;
-            border-radius: 20px;
-            padding: 30px;
-            width: 100%;
-            max-width: 500px;
+
+        .form-section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-            box-sizing: border-box;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
         }
+
+        .section-title i {
+            margin-right: 12px;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .section-title h3 {
+            margin: 0;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 20px;
+        }
+
         .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            margin-bottom: 25px;
         }
+
         .form-group label {
-            font-weight: bold;
-            color: #2c5282; /* Cambiar color a azul */
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
             font-size: 14px;
         }
+
         .form-group input {
-            border: 2px solid #E6E6FA;
+            width: 100%;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
-            padding: 12px;
+            padding: 14px 16px;
             font-size: 16px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            width: 100%; /* Make all inputs full width */
-            box-sizing: border-box; /* Include padding and border in the element's total width */
+            background-color: white;
+            box-sizing: border-box;
+            height: 50px;
         }
 
         .form-group input:focus {
-            border-color: #6A0DAD;
+            border-color: var(--primary-color);
             outline: none;
             box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.1);
         }
+
+        /* Inputs más grandes para campos específicos */
+        .large-input {
+            height: 60px !important;
+            font-size: 18px !important;
+            padding: 18px 20px !important;
+            font-weight: 500;
+        }
+
         .form-group input[type="date"] {
-            appearance: none;
-            -webkit-appearance: none;
-            background-color: white;
-            padding-right: 30px;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236A0DAD' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 10px center;
+            background-position: right 15px center;
             background-size: 20px;
+            padding-right: 50px;
         }
+
         .periodo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-size: 16px;
+            z-index: 2;
+        }
+
+        .input-with-icon input {
+            padding-left: 45px;
+        }
+
+        .currency-input {
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 16px;
+            z-index: 2;
+        }
+
+        .currency-input input {
+            padding-left: 35px;
+        }
+
+        .external-links {
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--secondary-color), #e6d9f2);
+            border-radius: 10px;
+            border-left: 4px solid var(--info-color);
+        }
+
+        .external-links h5 {
+            margin: 0 0 10px 0;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 14px;
             display: flex;
-            gap: 15px;
+            align-items: center;
+            gap: 8px;
         }
-        .periodo-container > div {
-            flex: 1;
+
+        .external-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--info-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-right: 20px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 14px;
         }
+
+        .external-links a:hover {
+            background-color: rgba(23, 162, 184, 0.1);
+        }
+
         .submit-button {
-            background-color: #2c5282; /* Cambiar color a azul */
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             color: white;
             border: none;
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 18px 30px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(106, 13, 173, 0.3);
+            height: 60px;
         }
 
         .submit-button:hover {
-            background-color: #0040FF; /* Color más oscuro al pasar el cursor */
-            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(106, 13, 173, 0.4);
         }
-        .submit-button:active {
-            transform: translateY(0);
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 60px 15px 30px;
-            }
-            .title {
-                font-size: 24px;
-            }
-            .form-container {
-                padding: 20px;
-            }
-            .periodo-container {
-                flex-direction: column;
-            }
-            .input-large {
-                width: 100%; 
-            }
 
+        .info-tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 8px;
         }
-        .dropZone {
-            border: 2px dashed #ccc;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            margin-top: 20px; /* Espacio entre el botón y la zona de arrastre */
-        }
-        .dropZone.hover {
-            border-color: #00f;
-        }
-        .label-with-icon {
+
+        .info-tooltip .tooltip-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--info-color);
+            color: white;
             display: flex;
             align-items: center;
-        }
-        .info-icon {
-            margin-left: 5px;
-            cursor: help;
-            position: relative;
-        }
-        .info-icon::after {
-            content: "?";
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            line-height: 16px;
-            text-align: center;
-            border-radius: 50%;
-            background-color: #1e88e5;
-            color: white;
+            justify-content: center;
             font-size: 12px;
             font-weight: bold;
+            cursor: help;
         }
-        .info-icon .tooltip {
+
+        .info-tooltip .tooltip-text {
             visibility: hidden;
-            width: 200px;
-            background-color: #555;
-            color: #fff;
+            width: 250px;
+            background-color: #333;
+            color: white;
             text-align: center;
-            border-radius: 6px;
-            padding: 5px;
+            border-radius: 8px;
+            padding: 10px;
             position: absolute;
-            z-index: 1;
+            z-index: 1000;
             bottom: 125%;
             left: 50%;
-            margin-left: -100px;
+            margin-left: -125px;
             opacity: 0;
             transition: opacity 0.3s;
+            font-size: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
-        .info-icon:hover .tooltip {
+
+        .info-tooltip:hover .tooltip-text {
             visibility: visible;
             opacity: 1;
         }
+
+        .form-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+            margin: 35px 0;
+        }
+
+        /* Estilos para los checkboxes */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-container:hover {
+            background-color: #e6d9f2;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .checkbox-label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .conditional-section {
+            display: none;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .conditional-section.show {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 0 15px;
+                max-width: 100%;
+            }
+
+            .card-body {
+                padding: 25px;
+            }
+
+            .card-header {
+                padding: 30px 20px;
+            }
+
+            .card-header h1 {
+                font-size: 26px;
+            }
+
+            .periodo-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .external-links a {
+                display: block;
+                margin-bottom: 8px;
+                margin-right: 0;
+            }
+
+            .large-input {
+                height: 55px !important;
+                font-size: 16px !important;
+            }
+        }
     </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-98REL9JCTR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-98REL9JCTR');
+    </script>
 </head>
 <body>
+
     <div class="container">
-        <h1 class="title"></h1>
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="alert {{ category }}">
-                            <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
-                            {{ message }}
+        <div class="main-card">
+            <div class="card-header">
+                <h1>
+                    <i class="fas fa-calculator"></i>
+                    Formulario UMA
+                </h1>
+                <div class="subtitle">
+                    Cálculo de Liquidación y Actualización de Montos
+                </div>
+            </div>
+
+            <div class="card-body">
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                            {% for category, message in messages %}
+                                <div class="alert {{ category }}">
+                                    {% if category == 'error' %}
+                                        <i class="fas fa-exclamation-triangle alert-icon"></i>
+                                    {% elif category == 'success' %}
+                                        <i class="fas fa-check-circle alert-icon"></i>
+                                    {% endif %}
+                                    <span>{{ message }}</span>
+                                    <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-        <form class="form-container" action='/resultado_uma' method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="autos">Autos:</label>
-                <input type="text" id="autos" name="Autos" placeholder="Ingrese los autos" required />
-            </div>
-            <div class="form-group">
-                <label for="expediente">Expediente:</label>
-                <input type="text" id="expediente" name="Expediente" placeholder="Ingrese el expediente" required />
-            </div>
-            <div class="periodo-container">
-                <div class="form-group">
-                    <label for="periodoDesde">Periodo Liquidado Desde:</label>
-                    <input type="date" id="periodoDesde" name="PeriodoDesde" required />
-                </div>
-                <div class="form-group">
-                    <label for="periodoHasta">Periodo Liquidado Hasta:</label>
-                    <input type="date" id="periodoHasta" name="PeriodoHasta" required />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="fechaCierre">Fecha de Cierre de Liquidación:</label>
-                <input type="date" id="fechaCierre" name="Fecha_de_Cierre_de_Liquidacion" required />
-            </div>
-            <div class="form-group">
-                <label for="fechaAprobacion">Fecha de Aprobación de Sentencia de Liquidación:</label>
-                <input type="date" id="fechaAprobacion" name="Fecha_Aprobacion_Sentencia" required />
-            </div>
-            <div class="form-group">
-                <label for="fechaRegulacion">Fecha de Regulación:</label>
-                <input type="date" id="fechaRegulacion" name="Fecha_de_Regulacion" required />
-            </div>
-            <div class="form-group">
-                <label for="montoAprobado">Monto Aprobado:</label>
-                <div style="position: relative;">
-                    <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">$</span>
-                    <input type="text" id="montoAprobado" name="Monto_Aprobado" 
-                           placeholder="Ingrese el monto aprobado  (ej. 10000.00)" 
-                           pattern="^\d+(\.\d{2})?$" 
-                           title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
-                           style="padding-left: 25px;"
-                           required />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="montoActualizado">Monto Aprobado Actualizado (con Tasa Pasiva):</label>
+                    {% endif %}
+                {% endwith %}
 
-                <!-- Links debajo de la label -->
-                <div>
-                    <a href="https://consejo.jusbaires.gob.ar/servicios/calculo-de-interes/" style="display: block;">Consejo Magistratura</a>
-                    <a href="https://www.bcra.gob.ar/BCRAyVos/calculadora-intereses-tasa-justicia.asp" style="display: block;">BCRA</a>
-                </div>
+                <form action='/resultado_uma' method="post" enctype="multipart/form-data">
+                    <!-- Información del Caso -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-folder-open"></i>
+                            <h3>Información del Caso</h3>
+                        </div>
 
-                <div style="position: relative;">
-                    <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);">$</span>
-                    <input type="text" id="montoActualizado" name="Monto_Aprobado_Actualizado" 
-                           placeholder="Ingrese el monto actualizado (ej. 10000.00)" 
-                           pattern="^\d+(\.\d{2})?$" 
-                           title="El formato debe ser un número con hasta dos decimales, por ejemplo 150000.78"
-                           style="padding-left: 25px;" 
-                           required />
-                </div>
+                        <div class="form-group">
+                            <label for="expediente">
+                                <i class="fas fa-hashtag me-2"></i>Expediente:
+                            </label>
+                            <input type="text" id="expediente" name="Expediente" placeholder="Ingrese el número de expediente" required />
+                            <label for="expediente">
+                                <i class="fas fa-file-alt me-2"></i>Autos:
+                            </label>
+                            <input type="text" id="autos" name="Autos" placeholder="Ingrese los autos del expediente" required />
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <!-- Períodos y Fechas -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>Períodos y Fechas</h3>
+                        </div>
+
+                        <div class="periodo-container">
+                            <div class="form-group">
+                                <label for="periodoDesde">
+                                    <i class="fas fa-calendar-plus me-2"></i>Periodo Liquidado Desde:
+                                </label>
+                                <input type="date" id="periodoDesde" name="PeriodoDesde" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="periodoHasta">
+                                    <i class="fas fa-calendar-minus me-2"></i>Periodo Liquidado Hasta:
+                                </label>
+                                <input type="date" id="periodoHasta" name="PeriodoHasta" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fechaCierre">
+                                <i class="fas fa-calendar-times me-2"></i>Fecha de Cierre de Liquidación:
+                            </label>
+                            <input type="date" id="fechaCierre" name="Fecha_de_Cierre_de_Liquidacion" required />
+                        </div>
+
+                        <!-- Checkbox para Fecha de Aprobación -->
+                        <div class="checkbox-container" onclick="toggleCheckbox('incluirAprobacion')">
+                            <input type="checkbox" id="incluirAprobacion" name="incluirAprobacion" />
+                            <label class="checkbox-label" for="incluirAprobacion">
+                                <i class="fas fa-calendar-check"></i>
+                                Incluir Fecha de Aprobación de Sentencia
+                            </label>
+                        </div>
+
+                        <!-- Sección condicional para Fecha de Aprobación -->
+                        <div id="seccionAprobacion" class="conditional-section">
+                            <div class="form-group">
+                                <label for="fechaAprobacion">
+                                    <i class="fas fa-calendar-check me-2"></i>Fecha de Aprobación de Sentencia de Liquidación:
+                                </label>
+                                <input type="date" id="fechaAprobacion" name="Fecha_Aprobacion_Sentencia" />
+                            </div>
+                        </div>
+
+                        <!-- Checkbox para Fecha de Regulación -->
+                        <div class="checkbox-container" onclick="toggleCheckbox('incluirRegulacion')">
+                            <input type="checkbox" id="incluirRegulacion" name="incluirRegulacion"/>
+                            <label class="checkbox-label" for="incluirRegulacion">
+                                <i class="fas fa-calendar-day"></i>
+                                Incluir Fecha de Regulación
+                            </label>
+                        </div>
+
+                        <!-- Sección condicional para Fecha de Regulación -->
+                        <div id="seccionRegulacion" class="conditional-section">
+                            <div class="form-group">
+                                <label for="fechaRegulacion">
+                                    <i class="fas fa-calendar-day me-2"></i>Fecha de Regulación:
+                                </label>
+                                <input type="date" id="fechaRegulacion" name="Fecha_de_Regulacion" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <!-- Montos -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fas fa-dollar-sign"></i>
+                            <h3>Montos de Liquidación</h3>
+                        </div>
+                        <div class="form-group">
+                            <label for="montoAprobado">
+                                <i class="fas fa-money-bill-wave me-2"></i>Monto Aprobado:
+                                <div class="info-tooltip">
+                                    <div class="tooltip-icon">?</div>
+                                    <div class="tooltip-text">Ingrese el monto aprobado en la liquidación original sin actualización</div>
+                                </div>
+                            </label>
+                            <input type="text" id="montoAprobado" name="Monto_Aprobado" 
+                                   placeholder="Ingrese el monto aprobado (ej. 10000.00)" 
+                                   pattern="^\d+(\.\d{2})?$" 
+                                   title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"
+                                   required />
+                        </div>
+
+                        <!-- Checkbox para Monto Actualizado -->
+                        <div class="checkbox-container" onclick="toggleCheckbox('incluirMontoActualizado')">
+                            <input type="checkbox" id="incluirMontoActualizado" name="incluirMontoActualizado" />
+                            <label class="checkbox-label" for="incluirMontoActualizado">
+                                <i class="fas fa-chart-line"></i>
+                                Incluir Monto Actualizado con Tasa Pasiva
+                            </label>
+                        </div>
+
+                        <!-- Sección condicional para Monto Actualizado -->
+                        <div id="seccionMontoActualizado" class="conditional-section">
+                            <div class="form-group">
+                                <div class="external-links">
+                                    <h5>
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Calculadoras Oficiales:
+                                    </h5>
+                                    <a href="https://consejo.jusbaires.gob.ar/servicios/calculo-de-interes/" target="_blank">
+                                        <i class="fas fa-university"></i>
+                                        Consejo de la Magistratura
+                                    </a>
+                                    <a href="https://www.bcra.gob.ar/BCRAyVos/calculadora-intereses-tasa-justicia.asp" target="_blank">
+                                        <i class="fas fa-landmark"></i>
+                                        BCRA - Banco Central
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="montoActualizado">
+                                    <i class="fas fa-chart-line me-2"></i>Monto Aprobado Actualizado (con Tasa Pasiva):
+                                    <div class="info-tooltip">
+                                        <div class="tooltip-icon">?</div>
+                                        <div class="tooltip-text">Utilice las calculadoras oficiales para obtener el monto actualizado con la tasa pasiva correspondiente</div>
+                                    </div>
+                                </label>
+                                <input type="text" id="montoActualizado" name="Monto_Aprobado_Actualizado" placeholder="Ingrese el monto actualizado (ej. 150000.78)" pattern="^\d+(\.\d{2})?$" 
+                                       title="El formato debe ser un número con hasta dos decimales, por ejemplo 150000.78"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <button type="submit" name="action" value="generar_pdf" class="submit-button">
+                        <i class="fas fa-file-pdf"></i>
+                        Generar Planilla PDF
+                    </button>
+                </form>
             </div>
-            <button type="submit" name="action" value="generar_pdf" class="submit-button">Generar Planilla PDF</button>
-        </form>
+        </div>
     </div>
+
+    <!-- Bootstrap JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Formateo automático de montos
+            const moneyInputs = document.querySelectorAll('#montoAprobado, #montoActualizado');
+
+            moneyInputs.forEach(input => {
+                input.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^\d.]/g, '');
+
+                    // Validar formato de decimal
+                    const parts = value.split('.');
+                    if (parts.length > 2) {
+                        value = parts[0] + '.' + parts[1];
+                    }
+                    if (parts[1] && parts[1].length > 2) {
+                        value = parts[0] + '.' + parts[1].substring(0, 2);
+                    }
+
+                    e.target.value = value;
+                });
+
+                input.addEventListener('blur', function(e) {
+                    let value = parseFloat(e.target.value);
+                    if (!isNaN(value)) {
+                        e.target.value = value.toFixed(2);
+                    }
+                });
+            });
+
+            // Validación de fechas
+            const fechaDesde = document.getElementById('periodoDesde');
+            const fechaHasta = document.getElementById('periodoHasta');
+
+            fechaDesde.addEventListener('change', function() {
+                fechaHasta.min = this.value;
+            });
+
+            fechaHasta.addEventListener('change', function() {
+                fechaDesde.max = this.value;
+            });
+        });
+
+        // Función para manejar los checkboxes y mostrar/ocultar secciones
+        function toggleCheckbox(checkboxId) {
+            const checkbox = document.getElementById(checkboxId);
+
+
+            checkbox.checked = !checkbox.checked;
+
+            // Determinar qué sección mostrar/ocultar según el checkbox
+            let sectionId;
+            switch(checkboxId) {
+                case 'incluirAprobacion':
+                    sectionId = 'seccionAprobacion';
+                    break;
+                case 'incluirRegulacion':
+                    sectionId = 'seccionRegulacion';
+                    break;
+                case 'incluirMontoActualizado':
+                    sectionId = 'seccionMontoActualizado';
+                    break;
+            }
+
+            const section = document.getElementById(sectionId);
+
+            if (checkbox.checked) {
+                section.classList.add('show');
+
+                // Si se muestra la sección, hacer que los campos sean requeridos
+                if (sectionId === 'seccionAprobacion') {
+                    document.getElementById('fechaAprobacion').required = true;
+                } else if (sectionId === 'seccionRegulacion') {
+                    document.getElementById('fechaRegulacion').required = true;
+                } else if (sectionId === 'seccionMontoActualizado') {
+                    document.getElementById('montoActualizado').required = true;
+                }
+            } else {
+                section.classList.remove('show');
+
+                // Si se oculta la sección, quitar el atributo required
+                if (sectionId === 'seccionAprobacion') {
+                    document.getElementById('fechaAprobacion').required = false;
+                } else if (sectionId === 'seccionRegulacion') {
+                    document.getElementById('fechaRegulacion').required = false;
+                } else if (sectionId === 'seccionMontoActualizado') {
+                    document.getElementById('montoActualizado').required = false;
+                }
+            }
+        }
+    </script>
 </body>
 </html>

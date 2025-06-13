@@ -83,20 +83,20 @@ class PDFGenerator:
       datos = {}
       datos['Acordada_fecha_de_cierre_de_liquidacion'] = obtener_acordada(self.fecha_de_cierre_de_liquidacion)
       datos['UMA_fecha_de_cierre_de_liquidacion'] = obtener_valor_uma(self.fecha_de_cierre_de_liquidacion)
-      datos['cantidad_FCL'], datos['valor_dividido_FCL'], datos['porcentajes_FCL'], datos['porcentaje_anterior_FCL'], datos['primera_valor_uma_final_FCL'], datos['segunda_valor_uma_final_FCL'], datos['total_uma_FCL'], datos['apoderado_FCL'], datos['reduccion_excepciones_FCL'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_de_cierre_de_liquidacion'])
+      datos['cantidad_FCL'], datos['valor_dividido_FCL'], datos['porcentajes_FCL'], datos['porcentaje_anterior_FCL'], datos['porcentaje_maximo_FCL'], datos['primera_valor_uma_FCL'], datos['primera_valor_uma_final_FCL'], datos['segundo_valor_uma_FCL'], datos['porcentaje_minimo_FCL'], datos['segunda_valor_uma_final_FCL'], datos['total_uma_FCL'], datos['apoderado_FCL'], datos['reduccion_excepciones_FCL'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_de_cierre_de_liquidacion'])
 
       if self.incluirRegulacion:
           datos['Acordada_fecha_de_regulacion'] = obtener_acordada(self.fecha_de_regulacion)
           datos['UMA_fecha_de_regulacion'] = obtener_valor_uma(self.fecha_de_regulacion)
-          datos['cantidad_R'], datos['valor_dividido_R'], datos['porcentajes_R'], datos['porcentaje_anterior_R'], datos['primera_valor_uma_final_R'], datos['segunda_valor_uma_final_R'], datos['total_uma_R'], datos['apoderado_R'], datos['reduccion_excepciones_R'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_de_regulacion'])
+          datos['cantidad_R'], datos['valor_dividido_R'], datos['porcentajes_R'], datos['porcentaje_anterior_R'], datos['porcentaje_maximo_R'], datos['primera_valor_uma_R'],datos['primera_valor_uma_final_R'], datos['segundo_valor_uma_R'], datos['porcentaje_minimo_R'],  datos['segunda_valor_uma_final_R'], datos['total_uma_R'], datos['apoderado_R'], datos['reduccion_excepciones_R'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_de_regulacion'])
 
       if self.incluirAprobacion:
           datos['Acordada_fecha_aprobacion_sentencia'] = obtener_acordada(self.fecha_aprobacion_sentencia)
           datos['UMA_fecha_aprobacion_sentencia'] = obtener_valor_uma(self.fecha_aprobacion_sentencia)
-          datos['cantidad_AS'], datos['valor_dividido_AS'],  datos['porcentajes_AS'], datos['porcentaje_anterior_AS'], datos['primera_valor_uma_final_AS'], datos['segunda_valor_uma_final_AS'], datos['total_uma_AS'], datos['apoderado_AS'], datos['reduccion_excepciones_AS'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_aprobacion_sentencia'])
+          datos['cantidad_AS'], datos['valor_dividido_AS'],  datos['porcentajes_AS'], datos['porcentaje_anterior_AS'], datos['porcentaje_maximo_AS'], datos['primera_valor_uma_AS'], datos['primera_valor_uma_final_AS'], datos['segundo_valor_uma_AS'], datos['porcentaje_minimo_AS'], datos['segunda_valor_uma_final_AS'], datos['total_uma_AS'], datos['apoderado_AS'], datos['reduccion_excepciones_AS'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_aprobacion_sentencia'])
 
       if self.incluirMontoActualizado:
-          datos['cantidad_TP'], datos['valor_dividido_TP'], datos['porcentajes_TP'], datos['porcentaje_anterior_TP'], datos['primera_valor_uma_final_TP'], datos['segunda_valor_uma_final_TP'], datos['total_uma_TP'], datos['apoderado_TP'], datos['reduccion_excepciones_TP'] = calcular_porcentajes(self.monto_aprobado_actualizado, datos['UMA_fecha_de_regulacion'])
+          datos['cantidad_TP'], datos['valor_dividido_TP'], datos['porcentajes_TP'], datos['porcentaje_anterior_TP'], datos['porcentaje_maximo_TP'], datos['primera_valor_uma_TP'], datos['primera_valor_uma_final_TP'], datos['segundo_valor_uma_TP'], datos['porcentaje_minimo_TP'],datos['segunda_valor_uma_final_TP'], datos['total_uma_TP'], datos['apoderado_TP'], datos['reduccion_excepciones_TP'] = calcular_porcentajes(self.monto_aprobado_actualizado, datos['UMA_fecha_de_regulacion'])
 
 
       datos['porcentaje_aplicable'], datos['apoderada'], datos['sin_excepciones'], datos['criterio'] = calcular_porcentajes_ley_21839(self.monto_aprobado)
@@ -122,7 +122,11 @@ class PDFGenerator:
           'cantidad_FCL': datos['cantidad_FCL'],
           'valor_dividido_FCL' : datos['valor_dividido_FCL'],
           'porcentaje_anterior_FCL': datos['porcentaje_anterior_FCL'],
+          'porcentaje_maximo_FCL': datos['porcentaje_maximo_FCL'],
+          'primera_valor_uma_FCL': datos['primera_valor_uma_FCL'],
           'primera_valor_uma_final_FCL': datos['primera_valor_uma_final_FCL'],
+          'segundo_valor_uma_FCL': datos['segundo_valor_uma_FCL'],
+          'porcentaje_minimo_FCL': datos['porcentaje_minimo_FCL'],
           'segunda_valor_uma_final_FCL': datos['segunda_valor_uma_final_FCL'],
           'total_uma_FCL': datos['total_uma_FCL'],
           'apoderado_FCL': datos['apoderado_FCL'],
@@ -148,7 +152,11 @@ class PDFGenerator:
               'cantidad_R': datos['cantidad_R'],
               'valor_dividido_R' : datos['valor_dividido_R'],
               'porcentaje_anterior_R': datos['porcentaje_anterior_R'],
+              'primera_valor_uma_R': datos['primera_valor_uma_R'],
+              'porcentaje_maximo_R': datos['porcentaje_maximo_R'],
               'primera_valor_uma_final_R': datos['primera_valor_uma_final_R'],
+              'segundo_valor_uma_R': datos['segundo_valor_uma_R'],
+              'porcentaje_minimo_R': datos['porcentaje_minimo_R'],
               'segunda_valor_uma_final_R': datos['segunda_valor_uma_final_R'],
               'total_uma_R': datos['total_uma_R'],
               'apoderado_R': datos['apoderado_R'],
@@ -164,7 +172,11 @@ class PDFGenerator:
               'cantidad_AS': datos['cantidad_AS'],
               'valor_dividido_AS' : datos['valor_dividido_AS'],
               'porcentaje_anterior_AS': datos['porcentaje_anterior_AS'],
+              'porcentaje_maximo_AS': datos['porcentaje_maximo_AS'],
+              'primera_valor_uma_AS': datos['primera_valor_uma_AS'],
               'primera_valor_uma_final_AS': datos['primera_valor_uma_final_AS'],
+              'segundo_valor_uma_AS': datos['segundo_valor_uma_AS'],
+              'porcentaje_minimo_AS': datos['porcentaje_minimo_AS'],
               'segunda_valor_uma_final_AS': datos['segunda_valor_uma_final_AS'],
               'total_uma_AS': datos['total_uma_AS'],
               'apoderado_AS': datos['apoderado_AS'],
@@ -177,7 +189,11 @@ class PDFGenerator:
               'cantidad_TP': datos['cantidad_TP'],
               'valor_dividido_TP' : datos['valor_dividido_TP'],
               'porcentaje_anterior_TP': datos['porcentaje_anterior_TP'],
+              'porcentaje_maximo_TP': datos['porcentaje_maximo_TP'],
+              'primera_valor_uma_TP': datos['primera_valor_uma_TP'],
               'primera_valor_uma_final_TP': datos['primera_valor_uma_final_TP'],
+              'porcentaje_minimo_TP': datos['porcentaje_minimo_TP'],
+              'segundo_valor_uma_TP': datos['segundo_valor_uma_TP'],
               'segunda_valor_uma_final_TP': datos['segunda_valor_uma_final_TP'],
               'total_uma_TP': datos['total_uma_TP'],
               'apoderado_TP': datos['apoderado_TP'],

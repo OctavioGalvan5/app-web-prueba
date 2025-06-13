@@ -129,6 +129,10 @@ def calcular_porcentajes(monto_aprobado, valor_uma):
     porcentaje_anterior = 0
     primera_valor_uma_final = 0
     segunda_valor_uma_final = 0
+    porcentaje_maximo = 0
+    porcentaje_minimo = 0
+    segundo_valor_uma = 0
+    primer_valor_uma = 0
     
   else:
     porcentajes = obtener_porcentajes(valor_divido_2) #final
@@ -137,15 +141,15 @@ def calcular_porcentajes(monto_aprobado, valor_uma):
     porcentaje_maximo = obtener_porcentaje_maximo_fila_anterior(valor_divido_2)
     primer_valor_uma = obtener_monto_uma_maximo_fila_anterior(valor_divido_2)
     primera_valor_uma_final = calcular_porcentaje(porcentaje_maximo,primer_valor_uma)
-    segunda_valor_uma = valor_divido_2 - primer_valor_uma
-    segunda_valor_uma_final = calcular_porcentaje(porcentaje_minimo, segunda_valor_uma)
+    segundo_valor_uma = round(valor_divido_2 - primer_valor_uma,2)
+    segunda_valor_uma_final = calcular_porcentaje(porcentaje_minimo, segundo_valor_uma)
     total_uma = round(primera_valor_uma_final + segunda_valor_uma_final, 2)
     apoderado = sumar_porcentaje(40,total_uma) # final
     reduccion_excepciones = restar_porcentaje(10,apoderado) #final
     #ejecucion_art54 = restar_porcentaje(50,reduccion_excepciones) #final
     #incidencia = calcular_porcentaje(25, ejecucion_art54) #final
 
-  return cantidad_uma, valor_divido_2, porcentajes, porcentaje_anterior, primera_valor_uma_final, segunda_valor_uma_final, total_uma, apoderado, reduccion_excepciones
+  return cantidad_uma, valor_divido_2, porcentajes, porcentaje_anterior, porcentaje_maximo, primer_valor_uma, primera_valor_uma_final, segundo_valor_uma, porcentaje_minimo, segunda_valor_uma_final, total_uma, apoderado, reduccion_excepciones
 
 def transformar_fecha(fecha):
   # Convertir la fecha de string a objeto datetime
