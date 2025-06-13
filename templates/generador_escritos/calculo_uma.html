@@ -86,80 +86,80 @@
         <tbody>
             <tr class="font-large first-column-cell">
                 <td rowspan="2" class="negrita first-column-cell">Según la fecha que se tome</td>
-                <td class="negrita">Fecha de cierre</td>
+                <td class="negrita">Monto: {{total_liquidacion}}</td>
 
-                {% if incluirAprobacion %}
-                <td class="negrita">Fecha de aprobación de sentencia</td>
+                {% if Segunda_Liquidacion_Si %}
+                <td class="negrita">Monto: {{Total_Segunda_Liquidacion}}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
-                <td class="negrita">Fecha de regulación</td>
+                {% if IPC_Liquidacion_Si %}
+                <td class="negrita">Monto: {{Total_Primera_Liquidacion_IPC}}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
-                <td class="wide-column negrita">Fecha de cierre de la liquidación actualizada la base regulatoria conforme art 52 con tasa pasiva</td>
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="wide-column negrita">Monto: {{Total_Segunda_Liquidacion_IPC}}</td>
                 {% endif %}
             </tr>
             <tr class="font-large">
                 <td class="fuente-grande">{{ fecha_de_cierre_de_liquidacion }}</td>
 
-                {% if incluirAprobacion %}
-                <td class="fuente-grande">{{ fecha_aprobacion_sentencia }}</td>
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{ fecha_de_cierre_de_liquidacion }}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
-                <td class="fuente-grande">{{ fecha_de_regulacion }}</td>
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{ fecha_de_cierre_de_liquidacion }}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
-                <td class="fuente-grande">{{ fecha_de_regulacion }}</td>
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{ fecha_de_cierre_de_liquidacion }}</td>
                 {% endif %}
             </tr>
             <tr class="font-large">
                 <td class="negrita first-column-cell">Norma</td>
                 <td class="fuente-grande">{{Acordada_fecha_de_cierre_de_liquidacion}}</td>
 
-                {% if incluirAprobacion %}
-                <td class="fuente-grande">{{Acordada_fecha_aprobacion_sentencia}}</td>
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{Acordada_fecha_de_cierre_de_liquidacion}}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
-                <td class="fuente-grande">{{Acordada_fecha_de_regulacion}}</td>
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{Acordada_fecha_de_cierre_de_liquidacion}}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
-                <td class="fuente-grande">{{Acordada_fecha_de_regulacion}}</td>
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{Acordada_fecha_de_cierre_de_liquidacion}}</td>
                 {% endif %}
             </tr>
             <tr class="font-large">
                 <td class="negrita first-column-cell">Valor UMA</td>
                 <td class="fuente-grande">{{UMA_fecha_de_cierre_de_liquidacion}}</td>
 
-                {% if incluirAprobacion %}
-                <td class="fuente-grande">{{UMA_fecha_aprobacion_sentencia}}</td>
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{UMA_fecha_de_cierre_de_liquidacion}}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
-                <td class="fuente-grande">{{UMA_fecha_de_regulacion}}</td>
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{UMA_fecha_de_cierre_de_liquidacion}}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
-                <td class="fuente-grande">{{UMA_fecha_de_regulacion}}</td>
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{UMA_fecha_de_cierre_de_liquidacion}}</td>
                 {% endif %}
             </tr>
             <tr class="font-large">
                 <td class="negrita first-column-cell">Cantidad UMA</td>
                 <td class="fuente-grande">{{cantidadFCL}}</td>
 
-                {% if incluirAprobacion %}
+                {% if Segunda_Liquidacion_Si %}
                 <td class="fuente-grande">{{cantidadAS}}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
+                {% if IPC_Liquidacion_Si %}
                 <td class="fuente-grande">{{cantidadR}}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
                 <td class="fuente-grande">{{cantidadTP}}</td>
                 {% endif %}
             </tr>
@@ -167,15 +167,15 @@
                 <td class="negrita first-column-cell">Escala del art 21 de la ley 27.423</td>
                 <td class="fuente-grande">{{porcentajesFCL}}</td>
 
-                {% if incluirAprobacion %}
+                {% if Segunda_Liquidacion_Si %}
                 <td class="fuente-grande">{{porcentajesAS}}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
+                {% if IPC_Liquidacion_Si %}
                 <td class="fuente-grande">{{porcentajesR}}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
                 <td class="fuente-grande">{{porcentajesTP}}</td>
                 {% endif %}
             </tr>
@@ -183,15 +183,15 @@
                 <td class="negrita first-column-cell">Mínimo en UMA</td>
                 <td class="fuente-grande">{{minimoFCL}}</td>
 
-                {% if incluirAprobacion %}
+                {% if Segunda_Liquidacion_Si %}
                 <td class="fuente-grande">{{minimoAS}}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
+                {% if IPC_Liquidacion_Si %}
                 <td class="fuente-grande">{{minimoR}}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
                 <td class="fuente-grande">{{minimoTP}}</td>
                 {% endif %}
             </tr>
@@ -199,32 +199,31 @@
                 <td class="negrita first-column-cell">40% por ser apoderado Art 20</td>
                 <td class="fuente-grande">{{apoderadoFCL}}</td>
 
-                {% if incluirAprobacion %}
+                {% if Segunda_Liquidacion_Si %}
                 <td class="fuente-grande">{{apoderadoAS}}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
+                {% if IPC_Liquidacion_Si %}
                 <td class="fuente-grande">{{apoderadoR}}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
                 <td class="fuente-grande">{{apoderadoTP}}</td>
                 {% endif %}
             </tr>
-
             <tr class="font-large">
                 <td class="negrita first-column-cell">Reducción del 10% si no hubo excepciones Art 29</td>
                 <td>{{reduccionFCL}}</td>
 
-                {% if incluirAprobacion %}
+                {% if Segunda_Liquidacion_Si %}
                 <td>{{reduccionAS}}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
+                {% if IPC_Liquidacion_Si %}
                 <td>{{reduccionR}}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
                 <td>{{reduccionTP}}</td>
                 {% endif %}
             </tr>
@@ -232,24 +231,24 @@
                 <td class="negrita first-column-cell">1 sola etapa la ejecución 50% Art 34</td>
                 <td>{{ejecucionFCL}}</td>
 
-                {% if incluirAprobacion %}
+                {% if Segunda_Liquidacion_Si %}
                 <td>{{ejecucionAS}}</td>
                 {% endif %}
 
-                {% if incluirRegulacion %}
+                {% if IPC_Liquidacion_Si %}
                 <td>{{ejecucionR}}</td>
                 {% endif %}
 
-                {% if incluirMontoActualizado %}
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
                 <td>{{ejecucionTP}}</td>
                 {% endif %}
             </tr>
             <tr class="font-large">
                 <td class="negrita first-column-cell">Art 58 inc B</td>
                 {% set columnas_adicionales = 0 %}
-                {% if incluirAprobacion %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
-                {% if incluirRegulacion %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
-                {% if incluirMontoActualizado %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
+                {% if Segunda_Liquidacion_Si %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
+                {% if IPC_Liquidacion_Si %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
                 {% set colspan_total = 1 + columnas_adicionales %}
                 <td colspan="{{ colspan_total }}" class="negrita fuente-grande" style="text-align: center;">Mínimo 6 UMA</td>
 

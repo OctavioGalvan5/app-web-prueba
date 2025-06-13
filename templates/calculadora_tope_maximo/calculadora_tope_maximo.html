@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Topes Previsionales</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary: #5e35b1;
@@ -455,12 +456,42 @@
     {% include 'footers/footer.html' %}
 
     <script>
-        // Validación básica del formulario
+        const maxCheckboxes = 8;
+        const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        allCheckboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                if (checkedCount > maxCheckboxes) {
+                    this.checked = false;
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Límite alcanzado',
+                        text: `Solo puede seleccionar hasta ${maxCheckboxes} métodos de movilidad para comparar al mismo tiempo.`,
+                        confirmButtonColor: '#5e35b1'
+                    });
+                }
+            });
+        });
+
         document.querySelector('form').addEventListener('submit', function(e) {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            if (checkboxes.length === 0) {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (checked.length === 0) {
                 e.preventDefault();
-                alert('Por favor, seleccione al menos un método de movilidad para comparar.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Debe seleccionar al menos uno',
+                    text: 'Por favor, seleccione al menos un método de movilidad para comparar.',
+                    confirmButtonColor: '#5e35b1'
+                });
+            } else if (checked.length > maxCheckboxes) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Demasiadas opciones',
+                    text: `Ha seleccionado más de ${maxCheckboxes} métodos de movilidad. Por favor, reduzca su selección.`,
+                    confirmButtonColor: '#5e35b1'
+                });
             }
         });
     </script>

@@ -16,20 +16,17 @@ from decimal import Decimal
 import fitz  # PyMuPDF
 from PIL import Image
 
-def cortar_primera_pagina_a_la_mitad(pdf_bytes, output_image_path, posicion='superior'):
+def cortar_dos_tercios_superiores(pdf_bytes, output_image_path):
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     page = doc.load_page(0)  # Primera página
 
     rect = page.rect
-    mitad_alto = rect.height / 2
+    dos_tercios_alto = rect.height * (2 / 3)
 
-    # Elegimos qué mitad tomar: 'superior' o 'inferior'
-    if posicion == 'superior':
-        clip = fitz.Rect(rect.x0, rect.y0, rect.x1, mitad_alto)
-    else:  # 'inferior'
-        clip = fitz.Rect(rect.x0, mitad_alto, rect.x1, rect.y1)
+    # Definimos el rectángulo desde el tope hasta los 2/3 de altura
+    clip = fitz.Rect(rect.x0, rect.y0, rect.x1, rect.y0 + dos_tercios_alto)
 
-    # Renderizar solo esa parte (clip)
+    # Renderizar solo esa parte
     pix = page.get_pixmap(clip=clip, dpi=300)
     img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
     img.save(output_image_path)
@@ -248,12 +245,12 @@ class Escrito_liquidacion:
       self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC'] = formatear_dinero(str(self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC']))
 
       if self.datos['Tope_Si']:
-          caliva_anses, anses_2, badaro_2, badaro_cm_2, ocheintados_rem_max_2, rem_max_2,rem_max_imponible_cm_extendido_27551_2, martinez_2 = obtener_monto(self.datos['Fecha_de_cierre_de_intereses'])
-          self.datos['dif_haber_reclamado_anses'] = formatear_dinero(Decimal(self.datos['haber_tope_maximo']) - anses_2)
-          self.datos['porc_haber_reclamado_anses'] = str(round((Decimal(self.datos['haber_tope_maximo']) / anses_2 - 1) * 100, 2)) + "%"
-          self.datos['dif_ocheintados_rem_max_anses']  = str(round((ocheintados_rem_max_2 / anses_2 - 1) * 100 , 2)) + "%"
+          caliva_anses, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max,rem_max_imponible_cm_extendido_27551, martinez, anses_palavecino, caliva_palavecino, badaro_cm_palavecino, RM_Badaro_FP_CM_P_Anses = obtener_monto(self.datos['Fecha_de_cierre_de_intereses'])
+          self.datos['dif_haber_reclamado_anses'] = formatear_dinero(Decimal(self.datos['haber_tope_maximo']) - anses)
+          self.datos['porc_haber_reclamado_anses'] = str(round((Decimal(self.datos['haber_tope_maximo']) / anses - 1) * 100, 2)) + "%"
+          self.datos['dif_ocheintados_rem_max_anses']  = str(round((ocheintados_rem_max / anses - 1) * 100 , 2)) + "%"
           self.datos['tope_anses'] = formatear_dinero(anses_2)
-          self.datos['tope_ocheintados_rem_max'] = formatear_dinero(ocheintados_rem_max_2)
+          self.datos['tope_ocheintados_rem_max'] = formatear_dinero(ocheintados_rem_max)
       self.datos['Fecha_de_cierre_de_intereses'] = transformar_fecha(self.datos['Fecha_de_cierre_de_intereses'])
 
 
@@ -266,8 +263,8 @@ class Escrito_liquidacion:
         )
         pdf = pdf_generator.generar_pdf()
 
-        imagen_path = cortar_primera_pagina_a_la_mitad(
-            pdf, 'datos/escritos_liquidacion/temp_liquidacion.png', posicion='superior'
+        imagen_path = cortar_dos_tercios_superiores(
+            pdf, 'datos/escritos_liquidacion/temp_liquidacion.png'
         )
 
       
@@ -290,7 +287,7 @@ class Escrito_liquidacion:
       # Reemplazar el marcador con la imagen del gráfico
         replace_pic(doc, 'Comparacion_1', self.datos['grafico_1'])
         replace_pic(doc, 'Comparacion_2', self.datos['grafico_2'])
-        replace_pic(doc, 'LIQUIDACION_IMG', imagen_path)
+        replace_pic(doc, 'Cuadro_Uma', imagen_path)
 
 
       # Guardar el documento renderizado

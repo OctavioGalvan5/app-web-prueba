@@ -623,141 +623,6 @@ def resultado_movilizador_de_haber():
                                   fecha_adquisicion_del_derecho, monto, movilidad_1, tupla)
     resultado = calculo.generar_pdf()
     return resultado
-
-@app.route('/resultado_escrito_liquidacion', methods=['POST'])
-@login_required
-def resultado_escrito_liquidacion():
-    datos = {}
-
-    #Tipo de liquidacion
-    datos['tipo_escrito'] = request.form.get('tipo_escrito')
-
-    #Inconstitucionalidades
-    datos['ley_27609_Si'] = request.form.get('27.609_Si', False) == 'on'
-    datos['ley_27541_Si'] = request.form.get('27.541_Si', False) == 'on'
-    datos['ley_27426_Si'] = request.form.get('27.426_Si', False) == 'on'
-
-    
-    #Datos Cliente
-    datos['cliente'] = request.form.get('cliente')
-    datos['expediente'] = request.form.get('expediente')
-
-    # Fechas clave y sentencias
-    datos['Fecha_Sentencia_Primera'] = request.form.get('Fecha_Sentencia_Primera') or "2022-02-01"
-    datos['Sentencia_2da_Si'] = request.form.get('Sentencia_2da_Si', False) == 'on'
-    datos['Sentencia_2da_No'] = request.form.get('Sentencia_2da_No', False) == 'on'
-    datos['Sentencia_de_Segunda'] = request.form.get('Sentencia_de_Segunda') or "2022-02-01"
-    datos['Sala'] = request.form.get('Sala')
-
-    # Fechas relacionadas a liquidaciones
-    datos['Fecha_Inicial_de_Pago'] = request.form.get('Fecha_Inicial_de_Pago') or "2022-02-01"
-    datos['Fecha_de_cierre_de_liquidación'] = request.form.get('Fecha_de_cierre_de_liquidación') or "2022-02-01"
-    datos['Fecha_de_cierre_de_intereses'] = request.form.get('Fecha_de_cierre_de_intereses') or "2022-02-01"
-    datos['fecha_aprobacion_planilla'] = request.form.get('fecha_aprobacion_planilla') or "2022-02-01"
-    
-    #Badaro
-    datos['Badaro_Si'] = request.form.get('Badaro_Si', False) == 'on'
-    
-    #Honorarios
-    datos['Honorarios_No'] = request.form.get('Honorarios_No', False) == 'on'
-
-    # Pensiones y fallecimientos
-    datos['Pension_Si'] = request.form.get('Pension_Si', False) == 'on'
-    datos['Sumas_No'] = request.form.get('Sumas_No', False) == 'on'
-    datos['fecha_fallecimiento'] = request.form.get('fecha_fallecimiento') or "2022-02-01"
-    datos['nombre_receptor'] = request.form.get('nombre_receptor')
-    datos['Receptor'] = request.form.get('Receptor')
-    datos['Porcentaje_Pension'] = request.form.get('Porcentaje_Pension')
-
-    # Edad avanzada
-    datos['Edad_Avanzada_Si'] = request.form.get('Edad_Avanzada_Si', False) == 'on'
-
-    # Error material
-    datos['Error_Material_Si'] = request.form.get('Error_Material_Si', False) == 'on'
-    datos['Error_Material_No'] = request.form.get('Error_Material_No', False) == 'on'
-    datos['Error_Material_primer_fecha'] = request.form.get('Error_Material_primer_fecha') or "2022-02-01"
-    datos['Error_Material_ultima_fecha'] = request.form.get('Error_Material_ultima_fecha') or "2022-02-01"
-
-    # Sumas, PBU y otros conceptos
-    datos['Sumas_Si'] = request.form.get('Sumas_Si', False) == 'on'
-    datos['PBU_Si'] = request.form.get('PBU_Si', False) == 'on'
-    datos['Monto_PBU'] = request.form.get('Monto_PBU')
-    datos['Porcentaje_PBU'] = request.form.get('Porcentaje_PBU')
-
-    # Montos y reclamaciones
-    datos['Percibido'] = request.form.get('Percibido')
-    datos['Reclamado'] = request.form.get('Reclamado')
-
-    # Fechas y periodos adicionales (RH y AC)
-    datos['RH_Si'] = request.form.get('RH_Si', False) == 'on'
-    datos['primer_fecha_RH'] = request.form.get('primer_fecha_RH') or "2022-02-01"
-    datos['ultima_fecha_RH'] = request.form.get('ultima_fecha_RH') or "2022-02-01"
-    datos['AC_Si'] = request.form.get('AC_Si', False) == 'on'
-    datos['primer_fecha_AC'] = request.form.get('primer_fecha_AC') or "2022-02-01"
-    datos['ultima_fecha_AC'] = request.form.get('ultima_fecha_AC') or "2022-02-01"
-
-    # Liquidación principal
-    datos['SP_Si'] = request.form.get('SP_Si', False) == 'on'
-    datos['Movilidad'] = request.form.get('Movilidad')
-    datos['Haber_de_Alta'] = request.form.get('Haber_de_Alta') or "25022"
-    datos['Capital'] = request.form.get('Capital')
-    datos['Intereses'] = request.form.get('Intereses')
-    datos['total_liquidacion'] = request.form.get('total_liquidacion')
-
-    # Descuentos y pagos
-    datos['pagos_Si'] = request.form.get('pagos_Si', False) == 'on'
-    datos['monto_descontado_1'] = request.form.get('monto_descontado_1')
-    datos['fecha_descuento_1'] = request.form.get('fecha_descuento_1') or "2022-02-01"
-    datos['monto_descontado_2'] = request.form.get('monto_descontado_2')
-    datos['fecha_descuento_2'] = request.form.get('fecha_descuento_2') or "2022-02-01"
-    datos['monto_descontado_3'] = request.form.get('monto_descontado_3')
-    datos['fecha_descuento_3'] = request.form.get('fecha_descuento_3') or "2022-02-01"
-    datos['monto_descontado_4'] = request.form.get('monto_descontado_4')
-    datos['fecha_descuento_4'] = request.form.get('fecha_descuento_4') or "2022-02-01"
-    datos['tupla_descuentos'] = ((datos['monto_descontado_1'], datos['fecha_descuento_1']), (datos['monto_descontado_2'], datos['fecha_descuento_2']), (datos['monto_descontado_3'], datos['fecha_descuento_3']), (datos['monto_descontado_4'], datos['fecha_descuento_4']))
-    datos['parrafo_descuentos'] = ""
-
-    
-
-    # Segunda liquidación
-    datos['Segunda_Liquidacion_Si'] = request.form.get('Segunda_Liquidacion_Si', False) == 'on'
-    datos['Segunda_Liquidacion_No'] = request.form.get('Segunda_Liquidacion_No', False) == 'on'
-    datos['Movilidad_Segunda_Liquidacion'] = request.form.get('Movilidad_Segunda_Liquidacion')
-    datos['Haber_de_Alta_Segunda_Liquidacion'] = request.form.get('Haber_de_Alta_Segunda_Liquidacion') or "5256"
-    datos['Capital_Segunda_Liquidacion'] = request.form.get('Capital_Segunda_Liquidacion')
-    datos['Intereses_Segunda_Liquidacion'] = request.form.get('Intereses_Segunda_Liquidacion')
-    datos['Total_Segunda_Liquidacion'] = request.form.get('Total_Segunda_Liquidacion') or "0"
-
-    # Liquidación IPC
-    datos['IPC_Liquidacion_Si'] = request.form.get('IPC_Liquidacion_Si', False) == 'on'
-    datos['IPC_Liquidacion_No'] = request.form.get('IPC_Liquidacion_No', False) == 'on'
-    datos['Movilidad_Primera_Liquidacion_IPC'] = request.form.get('Movilidad_Primera_Liquidacion_IPC')
-    datos['Haber_de_Alta_Primera_Liquidacion_IPC'] = request.form.get('Haber_de_Alta_Primera_Liquidacion_IPC') or "25252"
-    datos['Capital_Primera_Liquidacion_IPC'] = request.form.get('Capital_Primera_Liquidacion_IPC')
-    datos['Intereses_Primera_Liquidacion_IPC'] = request.form.get('Intereses_Primera_Liquidacion_IPC')
-    datos['Total_Primera_Liquidacion_IPC'] = request.form.get('Total_Primera_Liquidacion_IPC') or "0"
-
-    # Segunda liquidación IPC
-    datos['Movilidad_Segunda_Liquidacion_IPC'] = request.form.get('Movilidad_Segunda_Liquidacion_IPC')
-    datos['Haber_de_Alta_Segunda_Liquidacion_IPC'] = request.form.get('Haber_de_Alta_Segunda_Liquidacion_IPC') or "250250"
-    datos['Capital_Segunda_Liquidacion_IPC'] = request.form.get('Capital_Segunda_Liquidacion_IPC')
-    datos['Intereses_Segunda_Liquidacion_IPC'] = request.form.get('Intereses_Segunda_Liquidacion_IPC')
-    datos['Total_Segunda_Liquidacion_IPC'] = request.form.get('Total_Segunda_Liquidacion_IPC') or "0"
-
-    datos['Diferencias'] = ""
-    datos['Porcentaje'] = ""
-    datos['Diferencias_2'] = ""
-    datos['Porcentaje_2'] = ""
-
-    datos['Tope_Si'] = request.form.get('Tope_Haber_Maximo_Si', False) == 'on'
-    datos['haber_tope_maximo'] = request.form.get('haber_tope_maximo') or 10
-    datos['Daños_Si'] = request.form.get('Daños_Si', False) == 'on'
-    datos['Sancionatorios_Si'] = request.form.get('Sancionatorios_Si', False) == 'on'
-    
-    escrito = Escrito_liquidacion(datos)
-    resultado = escrito.crear_documento()
-    
-    return resultado
     
 @app.route('/comparador_productos')
 @login_required
@@ -2174,6 +2039,143 @@ def generador_escrito_liquidacion():
 
     # GET request
     return render_template('generador_escritos/index.html')
+
+@app.route('/resultado_escrito_liquidacion', methods=['POST'])
+@login_required
+def resultado_escrito_liquidacion():
+    datos = {}
+
+    #Tipo de liquidacion
+    datos['tipo_escrito'] = request.form.get('tipo_escrito')
+
+    #Inconstitucionalidades
+    datos['ley_27609_Si'] = request.form.get('27.609_Si', False) == 'on'
+    datos['ley_27541_Si'] = request.form.get('27.541_Si', False) == 'on'
+    datos['ley_27426_Si'] = request.form.get('27.426_Si', False) == 'on'
+    datos['decreto_274_2024_Si'] = request.form.get('274_2024_Si', False) == 'on'
+
+
+
+    #Datos Cliente
+    datos['cliente'] = request.form.get('cliente')
+    datos['expediente'] = request.form.get('expediente')
+
+    # Fechas clave y sentencias
+    datos['Fecha_Sentencia_Primera'] = request.form.get('Fecha_Sentencia_Primera') or "2022-02-01"
+    datos['Sentencia_2da_Si'] = request.form.get('Sentencia_2da_Si', False) == 'on'
+    datos['Sentencia_2da_No'] = request.form.get('Sentencia_2da_No', False) == 'on'
+    datos['Sentencia_de_Segunda'] = request.form.get('Sentencia_de_Segunda') or "2022-02-01"
+    datos['Sala'] = request.form.get('Sala')
+
+    # Fechas relacionadas a liquidaciones
+    datos['Fecha_Inicial_de_Pago'] = request.form.get('Fecha_Inicial_de_Pago') or "2022-02-01"
+    datos['Fecha_de_cierre_de_liquidación'] = request.form.get('Fecha_de_cierre_de_liquidación') or "2022-02-01"
+    datos['Fecha_de_cierre_de_intereses'] = request.form.get('Fecha_de_cierre_de_intereses') or "2022-02-01"
+    datos['fecha_aprobacion_planilla'] = request.form.get('fecha_aprobacion_planilla') or "2022-02-01"
+
+    #Badaro
+    datos['Badaro_Si'] = request.form.get('Badaro_Si', False) == 'on'
+
+    #Honorarios
+    datos['Honorarios_No'] = request.form.get('Honorarios_No', False) == 'on'
+
+    # Pensiones y fallecimientos
+    datos['Pension_Si'] = request.form.get('Pension_Si', False) == 'on'
+    datos['Sumas_No'] = request.form.get('Sumas_No', False) == 'on'
+    datos['fecha_fallecimiento'] = request.form.get('fecha_fallecimiento') or "2022-02-01"
+    datos['nombre_receptor'] = request.form.get('nombre_receptor')
+    datos['Receptor'] = request.form.get('Receptor')
+    datos['Porcentaje_Pension'] = request.form.get('Porcentaje_Pension')
+
+    # Edad avanzada
+    datos['Edad_Avanzada_Si'] = request.form.get('Edad_Avanzada_Si', False) == 'on'
+
+    # Error material
+    datos['Error_Material_Si'] = request.form.get('Error_Material_Si', False) == 'on'
+    datos['Error_Material_No'] = request.form.get('Error_Material_No', False) == 'on'
+    datos['Error_Material_primer_fecha'] = request.form.get('Error_Material_primer_fecha') or "2022-02-01"
+    datos['Error_Material_ultima_fecha'] = request.form.get('Error_Material_ultima_fecha') or "2022-02-01"
+
+    # Sumas, PBU y otros conceptos
+    datos['Sumas_Si'] = request.form.get('Sumas_Si', False) == 'on'
+    datos['PBU_Si'] = request.form.get('PBU_Si', False) == 'on'
+    datos['Monto_PBU'] = request.form.get('Monto_PBU')
+    datos['Porcentaje_PBU'] = request.form.get('Porcentaje_PBU')
+
+    # Montos y reclamaciones
+    datos['Percibido'] = request.form.get('Percibido')
+    datos['Reclamado'] = request.form.get('Reclamado')
+
+    # Fechas y periodos adicionales (RH y AC)
+    datos['RH_Si'] = request.form.get('RH_Si', False) == 'on'
+    datos['primer_fecha_RH'] = request.form.get('primer_fecha_RH') or "2022-02-01"
+    datos['ultima_fecha_RH'] = request.form.get('ultima_fecha_RH') or "2022-02-01"
+    datos['AC_Si'] = request.form.get('AC_Si', False) == 'on'
+    datos['primer_fecha_AC'] = request.form.get('primer_fecha_AC') or "2022-02-01"
+    datos['ultima_fecha_AC'] = request.form.get('ultima_fecha_AC') or "2022-02-01"
+
+    # Liquidación principal
+    datos['SP_Si'] = request.form.get('SP_Si', False) == 'on'
+    datos['Movilidad'] = request.form.get('Movilidad')
+    datos['Haber_de_Alta'] = request.form.get('Haber_de_Alta') or "25022"
+    datos['Capital'] = request.form.get('Capital')
+    datos['Intereses'] = request.form.get('Intereses')
+    datos['total_liquidacion'] = request.form.get('total_liquidacion')
+
+    # Descuentos y pagos
+    datos['pagos_Si'] = request.form.get('pagos_Si', False) == 'on'
+    datos['monto_descontado_1'] = request.form.get('monto_descontado_1')
+    datos['fecha_descuento_1'] = request.form.get('fecha_descuento_1') or "2022-02-01"
+    datos['monto_descontado_2'] = request.form.get('monto_descontado_2')
+    datos['fecha_descuento_2'] = request.form.get('fecha_descuento_2') or "2022-02-01"
+    datos['monto_descontado_3'] = request.form.get('monto_descontado_3')
+    datos['fecha_descuento_3'] = request.form.get('fecha_descuento_3') or "2022-02-01"
+    datos['monto_descontado_4'] = request.form.get('monto_descontado_4')
+    datos['fecha_descuento_4'] = request.form.get('fecha_descuento_4') or "2022-02-01"
+    datos['tupla_descuentos'] = ((datos['monto_descontado_1'], datos['fecha_descuento_1']), (datos['monto_descontado_2'], datos['fecha_descuento_2']), (datos['monto_descontado_3'], datos['fecha_descuento_3']), (datos['monto_descontado_4'], datos['fecha_descuento_4']))
+    datos['parrafo_descuentos'] = ""
+
+
+
+    # Segunda liquidación
+    datos['Segunda_Liquidacion_Si'] = request.form.get('Segunda_Liquidacion_Si', False) == 'on'
+    datos['Segunda_Liquidacion_No'] = request.form.get('Segunda_Liquidacion_No', False) == 'on'
+    datos['Movilidad_Segunda_Liquidacion'] = request.form.get('Movilidad_Segunda_Liquidacion')
+    datos['Haber_de_Alta_Segunda_Liquidacion'] = request.form.get('Haber_de_Alta_Segunda_Liquidacion') or "5256"
+    datos['Capital_Segunda_Liquidacion'] = request.form.get('Capital_Segunda_Liquidacion')
+    datos['Intereses_Segunda_Liquidacion'] = request.form.get('Intereses_Segunda_Liquidacion')
+    datos['Total_Segunda_Liquidacion'] = request.form.get('Total_Segunda_Liquidacion') or "0"
+
+    # Liquidación IPC
+    datos['IPC_Liquidacion_Si'] = request.form.get('IPC_Liquidacion_Si', False) == 'on'
+    datos['IPC_Liquidacion_No'] = request.form.get('IPC_Liquidacion_No', False) == 'on'
+    datos['Movilidad_Primera_Liquidacion_IPC'] = request.form.get('Movilidad_Primera_Liquidacion_IPC')
+    datos['Haber_de_Alta_Primera_Liquidacion_IPC'] = request.form.get('Haber_de_Alta_Primera_Liquidacion_IPC') or "25252"
+    datos['Capital_Primera_Liquidacion_IPC'] = request.form.get('Capital_Primera_Liquidacion_IPC')
+    datos['Intereses_Primera_Liquidacion_IPC'] = request.form.get('Intereses_Primera_Liquidacion_IPC')
+    datos['Total_Primera_Liquidacion_IPC'] = request.form.get('Total_Primera_Liquidacion_IPC') or "0"
+
+    # Segunda liquidación IPC
+    datos['Movilidad_Segunda_Liquidacion_IPC'] = request.form.get('Movilidad_Segunda_Liquidacion_IPC')
+    datos['Haber_de_Alta_Segunda_Liquidacion_IPC'] = request.form.get('Haber_de_Alta_Segunda_Liquidacion_IPC') or "250250"
+    datos['Capital_Segunda_Liquidacion_IPC'] = request.form.get('Capital_Segunda_Liquidacion_IPC')
+    datos['Intereses_Segunda_Liquidacion_IPC'] = request.form.get('Intereses_Segunda_Liquidacion_IPC')
+    datos['Total_Segunda_Liquidacion_IPC'] = request.form.get('Total_Segunda_Liquidacion_IPC') or "0"
+
+    datos['Diferencias'] = ""
+    datos['Porcentaje'] = ""
+    datos['Diferencias_2'] = ""
+    datos['Porcentaje_2'] = ""
+
+    datos['Tope_Si'] = request.form.get('Tope_Haber_Maximo_Si', False) == 'on'
+    datos['haber_tope_maximo'] = request.form.get('haber_tope_maximo') or 10
+    datos['Daños_Si'] = request.form.get('Daños_Si', False) == 'on'
+    datos['Sancionatorios_Si'] = request.form.get('Sancionatorios_Si', False) == 'on'
+
+    escrito = Escrito_liquidacion(datos)
+    resultado = escrito.crear_documento()
+
+    return resultado
 
 @app.route('/generador_escrito_agravios')
 def generador_escrito_agravios():
