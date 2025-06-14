@@ -105,7 +105,7 @@ def obtener_monto_uma_maximo_fila_anterior(valor_ingresado):
           valor2 = row[2]  # Valor máximo del rango (el monto UMA máximo actual)
 
           if valor1 <= valor_ingresado < valor2:
-              return fila_anterior[2] if fila_anterior else None  # Retorna el UMA máximo de la fila anterior
+              return fila_anterior[6] if fila_anterior else None  # Retorna el UMA máximo de la fila anterior
 
           fila_anterior = row  # Guarda la fila actual como "anterior" para la próxima vuelta
 

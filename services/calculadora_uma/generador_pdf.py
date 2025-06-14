@@ -7,7 +7,7 @@ from datetime import datetime
 from sqlalchemy import text
 
 
-def obtener_acordada(fecha_ingresada):
+def obtener_acordada_regulacion(fecha_ingresada):
     # Convertir la fecha ingresada por el usuario a un objeto datetime.date
     fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
 
@@ -33,11 +33,62 @@ def obtener_acordada(fecha_ingresada):
         else:
             return None
 
-def obtener_valor_uma(fecha_ingresada):
+def obtener_valor_uma_regulacion(fecha_ingresada):
     fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
 
     with engine.connect() as conn:
         result = conn.execute(text("SELECT * FROM valor_uma"))
+
+        # Variables para almacenar la fila más cercana
+        fila_cercana = None
+        fecha_cercana = None
+
+        for row in result:
+            fecha_fila = row[1]  # Asumiendo que la segunda columna es la fecha
+            if fecha_fila <= fecha_ingresada_dt:
+                # Comparar para encontrar la fecha más cercana
+                if fecha_cercana is None or fecha_fila > fecha_cercana:
+                    fecha_cercana = fecha_fila
+                    fila_cercana = row
+
+        if fila_cercana:
+            # Extraer el elemento 5
+            acordada = fila_cercana[4]
+            return acordada
+        else:
+            return None
+
+def obtener_acordada(fecha_ingresada):
+    # Convertir la fecha ingresada por el usuario a un objeto datetime.date
+    fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
+
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM valor_uma_copia"))
+
+        # Variables para almacenar la fila más cercana
+        fila_cercana = None
+        fecha_cercana = None
+
+        for row in result:
+            fecha_fila = row[1]  # Asumiendo que la segunda columna es la fecha
+            if fecha_fila <= fecha_ingresada_dt:
+                # Comparar para encontrar la fecha más cercana
+                if fecha_cercana is None or fecha_fila > fecha_cercana:
+                    fecha_cercana = fecha_fila
+                    fila_cercana = row
+
+        if fila_cercana:
+            # Extraer el elemento 4
+            acordada = fila_cercana[3]
+            return acordada
+        else:
+            return None
+
+def obtener_valor_uma(fecha_ingresada):
+    fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
+
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM valor_uma_copia"))
 
         # Variables para almacenar la fila más cercana
         fila_cercana = None
@@ -86,8 +137,8 @@ class PDFGenerator:
       datos['cantidad_FCL'], datos['valor_dividido_FCL'], datos['porcentajes_FCL'], datos['porcentaje_anterior_FCL'], datos['porcentaje_maximo_FCL'], datos['primera_valor_uma_FCL'], datos['primera_valor_uma_final_FCL'], datos['segundo_valor_uma_FCL'], datos['porcentaje_minimo_FCL'], datos['segunda_valor_uma_final_FCL'], datos['total_uma_FCL'], datos['apoderado_FCL'], datos['reduccion_excepciones_FCL'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_de_cierre_de_liquidacion'])
 
       if self.incluirRegulacion:
-          datos['Acordada_fecha_de_regulacion'] = obtener_acordada(self.fecha_de_regulacion)
-          datos['UMA_fecha_de_regulacion'] = obtener_valor_uma(self.fecha_de_regulacion)
+          datos['Acordada_fecha_de_regulacion'] = obtener_acordada_regulacion(self.fecha_de_regulacion)
+          datos['UMA_fecha_de_regulacion'] = obtener_valor_uma_regulacion(self.fecha_de_regulacion)
           datos['cantidad_R'], datos['valor_dividido_R'], datos['porcentajes_R'], datos['porcentaje_anterior_R'], datos['porcentaje_maximo_R'], datos['primera_valor_uma_R'],datos['primera_valor_uma_final_R'], datos['segundo_valor_uma_R'], datos['porcentaje_minimo_R'],  datos['segunda_valor_uma_final_R'], datos['total_uma_R'], datos['apoderado_R'], datos['reduccion_excepciones_R'] = calcular_porcentajes(self.monto_aprobado, datos['UMA_fecha_de_regulacion'])
 
       if self.incluirAprobacion:
