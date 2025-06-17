@@ -200,6 +200,8 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
             monto_columna15 = Decimal(fila_dict['alanis_ripte']) * Decimal(monto)
             monto_columna16 = Decimal(fila_dict['Caliva_Palavecino']) * Decimal(monto)
             monto_columna17 = Decimal(fila_dict['Anses_Palavecino']) * Decimal(monto)
+            monto_columna18 = Decimal(fila_dict['Alanis_Colina']) * Decimal(monto)
+
 
 
 
@@ -222,12 +224,14 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                 formatear_dinero(monto_columna15),
                 formatear_dinero(monto_columna16),
                 formatear_dinero(monto_columna17),
+                formatear_dinero(monto_columna18),
+
 
 
 
             ))
             lista_montos.append((monto_columna2, monto_columna3, monto_columna4, monto_columna5, monto_columna6, monto_columna7,
-                                 monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13, monto_columna14, monto_columna15, monto_columna16, monto_columna17))
+                                 monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13, monto_columna14, monto_columna15, monto_columna16, monto_columna17, monto_columna18))
         else:
             print("No se encontró una fecha menor a la ingresada.")
             return []
@@ -286,6 +290,9 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                     else:
                         monto_columna17= (monto_columna17 * Decimal(fila_dict['Anses_Palavecino'])) * Decimal(0.7)
 
+                    monto_columna18 *= Decimal(fila_dict['Alanis_Colina'])
+                    monto_columna18 = monto_columna18 * Decimal(0.7)
+
                 else:  
                     if fila_dict['id'] == 243:
                         monto_columna2 = monto_columna2 * Decimal(fila_dict['ANSES']) + Decimal(1500)
@@ -319,6 +326,7 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                         monto_columna17= monto_columna17 * Decimal(fila_dict['Anses_Palavecino']) + Decimal(1500)
                     else:
                         monto_columna17= monto_columna17 * Decimal(fila_dict['Anses_Palavecino'])
+                    monto_columna18 *= Decimal(fila_dict['Alanis_Colina'])
 
 
 
@@ -339,12 +347,13 @@ def buscar_fechas(fecha_inicio, fecha_fin, monto,tupla_reajuste,haber_reajustado
                     formatear_dinero(monto_columna14),
                     formatear_dinero(monto_columna15),
                     formatear_dinero(monto_columna16),
-                    formatear_dinero(monto_columna17)
+                    formatear_dinero(monto_columna17),
+                    formatear_dinero(monto_columna18),
 
 
                 ))
                 lista_montos.append((monto_columna2, monto_columna3, monto_columna4, monto_columna5, monto_columna6, monto_columna7,
-                                     monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13, monto_columna14, monto_columna15, monto_columna16, monto_columna17))
+                                     monto_columna8, monto_columna9, monto_columna10, monto_columna11, monto_columna12, monto_columna13, monto_columna14, monto_columna15, monto_columna16, monto_columna17, monto_columna18))
 
                 if fila_dict['fechas'].year == fecha_fin_dt.year and fila_dict['fechas'].month == fecha_fin_dt.month:
                     break
@@ -405,6 +414,8 @@ def generar_grafico_linea(
     alanis_ripte_flag,
     caliva_palavecino_bf_flag, # Flag para 'Caliva Palavecino' (de monto_columna16)
     anses_palavecino_bf_flag,  # Flag para 'Anses Palavecino' (de monto_columna17) <-- ¡Este es el que te interesa!
+    alanis_colina_bf_flag,  # Flag para 'Anses Palavecino' (de monto_columna17) <-- ¡Este es el que te interesa!
+
 
     # Datos y flag para la serie de funcion_movilidad_personalizada:
     datos_mov_personalizada,   # Esta es 'filas_dinero' de funcion_movilidad_personalizada
@@ -434,7 +445,9 @@ def generar_grafico_linea(
         'Alanis con IPC',                         # Índice 12 (monto_columna14)
         'Alanis con RIPTE',                       # Índice 13 (monto_columna15)
         'Caliva Palavecino',                      # Índice 14 (monto_columna16)
-        'Anses Palavecino'                        # Índice 15 (monto_columna17) <-- Los datos que quieres con esta etiqueta
+        'Anses Palavecino',                        # Índice 15 (monto_columna17) <-- Los datos que quieres con esta etiqueta
+        'Alanis con Colina'                        # Índice 15 (monto_columna17) <-- Los datos que quieres con esta etiqueta
+
     ]
 
     booleanos_bf = [
@@ -453,7 +466,9 @@ def generar_grafico_linea(
         alanis_ipc_flag,
         alanis_ripte_flag,
         caliva_palavecino_bf_flag,
-        anses_palavecino_bf_flag # El flag para mostrar la línea Anses Palavecino con datos de buscar_fechas
+        anses_palavecino_bf_flag, # El flag para mostrar la línea Anses Palavecino con datos de buscar_fechas
+        alanis_colina_bf_flag,
+
     ]
 
     fig = go.Figure()
@@ -588,7 +603,7 @@ def crear_graficos(datos, etiquetas, titulo):
     return grafico_base64
 
 class CalculadorMovilidad:
-    def __init__(self, datos_del_actor,fallecido, fecha_fallecimiento, cobrador_pension, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis,movilidad_personalizada, Caliva_Palavecino, Anses_Palavecino,movilidad_1, tupla, tupla_reajuste, haber_reajustado ):
+    def __init__(self, datos_del_actor,fallecido, fecha_fallecimiento, cobrador_pension, expediente,cuil_expediente, beneficio, num_beneficio, fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago, caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago,fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis,movilidad_personalizada, Caliva_Palavecino, Anses_Palavecino, Alanis_Colina,movilidad_1, tupla, tupla_reajuste, haber_reajustado ):
         self.datos_del_actor = datos_del_actor
         self.fallecido = fallecido
         self.fecha_fallecimiento = fecha_fallecimiento
@@ -621,6 +636,7 @@ class CalculadorMovilidad:
         self.movilidad_personalizada = movilidad_personalizada
         self.Caliva_Palavecino = Caliva_Palavecino
         self.Anses_Palavecino = Anses_Palavecino
+        self.Alanis_Colina = Alanis_Colina
         self.movilidad_1 = movilidad_1 
         self.tupla = tupla
         self.resultado = procesar_tuplas(self.tupla, self.movilidad_1)
@@ -763,6 +779,15 @@ class CalculadorMovilidad:
                 'conf_caliva_Anses_Palavecino': str(round((ultimos_valores[15] - ultimos_valores[7]) / ultimos_valores[7] * 100, 2)) + "%",
                 'dif_alanis_Anses_Palavecino': formatear_dinero(ultimos_valores[15] - ultimos_valores[9]),
                 'conf_alanis_Anses_Palavecino': str(round((ultimos_valores[15] - ultimos_valores[9]) / ultimos_valores[9] * 100, 2)) + "%",
+
+                #
+                'dif_anses_Alanis_Colina': formatear_dinero(ultimos_valores[16] - ultimos_valores[0]),
+                'conf_anses_Alanis_Colina': str(round((ultimos_valores[16] - ultimos_valores[0]) / ultimos_valores[0] * 100, 2)) + "%",
+
+                'dif_caliva_Alanis_Colina': formatear_dinero(ultimos_valores[16] - ultimos_valores[7]),
+                'conf_caliva_Alanis_Colina': str(round((ultimos_valores[16] - ultimos_valores[7]) / ultimos_valores[7] * 100, 2)) + "%",
+                'dif_alanis_Alanis_Colina': formatear_dinero(ultimos_valores[16] - ultimos_valores[9]),
+                'conf_alanis_Alanis_Colina': str(round((ultimos_valores[16] - ultimos_valores[9]) / ultimos_valores[9] * 100, 2)) + "%",
            }    
         datos = [ultimos_valores[0]]
         etiquetas = ['Anses']
@@ -826,6 +851,10 @@ class CalculadorMovilidad:
             datos.append(ultimos_valores[15])
             #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
             etiquetas.append('Anses Palavecino')
+        if self.Alanis_Colina:
+            datos.append(ultimos_valores[16])
+            #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+            etiquetas.append('Alanis con Colina')
         if self.movilidad_personalizada:
             datos.append(ultimo_valor_personalizado)
             #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
@@ -887,6 +916,10 @@ class CalculadorMovilidad:
                     datos_2.append(ultimos_valores[15])
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
                     etiquetas_2.append('Anses Palavecino')
+                if self.Alanis_Colina:
+                    datos_2.append(ultimos_valores[16])
+                    #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+                    etiquetas_2.append('Alanis con Colina')
                 if self.movilidad_personalizada:
                     datos_2.append(ultimo_valor_personalizado)
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
@@ -949,6 +982,10 @@ class CalculadorMovilidad:
                     datos_3.append(ultimos_valores[15])
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
                     etiquetas_3.append('Anses Palavecino')
+                if self.Alanis_Colina:
+                    datos_3.append(ultimos_valores[16])
+                    #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
+                    etiquetas_3.append('Alanis con Colina')
                 if self.movilidad_personalizada:
                     datos_3.append(ultimo_valor_personalizado)
                     #datos.append(round(ultimos_valores[10] - ultimos_valores[0],2))
@@ -981,6 +1018,7 @@ class CalculadorMovilidad:
             self.alanis_ripte,                   # Flag para 'Alanis con RIPTE'
             self.Caliva_Palavecino,              # Flag para 'Caliva Palavecino' (datos de monto_columna16)
             self.Anses_Palavecino,               # Flag para 'Anses Palavecino' (datos de monto_columna17)
+            self.Alanis_Colina,
 
             # Argumentos para datos de funcion_movilidad_personalizada:
             filas_dinero,                        # Datos para 'Movilidad Personalizada'
@@ -1027,6 +1065,7 @@ class CalculadorMovilidad:
             alanis_ripte = self.alanis_ripte,
             Caliva_Palavecino = self.Caliva_Palavecino,
             Anses_Palavecino= self.Anses_Palavecino,
+            Alanis_Colina= self.Alanis_Colina,
             comparacion_mov_sentencia_si = self.comparacion_mov_sentencia_si,
             comparacion_mov_caliva= self.comparacion_mov_caliva,
             comparacion_mov_alanis= self.comparacion_mov_alanis,
@@ -1048,6 +1087,7 @@ class CalculadorMovilidad:
             valor_alanis_ripte = formatear_dinero(montos_a_fecha_cierre[13]),
             valor_Caliva_Palavecino = formatear_dinero(montos_a_fecha_cierre[14]),
             valor_Anses_Palavecino = formatear_dinero(montos_a_fecha_cierre[15]),
+            valor_Alanis_Colina = formatear_dinero(montos_a_fecha_cierre[16]),
             valor_mov_personalizada = formatear_dinero(ultimo_valor_personalizado),
 
 

@@ -300,6 +300,14 @@
             <td class="confiscatoriedad">{{ comparacion.conf_anses_Anses_Palavecino }}</td>
         </tr>
         {% endif %}
+        {% if Alanis_Colina  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con Colina</td>
+            <td>{{valor_Alanis_Colina}}</td>
+            <td>{{ comparacion.dif_anses_Alanis_Colina }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_anses_Alanis_Colina }}</td>
+        </tr>
+        {% endif %}
         {% if movilidad_personalizada %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Movilidad Personalizada</td>
@@ -440,6 +448,14 @@
             <td class="confiscatoriedad">{{ comparacion.conf_alanis_Anses_Palavecino }}</td>
         </tr>
         {% endif %}
+        {% if Alanis_Colina  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con Colina</td>
+            <td>{{valor_Alanis_Colina}}</td>
+            <td>{{ comparacion.dif_alanis_Alanis_Colina }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_alanis_Alanis_Colina }}</td>
+        </tr>
+        {% endif %}
         {% if movilidad_personalizada %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Movilidad Personalizada</td>
@@ -568,6 +584,14 @@
             <td class="confiscatoriedad">{{ comparacion.conf_caliva_Anses_Palavecino }}</td>
         </tr>
         {% endif %}
+        {% if Alanis_Colina  %}
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Alanis con Colina</td>
+            <td>{{valor_Alanis_Colina}}</td>
+            <td>{{ comparacion.dif_caliva_Alanis_Colina }}</td>
+            <td class="confiscatoriedad">{{ comparacion.conf_caliva_Alanis_Colina }}</td>
+        </tr>
+        {% endif %}
         {% if movilidad_personalizada %}
         <tr class="font-large">
             <td class="negrita first-column-cell">Movilidad Personalizada</td>
@@ -634,6 +658,9 @@
                 {% if Anses_Palavecino %}
                 <td class="negrita">Anses Palavecino </td>
                 {% endif %}
+                {% if Alanis_Colina %}
+                <td class="negrita">Alanis con Colina </td>
+                {% endif %}
                 {% if movilidad_personalizada %}
                 <td class="negrita">Movilidad Personalizada</td>
                 {% endif %}
@@ -686,8 +713,11 @@
                 {% if Anses_Palavecino %}
                 <td class="haber">{{ fila[16] }}</td>
                 {% endif %}
-                {% if movilidad_personalizada %}
+                {% if Alanis_Colina %}
                 <td class="haber">{{ fila[17] }}</td>
+                {% endif %}
+                {% if movilidad_personalizada %}
+                <td class="haber">{{ fila[18] }}</td>
                 {% endif %}
             </tr>
             {% endfor %}
