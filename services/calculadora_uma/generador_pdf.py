@@ -12,6 +12,7 @@ def obtener_acordada_regulacion(fecha_ingresada):
     fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
 
     with engine.connect() as conn:
+        conn.connection.ping(reconnect=True)
         result = conn.execute(text("SELECT * FROM valor_uma"))
 
         # Variables para almacenar la fila más cercana
@@ -37,6 +38,7 @@ def obtener_valor_uma_regulacion(fecha_ingresada):
     fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
 
     with engine.connect() as conn:
+        conn.connection.ping(reconnect=True)
         result = conn.execute(text("SELECT * FROM valor_uma"))
 
         # Variables para almacenar la fila más cercana
@@ -63,6 +65,7 @@ def obtener_acordada(fecha_ingresada):
     fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
 
     with engine.connect() as conn:
+        conn.connection.ping(reconnect=True)
         result = conn.execute(text("SELECT * FROM valor_uma_copia"))
 
         # Variables para almacenar la fila más cercana
@@ -88,6 +91,7 @@ def obtener_valor_uma(fecha_ingresada):
     fecha_ingresada_dt = datetime.strptime(fecha_ingresada, '%Y-%m-%d').date()
 
     with engine.connect() as conn:
+        conn.connection.ping(reconnect=True)
         result = conn.execute(text("SELECT * FROM valor_uma_copia"))
 
         # Variables para almacenar la fila más cercana
