@@ -11,7 +11,7 @@ Flask-WTF
 pandas
 openpyxl
 plotly
-kaleido
+kaleido==0.2.1
 PyPDF2
 google-generativeai
 google-api-python-client
