@@ -474,6 +474,8 @@ class Comparativa:
           caliva_marquez_mas_palavecino = self.caliva_marquez_mas_palavecino,
           badaro_cm_palavecino = self.badaro_cm_palavecino,
           RM_Badaro_FP_CM_P_Anses = self.RM_Badaro_FP_CM_P_Anses,
+          Alanis_Colina=self.Alanis_Colina,
+
           
           caliva_anses=formatear_dinero(datos['caliva_anses']),
           anses_2=formatear_dinero(datos['anses_2']),
@@ -487,7 +489,8 @@ class Comparativa:
           caliva_marquez_mas_palavecino_2=formatear_dinero(datos['caliva_marquez_mas_palavecino_2']),
           badaro_cm_palavecino_2=formatear_dinero(datos['badaro_cm_palavecino_2']),
           RM_Badaro_FP_CM_P_Anses_2=formatear_dinero(datos['RM_Badaro_FP_CM_P_Anses']),
-          Alanis_Colina=formatear_dinero(datos['Alanis_Colina']),
+          Alanis_Colina_2=formatear_dinero(datos['Alanis_Colina']),
+          
 
 
 
