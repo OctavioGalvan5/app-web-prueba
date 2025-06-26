@@ -2397,8 +2397,8 @@ def editar_libro(id):
 
     
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Usa el puerto asignado por Render
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(debug=True)  # Esto ya no se usa si lanzás con Gunicorn
+
 
 def status_401(error):
     return redirect(url_for('login'))
