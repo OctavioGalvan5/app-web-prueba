@@ -2231,6 +2231,9 @@ def ver_libros():
         libros = [dict(row._mapping) for row in result]
     return render_template('biblioteca/libros.html', libros=libros)
 
+from werkzeug.utils import secure_filename
+import os
+
 @app.route('/upload_book', methods=['POST'])
 def upload_book():
     origen = request.form.get('origen', 'privado')  # Por defecto asumimos privado
@@ -2238,7 +2241,7 @@ def upload_book():
     if 'documentos[]' not in request.files:
         flash("No se enviaron archivos", "danger")
         if origen == 'publico':
-            return redirect(url_for('casos_publicos'))  # cambia esto por la ruta real
+            return redirect(url_for('casos_publicos'))
         return redirect(url_for('ver_libros'))
 
     archivos = request.files.getlist('documentos[]')
@@ -2249,22 +2252,37 @@ def upload_book():
         if archivo.filename == '':
             continue
 
-        file_hash = calculate_file_hash(archivo.stream)
-        archivo.stream.seek(0)
+        # Guardar archivo temporalmente en disco
+        filename = secure_filename(archivo.filename)
+        tmp_path = os.path.join("/tmp", filename)
+        archivo.save(tmp_path)
 
-        drive_link, error = process_and_save_libro(archivo.stream, archivo.filename)
-        if error:
-            flash(error, "danger")
-        else:
-            processed = True
-            new_file_hash = file_hash
-            flash(f"Archivo {archivo.filename} subido y analizado correctamente.", "success")
-            break
+        try:
+            # Calcular hash desde archivo físico
+            with open(tmp_path, 'rb') as f:
+                file_hash = calculate_file_hash(f)
+
+            # Procesar el archivo desde disco
+            with open(tmp_path, 'rb') as f:
+                drive_link, error = process_and_save_libro(f, archivo.filename)
+
+            if error:
+                flash(error, "danger")
+            else:
+                processed = True
+                new_file_hash = file_hash
+                flash(f"Archivo {archivo.filename} subido y analizado correctamente.", "success")
+                break
+
+        finally:
+            # Eliminar archivo temporal para liberar espacio
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
 
     if not processed:
         flash("No se pudo procesar ningún archivo.", "danger")
         if origen == 'publico':
-            return redirect(url_for('casos_publicos'))  # cambia esto por la ruta real
+            return redirect(url_for('casos_publicos'))
         return redirect(url_for('ver_libro'))
 
     with engine.connect() as connection:
@@ -2282,7 +2300,7 @@ def upload_book():
     else:
         flash("No se encontró el caso subido.", "danger")
         if origen == 'publico':
-            return redirect(url_for('casos_publicos'))  # cambia esto por la ruta real
+            return redirect(url_for('casos_publicos'))
         return redirect(url_for('ver_libro'))
 
 @app.route('/eliminar_libro/<int:id>', methods=['POST'])

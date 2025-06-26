@@ -27,19 +27,21 @@ def convertir_fecha(fecha_str):
     print(f"Formato de fecha no reconocido: {fecha_str}")
     return None
 
-def extract_text_from_pdf(file_obj):
+def extract_text_from_pdf(file_obj, max_pages=10):
     text_content = ""
     with pdfplumber.open(file_obj) as pdf:
-        for page in pdf.pages:
-            text_content += page.extract_text() or ""  # Evita errores con páginas vacías
+        for i, page in enumerate(pdf.pages):
+            if i >= max_pages:
+                break
+            text_content += page.extract_text() or ""
     return text_content
-
 
 def analyze_book_document(texto_pdfs):
     try:
         # Configurar la API (actualiza la key según corresponda)
         genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
 
+        texto_pdfs = texto_pdfs[:15000]
 
         # Construir el prompt de análisis, incluyendo la imagen en base64 al inicio
         prompt = f"""Eres un asistente bibliotecario experto en analizar libros. A partir del texto extraído de un archivo PDF de un libro, extrae la siguiente información en formato JSON. Importante: NO uses acentos (reemplaza las vocales acentuadas por sus equivalentes sin acento). Si no se encuentra claramente un dato, devolvelo como cadena vacia ("").
