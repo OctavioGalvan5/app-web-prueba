@@ -2055,6 +2055,11 @@ def resultado_escrito_liquidacion():
     datos['ley_27426_Si'] = request.form.get('27.426_Si', False) == 'on'
     datos['decreto_274_2024_Si'] = request.form.get('274_2024_Si', False) == 'on'
 
+    # costas
+    datos['costas_por_su_orden'] = request.form.get('costas_por_su_orden', False) == 'on'
+    datos['costas_anses_sin_controversia'] = request.form.get('costas_anses_sin_controversia', False) == 'on'
+    datos['costas_anses_ambas_instancias'] = request.form.get('costas_anses_ambas_instancias', False) == 'on'
+    datos['costas_anses_revocadas_por_camara'] = request.form.get('costas_anses_revocadas_por_camara', False) == 'on'
 
 
     #Datos Cliente
