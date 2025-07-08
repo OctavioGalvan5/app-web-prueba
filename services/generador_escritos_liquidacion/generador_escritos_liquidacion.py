@@ -245,7 +245,7 @@ class Escrito_liquidacion:
       self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC'] = formatear_dinero(str(self.datos['Haber_de_Alta_Segunda_Liquidacion_IPC']))
 
       if self.datos['Tope_Si']:
-          caliva_anses, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max,rem_max_imponible_cm_extendido_27551, martinez, anses_palavecino, caliva_palavecino, badaro_cm_palavecino, RM_Badaro_FP_CM_P_Anses = obtener_monto(self.datos['Fecha_de_cierre_de_intereses'])
+          caliva_anses, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max,rem_max_imponible_cm_extendido_27551, martinez, anses_palavecino, caliva_palavecino, badaro_cm_palavecino, RM_Badaro_FP_CM_P_Anses, Alanis_colina = obtener_monto(self.datos['Fecha_de_cierre_de_intereses'])
           self.datos['dif_haber_reclamado_anses'] = formatear_dinero(Decimal(self.datos['haber_tope_maximo']) - anses)
           self.datos['porc_haber_reclamado_anses'] = str(round((Decimal(self.datos['haber_tope_maximo']) / anses - 1) * 100, 2)) + "%"
           self.datos['dif_ocheintados_rem_max_anses']  = str(round((ocheintados_rem_max / anses - 1) * 100 , 2)) + "%"
