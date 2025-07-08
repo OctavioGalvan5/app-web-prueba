@@ -249,7 +249,7 @@ class Escrito_liquidacion:
           self.datos['dif_haber_reclamado_anses'] = formatear_dinero(Decimal(self.datos['haber_tope_maximo']) - anses)
           self.datos['porc_haber_reclamado_anses'] = str(round((Decimal(self.datos['haber_tope_maximo']) / anses - 1) * 100, 2)) + "%"
           self.datos['dif_ocheintados_rem_max_anses']  = str(round((ocheintados_rem_max / anses - 1) * 100 , 2)) + "%"
-          self.datos['tope_anses'] = formatear_dinero(anses_2)
+          self.datos['tope_anses'] = formatear_dinero(anses)
           self.datos['tope_ocheintados_rem_max'] = formatear_dinero(ocheintados_rem_max)
       self.datos['Fecha_de_cierre_de_intereses'] = transformar_fecha(self.datos['Fecha_de_cierre_de_intereses'])
 
