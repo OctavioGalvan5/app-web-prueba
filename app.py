@@ -2104,7 +2104,7 @@ def resultado_escrito_liquidacion():
 
     # Sumas, PBU y otros conceptos
     datos['Sumas_Si'] = request.form.get('Sumas_Si', False) == 'on'
-    datos['PBU_Si'] = request.form.get('PBU_Si', False) == 'on'
+    datos['PBU_Si'] = request.form.get('PBU_Si') == 'true'
     datos['Monto_PBU'] = request.form.get('Monto_PBU')
     datos['Porcentaje_PBU'] = request.form.get('Porcentaje_PBU')
 
