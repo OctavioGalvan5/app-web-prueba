@@ -20,7 +20,7 @@ def extraer_texto_pdf(ruta_pdf):
 
 # ========== PROMPT ==========
 PROMPT_LEGAL = """
-Eres un asistente legal experto en analizar pdfs con cálculos de jubilaciones. Los siguientes documentos estan relacionados con un mismo caso. Analiza la informacion y proporciona una respuesta consolidado en formato JSON, Importante: NO uses acentos (reemplaza las vocales acentuadas por sus equivalentes sin acento):
+Eres un asistente legal experto en analizar pdfs con cálculos de jubilaciones. Los siguientes documentos estan relacionados con un mismo caso. Analiza la informacion y proporciona una respuesta consolidado en formato JSON, Importante: NO uses acentos (reemplaza las vocales acentuadas por sus equivalentes sin acento) IMPORTANTE: Si algún dato solicitado no puede ser encontrado con certeza, deberás devolver "" (una cadena vacía), nunca null, None, "no encontrado", Esto es necesario para que el formulario automatizado funcione correctamente:
 
 {{
     "27.609_Si": "Si la liquidación es entre el periodo XXXX y el periodo XXXX devolver un True, sino devolver False",
