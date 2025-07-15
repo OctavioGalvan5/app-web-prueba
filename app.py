@@ -707,28 +707,28 @@ def resultado_herramientas_demandas():
     
         def obtener_valor(form_value):
             valor = float(form_value)
-            return valor if valor != 0 else 1
+            return valor if valor != 0 else 0
 
-        PBU_repa = obtener_valor(request.form.get('PBU_repa', 1))
-        PC_repa = obtener_valor(request.form.get('PC_repa', 1))
-        PAP_repa = obtener_valor(request.form.get('PAP_repa', 1))
-        REPA_repa = obtener_valor(request.form.get('REPA_repa', 1))
-        OTROS_repa = obtener_valor(request.form.get('OTROS_repa', 1))
+        PBU_repa = obtener_valor(request.form.get('PBU_repa', 0)) or 1
+        PC_repa = obtener_valor(request.form.get('PC_repa', 0))
+        PAP_repa = obtener_valor(request.form.get('PAP_repa', 0))
+        REPA_repa = obtener_valor(request.form.get('REPA_repa', 0))
+        OTROS_repa = obtener_valor(request.form.get('OTROS_repa', 0))
 
-        PBU_reclamado = obtener_valor(request.form.get('PBU_reclamado', 1))
-        PC_reclamado = obtener_valor(request.form.get('PC_reclamado', 1))
-        PAP_reclamado = obtener_valor(request.form.get('PAP_reclamado', 1))
-        REPA_reclamado = obtener_valor(request.form.get('REPA_reclamado', 1))
-        OTROS_reclamado = obtener_valor(request.form.get('OTROS_reclamado', 1))
+        PBU_reclamado = obtener_valor(request.form.get('PBU_reclamado', 0)) or 1
+        PC_reclamado = obtener_valor(request.form.get('PC_reclamado', 0))
+        PAP_reclamado = obtener_valor(request.form.get('PAP_reclamado', 0))
+        REPA_reclamado = obtener_valor(request.form.get('REPA_reclamado', 0))
+        OTROS_reclamado = obtener_valor(request.form.get('OTROS_reclamado', 0))
 
         comparacion_repa_movilizado = request.form.get('comparacion_repa_movilizado', False)
         comparacion_repa_movilizado_No = request.form.get('comparacion_repa_movilizado_No', False)
 
-        PBU_repa_movilizado = obtener_valor(request.form.get('PBU_repa_movilizado', 1))
-        PC_repa_movilizado = obtener_valor(request.form.get('PC_repa_movilizado', 1))
-        PAP_repa_movilizado = obtener_valor(request.form.get('PAP_repa_movilizado', 1))
-        REPA_repa_movilizado = obtener_valor(request.form.get('REPA_repa_movilizado', 1))
-        OTROS_repa_movilizado = obtener_valor(request.form.get('OTROS_repa_movilizado', 1))
+        PBU_repa_movilizado = obtener_valor(request.form.get('PBU_repa_movilizado', 0))
+        PC_repa_movilizado = obtener_valor(request.form.get('PC_repa_movilizado', 0))
+        PAP_repa_movilizado = obtener_valor(request.form.get('PAP_repa_movilizado', 0))
+        REPA_repa_movilizado = obtener_valor(request.form.get('REPA_repa_movilizado', 0))
+        OTROS_repa_movilizado = obtener_valor(request.form.get('OTROS_repa_movilizado', 0))
 
         diccionario_sumas = {
             "sumas_remunerativas": request.form.get('sumas_remunerativas', False),
