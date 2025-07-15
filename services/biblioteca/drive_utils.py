@@ -95,6 +95,7 @@ def file_hash_exists_libro(file_hash):
     """
     Verifica si el hash ya existe en la tabla 'libros'.
     """
+    print(file_hash)
     query = text("SELECT COUNT(*) FROM libros WHERE file_hash = :file_hash")
     with engine.connect() as connection:
         result = connection.execute(query, {"file_hash": file_hash})
@@ -130,7 +131,7 @@ def process_and_save_libro(file_obj, file_name, update=False):
     if not update:
         save_libro_to_db(libro_data)
 
-    return drive_link, None
+    return drive_link, None, None
 
 
 def delete_drive_file(drive_link):

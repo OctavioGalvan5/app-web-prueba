@@ -2269,7 +2269,7 @@ def upload_book():
 
             # Procesar el archivo desde disco
             with open(tmp_path, 'rb') as f:
-                drive_link, error = process_and_save_libro(f, archivo.filename)
+                drive_link,_, error = process_and_save_libro(f, archivo.filename)
 
             if error:
                 flash(error, "danger")
@@ -2288,7 +2288,7 @@ def upload_book():
         flash("No se pudo procesar ningún archivo.", "danger")
         if origen == 'publico':
             return redirect(url_for('casos_publicos'))
-        return redirect(url_for('ver_libro'))
+        return redirect(url_for('ver_libros'))
 
     with engine.connect() as connection:
         result = connection.execute(
@@ -2306,7 +2306,7 @@ def upload_book():
         flash("No se encontró el caso subido.", "danger")
         if origen == 'publico':
             return redirect(url_for('casos_publicos'))
-        return redirect(url_for('ver_libro'))
+        return redirect(url_for('ver_libros'))
 
 @app.route('/eliminar_libro/<int:id>', methods=['POST'])
 @login_required

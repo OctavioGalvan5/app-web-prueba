@@ -97,7 +97,7 @@ def save_libro_to_db(data):
         "titulo": data.get("titulo"),
         "categoria": data.get("categoria"),
         "edicion": data.get("edicion"),
-        "anio": int(data["anio_publicacion"]) if data.get("anio_publicacion") else None,
+        "anio": data.get("anio_publicacion"),
         "palabras_clave": data.get("palabras_clave"),
         "resumen": data.get("resumen"),
         "drive_link": data.get("drive_link"),
@@ -131,7 +131,7 @@ def update_libro_in_db(data):
         "titulo": data.get("titulo"),
         "categoria": data.get("categoria"),
         "edicion": data.get("edicion"),
-        "anio": int(data["anio"]),
+        "anio": data.get("anio"),
         "palabras_clave": data.get("palabras_clave"),
         "resumen": data.get("resumen"),
         "drive_link": data.get("drive_link"),
@@ -158,4 +158,3 @@ def update_libro_in_db(data):
             print("Libro actualizado correctamente:", result.rowcount)
     except Exception as e:
         print("Error al actualizar el libro en la base de datos:", e)
-
