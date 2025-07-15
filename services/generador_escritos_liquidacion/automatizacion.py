@@ -95,7 +95,7 @@ Eres un asistente legal experto en analizar pdfs con cálculos de jubilaciones. 
 
 # ========== FUNCION PARA LLAMAR A GEMINI ==========
 def analizar_con_gemini(texto_pdf):
-    model = genai.GenerativeModel('gemini-2.5-flash-preview-04-17')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     respuesta = model.generate_content(PROMPT_LEGAL + "\n\n" + texto_pdf)
 
     texto_limpio = limpiar_respuesta_json(respuesta.text)
