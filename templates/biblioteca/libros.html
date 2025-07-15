@@ -195,6 +195,7 @@
             gap: 15px;
             margin-bottom: 25px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .busqueda-input {
@@ -208,29 +209,6 @@
         }
 
         .busqueda-input:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.1);
-        }
-
-        .filtro-select {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #e1e5eb;
-            border-radius: 8px;
-            background-color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: var(--transition);
-            min-width: 150px;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235e35b1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            padding-right: 40px;
-        }
-
-        .filtro-select:focus {
             border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.1);
@@ -415,108 +393,6 @@
             transform: translateY(0);
         }
 
-        /* Estilos para el chat */
-        .chat-container {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            margin-top: 40px;
-        }
-
-        .chat-box {
-            height: 300px;
-            overflow-y: auto;
-            border: 1px solid #e1e5eb;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: var(--secondary);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .chat-box::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-box::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-
-        .chat-box::-webkit-scrollbar-thumb {
-            background: var(--primary-light);
-            border-radius: 4px;
-        }
-
-        .chat-box::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-        }
-
-        .chat-input {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 14px;
-            border: 2px solid #e1e5eb;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: var(--transition);
-        }
-
-        .chat-input input:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.1);
-        }
-
-        .chat-input button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chat-input button:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .mensaje-usuario {
-            background: var(--primary);
-            color: white;
-            padding: 12px 18px;
-            border-radius: 18px 18px 0 18px;
-            max-width: 80%;
-            align-self: flex-end;
-            word-break: break-word;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 0.3s ease forwards;
-        }
-
-        .mensaje-ia {
-            background: var(--primary-bg);
-            padding: 12px 18px;
-            border-radius: 18px 18px 18px 0;
-            max-width: 80%;
-            word-break: break-word;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            border-left: 3px solid var(--primary);
-            animation: fadeIn 0.3s ease forwards;
-        }
-
         .error {
             color: var(--danger);
             background: #ffe6e6;
@@ -535,7 +411,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .file-item, .mensaje-usuario, .mensaje-ia {
+        .file-item {
             animation: fadeIn 0.3s ease forwards;
         }
 
@@ -545,39 +421,49 @@
                 padding: 15px;
                 margin: 20px auto;
             }
+
             .card {
                 padding: 20px;
             }
+
             h2 {
                 font-size: 24px;
             }
+
             .filtros-container {
                 flex-direction: column;
                 gap: 10px;
             }
-            .busqueda-input, .filtro-select {
+
+            .busqueda-input {
                 width: 100%;
             }
+
             .tabla-casos th, 
             .tabla-casos td {
                 padding: 10px;
                 font-size: 14px;
             }
+
             .acciones-contenedor {
                 flex-direction: column;
                 gap: 5px;
             }
+
             .btn-editar, 
             .btn-eliminar {
                 width: 100%;
                 justify-content: center;
             }
+
             .drop-zone {
                 padding: 30px 15px;
             }
+
             .drop-zone-icon {
                 font-size: 36px;
             }
+
             .drop-zone-text {
                 font-size: 16px;
             }
@@ -586,8 +472,9 @@
 </head>
 <body>
     {% include 'navs/nav.html' %}
+
     <div class="container">
-        <!-- Sección de casos -->
+        <!-- Sección de libros -->
         <div class="card">
             <h2>Libros</h2>
 
@@ -597,12 +484,15 @@
                     <span class="input-group-text bg-white border-end-0">
                         <i class="fas fa-search text-muted"></i>
                     </span>
-                    <input type="text" 
-                        class="busqueda-input form-control border-start-0"
-                        placeholder="Buscar por nombre o expediente..."
-                        id="busquedaInput">
+                    <input type="text"
+                           class="busqueda-input form-control border-start-0"
+                           placeholder="Buscar por autor, título, palabras clave o resumen..."
+                           id="busquedaInput">
                 </div>
-
+                <button type="button" class="btn-reset" onclick="resetearFiltros()">
+                    <i class="fas fa-times"></i>
+                    Limpiar
+                </button>
             </div>
 
             <div class="contador-resultados">
@@ -612,16 +502,16 @@
 
             <div class="filtros-activos" id="filtrosActivos"></div>
 
-            <!-- Tabla de casos -->
+            <!-- Tabla de libros -->
             <div class="tabla-contenedor">
                 <table class="tabla-casos">
                     <thead>
                         <tr>
                             <th>Autor (Apellido y Nombre)</th>
-                            <th>Titulo del libro</th>
+                            <th>Título del libro</th>
                             <th>Edición</th>
                             <th>Año</th>
-                            <th>Palabras claves de busqueda</th>
+                            <th>Palabras claves de búsqueda</th>
                             <th>Breve resumen con IA</th>
                             <th>Acciones</th>
                         </tr>
@@ -631,7 +521,7 @@
                         <tr>
                             <td>{{ libro.autor }}</td>
                             <td>{{ libro.titulo }}</td>
-                            <td>{{ libro.edicion}}</td>
+                            <td>{{ libro.edicion }}</td>
                             <td>{{ libro.anio }}</td>
                             <td>{{ libro.palabras_clave }}</td>
                             <td>{{ libro.resumen }}</td>
@@ -680,7 +570,6 @@
                 </div>
             {% endif %}
         {% endwith %}
-
     </div>
 
     {% include 'footers/footer.html' %}
@@ -730,7 +619,6 @@
 
         function updateFileList() {
             fileList.innerHTML = '';
-
             if (fileInput.files.length === 0) {
                 return;
             }
@@ -777,7 +665,6 @@
 
         function validateFiles() {
             const files = fileInput.files;
-
             if (files.length === 0) {
                 showError('Por favor, selecciona al menos un archivo.');
                 return false;
@@ -789,6 +676,7 @@
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -820,117 +708,69 @@
             return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
 
-        function filtrarCasos() {
+        // FUNCIÓN CORREGIDA PARA FILTRAR LIBROS
+        function filtrarLibros() {
             const inputBusqueda = document.getElementById('busquedaInput');
-            const filtroInstancia = document.getElementById('filtroInstancia');
             const tabla = document.querySelector('.tabla-casos tbody');
             const filas = tabla.querySelectorAll('tr');
 
             // Convertir la búsqueda a minúsculas y sin acentos
             const textoBusqueda = eliminarAcentos(inputBusqueda.value.toLowerCase());
-            const instanciaSeleccionada = filtroInstancia.value;
 
             filas.forEach(fila => {
-                // Convertir nombre del caso y expediente a minúsculas y sin acentos
-                const nombreCaso = eliminarAcentos(fila.cells[0].textContent.toLowerCase());
-                const expediente = eliminarAcentos(fila.cells[1].textContent.toLowerCase());
-                const instancia = fila.cells[3].textContent;
+                // Obtener el texto de todas las columnas relevantes
+                const autor = eliminarAcentos(fila.cells[0].textContent.toLowerCase());
+                const titulo = eliminarAcentos(fila.cells[1].textContent.toLowerCase());
+                const edicion = eliminarAcentos(fila.cells[2].textContent.toLowerCase());
+                const anio = eliminarAcentos(fila.cells[3].textContent.toLowerCase());
+                const palabrasClave = eliminarAcentos(fila.cells[4].textContent.toLowerCase());
+                const resumen = eliminarAcentos(fila.cells[5].textContent.toLowerCase());
 
-                const coincideTexto = nombreCaso.includes(textoBusqueda) || expediente.includes(textoBusqueda);
-                const coincideInstancia = instanciaSeleccionada === "" || instancia === instanciaSeleccionada;
+                // Verificar si el texto de búsqueda coincide con alguna columna
+                const coincide = autor.includes(textoBusqueda) || 
+                               titulo.includes(textoBusqueda) || 
+                               edicion.includes(textoBusqueda) || 
+                               anio.includes(textoBusqueda) || 
+                               palabrasClave.includes(textoBusqueda) || 
+                               resumen.includes(textoBusqueda);
 
-                fila.style.display = (coincideTexto && coincideInstancia) ? '' : 'none';
+                fila.style.display = coincide ? '' : 'none';
             });
+
             actualizarContador();
             mostrarFiltrosActivos();
         }
 
         // Funciones adicionales
         function actualizarContador() {
-            const filasVisibles = document.querySelectorAll('.tabla-casos tbody tr[style=""]').length;
+            const filasVisibles = document.querySelectorAll('.tabla-casos tbody tr[style=""], .tabla-casos tbody tr:not([style])').length;
             document.getElementById('contador').textContent = filasVisibles;
         }
 
         function resetearFiltros() {
             document.getElementById('busquedaInput').value = '';
-            document.getElementById('filtroInstancia').value = '';
-            filtrarCasos();
+            filtrarLibros();
         }
 
         function mostrarFiltrosActivos() {
             const contenedor = document.getElementById('filtrosActivos');
             const busqueda = document.getElementById('busquedaInput').value;
-            const instancia = document.getElementById('filtroInstancia').value;
 
             let html = '';
+
             if (busqueda) {
                 html += `<span class="filtro-activo"><i class="fas fa-search"></i> Búsqueda: "${busqueda}"</span>`;
             }
-            if (instancia) {
-                html += `<span class="filtro-activo"><i class="fas fa-filter"></i> Instancia: ${instancia}</span>`;
-            }
+
             contenedor.innerHTML = html;
         }
 
-        // Inicialización
-        document.getElementById('busquedaInput').addEventListener('input', filtrarCasos);
-        document.getElementById('filtroInstancia').addEventListener('change', filtrarCasos);
-        filtrarCasos();
+        // Inicialización - CORREGIDA
+        document.getElementById('busquedaInput').addEventListener('input', filtrarLibros);
 
-        // Script para el chat
-        async function enviarMensaje() {
-            const input = document.getElementById('chatInput');
-            const chatBox = document.getElementById('chatBox');
-            const mensaje = input.value.trim();
-
-            if (!mensaje) return;
-
-            // Mostrar mensaje del usuario
-            chatBox.innerHTML += `
-                <div class="mensaje-usuario">
-                    <strong>Tú:</strong> ${mensaje}
-                </div>
-            `;
-
-            input.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            try {
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ mensaje: mensaje })
-                });
-
-                const data = await response.json();
-
-                if (data.error) throw new Error(data.error);
-
-                // Mostrar respuesta de la IA
-                chatBox.innerHTML += `
-                    <div class="mensaje-ia">
-                        <strong>Asistente:</strong> ${data.respuesta}
-                    </div>
-                `;
-
-            } catch (error) {
-                chatBox.innerHTML += `
-                    <div class="mensaje-ia error">
-                        <i class="fas fa-exclamation-triangle"></i> Error: ${error.message}
-                    </div>
-                `;
-            }
-
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        // Permitir enviar con Enter
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                enviarMensaje();
-            }
+        // Ejecutar filtrado inicial para mostrar todos los libros
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarContador();
         });
     </script>
 </body>
