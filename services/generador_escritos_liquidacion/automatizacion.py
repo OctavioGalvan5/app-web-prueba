@@ -5,7 +5,7 @@ import re
 
 # ========== CONFIGURACION ==========
 PDF_PATH = "archivo.pdf"  # Cambia esto por el path real
-API_KEY = "AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU"   # Pega aquí tu clave de Gemini
+API_KEY = "AIzaSyDBgMgAIRyLcTdqkVIT-Gquptn94Io5hkY"   # Pega aquí tu clave de Gemini
 genai.configure(api_key=API_KEY)
 
 # ========== FUNCION PARA EXTRAER TEXTO ==========
