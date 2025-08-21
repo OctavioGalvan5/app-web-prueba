@@ -21,3 +21,4 @@ pdfplumber
 gspread
 pypdf
 PyMuPDF
+google-genai
