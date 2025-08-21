@@ -5,7 +5,7 @@ import re
 
 # ========== CONFIGURACION ==========
 PDF_PATH = "archivo.pdf"  # Cambia esto por el path real
-API_KEY = "AIzaSyAQH2nNe8BCJCYD62oZPI4Cd9tCxCdtOow"  # Pega aquí tu clave de Gemini
+API_KEY = "AIzaSyDwxfjb8bdcxdp-5Bi3uEQi4jesX2ujXGQ"  # Pega aquí tu clave de Gemini
 genai.configure(api_key=API_KEY)
 
 
