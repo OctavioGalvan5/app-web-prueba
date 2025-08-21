@@ -39,7 +39,7 @@ def extract_text_from_pdf(file_obj, max_pages=10):
 def analyze_book_document(texto_pdfs):
     try:
         # Configurar la API (actualiza la key según corresponda)
-        genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
+        genai.configure(api_key="AIzaSyAQH2nNe8BCJCYD62oZPI4Cd9tCxCdtOow")
 
         texto_pdfs = texto_pdfs[:15000]
 

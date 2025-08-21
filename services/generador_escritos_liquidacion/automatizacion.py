@@ -5,8 +5,9 @@ import re
 
 # ========== CONFIGURACION ==========
 PDF_PATH = "archivo.pdf"  # Cambia esto por el path real
-API_KEY = "AIzaSyDBgMgAIRyLcTdqkVIT-Gquptn94Io5hkY"   # Pega aquí tu clave de Gemini
+API_KEY = "AIzaSyAQH2nNe8BCJCYD62oZPI4Cd9tCxCdtOow"  # Pega aquí tu clave de Gemini
 genai.configure(api_key=API_KEY)
+
 
 # ========== FUNCION PARA EXTRAER TEXTO ==========
 def extraer_texto_pdf(ruta_pdf):
@@ -17,6 +18,7 @@ def extraer_texto_pdf(ruta_pdf):
     doc.close()
     print("Texto extraído del PDF.")
     return texto_total
+
 
 # ========== PROMPT ==========
 PROMPT_LEGAL = """
@@ -93,6 +95,7 @@ Eres un asistente legal experto en analizar pdfs con cálculos de jubilaciones. 
 
 """
 
+
 # ========== FUNCION PARA LLAMAR A GEMINI ==========
 def analizar_con_gemini(texto_pdf):
     model = genai.GenerativeModel('gemini-2.5-flash')
@@ -109,6 +112,7 @@ def analizar_con_gemini(texto_pdf):
         print("Texto recibido:")
         print(texto_limpio)
         return None
+
 
 def limpiar_respuesta_json(respuesta):
     # Elimina espacios iniciales/finales
