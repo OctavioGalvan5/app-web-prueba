@@ -316,21 +316,6 @@
                         <label for="numero_identificacion">Número de Identificación</label>
                         <input type="text" id="numero_identificacion" name="numero_identificacion" required placeholder="Ej: 27-12345678-0 o 123456/2023">
                     </div>
-
-                    <div class="form-group">
-                        <label for="cargo_docente">Cargo Docente</label>
-                        <select id="cargo_docente" name="cargo_docente" required>
-                            <option value="">Seleccione un cargo</option>
-                            <option value="Maestro de Grado">Maestro de Grado</option>
-                            <option value="Profesor">Profesor</option>
-                            <option value="Director">Director</option>
-                            <option value="Vicedirector">Vicedirector</option>
-                            <option value="Secretario">Secretario</option>
-                            <option value="Preceptor">Preceptor</option>
-                            <option value="Bibliotecario">Bibliotecario</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                    </div>
                 </div>
 
                 <!-- Períodos de Cálculo -->
@@ -377,61 +362,7 @@
                         </label>
                         <input type="number" id="monto" name="monto" step="0.01" required placeholder="Ej: 180000.00">
                     </div>
-                    <div class="form-group">
-                        <label for="antiguedad_docente">
-                            Antigüedad Docente (años)
-                            <span class="tooltip">
-                                <i class="fas fa-info-circle"></i>
-                                <span class="tooltip-text">Años de antigüedad en la docencia</span>
-                            </span>
-                        </label>
-                        <input type="number" id="antiguedad_docente" name="antiguedad_docente" min="0" max="50" placeholder="Ej: 15">
-                    </div>
                 </div>
-
-                <!-- Información Adicional -->
-                <div class="section-title">
-                    <i class="fas fa-info"></i> Información Adicional
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nivel_educativo">Nivel Educativo</label>
-                        <select id="nivel_educativo" name="nivel_educativo" required>
-                            <option value="">Seleccione un nivel</option>
-                            <option value="Inicial">Inicial</option>
-                            <option value="Primario">Primario</option>
-                            <option value="Secundario">Secundario</option>
-                            <option value="Superior">Superior</option>
-                            <option value="Especial">Especial</option>
-                            <option value="Adultos">Adultos</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="situacion_revista">Situación de Revista</label>
-                        <select id="situacion_revista" name="situacion_revista" required>
-                            <option value="">Seleccione una situación</option>
-                            <option value="Titular">Titular</option>
-                            <option value="Provisional">Provisional</option>
-                            <option value="Suplente">Suplente</option>
-                            <option value="Interino">Interino</option>
-                            <option value="Contratado">Contratado</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="establecimiento">Establecimiento</label>
-                        <input type="text" id="establecimiento" name="establecimiento" placeholder="Ej: Escuela Primaria N° 123">
-                    </div>
-                    <div class="form-group">
-                        <label for="localidad">Localidad</label>
-                        <input type="text" id="localidad" name="localidad" placeholder="Ej: Buenos Aires">
-                    </div>
-                </div>
-
-
                 <button type="submit" class="submit-button">
                     <i class="fas fa-calculator"></i> Calcular Movilidad Docente
                 </button>
