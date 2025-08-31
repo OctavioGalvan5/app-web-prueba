@@ -41,7 +41,7 @@ from services.calculos import formatear_dinero, transformar_fecha
 from services.generador_regulacion.generador_regulacion import Regulacion
 from services.generador_escritos_liquidacion.generador_escritos_liquidacion import Escrito_liquidacion
 from services.generador_escritos_agravios.generador_escritos_agravios import Escrito_agravios
-
+from services.calculadora_docente.calculadora_docente import CalculadorMovilidadDocente
 from services.generador_escritos_liquidacion.automatizacion import analizar_con_gemini, extraer_texto_pdf
 from services.calculadora_tope_maximo.generador_pdf import Comparativa
 from services.comparador_productos.comparador_productos import Comparador_productos
@@ -1077,8 +1077,6 @@ def formato_moneda(value):
         return "${:,.2f}".format(amount).replace(",", "X").replace(".", ",").replace("X", ".")
     except (ValueError, TypeError):
         return ""
-
-
 
 @app.route('/casos_publicos')
 def casos_publicos():
@@ -2418,7 +2416,56 @@ def editar_libro(id):
 
     return render_template('biblioteca/editar_libro.html', libro=libro)
 
-    
+@app.route('/calculadora_docente')
+@login_required
+def calculadora_docente():
+    return render_template('calculadora_docente/calculadora_docente.html')
+
+@app.route('/resultado_calculadora_docente', methods=['POST'])
+def resultado_calculadora_docente():
+    # Información del Docente
+    nombre_docente = request.form.get('nombre_docente', '')
+    cuil_expediente_tipo = request.form.get('cuil_expediente_tipo', '')
+    numero_identificacion= request.form.get('numero_identificacion', '')
+    cargo_docente = request.form.get('cargo_docente', '')
+
+
+    # Períodos de Cálculo
+    periodo_desde = request.form.get('periodo_desde', '') # 'YYYY-MM-DD'
+    periodo_hasta = request.form.get('periodo_hasta', '') # 'YYYY-MM-DD'
+
+
+    # Datos Económicos
+    # Devuelve string → casteá donde lo uses (float/Decimal)
+    monto = request.form.get('monto', '0')
+    antiguedad_docente = request.form.get('antiguedad_docente', '') # puede venir vacío
+
+
+    # Información Adicional
+    nivel_educativo = request.form.get('nivel_educativo', '')
+    situacion_revista= request.form.get('situacion_revista', '')
+    establecimiento = request.form.get('establecimiento', '')
+    localidad = request.form.get('localidad', '')
+
+    calc = CalculadorMovilidadDocente(
+        nombre_docente=nombre_docente,
+        cuil_expediente_tipo=cuil_expediente_tipo,
+        numero_identificacion=numero_identificacion,
+        cargo_docente=cargo_docente,
+        periodo_desde=periodo_desde,
+        periodo_hasta=periodo_hasta,
+        monto=Decimal(str(monto)),  # <- ya entra como Decimal
+        antiguedad_docente=antiguedad_docente,
+        nivel_educativo=nivel_educativo,
+        situacion_revista=situacion_revista,
+        establecimiento=establecimiento,
+        localidad=localidad
+    )
+
+    resultado = calc.generar_pdf()
+    return resultado
+
+
 if __name__ == '__main__':
     app.run(debug=True)  # Esto ya no se usa si lanzás con Gunicorn
 

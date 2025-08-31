@@ -467,7 +467,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-98REL9JCTR"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(){dataLayer.push(arguments);} 
       gtag('js', new Date());
 
       gtag('config', 'G-98REL9JCTR');
@@ -542,6 +542,16 @@
                     <h2 class="service-title">Planilla Docente</h2>
                     <p class="service-description">Calcule el haber previsional docente considerando los regímenes especiales aplicables a este sector.</p>
                     <a href="/planilla_docente" class="btn">Calcular</a>
+                </div>
+
+                <!-- NUEVA: Calculadora Movilidad Docente -->
+                <div class="service-card" data-tool="calculadora-movilidad-docente">
+                    <div class="service-icon">
+                        <i class="fas fa-chalkboard-user"></i>
+                    </div>
+                    <h2 class="service-title">Calculadora Movilidad Docente</h2>
+                    <p class="service-description">Calcule la movilidad correspondiente a regímenes docentes, de forma clara y rápida.</p>
+                    <a href="/calculadora_docente" class="btn">Calcular</a>
                 </div>
             </div>
         </section>
@@ -715,6 +725,15 @@
                     icon: 'fas fa-chalkboard-teacher',
                     url: '/planilla_docente',
                     keywords: 'docente, planilla, haber, maestro, profesor'
+                },
+                // NUEVO: Calculadora Movilidad Docente
+                {
+                    id: 'calculadora-movilidad-docente',
+                    title: 'Calculadora Movilidad Docente',
+                    description: 'Calcule movilidad para regímenes docentes',
+                    icon: 'fas fa-chalkboard-user',
+                    url: '/calculadora_docente',
+                    keywords: 'movilidad docente, movilidad, docente, calculadora, régimen docente'
                 },
                 {
                     id: 'generador-regulacion',
