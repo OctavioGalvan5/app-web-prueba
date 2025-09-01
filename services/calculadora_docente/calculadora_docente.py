@@ -11,6 +11,42 @@ from xhtml2pdf import pisa
 import base64
 import plotly.io as pio  # requiere: pip install -U kaleido
 
+def obtener_indices_docentes(fecha_inicio: str, fecha_fin: str) -> list[Decimal]:
+    """
+    Devuelve la lista de índices (uno por mes) para el rango:
+    del PRIMER día del mes siguiente a `fecha_inicio` hasta el mes de `fecha_fin` (inclusive),
+    alineado con `calcular_serie_docente`.
+    """
+    fi_dt = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
+    ff_dt = datetime.strptime(fecha_fin, "%Y-%m-%d").date()
+    start_dt = fi_dt.replace(day=1) + relativedelta(months=1)
+    end_dt = ff_dt.replace(day=1)
+
+    metadata = MetaData()
+    movilidad_docente = Table("movilidad_docente", metadata, autoload_with=engine)
+
+    with engine.connect() as conn:
+        stmt = (
+            select(movilidad_docente.c.fechas, movilidad_docente.c.indices_docentes)
+            .where(
+                and_(
+                    movilidad_docente.c.fechas >= start_dt,
+                    movilidad_docente.c.fechas <= end_dt,
+                )
+            )
+            .order_by(asc(movilidad_docente.c.fechas))
+        )
+        rows = conn.execute(stmt).all()
+
+    indices = []
+    for fecha, indice in rows:
+        try:
+            idx_dec = Decimal(str(indice))
+        except (InvalidOperation, TypeError, ValueError):
+            idx_dec = Decimal("1")
+        indices.append(idx_dec)
+    return indices
+
 def _fmt_ddmmyyyy(s: str) -> str:
     if not s:
         return ""
@@ -370,12 +406,15 @@ class CalculadorMovilidadDocente:
         except Exception:
             grafico_b64 = ""  # evita romper si kaleido no está disponible
 
+        indices_mes = obtener_indices_docentes(self.periodo_desde, self.periodo_hasta)
+
         filas_detalle = build_filas_detalle(
             periodo_desde=self.periodo_desde,
             periodo_hasta=self.periodo_hasta,
             serie_montos=self.serie_montos or [],
-            # indices_docentes=lista_indices_opcional
+            indices_docentes=indices_mes,  # <-- ahora sí
         )
+
 
         # --- 3) Contexto para la plantilla ---
         contexto = {
@@ -411,8 +450,7 @@ class CalculadorMovilidadDocente:
             # Detalle y gráfico
             "grafico_linea_docente": grafico_b64,
             "filas_detalle": filas_detalle,
-            "mostrar_indice":
-            False,  # ponelo True si pasás indices_docentes en build_filas_detalle
+            "mostrar_indice": True,  # ponelo True si pasás indices_docentes en build_filas_detalle
             "notas": None,  # o lista de strings si querés mostrar notas
         }
 
