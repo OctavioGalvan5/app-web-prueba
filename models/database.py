@@ -2,16 +2,25 @@ from sqlalchemy import create_engine, text
 from datetime import datetime
 from babel.numbers import format_currency
 
-# Configuración de la conexión a la base de datos
-db_connection_string = "mysql+pymysql://admin:root2025@database-1.cfsausq6um46.us-east-2.rds.amazonaws.com:3306/calculadoras"
+db_connection_string = (
+    "mysql+pymysql://admin:root2025@database-1.cfsausq6um46.us-east-2.rds.amazonaws.com:3306/calculadoras"
+    "?charset=utf8mb4"
+)
 
 engine = create_engine(
     db_connection_string,
+    pool_pre_ping=True,    # evita usar conexiones muertas
+    pool_recycle=900,      # recicla antes del timeout del server (ajustá si tu MySQL corta antes)
+    pool_size=5,
+    max_overflow=10,
+    pool_timeout=30,
     connect_args={
-        "ssl": {
-            "ssl_ca": "/etc/ssl/cert.pem"
-        }
-    })
+        "connect_timeout": 10,
+        "read_timeout": 30,
+        "write_timeout": 30,
+        "ssl": {"ssl_ca": "/etc/ssl/cert.pem"},
+    },
+)
 
 def formatear_dinero(cantidad):
     return format_currency(cantidad, 'ARS', locale='es_AR').replace(u'\xa0', u'')
