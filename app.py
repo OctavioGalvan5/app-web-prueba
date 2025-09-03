@@ -1959,8 +1959,6 @@ def datos_cruzados():
 
     return render_template("datos_cruzados/datos_cruzados.html", datos=datos)
 
-
-
 @app.route('/generador_escrito_liquidacion', methods=['GET', 'POST'])
 def generador_escrito_liquidacion():
     if request.method == 'POST':
@@ -1999,6 +1997,7 @@ def generador_escrito_liquidacion():
                 "27.541_Si": False,
                 "27.426_Si": False,
                 "cliente": "",
+                "Fecha_Sentencia_Primera": "",
                 "fecha_inicial_pago": "",
                 "Fecha_de_cierre_de_liquidacion": "",
                 "Fecha_de_cierre_de_intereses": "",

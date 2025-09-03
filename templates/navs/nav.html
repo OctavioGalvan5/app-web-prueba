@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -329,15 +330,23 @@
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
-        .navbar, .sidenav-link, .credits {
+        .navbar,
+        .sidenav-link,
+        .credits {
             animation: fadeIn 0.5s ease forwards;
         }
     </style>
 </head>
+
 <body>
     <!-- Main Navigation -->
     <nav class="navbar">
@@ -372,7 +381,7 @@
         <div class="navbar-actions">
             <div class="credits">
                 <i class="fas fa-user-circle"></i>
-                <span>{{ current_user.fullname }}, Créditos: {{ current_user.credito }}</span>
+                <span>{{ current_user.fullname }}</span>
             </div>
         </div>
 
@@ -411,7 +420,7 @@
             <div class="sidenav-footer">
                 <div class="credits">
                     <i class="fas fa-user-circle"></i>
-                    <span>{{ current_user.fullname }}, Créditos: {{ current_user.credito }}</span>
+                    <span>{{ current_user.fullname }}</span>
                 </div>
             </div>
         </div>
@@ -490,4 +499,5 @@
         });
     </script>
 </body>
+
 </html>

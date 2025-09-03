@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subir PDF para Análisis</title>
-    <!-- Bootstrap 5 CSS desde CDN -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome para iconos -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!-- Google Fonts -->
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -355,7 +355,7 @@
                                 <div class="drop-zone-subtext">
                                     o haz clic para seleccionar un archivo
                                 </div>
-                                <button type="button" class="browse-button" onclick="document.getElementById('pdfFile').click()">
+                                <button type="button" class="browse-button" id="browseButton">
                                     <i class="fas fa-folder-open"></i>
                                     Seleccionar Archivo
                                 </button>
@@ -393,9 +393,9 @@
                         <i class="fas fa-pen"></i> Completar manualmente sin PDF
                     </button>
                 </form>
-                
+
                 <div class="features-section">
-                    
+
                     <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 20px;">
                         <i class="fas fa-star me-2"></i>Características del Procesamiento
                     </h3>
@@ -432,13 +432,14 @@
 
     {% include 'footers/footer.html' %}
 
-    <!-- Bootstrap JS desde CDN -->
+     Bootstrap JS desde CDN 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const dropZone = document.getElementById('dropZone');
             const fileInput = document.getElementById('pdfFile');
+            const browseButton = document.getElementById('browseButton');
             const fileInfo = document.getElementById('fileInfo');
             const fileName = document.getElementById('fileName').querySelector('span');
             const fileSize = document.getElementById('fileSize');
@@ -447,9 +448,20 @@
             const progressBar = document.getElementById('progressBar');
             const progressFill = document.getElementById('progressFill');
 
-            // Eventos de drag and drop
-            dropZone.addEventListener('click', () => fileInput.click());
+            // Evento de click en el drop zone (excluyendo el botón)
+            dropZone.addEventListener('click', (e) => {
+                // Solo activar si no se hizo click en el botón
+                if (!e.target.closest('.browse-button')) {
+                    fileInput.click();
+                }
+            });
 
+            browseButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evitar que se propague al dropZone
+                fileInput.click();
+            });
+
+            // Eventos de drag and drop
             dropZone.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 dropZone.classList.add('dragover');
@@ -465,24 +477,32 @@
 
                 const files = e.dataTransfer.files;
                 if (files.length > 0 && files[0].type === 'application/pdf') {
-                    fileInput.files = files;
+                    const dt = new DataTransfer();
+                    dt.items.add(files[0]);
+                    fileInput.files = dt.files;
                     handleFileSelect(files[0]);
                 } else {
                     alert('Por favor, selecciona un archivo PDF válido.');
                 }
             });
 
-            // Evento de selección de archivo
             fileInput.addEventListener('change', function(e) {
-                if (e.target.files.length > 0) {
-                    handleFileSelect(e.target.files[0]);
+                const files = e.target.files;
+                if (files && files.length > 0) {
+                    handleFileSelect(files[0]);
                 }
             });
 
             // Función para manejar la selección de archivo
             function handleFileSelect(file) {
+                if (!file) {
+                    console.error('No se recibió ningún archivo');
+                    return;
+                }
+
                 if (file.type !== 'application/pdf') {
                     alert('Por favor, selecciona un archivo PDF válido.');
+                    fileInput.value = '';
                     return;
                 }
 

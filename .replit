@@ -11,3 +11,6 @@ run = ["sh", "-c", "python app.py"]
 localPort = 5000
 externalPort = 80
 exposeLocalhost = true
+
+[agent]
+expertMode = true

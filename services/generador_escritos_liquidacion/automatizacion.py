@@ -79,11 +79,14 @@ Eres un asistente legal experto en analizar pdfs con cálculos de jubilaciones. 
 
     "cliente": "a este dato lo encontraras en el/los retroactivos, en un formato como el siguiente 'Liquidación del Retroactivo de Diferencias de Haber e Intereses. BARAGIOLA RITA MARGARITA', en este caso devolverás 'BARAGIOLA RITA MARGARITA' ",
 
+    "Fecha_Sentencia_Primera": "aqui devuelve vacio, es decir '' ",
+
     "fecha_inicial_pago": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Las diferencias mensuales se calcularon por los períodos comprendidos entre el 06/10/2016 y el 30/04/2025.', por ejemplo lo que tienes que devolver en este caso es '06/10/2016'damela en formato YYYY-MM-DD",
 
-    "Fecha_de_cierre_de_liquidación": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Las diferencias mensuales se calcularon por los períodos comprendidos entre el 06/10/2016 y el 30/04/2025.', por ejemplo lo que tienes que devolver en este caso es '30/04/2025' damela en formato YYYY-MM-DD",
+    "Fecha_de_cierre_de_liquidacion": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Las diferencias mensuales se calcularon por los períodos comprendidos entre el 06/10/2016 y el 30/04/2025.', por ejemplo lo que tienes que devolver en este caso es '30/04/2025' damela en formato YYYY-MM-DD",
 
     "Fecha_de_cierre_de_intereses": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Los intereses por las diferencias de haber se calcularon hasta el 30/04/2025 con la tasa Pasiva para uso de la Justicia (Com. 14290 BCRA) .' es '30/04/2025' damela en formato YYYY-MM-DD"",
+    
     "Badaro_Si": "En el retroactivo, buscaras la movilidad aplicada, si la movilidad menciona INDEC, significa que es badaro, y devolveras True, sino devolveras False",
     "PBU_Si": "Si tiene PBU en el haber reajustado encontraras algo como lo siguiente 'P.B.U. = 2.674,54', si tiene pbu devolver True, sino tiene PBU devolver False",
     "Monto_PBU": "El monto del PBU (si es que tiene) se encuentra en el haber reajustado, lo encontraras por ejemplo como 'P.B.U. = 2.674,54' , en este caso devolveras '$2.674,54'",
