@@ -90,7 +90,7 @@ def convertir_fecha(fecha_str):
     return None
 
 # Configurar la API de Gemini
-genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
+genai.configure(api_key="AIzaSyDwxfjb8bdcxdp-5Bi3uEQi4jesX2ujXGQ")
 
 
 def geminis_api_extract_data(image_streams):
