@@ -79,6 +79,8 @@ Eres un asistente legal experto en analizar pdfs con cálculos de jubilaciones. 
 
     "cliente": "a este dato lo encontraras en el/los retroactivos, en un formato como el siguiente 'Liquidación del Retroactivo de Diferencias de Haber e Intereses. BARAGIOLA RITA MARGARITA', en este caso devolverás 'BARAGIOLA RITA MARGARITA' ",
 
+    "expediente": "a este dato lo encontraras en la sentencia de juzgado, en un formato como el siguiente 'AUTOS Y VISTOS para dictar sentencia en este Expte. N° FSA 33872/2018 ', en este caso devolverás '33872/2018' solo los numeros, nada de FSA ",
+
     "Fecha_Sentencia_Primera": "Este dato lo conseguiras en la parte que dice juzgado, suele aparecer primero, aveces aparece como 'Salta, julio de 2024', por ejemplo lo que tienes que devolver en este caso es '01/07/2024' , o te puede aparecer el dia como por ejemplo 'Salta, 9 septiembre de 2024'por ejemplo lo que tienes que devolver en este caso es '09/09/2024' damela en formato YYYY-MM-DD",
 
     "Sentencia_2da_Si": "Si tiene Sentencia de Camara en el texto encontraras algo que diga como 'Poder Judicial de la Nación
