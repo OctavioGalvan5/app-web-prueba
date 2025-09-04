@@ -79,7 +79,14 @@ Eres un asistente legal experto en analizar pdfs con cálculos de jubilaciones. 
 
     "cliente": "a este dato lo encontraras en el/los retroactivos, en un formato como el siguiente 'Liquidación del Retroactivo de Diferencias de Haber e Intereses. BARAGIOLA RITA MARGARITA', en este caso devolverás 'BARAGIOLA RITA MARGARITA' ",
 
-    "Fecha_Sentencia_Primera": "aqui devuelve vacio, es decir '' ",
+    "Fecha_Sentencia_Primera": "Este dato lo conseguiras en la parte que dice juzgado, suele aparecer primero, aveces aparece como 'Salta, julio de 2024', por ejemplo lo que tienes que devolver en este caso es '01/07/2024' , o te puede aparecer el dia como por ejemplo 'Salta, 9 septiembre de 2024'por ejemplo lo que tienes que devolver en este caso es '09/09/2024' damela en formato YYYY-MM-DD",
+
+    "Sentencia_2da_Si": "Si tiene Sentencia de Camara en el texto encontraras algo que diga como 'Poder Judicial de la Nación
+CAMARA FEDERAL DE SALTA - SALA II' eso significa que tiene sentencia de segunda, si tiene devolver True, si no tiene devolver False",
+
+    "Sentencia_de_Segunda": "Este dato lo conseguiras en la parte que dice camara, suele aparecer al principio, aveces aparece como 'Salta, julio de 2024', por ejemplo lo que tienes que devolver en este caso es '01/07/2024' , o te puede aparecer el dia como por ejemplo 'Salta, 9 septiembre de 2024'por ejemplo lo que tienes que devolver en este caso es '09/09/2024' damela en formato YYYY-MM-DD",
+
+    "Sala": "Si en el texto aparece 'CAMARA FEDERAL DE SALTA - SALA I' o 'SALA II', devolver exactamente 'Sala I' o 'Sala II' (sin acentos). Si no se puede determinar con certeza, devolver ''.",
 
     "fecha_inicial_pago": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Las diferencias mensuales se calcularon por los períodos comprendidos entre el 06/10/2016 y el 30/04/2025.', por ejemplo lo que tienes que devolver en este caso es '06/10/2016'damela en formato YYYY-MM-DD",
 
@@ -102,13 +109,39 @@ Eres un asistente legal experto en analizar pdfs con cálculos de jubilaciones. 
 
 "fecha_descuento_1": "Este dato lo sacaras del retroactivo (si es que tiene pagos previos), a este dato lo encontraras en algo como el siguiente ejemplo: 'Fecha Importe Tipo Descontado del 01/04/2017 94.993,31 Efectivo Saldo acumulado a la fecha del pago. Cantidad de Pagos Indicados: 1', en este caso la fecha es '01/04/2017' devuelvelo en formato YYYY-MM-DD ",
 
+"monto_descontado_2": "Este dato lo sacaras del retroactivo (si es que tiene pagos previos), a este dato lo encontraras en algo como el siguiente ejemplo: 'Fecha Importe Tipo Descontado del 01/04/2017 94.993,31 Efectivo Saldo acumulado a la fecha del pago. Cantidad de Pagos Indicados: 1', en este caso el monto es '94.993,31', PRECAUCION aveces solo tiene un solo monto descontado, y ya lo colocaste en monto_descontado_1, entonces en ese caso no devolveras nada, en caso que tenga dos montos, aqui colocaras el segundo ",
+
+"fecha_descuento_2": "Este dato lo sacaras del retroactivo (si es que tiene pagos previos), a este dato lo encontraras en algo como el siguiente ejemplo: 'Fecha Importe Tipo Descontado del 01/04/2017 94.993,31 Efectivo Saldo acumulado a la fecha del pago. Cantidad de Pagos Indicados: 1', en este caso la fecha es '01/04/2017' devuelvelo en formato YYYY-MM-DD, PRECAUCION aveces solo tiene un solo monto descontado, y ya lo colocaste en fecha_descuento_2, entonces en ese caso no devolveras nada, en caso que tenga dos montos, aqui colocaras la fecha del segundo monto descontado",
+
+"monto_descontado_3": "Este dato lo sacaras del retroactivo (si es que tiene pagos previos), a este dato lo encontraras en algo como el siguiente ejemplo: 'Fecha Importe Tipo Descontado del 01/04/2017 94.993,31 Efectivo Saldo acumulado a la fecha del pago. Cantidad de Pagos Indicados: 1', en este caso el monto es '94.993,31', PRECAUCION aveces solo tiene un solo monto descontado, y ya lo colocaste en monto_descontado_1, entonces en ese caso no devolveras nada, en caso que tenga tres montos, aqui colocaras el tercero ",
+
+"fecha_descuento_3": "Este dato lo sacaras del retroactivo (si es que tiene pagos previos), a este dato lo encontraras en algo como el siguiente ejemplo: 'Fecha Importe Tipo Descontado del 01/04/2017 94.993,31 Efectivo Saldo acumulado a la fecha del pago. Cantidad de Pagos Indicados: 1', en este caso la fecha es '01/04/2017' devuelvelo en formato YYYY-MM-DD, PRECAUCION aveces solo tiene un solo monto descontado, y ya lo colocaste en fecha_descuento_2, entonces en ese caso no devolveras nada, en caso que tenga tres montos, aqui colocaras la fecha del tercer monto descontado",
+
 "Capital": "Este dato lo sacaras del retroactivo, a este dato lo encontraras en algo como el siguiente ejemplo: 'Período Capital Intereses Total Pagado en el Saldo Período Efectivo 11.476.070,84 10.512.805,77 21.988.876,61 94.993,31 21.893.883,30 al 30/04/2025 ', en este caso el monto es '11.476.070,84'",
 
 "Intereses": "Este dato lo sacaras del retroactivo, a este dato lo encontraras en algo como el siguiente ejemplo: 'Período Capital Intereses Total Pagado en el Saldo Período Efectivo 11.476.070,84 10.512.805,77 21.988.876,61 94.993,31 21.893.883,30 al 30/04/2025 ', en este caso el monto es '10.512.805,77'",
 
 "total_liquidacion": "Este dato lo sacaras del retroactivo, a este dato lo encontraras en algo como el siguiente ejemplo: 'Período Capital Intereses Total Pagado en el Saldo Período Efectivo 11.476.070,84 10.512.805,77 21.988.876,61 94.993,31 21.893.883,30 al 30/04/2025 ', en este caso el monto es '21.893.883,30'",
 
-"Segunda_Liquidacion_Si": "Tienes que saber si tiene una segunda liquidación, para hacerlo deberas ver la cantidad de retroactivos que tiene y sus movilidades, si ves que tiene dos movilidades y una tiene 'Aumentos fallo Marquez, Raimundo por Ley 27551' y la otra movilidad tiene 'Aumentos fallo Alanis, Daniel Ley 27551 35,55% para el año 2020' significa que tiene segunda liquidación y debes devolver True, sino devolveras False, la principal diferencia entre saber si tiene segunda liquidación o no, es ver si se hizo una liquidación con el fallo caliva y otra con el fallo alanis ",
+"Segunda_Liquidacion_Si": "Devuelve un booleano (True o False, no string). 
+Regla: devuelve True SOLO si detectas DOS retroactivos o DOS bloques de movilidad distintos, 
+donde al menos uno contiene referencia explicita al fallo Marquez (p. ej. 'Marquez', 'Marquez, Raimundo') 
+y al menos otro contiene referencia explicita al fallo Alanis (p. ej. 'Alanis', 'Alanis, Daniel', 'Alanis ... 35,55%/35.55% para 2020'). 
+Si solo aparece uno de los fallos, o si en un UNICO bloque de movilidad aparecen menciones a ambos fallos, devuelve False. 
+La presencia de IPC (p. ej. 'Ley 27551 (50 % IPC y 50% RIPTE ...)') NO implica segunda liquidacion por si sola: 
+sin 'Alanis' explicito en un bloque de movilidad distinto, devuelve False. 
+Se flexible ante mayusculas/minusculas y variantes tipograficas menores (comas vs puntos decimales, signos, espacios). 
+Ambiguedad o duda => devuelve False. 
+
+Ejemplos positivos (=> True):
+- Retroactivo A: movilidad con '... fallo Marquez ...'; Retroactivo B: movilidad con '... fallo Alanis ... 35,55% ...'.
+- Bloque 1: '... Marquez ...'; Bloque 2: '... Alanis ...'.
+
+Ejemplos negativos (=> False):
+- Solo 'Marquez' en todo el documento.
+- Solo IPC sin 'Alanis'.
+- Un unico bloque de movilidad que enumera historico y menciona 'Marquez' y 'Alanis' en el mismo parrafo."
+
 
 "Movilidad_Segunda_Liquidacion": "Aqui buscaras en el texto que te pasare un parrafo como el siguiente (aparece en el retroactivo) 'La movilidad del haber reclamado es siguiendo el índice: Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2017 y desde ahí Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahí Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahí Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y desde ahí fallo Palavecino, JosÚ hasta el 30/06/2024 y desde ahí Aumentos Generales de la ANSeS por movilidad' en este ejemplo la movilidad usada es 'Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2017 y desde ahí Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahí Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahí Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y desde ahí fallo Palavecino, JosÚ hasta el 30/06/2024 y desde ahí Aumentos Generales de la ANSeS por movilidad' eso es lo que tienes que devolver, puede ser el caso que haya varias movilidades, en este apartado debes devolver la que aparezca segundo",
 

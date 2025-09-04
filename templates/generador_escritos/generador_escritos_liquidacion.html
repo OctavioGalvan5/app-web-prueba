@@ -491,7 +491,7 @@
                 <label><i class="fas fa-question-circle me-2"></i>¿Tiene Sentencia de 2da?:</label>
                 <div class="checkbox-container">
                     <div class="inline-checkbox-group">
-                        <input type="checkbox" id="Sentencia_2da_Si" name="Sentencia_2da_Si">
+                        <input type="checkbox" id="Sentencia_2da_Si" name="Sentencia_2da_Si" value="true" {% if datos.PBU_Si %}checked{% endif %}>
                         <label for="Sentencia_2da_Si">Si</label>
                     </div>
                     <div class="inline-checkbox-group">
@@ -506,14 +506,14 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="Sentencia_de_Segunda"><i class="fas fa-calendar-alt me-2"></i>Fecha de Sentencia de 2da:</label>
-                    <input type="date" id="sentencia_interlocutoria_costas" name="Sentencia_de_Segunda">
+                    <input type="date" id="sentencia_interlocutoria_costas" name="Sentencia_de_Segunda" value="{{ datos.Sentencia_de_Segunda }}">
                 </div>
                 <div class="form-group">
                     <label for="sala"><i class="fas fa-university me-2"></i>Sala:</label>
                     <select id="sala" name="Sala">
-                        <option value="">Seleccione una Sala</option>
-                        <option value="Sala I">Sala I</option>
-                        <option value="Sala II">Sala II</option>
+                      <option value="">Seleccione una Sala</option>
+                      <option value="Sala I" {{ 'selected' if datos.Sala == 'Sala I' else '' }}>Sala I</option>
+                      <option value="Sala II" {{ 'selected' if datos.Sala == 'Sala II' else '' }}>Sala II</option>
                     </select>
                 </div>
             </div>
@@ -842,11 +842,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="monto_descontado_2"><i class="fas fa-dollar-sign me-2"></i>Monto Descontado:</label>
-                    <input type="text" id="monto_descontado_2" name="monto_descontado_2" placeholder="Ingrese el monto">
+                    <input type="text" id="monto_descontado_2" name="monto_descontado_2" placeholder="Ingrese el monto" value="{{ datos.monto_descontado_2 }}">
                 </div>
                 <div class="form-group">
                     <label for="fecha_descuento_2"><i class="fas fa-calendar-alt me-2"></i>Fecha:</label>
-                    <input type="date" id="fecha_descuento_2" name="fecha_descuento_2">
+                    <input type="date" id="fecha_descuento_2" name="fecha_descuento_2" value="{{ datos.fecha_descuento_2 }}">
                 </div>
             </div>
             <div class="form-row">
