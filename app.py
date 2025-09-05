@@ -2065,7 +2065,9 @@ def resultado_escrito_liquidacion():
 
     # Fechas clave y sentencias
     datos['Fecha_Sentencia_Primera'] = request.form.get('Fecha_Sentencia_Primera') or "2022-02-01"
-    datos['Sentencia_2da_Si'] = request.form.get('Sentencia_2da_Si', False) == 'on'
+    datos['Sentencia_2da_Si'] = request.form.get('Sentencia_2da_Si', False) == 'true'
+    print("Sentencia de segunda es ") 
+    print(datos['Sentencia_2da_Si'])
     datos['Sentencia_2da_No'] = request.form.get('Sentencia_2da_No', False) == 'on'
     datos['Sentencia_de_Segunda'] = request.form.get('Sentencia_de_Segunda') or "2022-02-01"
     datos['Sala'] = request.form.get('Sala')
@@ -2077,8 +2079,9 @@ def resultado_escrito_liquidacion():
     datos['fecha_aprobacion_planilla'] = request.form.get('fecha_aprobacion_planilla') or "2022-02-01"
 
     #Badaro
-    datos['Badaro_Si'] = request.form.get('Badaro_Si', False) == 'on'
-
+    datos['Badaro_Si'] = request.form.get('Badaro_Si') == 'true'
+    print("Badaro es ")
+    print(datos['Badaro_Si'])
     #Honorarios
     datos['Honorarios_No'] = request.form.get('Honorarios_No', False) == 'on'
 

@@ -491,7 +491,7 @@
                 <label><i class="fas fa-question-circle me-2"></i>¿Tiene Sentencia de 2da?:</label>
                 <div class="checkbox-container">
                     <div class="inline-checkbox-group">
-                        <input type="checkbox" id="Sentencia_2da_Si" name="Sentencia_2da_Si" value="true" {% if datos.PBU_Si %}checked{% endif %}>
+                        <input type="checkbox" id="Sentencia_2da_Si" name="Sentencia_2da_Si" value="true" {% if datos.Sentencia_2da_Si %}checked{% endif %}>
                         <label for="Sentencia_2da_Si">Si</label>
                     </div>
                     <div class="inline-checkbox-group">
@@ -547,7 +547,11 @@
             <div class="inline-checkbox-container">
                 <h4><i class="fas fa-question-circle me-2"></i>¿Es Badaro?:</h4>
                 <div class="inline-checkbox-group">
-                    <input type="checkbox" id="Badaro_Si" name="Badaro_Si" value="{{ datos.Badaro_Si }}">
+                    <input type="checkbox"
+                           id="Badaro_Si"
+                           name="Badaro_Si"
+                           value="true"
+                           {% if datos.Badaro_Si %}checked{% endif %}>
                     <label for="Badaro_Si">Si</label>
                 </div>
                 <div class="inline-checkbox-group">
