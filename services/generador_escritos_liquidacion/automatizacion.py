@@ -23,6 +23,7 @@ client = genai.Client(
     http_options=types.HttpOptions(api_version="v1")  # versión estable del API
 )
 
+
 # ========== UTILIDADES ==========
 def extraer_texto_pdf(ruta_pdf: str) -> str:
     doc = fitz.open(ruta_pdf)
@@ -34,6 +35,7 @@ def extraer_texto_pdf(ruta_pdf: str) -> str:
         return "\n".join(partes)
     finally:
         doc.close()
+
 
 def limpiar_respuesta_json(respuesta: str) -> str:
     texto = (respuesta or "").strip()
@@ -47,25 +49,31 @@ def limpiar_respuesta_json(respuesta: str) -> str:
         texto = texto[:-3].strip()
     return texto
 
+
 def backoff_sleep(i: int) -> None:
-    time.sleep(min(2 ** i + random.random(), 30))
+    time.sleep(min(2**i + random.random(), 30))
+
 
 def generar_con_backoff(model_name: str, prompt: str, retries: int = 5):
     for i in range(retries):
         try:
-            return client.models.generate_content(model=model_name, contents=prompt)
+            return client.models.generate_content(model=model_name,
+                                                  contents=prompt)
         except ResourceExhausted as e:
             # 429 / cuota: muestra región y límite si vienen en el mensaje
             s = str(e)
             loc = re.search(r'quota_location[^"]*"([^"]+)"', s)
             val = re.search(r'quota_limit_value[^"]*"([^"]+)"', s)
-            print(f"[429] ResourceExhausted. region={loc.group(1) if loc else '?'} "
-                  f"limit={val.group(1) if val else '?'}  → reintento...")
+            print(
+                f"[429] ResourceExhausted. region={loc.group(1) if loc else '?'} "
+                f"limit={val.group(1) if val else '?'}  → reintento...")
             backoff_sleep(i)
             continue
         except Exception:
             raise
-    raise RuntimeError("429 persistente tras reintentos (revisá tu cuota en ai.google.dev).")
+    raise RuntimeError(
+        "429 persistente tras reintentos (revisá tu cuota en ai.google.dev).")
+
 
 # ========== PROMPT ==========
 # (Corregida una comilla extra en 'Fecha_de_cierre_de_intereses')
@@ -79,22 +87,22 @@ Eres un asistente legal experto en analizar pdfs con cálculos de jubilaciones. 
 
     "cliente": "a este dato lo encontraras en el/los retroactivos, en un formato como el siguiente 'Liquidación del Retroactivo de Diferencias de Haber e Intereses. BARAGIOLA RITA MARGARITA', en este caso devolverás 'BARAGIOLA RITA MARGARITA' ",
 
-    "expediente": "a este dato lo encontraras en la sentencia de juzgado, en un formato como el siguiente 'AUTOS Y VISTOS para dictar sentencia en este Expte. N° FSA 33872/2018 ', en este caso devolverás '33872/2018' solo los numeros, nada de FSA ",
+    "expediente": "a este dato lo encontraras en la sentencia de juzgado, en un formato como el siguiente 'AUTOS Y VISTOS para dictar sentencia en este Expte. N° FSA 33872/2018 ', en este caso devolverás '33872/2018' solo los numeros, nada de FSA PRECAUCION NO SIEMPRE TENDRA JUZGADO O CAMARA EN CASO DE NO TENER DEVUELVE VACIO ES DECIR '' ",
 
-    "Fecha_Sentencia_Primera": "Este dato lo conseguiras en la parte que dice juzgado, suele aparecer primero, aveces aparece como 'Salta, julio de 2024', por ejemplo lo que tienes que devolver en este caso es '01/07/2024' , o te puede aparecer el dia como por ejemplo 'Salta, 9 septiembre de 2024'por ejemplo lo que tienes que devolver en este caso es '09/09/2024' damela en formato YYYY-MM-DD",
+    "Fecha_Sentencia_Primera": "Este dato lo conseguiras en la parte que dice juzgado, suele aparecer primero, aveces aparece como 'Salta, julio de 2024', por ejemplo lo que tienes que devolver en este caso es '01/07/2024' , o te puede aparecer el dia como por ejemplo 'Salta, 9 septiembre de 2024'por ejemplo lo que tienes que devolver en este caso es '09/09/2024' damela en formato YYYY-MM-DD PRECAUCION NO SIEMPRE TENDRA JUZGADO O CAMARA EN CASO DE NO TENER DEVUELVE VACIO ES DECIR '' ",
 
     "Sentencia_2da_Si": "Si tiene Sentencia de Camara en el texto encontraras algo que diga como 'Poder Judicial de la Nación
-CAMARA FEDERAL DE SALTA - SALA II' eso significa que tiene sentencia de segunda, si tiene devolver True, si no tiene devolver False",
+CAMARA FEDERAL DE SALTA - SALA II' eso significa que tiene sentencia de segunda, si tiene devolver True, si no tiene devolver False PRECAUCION NO SIEMPRE TENDRA JUZGADO O CAMARA",
 
-    "Sentencia_de_Segunda": "Este dato lo conseguiras en la parte que dice camara, suele aparecer al principio, aveces aparece como 'Salta, julio de 2024', por ejemplo lo que tienes que devolver en este caso es '01/07/2024' , o te puede aparecer el dia como por ejemplo 'Salta, 9 septiembre de 2024'por ejemplo lo que tienes que devolver en este caso es '09/09/2024' damela en formato YYYY-MM-DD",
+    "Sentencia_de_Segunda": "Este dato lo conseguiras en la parte que dice camara, suele aparecer al principio, aveces aparece como 'Salta, julio de 2024', por ejemplo lo que tienes que devolver en este caso es '01/07/2024' , o te puede aparecer el dia como por ejemplo 'Salta, 9 septiembre de 2024'por ejemplo lo que tienes que devolver en este caso es '09/09/2024' damela en formato YYYY-MM-DD PRECAUCION NO SIEMPRE TENDRA JUZGADO O CAMARA EN CASO DE NO TENER DEVUELVE VACIO ES DECIR ''",
 
     "Sala": "Si en el texto aparece 'CAMARA FEDERAL DE SALTA - SALA I' o 'SALA II', devolver exactamente 'Sala I' o 'Sala II' (sin acentos). Si no se puede determinar con certeza, devolver ''.",
 
-    "fecha_inicial_pago": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Las diferencias mensuales se calcularon por los períodos comprendidos entre el 06/10/2016 y el 30/04/2025.', por ejemplo lo que tienes que devolver en este caso es '06/10/2016'damela en formato YYYY-MM-DD",
+    "fecha_inicial_pago": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Las diferencias mensuales se calcularon por los períodos comprendidos entre el 06/10/2016 y el 30/04/2025.', por ejemplo lo que tienes que devolver en este caso es '06/10/2016' IMPORTANTE damela en formato YYYY-MM-DD no en DD/MM/YYYY, este dato siempre existira",
 
-    "Fecha_de_cierre_de_liquidacion": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Las diferencias mensuales se calcularon por los períodos comprendidos entre el 06/10/2016 y el 30/04/2025.', por ejemplo lo que tienes que devolver en este caso es '30/04/2025' damela en formato YYYY-MM-DD",
+    "Fecha_de_cierre_de_liquidacion": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Las diferencias mensuales se calcularon por los períodos comprendidos entre el 06/10/2016 y el 30/04/2025.', por ejemplo lo que tienes que devolver en este caso es '30/04/2025' IMPORTANTE damela en formato YYYY-MM-DD no en DD/MM/YYYY, este dato siempre existira",
 
-    "Fecha_de_cierre_de_intereses": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Los intereses por las diferencias de haber se calcularon hasta el 30/04/2025 con la tasa Pasiva para uso de la Justicia (Com. 14290 BCRA) .' es '30/04/2025' damela en formato YYYY-MM-DD"",
+    "Fecha_de_cierre_de_intereses": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Los intereses por las diferencias de haber se calcularon hasta el 30/04/2025 con la tasa Pasiva para uso de la Justicia (Com. 14290 BCRA) .' es '30/04/2025', IMPORTANTE damela en formato YYYY-MM-DD no en DD/MM/YYYY , este dato siempre existira",
     
     "Badaro_Si": "En el retroactivo, buscaras la movilidad aplicada, si la movilidad menciona INDEC, significa que es badaro, y devolveras True, sino devolveras False",
     "PBU_Si": "Si tiene PBU en el haber reajustado encontraras algo como lo siguiente 'P.B.U. = 2.674,54', si tiene pbu devolver True, sino tiene PBU devolver False",
@@ -181,6 +189,7 @@ Ejemplos negativos (=> False):
 
 """
 
+
 # ========== LLAMADA A GEMINI ==========
 def analizar_con_gemini(texto_pdf: str):
     model_name = "gemini-2.0-flash-001"  # modelo estable recomendado
@@ -197,6 +206,7 @@ def analizar_con_gemini(texto_pdf: str):
         print("Texto recibido:")
         print(texto_limpio)
         return None
+
 
 if __name__ == "__main__":
     texto = extraer_texto_pdf(PDF_PATH)
