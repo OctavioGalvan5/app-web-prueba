@@ -38,7 +38,7 @@ def extract_text_from_pdf(file_obj):
 def analyze_legal_documents(texto_pdfs, ultima_imagen):
     try:
         # Configurar la API (actualiza la key según corresponda)
-        genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
+        genai.configure(api_key="AIzaSyB2NMJLdfiy6f_8wStPyaOOjX3UvwkAm2o")
 
         # Convertir la imagen de la última página a base64
         ultima_imagen.seek(0)
