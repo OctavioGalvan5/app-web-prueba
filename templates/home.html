@@ -553,6 +553,16 @@
                     <p class="service-description">Calcule la movilidad correspondiente a regímenes docentes, de forma clara y rápida.</p>
                     <a href="/calculadora_docente" class="btn">Calcular</a>
                 </div>
+
+                <!-- Added new Calculadora del Tope 9 -->
+                <div class="service-card" data-tool="calculadora-tope-9">
+                    <div class="service-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h2 class="service-title">Calculadora del Tope 9</h2>
+                    <p class="service-description">Calcule el tope 9 aplicable a haberes previsionales según la normativa vigente y criterios jurisprudenciales.</p>
+                    <a href="/calculadora_tope_9" class="btn">Calcular</a>
+                </div>
             </div>
         </section>
 
@@ -668,6 +678,9 @@
                 <a href="/generador_escrito_liquidacion" class="quick-link">
                     <i class="fas fa-file-invoice-dollar"></i> Liquidaciones
                 </a>
+                <a href="/calculadora_tope_9" class="quick-link">
+                    <i class="fas fa-calculator"></i> Tope 9
+                </a>
             </div>
         </section>
     </main>
@@ -734,6 +747,14 @@
                     icon: 'fas fa-chalkboard-user',
                     url: '/calculadora_docente',
                     keywords: 'movilidad docente, movilidad, docente, calculadora, régimen docente'
+                },
+                {
+                    id: 'calculadora-tope-9',
+                    title: 'Calculadora del Tope 9',
+                    description: 'Calcule el tope 9 aplicable a haberes previsionales',
+                    icon: 'fas fa-calculator',
+                    url: '/calculadora_tope_9',
+                    keywords: 'tope 9, tope, calculadora, haber, previsional, normativa'
                 },
                 {
                     id: 'generador-regulacion',
@@ -810,7 +831,7 @@
                 if (results.length > 0) {
                     let html = '';
                     results.forEach(result => {
-                        html += `
+                        html += ``
                             <a href="${result.url}" class="search-result-item">
                                 <div class="search-result-icon">
                                     <i class="${result.icon}"></i>
@@ -820,7 +841,7 @@
                                     <div class="search-result-description">${result.description}</div>
                                 </div>
                             </a>
-                        `;
+                        ``;
                     });
                     searchResults.innerHTML = html;
                 } else {
