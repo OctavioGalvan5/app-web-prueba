@@ -3,7 +3,7 @@ from datetime import datetime
 from babel.numbers import format_currency
 
 db_connection_string = (
-    "mysql+pymysql://admin:root2025@database-1.cfsausq6um46.us-east-2.rds.amazonaws.com:3306/calculadoras"
+    "mysql+pymysql://admin:root2025@database-1.cruqq6acemph.us-east-2.rds.amazonaws.com:3306/calculadoras"
     "?charset=utf8mb4"
 )
 
