@@ -1337,10 +1337,15 @@ def editar_caso(id):
 
     return render_template('base_datos_casos/editar_caso.html', caso=caso)
 
+# Configuración global de la API (solo una vez, no dentro de cada ruta)
+API_KEY = os.getenv("GOOGLE_API_KEY")
+
+if not API_KEY:
+    raise ValueError("❌ No se encontró la variable de entorno GOOGLE_API_KEY")
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    genai.configure(api_key="AIzaSyCGw6VPHjs6zIopfdQR6exHZXkKJdlZOCU")
+    genai.configure(api_key=API_KEY)
     model = genai.GenerativeModel('gemini-2.0-flash', system_instruction="Eres una IA de un estudio Juridico Toyos y Espin, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible")
     try:
         # Obtén los casos de la base de datos

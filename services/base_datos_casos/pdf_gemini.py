@@ -8,6 +8,7 @@ from datetime import datetime
 from sqlalchemy import text
 import base64
 from models.database import engine  # Verifica que la conexión esté bien configurada
+from app import API_KEY
 
 # ================== Funciones para extraer y analizar el PDF ==================
 
@@ -38,7 +39,7 @@ def extract_text_from_pdf(file_obj):
 def analyze_legal_documents(texto_pdfs, ultima_imagen):
     try:
         # Configurar la API (actualiza la key según corresponda)
-        genai.configure(api_key="AIzaSyB2NMJLdfiy6f_8wStPyaOOjX3UvwkAm2o")
+        genai.configure(api_key=API_KEY)
 
         # Convertir la imagen de la última página a base64
         ultima_imagen.seek(0)

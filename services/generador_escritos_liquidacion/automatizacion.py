@@ -15,7 +15,11 @@ from google.api_core.exceptions import ResourceExhausted
 
 # ========== CONFIGURACIÓN ==========
 PDF_PATH = "archivo.pdf"  # Cambia esto por el path real
-API_KEY = "AIzaSyDwxfjb8bdcxdp-5Bi3uEQi4jesX2ujXGQ"  # ⚠️ no publiques esta clave
+# Leer la API key desde variable de entorno
+API_KEY = os.getenv("GOOGLE_API_KEY")
+
+if not API_KEY:
+    raise ValueError("❌ No se encontró la variable de entorno GOOGLE_API_KEY")
 
 # Cliente del nuevo SDK (Developer API; sin Vertex, sin env vars)
 client = genai.Client(

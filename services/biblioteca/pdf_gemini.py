@@ -8,6 +8,7 @@ from datetime import datetime
 from sqlalchemy import text
 import base64
 from models.database import engine  # Verifica que la conexión esté bien configurada
+from app import API_KEY
 
 # ================== Funciones para extraer y analizar el PDF ==================
 
@@ -39,7 +40,7 @@ def extract_text_from_pdf(file_obj, max_pages=10):
 def analyze_book_document(texto_pdfs):
     try:
         # Configurar la API (actualiza la key según corresponda)
-        genai.configure(api_key="AIzaSyB2NMJLdfiy6f_8wStPyaOOjX3UvwkAm2o")
+        genai.configure(api_key=API_KEY)
 
         texto_pdfs = texto_pdfs[:15000]
 

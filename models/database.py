@@ -1,11 +1,10 @@
 from sqlalchemy import create_engine, text
 from datetime import datetime
 from babel.numbers import format_currency
+import os
 
-db_connection_string = (
-    "mysql+pymysql://admin:root2025@database-1.cruqq6acemph.us-east-2.rds.amazonaws.com:3306/calculadoras"
-    "?charset=utf8mb4"
-)
+db_connection_string = os.getenv("DB_CONNECTION_STRING")
+
 
 engine = create_engine(
     db_connection_string,
