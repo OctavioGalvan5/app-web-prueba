@@ -8,7 +8,9 @@ from datetime import datetime
 from sqlalchemy import text
 import base64
 from models.database import engine  # Verifica que la conexión esté bien configurada
-from app import API_KEY
+import os
+
+API_KEY = os.getenv("GOOGLE_API_KEY")
 
 # ================== Funciones para extraer y analizar el PDF ==================
 
