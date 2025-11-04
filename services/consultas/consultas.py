@@ -90,7 +90,8 @@ def convertir_fecha(fecha_str):
     return None
 
 # Configurar la API de Gemini
-genai.configure(api_key="AIzaSyDwxfjb8bdcxdp-5Bi3uEQi4jesX2ujXGQ")
+API_KEY = os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=API_KEY)
 
 
 def geminis_api_extract_data(image_streams):
