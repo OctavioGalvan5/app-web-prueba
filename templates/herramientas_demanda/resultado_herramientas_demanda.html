@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,62 +16,77 @@
             background-width: 500px;
             background-opacity: 0.1;
         }
+
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
             line-height: 1.6;
             color: #333;
         }
+
         hr {
             border: none;
-            height: 2px; /* Grosor de la línea */
-            background-color: #D3D3D3; /* Color de la línea */
+            height: 2px;
+            /* Grosor de la línea */
+            background-color: #D3D3D3;
+            /* Color de la línea */
         }
+
         h1 {
             font-size: 24px;
             color: #845EC2;
             text-align: center;
         }
+
         h6 {
             font-size: 16px;
             color: #8400DA;
             margin-top: 30px;
             margin-bottom: 10px;
         }
+
         p {
             margin: 5px 0;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             page-break-inside: avoid;
             margin-bottom: 20px;
         }
+
         table td {
             text-align: left;
         }
+
         td {
             border: 1px solid #ccc;
-            padding: 6px; /* Menos espacio en la parte superior */
+            padding: 6px;
+            /* Menos espacio en la parte superior */
             text-align: left;
             word-wrap: break-word;
             white-space: normal;
         }
+
         table.benefits-comparison td {
             text-align: left;
             padding-left: 1px;
             padding-bottom: 1px;
             padding-top: 1;
         }
+
         .negrita {
             font-weight: bold;
         }
+
         .font-large {
             font-size: 12px;
         }
+
         .font-large_2 {
             font-size: 17px;
-            
+
         }
 
         .font-pequeña {
@@ -82,17 +98,21 @@
             font-weight: bold;
             width: 25%;
         }
+
         .first-column-cell {
             background-color: #f0f0f0;
             font-weight: bold;
         }
+
         .first-column-cell3 {
             background-color: #f0f0f0;
             font-weight: bold;
         }
+
         .page-break {
             page-break-after: always;
         }
+
         .info-section {
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -100,52 +120,74 @@
             margin-bottom: 20px;
             border-radius: 4px;
         }
+
         .graph-container {
             text-align: center;
             margin-bottom: 30px;
         }
+
         .graph-container img {
             max-width: 100%;
             height: auto;
         }
+
         .confiscatoriedad {
             color: #e53e3e;
         }
+
         .total {
             color: #e53e3e;
             font-size: 20px;
         }
+
         .haber {
             color: #2b6cb0;
         }
+
         hr {
-            border: none;               /* Elimina el estilo predeterminado */
-            border-top: 1px solid #000; /* Define la línea */
-            margin: 0;                  /* Quita los márgenes del <hr> */
+            border: none;
+            /* Elimina el estilo predeterminado */
+            border-top: 1px solid #000;
+            /* Define la línea */
+            margin: 0;
+            /* Quita los márgenes del <hr> */
         }
 
         h1 {
-            margin: 0;                  /* Quita los márgenes del <h1> */
-            padding-bottom: 1px;        /* Espacio interno para acercarse al <hr> */
-            font-size: 24px;            /* Tamaño del texto, ajustable según diseño */
+            margin: 0;
+            /* Quita los márgenes del <h1> */
+            padding-bottom: 1px;
+            /* Espacio interno para acercarse al <hr> */
+            font-size: 24px;
+            /* Tamaño del texto, ajustable según diseño */
         }
+
         .image-container {
-            text-align: center; /* Centra el contenido */
+            text-align: center;
+            /* Centra el contenido */
         }
+
         .image-container img {
-            width: 300px; /* Ajusta el ancho de la imagen */
-            height: auto; /* Mantiene la proporción de la imagen */
+            width: 300px;
+            /* Ajusta el ancho de la imagen */
+            height: auto;
+            /* Mantiene la proporción de la imagen */
         }
+
         .small-graph {
-            width: 600px; /* Ancho deseado */
-            height: auto; /* Mantiene la proporción */
+            width: 600px;
+            /* Ancho deseado */
+            height: auto;
+            /* Mantiene la proporción */
         }
-        .columna_sumas_codigo{
+
+        .columna_sumas_codigo {
             text-align: center;
             width: 120px;
         }
     </style>
 </head>
+
 <body>
     <hr>
     <h1 style="margin-top: 10px;">Resultado de Herramientas</h1>
@@ -157,1765 +199,22 @@
 
     <div class="info-section">
         <p><strong>Datos del actor:</strong> {{datos_del_actor}}&nbsp;&nbsp;&nbsp;
-           <strong>{{cuil_expediente}}:</strong> {{expediente}}
+            <strong>{{cuil_expediente}}:</strong> {{expediente}}
         </p>
         <p><strong>Tipo de Beneficio:</strong> {{beneficio}}&nbsp;&nbsp;&nbsp;
-           <strong>Numero de Beneficio:</strong> {{num_beneficio}}
+            <strong>Numero de Beneficio:</strong> {{num_beneficio}}
         </p>
     </div>
-    {% if comparacion_reparacion_historica %}
-    <h6>Comparacion Reparacion Historica:</h6>
-    <table style="margin-top: 20px;">
-        <tr class="font-large first-column-cell2";>
-            <td colspan="4" class="negrita" style="text-align: center;">Fecha de comparacion: {{fecha_comparacion_repa}}</td>
-        </tr>
-        <tr class="font-large first-column-cell2";>
-            <td class="negrita">Variables</td>
-            <td class="negrita">Haber Percibido con Reparacion Historica</td>
-            <td class="negrita">Haber Total Reclamado</td>
-            {% if comparacion_repa_movilizado %}
-            <td class="negrita">Haber con Reparacion Historica Movilizada</td>
-            {% endif %}
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">Total</td>
-            <td class="total"> {{ diccionario_repa.total_haber_con_repa }} </td>
-            <td class="total"> {{ diccionario_repa.total_haber_reclamado }} </td>
-            {% if comparacion_repa_movilizado %}
-            <td class="total">{{ diccionario_repa.total_haber_con_repa_movilizado }}</td>
-            {% endif %}
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">PBU</td>
-            <td> {{ PBU_repa }} </td>
-            <td> {{ PBU_reclamado }} </td>
-            {% if comparacion_repa_movilizado %}
-            <td>{{ PBU_repa_movilizado }}</td>
-            {% endif %}
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">PC</td>
-            <td> {{ PC_repa }} </td>
-            <td> {{ PC_reclamado }} </td>
-            {% if comparacion_repa_movilizado %}
-            <td>{{ PC_repa_movilizado }}</td>
-            {% endif %}
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">PAP</td>
-            <td> {{ PAP_repa }} </td>
-            <td> {{ PAP_reclamado }} </td>
-            {% if comparacion_repa_movilizado %}
-            <td>{{ PAP_repa_movilizado }}</td>
-            {% endif %}
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">REPARACION HISTORICA</td>
-            <td> {{ REPA_repa }} </td>
-            <td> {{ REPA_reclamado }} </td>
-            {% if comparacion_repa_movilizado %}
-            <td>{{ REPA_repa_movilizado }}</td>
-            {% endif %}
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">OTROS</td>
-            <td> {{ OTROS_repa }} </td>
-            <td> {{ OTROS_reclamado }} </td>
-            {% if comparacion_repa_movilizado %}
-            <td>{{ OTROS_repa_movilizado }}</td>
-            {% endif %}
-        </tr>
-    </table>
 
-    <table style="margin-top: 20px;">
-        <tr class="font-large first-column-cell2";>
-            <td class="negrita">Conceptos de Ajuste</td>
-            <td class="negrita">Comparacion Haber Reclamado con Haber con Reparacion Historica</td>
-            {% if comparacion_repa_movilizado %}
-            <td class="negrita">Comparacion Haber con Repa movilizado con Haber con Reparacion Historica</td>
-            {% endif %}
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">Diferencia/Merma</td>
-            <td class="total"> {{ diccionario_repa.dif_reclamado_repa }} </td>
-            {% if comparacion_repa_movilizado %}
-            <td class="total">{{ diccionario_repa.dif_repa_movilizado_repa }}</td>
-            {% endif %}
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">Incidencia en el Haber</td>
-            <td class="total"> {{ diccionario_repa.incidencia_reclamado_repa }} </td>
-            {% if comparacion_repa_movilizado %}
-            <td class="total">{{ diccionario_repa.incidencia_repa_movilizado_repa }}</td>
-            {% endif %}
-        </tr>
-        <tr class="font-large">
-            <td class="negrita first-column-cell">Quita con Confiscatoriedad</td>
-            <td class="total"> {{ diccionario_repa.quita_confis_reclamado_repa }} </td>
-            {% if comparacion_repa_movilizado %}
-            <td class="total">{{ diccionario_repa.quita_confis_repa_movilizado_repa }}</td>
-            {% endif %}
-        </tr>
-    </table>
-    
-    <div class="graph-container">
-        <img src="data:image/png;base64,{{ grafico_repa }}" alt="Gráfico comparativo de haberes de Sentencia">
-    </div>
-    {% endif %}
+    {% include 'herramientas_demanda/resultado_reparacion_historica.html' %}
 
-    {% if diccionario_sumas.sumas_remunerativas %}
-    <h6>Sumas No Remunerativas:</h6>
-    <table style="margin-top: 20px;">
-        {% if diccionario_sumas.instituto_provincial_de_vivienda %}
-        <tr class="font-large_2 first-column-cell2">
-            <td colspan="2" class="negrita" style="text-align: center;">Instituto Provincial de Vivienda Salta- IPV</td>
-        </tr>
-        <tr class="font-large_2 first-column-cell2">
-            <td class="negrita columna_sumas_codigo" >Código</td>
-            <td class="negrita" style="text-align: center;">Concepto</td>
-        </tr>
-        {% if diccionario_sumas.ipv_adic_ac_salarial_2010 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">627</td>
-            <td>Adic. Ac Salarial 2010</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.ipv_adic_ac_salarial_2016 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">628</td>
-            <td>Adic. Ac Salarial 2016</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.ipv_retroactivo_adic%}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">629</td>
-            <td>Retroactivo Adic</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.ipv_ac_salarial_2016 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">633</td>
-            <td>Ac. Salarial 2016</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.ipv_adic_respons_cargo %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">43</td>
-            <td>Adic. Respons. Cargo</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.ipv_adic %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">214</td>
-            <td>Adic</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.ipv_dto_2857_04 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">215</td>
-            <td>Dto. N° 2857/04</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.ipv_monto_extraordinario %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">405</td>
-            <td>Monto Extraordinario</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.ipv_extraord_acta_04_13 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">406</td>
-            <td>Extraord Acta 04/13</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.ipv_adic_ipv %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">630</td>
-            <td>Adic IPV</td>
-        </tr>
-        {% endif %}
-        {% endif %}
-        
-        {% if diccionario_sumas.municipalidad_salta %}
-        <tr class="font-large_2 first-column-cell2">
-            <td colspan="2" class="negrita" style="text-align: center;">Municipalidad de Salta</td>
-        </tr>
-        <tr class="font-large_2 first-column-cell2">
-            <td class="negrita columna_sumas_codigo" >Código</td>
-            <td class="negrita" style="text-align: center;">Concepto</td>
-        </tr>
-        {% if diccionario_sumas.municipalidad_salta_47_hijo %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">47</td>
-            <td>Hijo</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_52_conyuge %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">52</td>
-            <td>Conyuje</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_54_escuela_secundaria %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">54</td>
-            <td>Escuela Secundaria</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_147_acuerdo_salarial_2010 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">147</td>
-            <td>Acuerdo Salarial 2010</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_163_acuerdo_salarial_2011 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">163</td>
-            <td>Acuerdo Salarial 2011</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_165_acuerdo_salarial_2012 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">165</td>
-            <td>Acuerdo Salarial 2012</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_166_acuerdo_salarial_2013 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">166</td>
-            <td>Acuerdo Salarial 2013</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_297_suma_fija_sin_ap %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">297</td>
-            <td>Suma Fija Sin/Ap</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_324_ac_2011_12_13_s_ap %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">324</td>
-            <td>Ac-2011-12-13 s/ap</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_326_ac_2_semestre_16_s_ap %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">326</td>
-            <td>Ac. 2º Semestre/16 S/ap</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_517_presentismo %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">517</td>
-            <td>Presentismo</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_decreto_768_04 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">-</td>
-            <td>Decreto 768/04</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_decreto_0025_05 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">-</td>
-            <td>Decreto 0025/05</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.municipalidad_salta_dc_1208_025_1131_05 %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">-</td>
-            <td>DC. 1208-025-1131/05</td>
-        </tr>
-        {% endif %}
-        {% endif %}
+    {% include 'herramientas_demanda/resultado_sumas_remunerativas.html' %}
 
-        {% if diccionario_sumas.massalin_particulares %}
-        <tr class="font-large_2 first-column-cell2">
-            <td colspan="2" class="negrita" style="text-align: center;">Massalin Particulares S.A/S.R.L</td>
-        </tr>
-        <tr class="font-large_2 first-column-cell2">
-            <td class="negrita columna_sumas_codigo" >Código</td>
-            <td class="negrita" style="text-align: center;">Concepto</td>
-        </tr>
-        {% if diccionario_sumas.Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">3000</td>
-            <td>Concepto Asig. No Rem. Ac. 07 SUETRA No Remunerativo</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.Concepto_Asig_Acuerdo_2015_No_Remunerativo %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">3000</td>
-            <td>Concepto: Asig. Acuerdo 2015 No Remunerativo</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.Concepto_Asig_Acuerdo_2016_No_remunerativo %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">3000</td>
-            <td>Concepto: Asig. Acuerdo 2016 No remunerativo</td>
-        </tr>
-        {% endif %}
-        {% endif %}
+    {% if tabla_pbu %}
 
-        {% if diccionario_sumas.todo_obras_srl %}
-        <tr class="font-large_2 first-column-cell2">
-            <td colspan="2" class="negrita" style="text-align: center;">Todo Obra S.R.L</td>
-        </tr>
-        <tr class="font-large_2 first-column-cell2">
-            <td class="negrita columna_sumas_codigo" >Código</td>
-            <td class="negrita" style="text-align: center;">Concepto</td>
-        </tr>
-        {% if diccionario_sumas.todo_obras_srl_507_viatico %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">507</td>
-            <td>Viatico</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.todo_obras_srl_511_bonif_uso_corr_electrica %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">511</td>
-            <td>Bonif. Uso Corr. Electrica</td>
-        </tr>
-        {% endif %}
-        {% if diccionario_sumas.todo_obras_srl_514_compens_gas %}
-        <tr class="font-large_2">
-            <td class="columna_sumas_codigo">514</td>
-            <td>Compens. Gas</td>
-        </tr>
-        {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.hospital_materno_infantil %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital Materno Infantil</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_materno_infantil_328_adic_acu_sal_2010_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">328</td>
-                <td>Adic. Acu. Sal 2010 Remune</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_materno_infantil_370_ad_inc_d_2589_04_r_1893 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">370</td>
-                <td>Ad. Inc. D. 2589/04 R. 1893</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_materno_infantil_612_equiparador_res_1474_11 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res. 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_materno_infantil_627_adic_acu_sal_2010_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">627</td>
-                <td>Adic. Acu. Sal 2010 Remune</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_materno_infantil_628_adic_acu_sal_2010_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal 2010 No Remune</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_materno_infantil_632_adic_acu_sal_2010_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">632</td>
-                <td>Adic. Acu. Sal 2010 No Remune</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_materno_infantil_645_nivelador_res_2665_07 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">645</td>
-                <td>Nivelador Res. 2665/07</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_materno_infantil_657_adicional_extraordinario %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">657</td>
-                <td>Adicional Extraordinario</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_materno_infantil_696_ticket_alimentario %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">696</td>
-                <td>Ticket Alimentario</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.ministerio_salud_publica %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Ministerio de Salud Pública - Provincia de Salta</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.ministerio_salud_650 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">650</td>
-                <td>As. Ad. D.1055/03 Mod. D 1587/04</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_670 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">670</td>
-                <td>Ad. Inc. D. 2589/04</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_370 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">370</td>
-                <td>Ad. Inc. D. 2589/04 R. 1893</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_569 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">569</td>
-                <td>Fondo de emerg. Adic. Guardia / Adic. HS. Guardia sin aporte</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_627_628_328 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">627/628/328</td>
-                <td>Adic. Acu. Sal. 2010 No Remune</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_626 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">626</td>
-                <td>Adic. Acuerdo Salaria Guardia</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_632 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">632</td>
-                <td>Adic. Fijo No Rem</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_612 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res. 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_682 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adic. Res. 0460/16</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_645 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">645</td>
-                <td>Nivelador Res. 2665/07</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_653 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">653</td>
-                <td>Adic. Dif. Actividad Crítica</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_654 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">654</td>
-                <td>Adic. Dec. 1922/14</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_685 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">685</td>
-                <td>Beneficio D. Nac. 561/19</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ministerio_salud_656 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">656</td>
-                <td>Dto. Nac. 651/19 art. 4</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.tomografia_computada %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Tomografía Computada Sociedad del Estado</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.tomografia_2014 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">2014</td>
-                <td>Increm. Basico No Remun.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.tomografia_2011 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">2011</td>
-                <td>Incremen. Antig. No Remun.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.tomografia_400 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">400</td>
-                <td>Basico No Remun.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.tomografia_405 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">405</td>
-                <td>Antig. No Remun.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.tomografia_406 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">406</td>
-                <td>Presentismo No Remun.</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.cruz_roja_salta %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Cruz Roja Argentina Filial Salta</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.cruz_roja_301 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">301</td>
-                <td>DCTO 735/05</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.cruz_roja_307 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">307</td>
-                <td>Gastos de Traslado</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.cruz_roja_399 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">399</td>
-                <td>Compens. Redondeo</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.cruz_roja_351 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">351</td>
-                <td>Asig. Hijo</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.gobierno_provincia_salta %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Gobierno de la Provincia de Salta</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.gobierno_628 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal. 2010 No Remune.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.gobierno_680 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">680</td>
-                <td>Adic. Fijo DTO 2857/04</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.gobierno_690 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">690</td>
-                <td>Adic. Fijo DTO 1880/05</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.ministerio_educacion_salta %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Ministerio de Educación - Salta</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.ministerio_educacion_salta_627_adic_acu_sal_2010_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">627</td>
-                <td>Adic. Acu. Sal. 2010 No Remune.</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.hospital_senor_del_milagro %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital Señor del Milagro</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_senor_del_milagro_569_adic_hs_guardia_sin_aportes %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">569</td>
-                <td>Adic. HS. Guardia Sin Aportes</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_senor_del_milagro_612_adic_equip_no_profesional %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Adic. Equip. No Profesional</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_senor_del_milagro_628_adic_acu_sal_2010_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal. 2010 No Remune</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_senor_del_milagro_645_nivelador_res_2665_07 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">645</td>
-                <td>Nivelador Res. 2665/07</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_senor_del_milagro_657_adicional_extraordinario_2011 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">657</td>
-                <td>Adicional Extraordinario 2011</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_senor_del_milagro_682_adicional_res_0460_16 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adicional Res. 0460/16</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_senor_del_milagro_653_adic_dif_actividad_critica %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">653</td>
-                <td>Adic. Dif. Actividad Crítica</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_senor_del_milagro_565_adic_hs_guardia_sin_aportes_4_2014 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">565</td>
-                <td>Adic. HS. Guardia Sin Aportes 4/2014</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_senor_del_milagro_644_nivelador %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">644</td>
-                <td>Nivelador</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.edesa_sa %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">EDESA SA</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.edesa_sa_40004_art_31_bonif_uso_corriente_elec %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40004</td>
-                <td>Art. 31 Bonif. Uso Corriente Eléctrico</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.edesa_sa_40006_compensacion_gas %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40006</td>
-                <td>Compensación Gas</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.edesa_sa_40007_viaticos %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40007</td>
-                <td>Viáticos</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.edesa_sa_40095_gratif_ect_no_rem %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40095</td>
-                <td>Gratif. Ect. No Remunerativo</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.edesa_sa_40100_40103_suma_fija_no_rem %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40100/40103</td>
-                <td>Suma Fija No Remunerativa</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.hospital_san_bernardo %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">HOSPITAL SAN BERNARDO</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_san_bernardo_628_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal. 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_632_adic_fijo_no_rem_ni_bonif %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">632</td>
-                <td>Adic. Fijo No Rem. Ni Bonif.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_612_equiparador_res_1474_11 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res. 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_657_adic_extraordinario_2011 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">657</td>
-                <td>Adic. Extraordinario 2011</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_619_fdo_de_emer_adic_hs %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">619</td>
-                <td>Fondo de Emerg. Adic. HS</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_677_adic_dec_1922_14_gdias %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">677</td>
-                <td>Adic. Dec. 1922/14 Gdías</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_568_adic_hs_guardia_sin_aportes %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">568</td>
-                <td>Adic. HS Guardia sin Aportes</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_682_adic_acu_sal_2010_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adic. Acu. Sal. 2010 No Remune</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_670_ad_inc_d_2589_04_r_1893 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">670</td>
-                <td>Ad. Inc. D. 2589/04 R. 1893</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_653_adic_dif_actividad_critica %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">653</td>
-                <td>Adic. Dif. Actividad Crítica</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_627_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">627</td>
-                <td>Adic. Acu. Sal. 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_626_ad_acu_sal_guardia_10 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">626</td>
-                <td>Adic. Acu. Sal. Guardia 10</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_565_fondo_de_emer_adic_hs_guardia %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">565</td>
-                <td>Fondo de Emerg. Adic. HS Guardia</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_599_ad_incum_prescrip_y_certif %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">599</td>
-                <td>Ad. Incum. Prescrip. y Certif.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_bernardo_685_reintegro_imp_ganancias %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">685</td>
-                <td>Reintegro Imp. Ganancias</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.ips_salta %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">IPS SALTA</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.ips_salta_402_cuo_dev_gcias_rg_5008 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">402</td>
-                <td>Cuo. Dev. Gcias. RG 5008</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_470_ajuste_credito_no_rem %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">470</td>
-                <td>Ajuste Crédito No Rem.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_482_acu_sal_2010_no_rem %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">482</td>
-                <td>Acu. Sal. 2010 No Rem.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_483_gratif_d_4118_art_13 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">483</td>
-                <td>Gratif. D. 4118 Art. 13</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_499_aj_liqui_anual_imp_gana %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">499</td>
-                <td>Aj. Liqui. Anual Imp. Gana</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_decre_1055 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Decreto 1055</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_decre_1587_04 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Decreto 1587/04</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_decreto_2857_08 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Decreto 2857/08</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_decre_3718_08 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Decreto 3718/08</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_decre_1579_08 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Decreto 1579/08</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ips_salta_acuerdo_salarial_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Acuerdo Salarial 2010</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.alliance_one_tobacco %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">ALLIANCE ONE TOBACCO</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.alliance_one_tobacco_261_165_bono_no_reintegrable %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">261/165</td>
-                <td>Bono No Reintegrable</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.alliance_one_tobacco_182_anticipo_acuerdo_sot %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">182</td>
-                <td>Anticipo Acuerdo SOT</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.alliance_one_tobacco_194_acuerdo_no_rem_retroactivo %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">194</td>
-                <td>Acuerdo No Rem Retroactivo</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.alliance_one_tobacco_481_responsabilidad_gerencial %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">481</td>
-                <td>Responsabilidad Gerencial</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.alliance_one_tobacco_482_acuerdo_salarial_2010_no_rem %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">482</td>
-                <td>Acuerdo Salarial 2010 No Rem.</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.servicios_privados_postales %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">SERVICIOS PRIVADOS POSTALES</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.servicios_privados_postales_500_sal_susp_art_221_lct %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">500</td>
-                <td>Sal. Susp. Art. 221 LCT</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.servicios_privados_postales_513_item_4_1_12_comida %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">513</td>
-                <td>Item 4.1.12 Comida</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.servicios_privados_postales_514_item_4_1_13_viatico_especial %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">514</td>
-                <td>Item 4.1.13 Viático Especial</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.servicios_privados_postales_535_item_4_1_12_comida %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">535</td>
-                <td>Item 4.1.12 Comida</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.servicios_privados_postales_549_item_4_1_13_viatico_especial %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">549</td>
-                <td>Item 4.1.13 Viático Especial</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.servicios_privados_postales_588_adic_10_porc_s_4_1_12_y_4_1_13 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">588</td>
-                <td>Adic. 10% S/ 4.1.12 y 4.1.13</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.servicios_privados_postales_40000_sal_susp_art_221_lct %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40000</td>
-                <td>Sal. Susp. Art. 221 LCT</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.servicios_privados_postales_40013_item_4_1_12_comida %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40013</td>
-                <td>Item 4.1.12 Comida</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.servicios_privados_postales_40014_item_4_1_13_viatico_especial %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40014</td>
-                <td>Item 4.1.13 Viático Especial</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.servicios_privados_postales_40015_adic_10_porc_s_4_1_12_y_4_1_13 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40015</td>
-                <td>Adic. 10% S/ 4.1.12 y 4.1.13</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.banco_nacion_argentina %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">BANCO NACIÓN ARGENTINA</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.banco_nacion_argentina_adicional_mensual_por_product %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Adicional Mensual por Producto</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.banco_nacion_argentina_adicional_zona_desfavorable_no %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Adicional Zona Desfavorable No</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.banco_nacion_argentina_dif_unificacion_a_a_27_01_2011 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Dif. Unificación a A 27/01/2011</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.banco_nacion_argentina_adicional_mensual_por_product_2 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Adicional Mensual por Producto 2</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.banco_nacion_argentina_adicional_por_funcion %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Adicional por Función</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.banco_nacion_argentina_acta_acuerdo_29_03_07 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Acta Acuerdo 29/03/07</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.banco_nacion_argentina_titulo_secundario %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Título Secundario</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.banco_nacion_argentina_adicional_cajero_integral_p %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Adicional Cajero Integral P</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.banco_nacion_argentina_adic_fall_de_caja_mon_extr_per %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Adic. Fallo de Caja Mon. Extr. Per.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.banco_nacion_argentina_gratificacion_extraordinaria %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Gratificación Extraordinaria</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.ypf_sa %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">YPF SA</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.ypf_sa_vianda_alimentaria %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">-</td>
-                <td>Vianda Alimentaria</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.camara_senadores_salta %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Cámara Senadores Salta</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.camara_senadores_salta_510_retroact_ac_salarial %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">510</td>
-                <td>Retroactivo Acuerdo Salarial</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.camara_senadores_salta_511_ac_salarial_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">511</td>
-                <td>Acuerdo Salarial 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.camara_senadores_salta_516_sac_dcto_1922_14 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">516</td>
-                <td>SAC Dcto. 1922/14</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.camara_senadores_salta_900_retencion_de_imp_ganancias %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">900</td>
-                <td>Retención de Imp. Ganancias</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.hospital_onativia %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital Onativia</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_onativia_328_adic_acu_sal_2010_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">328</td>
-                <td>Adicional Acuerdo Salarial 2010 Remunerado</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_onativia_370_ad_inc_d_2589_04_r_1893 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">370</td>
-                <td>Adicional Inc. D 2589/04 R 1893</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_onativia_612_equiparador_res_1474_11 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res. 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_onativia_628_adic_acu_sal_2010_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adicional Acuerdo Salarial 2010 No Remunerado</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_onativia_670_ad_inc_d_2589_04_r_1893 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">670</td>
-                <td>Adicional Inc. D 2589/04 R 1893</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_onativia_682_adic_acu_sal_2010_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adicional Acuerdo Salarial 2010 No Remunerado</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.politi_hector_armando %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Politi Hector Armando</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.politi_hector_armando_503_decreto_38 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">503</td>
-                <td>Decreto 38</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.politi_hector_armando_504_asig_no_rem %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">504</td>
-                <td>Asignación No Remunerada</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.politi_hector_armando_505_bono_ext_fin_de_ano %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">505</td>
-                <td>Bono Extra Fin de Año</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.politi_hector_armando_507_dia_de_la_sanidad %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">507</td>
-                <td>Día de la Sanidad</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.politi_hector_armando_508_asig_no_rem_ant_38_porc %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">508</td>
-                <td>Asignación No Remunerada Ant. 38%</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.politi_hector_armando_509_asig_no_rem_ant_8_porc %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">509</td>
-                <td>Asignación No Remunerada Ant. 8%</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.politi_hector_armando_512_1_sac_no_rem_2020 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">512</td>
-                <td>1º SAC No Remunerado 2020</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.hospital_campo_quijano %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital Campo Quijano</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_campo_quijano_612_equiparador_res_1474_11 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res. 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_campo_quijano_628_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adicional Acu. Sal. 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_campo_quijano_645_equiparador_res_2665_07 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">645</td>
-                <td>Equiparador Res. 2665/07</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_campo_quijano_657_adicional_extraordinario_2011 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">657</td>
-                <td>Adicional Extraordinario 2011</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_campo_quijano_682_adicional_res_0460_16 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adicional Res. 0460/16</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.hospital_la_poma %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital La Poma</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_la_poma_31_zona_desfavorable %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">31</td>
-                <td>Zona Desfavorable</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_328_adic_acu_sal_2010_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">328</td>
-                <td>Adic. Acu. Sal. 2010 Remune</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_569_adic_hs_guardia_sin_aportes %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">569</td>
-                <td>Adic. HS Guardia Sin Aportes</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_599_ad_incum_prescrip_y_certif %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">599</td>
-                <td>Ad. Incum. Prescrip. y Certif.</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_612_equiparador_res_1474_11 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res. 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_620_radic_prof_d_2075_10 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">620</td>
-                <td>Radic. Prof. D. 2075/10</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_628_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal. 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_645_nivelador_res_2665_07 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">645</td>
-                <td>Nivelador Res. 2665/07</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_653_adic_dif_actividad_critica %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">653</td>
-                <td>Adic. Dif. Actividad Crítica</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_670_ad_inc_d_2589_04_r_1893 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">670</td>
-                <td>Ad. Incum. D. 2589/04 R. 1893</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_poma_682_adicional_res_0460_16 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adicional Res. 0460/16</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.hospital_nazareno %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital Nazareno</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_nazareno_612_equiparador_res_1474_11 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res. 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_nazareno_628_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal. 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_nazareno_645_equiparador_res_2665_07 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">645</td>
-                <td>Equiparador Res. 2665/07</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_nazareno_653_adic_dif_actividad_critica %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">653</td>
-                <td>Adic. Dif. Actividad Crítica</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_nazareno_682_adicional_res_0460_16 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adicional Res. 0460/16</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.ente_parques_industriales %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Ente General de Parques y Areas Industriales</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.ente_parques_industriales_202_adicional_628 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">202</td>
-                <td>Adicional 628</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ente_parques_industriales_600_adic_adm_publica_central %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">600</td>
-                <td>Adic. Adm. Pública Central</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ente_parques_industriales_628_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal. 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ente_parques_industriales_639_adic_dif_compensatorio %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">639</td>
-                <td>Adic. Dif. Compensatorio</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ente_parques_industriales_680_adic_fijo_dto_2857_04 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">680</td>
-                <td>Adic. Fijo Dto. 2857/04</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.ente_parques_industriales_690_adic_fijo_dto_1880_05 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">690</td>
-                <td>Adic. Fijo Dto. 1880/05</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.hospital_la_caldera %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital La Caldera</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_la_caldera_569_adic_hs_guardia_sin_aportes %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">569</td>
-                <td>Adic. HS Guardia Sin Aportes</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_caldera_612_equiparador_res_1474_11 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res. 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_caldera_628_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal. 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_la_caldera_682_adicional_res_0460_16 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adicional Res. 0460/16</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.hospital_san_antonio_cobres %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital San Antonio Cobres</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_san_antonio_cobres_612_equiparador_res_1474_11 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res. 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_antonio_cobres_628_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal. 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_antonio_cobres_645_nivelador_res_2665_07 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">645</td>
-                <td>Nivelador Res. 2665/07</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_san_antonio_cobres_682_adicional_res_0460_16 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adicional Res. 0460/16</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.hospital_general_guemes %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital General Guemes</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_general_guemes_573_adic_hs_guardia_sin_aportes %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">573</td>
-                <td>Adic. HS Guardia sin Aportes</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_general_guemes_599_ad_incum_prescrip_y_certif %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">599</td>
-                <td>Ad. Incum. Prescrip. y Certif</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_general_guemes_619_fondo_de_emer_adic_guardia_sdf %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">619</td>
-                <td>Fondo de Emerg. Adic. Guardia SDF</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_general_guemes_628_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adic. Acu. Sal. 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_general_guemes_653_ad_dif_actividad_critica %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">653</td>
-                <td>Ad. Dif. Actividad Crítica</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_general_guemes_656_dto_nac_651_19_art_4 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">656</td>
-                <td>Dto. Nac. 651/19 Art. 4</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_general_guemes_670_ad_inc_d_2589_04_r_1893 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">670</td>
-                <td>Ad. Inc. D. 2589/04 R. 1893</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_general_guemes_682_adicional_res_0460_16 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">682</td>
-                <td>Adicional Res. 0460/16</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.merceria_salta %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Mercería Salta</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.merceria_salta_301_acuerdo_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">301</td>
-                <td>Acuerdo No Remunerativo</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.merceria_salta_331_ant_s_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">331</td>
-                <td>Ant. S. No Remunerativo</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.merceria_salta_351_present_s_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">351</td>
-                <td>Present. S. No Remunerativo</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.merceria_salta_481_sac_s_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">481</td>
-                <td>SAC S. No Remunerativo</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.trans_gol_srl %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Trans Gol SRL</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.trans_gol_srl_40510_asignacipn_por_cruce %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40510</td>
-                <td>Asignación por Cruce</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.trans_gol_srl_40511_viatico_po_km_recorrido %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40511</td>
-                <td>Viático por km Recorrido</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.trans_gol_srl_40513_permanencias %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40513</td>
-                <td>Permanencias</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.trans_gol_srl_40609_adicional_carga_peligrosa %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">40609</td>
-                <td>Adicional Carga Peligrosa</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.el_sol_transporte %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">El Sol Transporte</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.el_sol_transporte_814_viaticos %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">814</td>
-                <td>Viáticos</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.provincia_salta_derechos_humanos %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Provincia Salta - Derechos Humanos</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.provincia_salta_derechos_humanos_608_adic_fijo_no_rem_ni_bonif %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">608</td>
-                <td>Adicional Fijo No Remunerativo Ni Bonificación</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.provincia_salta_derechos_humanos_628_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adicional Acu Sal 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.provincia_salta_derechos_humanos_680_adic_fijo_dto_2857_04 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">680</td>
-                <td>Adicional Fijo Dto 2857/04</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.provincia_salta_derechos_humanos_690_adic_fijo_dto_1880_05 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">690</td>
-                <td>Adicional Fijo Dto 1880/05</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.provincia_salta_derechos_humanos_695_tickets_alimentarios %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">695</td>
-                <td>Tickets Alimentarios</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-
-        {% if diccionario_sumas.hospital_del_milagro %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital Del Milagro</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_del_milagro_612_equiparador_res_1474_11 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">612</td>
-                <td>Equiparador Res 1474/11</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_del_milagro_627_adic_acu_sal_2010 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">627</td>
-                <td>Adicional Acu Sal 2010</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_del_milagro_628_adic_acu_sal_2010_no_remune %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">628</td>
-                <td>Adicional Acu Sal 2010 No Remunerativo</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_del_milagro_632_adic_fijo_no_rem_ni_bonif %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">632</td>
-                <td>Adicional Fijo No Remunerativo Ni Bonificación</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_del_milagro_645_nivelador_res_2665_07 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">645</td>
-                <td>Nivelador Res 2665/07</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_del_milagro_657_adicional_extraordinario_2011 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">657</td>
-                <td>Adicional Extraordinario 2011</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-
-        {% if diccionario_sumas.hospital_nino_jesus %}
-            <tr class="font-large_2 first-column-cell2">
-                <td colspan="2" class="negrita" style="text-align: center;">Hospital Niño Jesús</td>
-            </tr>
-            <tr class="font-large_2 first-column-cell2">
-                <td class="negrita columna_sumas_codigo">Código</td>
-                <td class="negrita" style="text-align: center;">Concepto</td>
-            </tr>
-            {% if diccionario_sumas.hospital_nino_jesus_561_redondeo %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">561</td>
-                <td>Redondeo</td>
-            </tr>
-            {% endif %}
-            {% if diccionario_sumas.hospital_nino_jesus_645_nivelador_res_2665_07 %}
-            <tr class="font-large_2">
-                <td class="columna_sumas_codigo">645</td>
-                <td>Nivelador Res 2665/07</td>
-            </tr>
-            {% endif %}
-        {% endif %}
-        {% for i in range(1, 6) %}
-            {% if diccionario_sumas.get('concepto_' ~ i) %}
-                <tr class="font-large_2">
-                    <td class="columna_sumas_codigo">{{ diccionario_sumas.get('codigo_' ~ i) }}</td>
-                    <td>{{ diccionario_sumas.get('concepto_' ~ i) }}</td>
-                </tr>
-            {% endif %}
-        {% endfor %}
-
-    </table>
+    {% include 'herramientas_demanda/tabla_pbu.html' %}
 
     {% endif %}
-
 </body>
+
 </html>

@@ -1,0 +1,100 @@
+{% if comparacion_reparacion_historica %}
+<h6>Comparacion Reparacion Historica:</h6>
+<table style="margin-top: 20px;">
+    <tr class="font-large first-column-cell2" ;>
+        <td colspan="4" class="negrita" style="text-align: center;">Fecha de comparacion: {{fecha_comparacion_repa}}
+        </td>
+    </tr>
+    <tr class="font-large first-column-cell2" ;>
+        <td class="negrita">Variables</td>
+        <td class="negrita">Haber Percibido con Reparacion Historica</td>
+        <td class="negrita">Haber Total Reclamado</td>
+        {% if comparacion_repa_movilizado %}
+        <td class="negrita">Haber con Reparacion Historica Movilizada</td>
+        {% endif %}
+    </tr>
+    <tr class="font-large">
+        <td class="negrita first-column-cell">Total</td>
+        <td class="total"> {{ diccionario_repa.total_haber_con_repa }} </td>
+        <td class="total"> {{ diccionario_repa.total_haber_reclamado }} </td>
+        {% if comparacion_repa_movilizado %}
+        <td class="total">{{ diccionario_repa.total_haber_con_repa_movilizado }}</td>
+        {% endif %}
+    </tr>
+    <tr class="font-large">
+        <td class="negrita first-column-cell">PBU</td>
+        <td> {{ PBU_repa }} </td>
+        <td> {{ PBU_reclamado }} </td>
+        {% if comparacion_repa_movilizado %}
+        <td>{{ PBU_repa_movilizado }}</td>
+        {% endif %}
+    </tr>
+    <tr class="font-large">
+        <td class="negrita first-column-cell">PC</td>
+        <td> {{ PC_repa }} </td>
+        <td> {{ PC_reclamado }} </td>
+        {% if comparacion_repa_movilizado %}
+        <td>{{ PC_repa_movilizado }}</td>
+        {% endif %}
+    </tr>
+    <tr class="font-large">
+        <td class="negrita first-column-cell">PAP</td>
+        <td> {{ PAP_repa }} </td>
+        <td> {{ PAP_reclamado }} </td>
+        {% if comparacion_repa_movilizado %}
+        <td>{{ PAP_repa_movilizado }}</td>
+        {% endif %}
+    </tr>
+    <tr class="font-large">
+        <td class="negrita first-column-cell">REPARACION HISTORICA</td>
+        <td> {{ REPA_repa }} </td>
+        <td> {{ REPA_reclamado }} </td>
+        {% if comparacion_repa_movilizado %}
+        <td>{{ REPA_repa_movilizado }}</td>
+        {% endif %}
+    </tr>
+    <tr class="font-large">
+        <td class="negrita first-column-cell">OTROS</td>
+        <td> {{ OTROS_repa }} </td>
+        <td> {{ OTROS_reclamado }} </td>
+        {% if comparacion_repa_movilizado %}
+        <td>{{ OTROS_repa_movilizado }}</td>
+        {% endif %}
+    </tr>
+</table>
+
+<table style="margin-top: 20px;">
+    <tr class="font-large first-column-cell2" ;>
+        <td class="negrita">Conceptos de Ajuste</td>
+        <td class="negrita">Comparacion Haber Reclamado con Haber con Reparacion Historica</td>
+        {% if comparacion_repa_movilizado %}
+        <td class="negrita">Comparacion Haber con Repa movilizado con Haber con Reparacion Historica</td>
+        {% endif %}
+    </tr>
+    <tr class="font-large">
+        <td class="negrita first-column-cell">Diferencia/Merma</td>
+        <td class="total"> {{ diccionario_repa.dif_reclamado_repa }} </td>
+        {% if comparacion_repa_movilizado %}
+        <td class="total">{{ diccionario_repa.dif_repa_movilizado_repa }}</td>
+        {% endif %}
+    </tr>
+    <tr class="font-large">
+        <td class="negrita first-column-cell">Incidencia en el Haber</td>
+        <td class="total"> {{ diccionario_repa.incidencia_reclamado_repa }} </td>
+        {% if comparacion_repa_movilizado %}
+        <td class="total">{{ diccionario_repa.incidencia_repa_movilizado_repa }}</td>
+        {% endif %}
+    </tr>
+    <tr class="font-large">
+        <td class="negrita first-column-cell">Quita con Confiscatoriedad</td>
+        <td class="total"> {{ diccionario_repa.quita_confis_reclamado_repa }} </td>
+        {% if comparacion_repa_movilizado %}
+        <td class="total">{{ diccionario_repa.quita_confis_repa_movilizado_repa }}</td>
+        {% endif %}
+    </tr>
+</table>
+
+<div class="graph-container">
+    <img src="data:image/png;base64,{{ grafico_repa }}" alt="Gráfico comparativo de haberes de Sentencia">
+</div>
+{% endif %}

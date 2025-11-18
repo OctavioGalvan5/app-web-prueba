@@ -704,6 +704,7 @@ def resultado_herramientas_demandas():
 
         # Extracción de valores con un valor predeterminado de 0 si están vacíos
         comparacion_reparacion_historica = request.form.get('comparacion_reparacion_historica', False)
+        tabla_pbu = request.form.get('tabla_pbu', False)
     
         def obtener_valor(form_value):
             valor = float(form_value)
@@ -1038,7 +1039,7 @@ def resultado_herramientas_demandas():
 
 
 
-        pdf = HerramientasDemanda(datos_del_actor, expediente, cuil_expediente, beneficio, num_beneficio,comparacion_reparacion_historica, fecha_comparacion_repa, PBU_repa, PC_repa, PAP_repa, REPA_repa,OTROS_repa, PBU_reclamado, PC_reclamado, PAP_reclamado,REPA_reclamado, OTROS_reclamado, comparacion_repa_movilizado,comparacion_repa_movilizado_No, PBU_repa_movilizado, PC_repa_movilizado,PAP_repa_movilizado, REPA_repa_movilizado, OTROS_repa_movilizado, diccionario_sumas)
+        pdf = HerramientasDemanda(datos_del_actor, expediente, cuil_expediente, beneficio, num_beneficio,comparacion_reparacion_historica, fecha_comparacion_repa, PBU_repa, PC_repa, PAP_repa, REPA_repa,OTROS_repa, PBU_reclamado, PC_reclamado, PAP_reclamado,REPA_reclamado, OTROS_reclamado, comparacion_repa_movilizado,comparacion_repa_movilizado_No, PBU_repa_movilizado, PC_repa_movilizado,PAP_repa_movilizado, REPA_repa_movilizado, OTROS_repa_movilizado, diccionario_sumas, tabla_pbu)
 
         resultado = pdf.generar_pdf()
         return resultado

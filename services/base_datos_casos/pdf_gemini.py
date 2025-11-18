@@ -14,12 +14,13 @@ API_KEY = os.getenv("GOOGLE_API_KEY")
 
 # ================== Funciones para extraer y analizar el PDF ==================
 
+
 def convertir_fecha(fecha_str):
     formatos = [
         "%Y-%m-%d",  # Formato ISO (input date)
         "%d/%m/%Y",  # Formato original
-        "%m/%Y",     # Formato sin día
-        "%Y-%m"      # Formato ISO sin día
+        "%m/%Y",  # Formato sin día
+        "%Y-%m"  # Formato ISO sin día
     ]
     for formato in formatos:
         try:
@@ -30,11 +31,13 @@ def convertir_fecha(fecha_str):
     print(f"Formato de fecha no reconocido: {fecha_str}")
     return None
 
+
 def extract_text_from_pdf(file_obj):
     text_content = ""
     with pdfplumber.open(file_obj) as pdf:
         for page in pdf.pages:
-            text_content += page.extract_text() or ""  # Evita errores con páginas vacías
+            text_content += page.extract_text(
+            ) or ""  # Evita errores con páginas vacías
     return text_content
 
 
@@ -77,12 +80,13 @@ Texto de los documentos:
 
         # En este caso se envía un único elemento con todo el contenido (imagen + prompt)
         contenido = [{"text": prompt}]
-        model = genai.GenerativeModel("gemini-2.0-flash")
+        model = genai.GenerativeModel("gemini-2.5-flash")
         response = model.generate_content(contenido)
         json_response = response.text
 
         # Buscar el bloque JSON en la respuesta
-        match = re.search(r'\{.*\}', json_response.replace('\n', ''), re.DOTALL)
+        match = re.search(r'\{.*\}', json_response.replace('\n', ''),
+                          re.DOTALL)
         if match:
             json_response = match.group(0)
             print("JSON extraido:", json_response)
@@ -102,6 +106,7 @@ Texto de los documentos:
     except Exception as e:
         print(f"Error al llamar a la API de Gemini: {e}")
         return None
+
 
 def save_sentencia_to_db(data):
     """Inserta en la tabla 'sentencias' todos los datos extraidos,
@@ -173,7 +178,7 @@ def update_sentencia_in_db(data):
         "numero_resolucion": data.get("numero_resolucion"),
         "estado_sentencia": data.get("estado_sentencia"),
         "drive_link": data.get("drive_link"),  # Se agrega el drive_link
-        "file_hash": data.get("file_hash")       # Se agrega el hash del archivo
+        "file_hash": data.get("file_hash")  # Se agrega el hash del archivo
     }
 
     update_query = text("""
