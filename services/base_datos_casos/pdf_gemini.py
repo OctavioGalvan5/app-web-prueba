@@ -114,9 +114,16 @@ def save_sentencia_to_db(data):
     fecha_str = data.get("fecha_sentencia")
     fecha_date = convertir_fecha(fecha_str) if fecha_str else None
 
+    # --- CORRECCIÓN HONORARIOS ---
+    # Limpiamos el valor si viene como texto "null", "None" o vacío
+    honorarios = data.get("honorarios")
+    if str(honorarios).strip().lower() in ['null', 'none', '', 'nan']:
+        honorarios = None
+    # -----------------------------
+
     sentencia_data = {
         "resumen": data.get("resumen"),
-        "honorarios": data.get("honorarios"),
+        "honorarios": honorarios,  # Usamos la variable limpia
         "instancia": data.get("instancia"),
         "jueces": data.get("jueces"),
         "nombre_caso": data.get("nombre_caso"),
@@ -160,10 +167,17 @@ def update_sentencia_in_db(data):
     fecha_str = data.get("fecha_sentencia")
     fecha_date = convertir_fecha(fecha_str) if fecha_str else None
 
+    # --- CORRECCIÓN HONORARIOS ---
+    # Limpiamos el valor si viene como texto "null", "None" o vacío
+    honorarios = data.get("honorarios")
+    if str(honorarios).strip().lower() in ['null', 'none', '', 'nan']:
+        honorarios = None
+    # -----------------------------
+
     sentencia_data = {
         "id": data.get("id"),
         "resumen": data.get("resumen"),
-        "honorarios": data.get("honorarios"),
+        "honorarios": honorarios,  # Usamos la variable limpia
         "instancia": data.get("instancia"),
         "jueces": data.get("jueces"),
         "nombre_caso": data.get("nombre_caso"),
@@ -177,8 +191,8 @@ def update_sentencia_in_db(data):
         "normativa": data.get("normativa"),
         "numero_resolucion": data.get("numero_resolucion"),
         "estado_sentencia": data.get("estado_sentencia"),
-        "drive_link": data.get("drive_link"),  # Se agrega el drive_link
-        "file_hash": data.get("file_hash")  # Se agrega el hash del archivo
+        "drive_link": data.get("drive_link"), 
+        "file_hash": data.get("file_hash") 
     }
 
     update_query = text("""
