@@ -71,7 +71,7 @@ Eres un asistente legal experto en analizar sentencias judiciales. Los siguiente
     "fundamentos": "fundamentos legales de la sentencia",
     "normativa": "normativa aplicada en la sentencia (si no se menciona, indica: 'No se menciona normativa')",
     "numero_resolucion": "numero de resolucion (si no se menciona, indica: 'No se menciona numero de resolucion')",
-    "estado_sentencia": "estado de la sentencia (ejemplo: Firme, Sujeta a Revision)"
+    "estado_sentencia": "estado de la sentencia (Deben ser alguna de las siguientes Firme, Sujeta a Revision)"
 }}
 
 Texto de los documentos:
