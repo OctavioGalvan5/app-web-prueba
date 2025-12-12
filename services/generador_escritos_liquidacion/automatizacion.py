@@ -199,7 +199,7 @@ Ejemplos negativos (=> False):
 
 # ========== LLAMADA A GEMINI ==========
 def analizar_con_gemini(texto_pdf: str):
-    model_name = "gemini-2.5-flash"  # modelo estable recomendado
+    model_name = "gemini-flash-latest"  # modelo estable recomendado
     resp = generar_con_backoff(model_name, PROMPT_LEGAL + "\n\n" + texto_pdf)
     texto_limpio = limpiar_respuesta_json(getattr(resp, "text", ""))
 

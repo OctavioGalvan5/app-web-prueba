@@ -95,7 +95,7 @@ genai.configure(api_key=API_KEY)
 
 
 def geminis_api_extract_data(image_streams):
-    modelo = genai.GenerativeModel("gemini-2.5-flash")
+    modelo = genai.GenerativeModel("gemini-flash-latest")
     try:
         contenido = []
         # Iterar sobre cada archivo (imagen) y convertirlo a base64
