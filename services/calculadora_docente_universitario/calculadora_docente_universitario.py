@@ -11,11 +11,11 @@ from xhtml2pdf import pisa
 import base64
 import plotly.io as pio  # requiere: pip install -U kaleido
 
-def obtener_indices_docentes(fecha_inicio: str, fecha_fin: str) -> list[Decimal]:
+def obtener_indices_docente_universitario(fecha_inicio: str, fecha_fin: str) -> list[Decimal]:
     """
-    Devuelve la lista de índices docentes (uno por mes) para el rango:
+    Devuelve la lista de índices docente universitario (uno por mes) para el rango:
     del PRIMER día del mes siguiente a `fecha_inicio` hasta el mes de `fecha_fin` (inclusive).
-    Los índices se obtienen de la tabla `tabla_movilidades`, columna `RIPDOC_dec_137_05`.
+    Los índices se obtienen de la tabla `tabla_movilidades`, columna `RIPDUN_Ley_26_508`.
     """
     fi_dt = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
     ff_dt = datetime.strptime(fecha_fin, "%Y-%m-%d").date()
@@ -24,7 +24,7 @@ def obtener_indices_docentes(fecha_inicio: str, fecha_fin: str) -> list[Decimal]
 
     with engine.connect() as conn:
         stmt = text("""
-            SELECT fechas, RIPDOC_dec_137_05 
+            SELECT fechas, RIPDUN_Ley_26_508 
             FROM tabla_movilidades 
             WHERE fechas >= :start_dt AND fechas <= :end_dt
             ORDER BY fechas ASC
@@ -231,12 +231,12 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import plotly.graph_objects as go
 
-def grafico_linea_haber_docente(fecha_inicio: str,
+def grafico_linea_haber_docente_universitario(fecha_inicio: str,
                                 fecha_fin: str,
                                 monto_inicial,
-                                titulo: str = "Haber con aumentos docentes"):
+                                titulo: str = "Haber con aumentos docente universitario"):
     # 1) Serie calculada (valores por mes)
-    serie = calcular_serie_docente(fecha_inicio, fecha_fin, monto_inicial)
+    serie = calcular_serie_docente_universitario(fecha_inicio, fecha_fin, monto_inicial)
 
     # 2) Fechas mensuales (x)
     fi_dt = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
@@ -323,12 +323,12 @@ def grafico_linea_haber_docente(fecha_inicio: str,
     return fig
 
 
-def grafico_comparativo_docente_anses(fecha_inicio: str,
+def grafico_comparativo_docente_universitario_anses(fecha_inicio: str,
                                        fecha_fin: str,
                                        monto_inicial,
                                        serie_docente: list,
                                        serie_anses: list,
-                                       titulo: str = "Comparación: Movilidad Docente vs ANSES"):
+                                       titulo: str = "Comparación: Movilidad Docente Universitario vs ANSES"):
     """
     Genera un gráfico de líneas comparando la evolución del haber
     con movilidad docente vs movilidad ANSES.
@@ -381,16 +381,16 @@ def grafico_comparativo_docente_anses(fecha_inicio: str,
     # Figura con dos líneas
     fig = go.Figure()
 
-    # Línea Docente (color morado/violeta)
+    # Línea Docente Universitario (color morado)
     fig.add_trace(
         go.Scatter(
             x=fechas,
             y=y_docente,
             mode="lines+markers",
-            name="Movilidad Docente",
+            name="Movilidad Docente Universitario",
             text=[mes_es(d) for d in fechas],
             customdata=hover_docente,
-            hovertemplate="<b>%{text}</b><br>Docente: %{customdata}<extra></extra>",
+            hovertemplate="<b>%{text}</b><br>Docente Univ.: %{customdata}<extra></extra>",
             marker=dict(size=5, color="#845EC2"),
             line=dict(width=2, color="#845EC2"),
         )
@@ -449,13 +449,13 @@ def grafico_comparativo_docente_anses(fecha_inicio: str,
 
 
 
-def calcular_serie_docente(fecha_inicio: str, fecha_fin: str,
+def calcular_serie_docente_universitario(fecha_inicio: str, fecha_fin: str,
                            monto_inicial) -> list:
     """
-    Calcula la serie de montos multiplicando mes a mes por los índices docentes
+    Calcula la serie de montos multiplicando mes a mes por los índices docente universitario
     desde el PRIMER DÍA DEL MES SIGUIENTE a `fecha_inicio` hasta el mes de `fecha_fin` (inclusive).
 
-    Los índices se obtienen de la tabla `tabla_movilidades`, columna `RIPDOC_dec_137_05`.
+    Los índices se obtienen de la tabla `tabla_movilidades`, columna `RIPDUN_Ley_26_508`.
 
     Retorna una lista con los montos acumulados (Decimal) por cada mes del rango.
     """
@@ -467,15 +467,15 @@ def calcular_serie_docente(fecha_inicio: str, fecha_fin: str,
     start_dt = fi_dt.replace(day=1) + relativedelta(months=1)
     end_dt = ff_dt.replace(day=1)
 
-    print(f"[DOCENTE] Rango a calcular → desde: {start_dt} hasta: {end_dt}")
+    print(f"[DOCENTE UNIV] Rango a calcular → desde: {start_dt} hasta: {end_dt}")
 
     if start_dt > end_dt:
-        print("⚠️ [DOCENTE] start_dt > end_dt: no hay meses a procesar en el rango.")
+        print("⚠️ [DOCENTE UNIV] start_dt > end_dt: no hay meses a procesar en el rango.")
         return []
 
     with engine.connect() as conn:
         stmt = text("""
-            SELECT fechas, RIPDOC_dec_137_05 
+            SELECT fechas, RIPDUN_Ley_26_508 
             FROM tabla_movilidades 
             WHERE fechas >= :start_dt AND fechas <= :end_dt
             ORDER BY fechas ASC
@@ -483,13 +483,13 @@ def calcular_serie_docente(fecha_inicio: str, fecha_fin: str,
         rows = conn.execute(stmt, {"start_dt": start_dt, "end_dt": end_dt}).all()
 
     if not rows:
-        print("⚠️ [DOCENTE] No se encontraron filas en 'tabla_movilidades' para el rango solicitado.")
+        print("⚠️ [DOCENTE UNIV] No se encontraron filas en 'tabla_movilidades' para el rango solicitado.")
 
     monto = Decimal(str(monto_inicial))
     lista_montos = []
 
     for fecha, indice in rows:
-        print(f"[DOCENTE] Mes: {fecha} | índice_docente (RIPDOC)={indice}")
+        print(f"[DOCENTE UNIV] Mes: {fecha} | índice_docente_universitario (RIPDUN)={indice}")
         try:
             idx_dec = Decimal(str(indice))
         except (InvalidOperation, TypeError):
@@ -507,7 +507,7 @@ def _formato_pesos_ar(x: Decimal) -> str:
     return "$" + s.replace(",", "X").replace(".", ",").replace("X", ".")
 
 
-class CalculadorMovilidadDocente:
+class CalculadorMovilidadDocenteUniversitario:
 
     def __init__(
             self,
@@ -524,7 +524,7 @@ class CalculadorMovilidadDocente:
             establecimiento,
             localidad,
             comparar_con_anses=False):  # NUEVO: opción de comparación
-        # Datos del docente
+        # Datos del docente universitario
         self.nombre_docente = nombre_docente
         self.cuil_expediente_tipo = cuil_expediente_tipo
         self.numero_identificacion = numero_identificacion
@@ -546,10 +546,10 @@ class CalculadorMovilidadDocente:
 
         # Opción de comparación
         self.comparar_con_anses = comparar_con_anses
-        print(f"🔍 DEBUG CLASE - comparar_con_anses: {self.comparar_con_anses}")
+        print(f"🔍 DEBUG CLASE UNIV - comparar_con_anses: {self.comparar_con_anses}")
 
-        # Resultados Docente
-        self.serie_montos = calcular_serie_docente(
+        # Resultados Docente Universitario
+        self.serie_montos = calcular_serie_docente_universitario(
             fecha_inicio=self.periodo_desde,
             fecha_fin=self.periodo_hasta,
             monto_inicial=self.monto)
@@ -562,13 +562,13 @@ class CalculadorMovilidadDocente:
         self.diferencia_pct_docente_anses = None
 
         if self.comparar_con_anses:
-            print("🔍 DEBUG CLASE - Calculando serie ANSES...")
+            print("🔍 DEBUG CLASE UNIV - Calculando serie ANSES...")
             self.serie_anses = calcular_serie_anses(
                 fecha_inicio=self.periodo_desde,
                 fecha_fin=self.periodo_hasta,
                 monto_inicial=self.monto)
             self.monto_final_anses = self.serie_anses[-1] if self.serie_anses else None
-            print(f"🔍 DEBUG CLASE - Serie ANSES calculada: {len(self.serie_anses) if self.serie_anses else 0} meses")
+            print(f"🔍 DEBUG CLASE UNIV - Serie ANSES calculada: {len(self.serie_anses) if self.serie_anses else 0} meses")
 
             # Calcular diferencias
             if self.monto_final and self.monto_final_anses:
@@ -579,20 +579,20 @@ class CalculadorMovilidadDocente:
                     )
 
         # Gráfico (Plotly Figure)
-        titulo_base = f"Evolución del haber docente — {self.nombre_docente}" if self.nombre_docente else "Evolución del haber docente"
+        titulo_base = f"Evolución del haber docente universitario — {self.nombre_docente}" if self.nombre_docente else "Evolución del haber docente universitario"
 
         if self.comparar_con_anses and self.serie_anses:
             # Gráfico comparativo con dos líneas
-            self.figura = grafico_comparativo_docente_anses(
+            self.figura = grafico_comparativo_docente_universitario_anses(
                 fecha_inicio=self.periodo_desde,
                 fecha_fin=self.periodo_hasta,
                 monto_inicial=self.monto,
                 serie_docente=self.serie_montos,
                 serie_anses=self.serie_anses,
-                titulo=f"Comparación: Docente vs ANSES — {self.nombre_docente}" if self.nombre_docente else "Comparación: Docente vs ANSES")
+                titulo=f"Comparación: Docente Universitario vs ANSES — {self.nombre_docente}" if self.nombre_docente else "Comparación: Docente Universitario vs ANSES")
         else:
-            # Gráfico simple solo docente
-            self.figura = grafico_linea_haber_docente(
+            # Gráfico simple solo docente universitario
+            self.figura = grafico_linea_haber_docente_universitario(
                 fecha_inicio=self.periodo_desde,
                 fecha_fin=self.periodo_hasta,
                 monto_inicial=self.monto,
@@ -640,7 +640,7 @@ class CalculadorMovilidadDocente:
         except Exception:
             grafico_b64 = ""  # evita romper si kaleido no está disponible
 
-        indices_mes = obtener_indices_docentes(self.periodo_desde, self.periodo_hasta)
+        indices_mes = obtener_indices_docente_universitario(self.periodo_desde, self.periodo_hasta)
 
         # Obtener datos ANSES si la comparación está habilitada
         serie_anses_para_detalle = None
@@ -713,7 +713,7 @@ class CalculadorMovilidadDocente:
             # Determinar quién es mayor
             if self.monto_final and self.monto_final_anses:
                 if self.monto_final > self.monto_final_anses:
-                    contexto["resultado_comparacion"] = "Movilidad Docente otorga mayor haber"
+                    contexto["resultado_comparacion"] = "Movilidad Docente Universitario otorga mayor haber"
                     contexto["resultado_comparacion_clase"] = "docente-mayor"
                 elif self.monto_final < self.monto_final_anses:
                     contexto["resultado_comparacion"] = "Movilidad ANSES otorga mayor haber"
@@ -725,7 +725,7 @@ class CalculadorMovilidadDocente:
 
         # --- 4) Render y PDF (xhtml2pdf como en tu ejemplo) ---
         html_rendered = render_template(
-            "calculadora_docente/resultado_calculadora_docente.html",  # ruta de la plantilla
+            "calculadora_docente_universitario/resultado_calculadora_docente_universitario.html",  # ruta de la plantilla
             **contexto)
 
         pdf_buffer = BytesIO()
@@ -738,5 +738,5 @@ class CalculadorMovilidadDocente:
             pdf_buffer,
             as_attachment=True,
             download_name=
-            f"resultado_haber_docente_{self.numero_identificacion or 'docente'}.pdf",
+            f"resultado_haber_docente_universitario_{self.numero_identificacion or 'docente_univ'}.pdf",
             mimetype="application/pdf")

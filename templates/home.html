@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +28,8 @@
             box-sizing: border-box;
         }
 
-        body, html {
+        body,
+        html {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f7fa;
             color: var(--text-dark);
@@ -104,7 +106,8 @@
             max-width: 700px;
             margin: 0 auto 40px;
             position: relative;
-            z-index: 1000; /* Ensure search container is above other content */
+            z-index: 1000;
+            /* Ensure search container is above other content */
         }
 
         .search-bar {
@@ -118,7 +121,8 @@
             background-color: white;
             opacity: 1;
             position: relative;
-            z-index: 1001; /* Ensure input is above results */
+            z-index: 1001;
+            /* Ensure input is above results */
         }
 
         .search-bar:focus {
@@ -134,7 +138,8 @@
             transform: translateY(-50%);
             color: var(--primary);
             font-size: 1.2rem;
-            z-index: 1002; /* Ensure icon is above input */
+            z-index: 1002;
+            /* Ensure icon is above input */
         }
 
         .search-results {
@@ -148,7 +153,8 @@
             margin-top: 10px;
             max-height: 400px;
             overflow-y: auto;
-            z-index: 999; /* High z-index but below input */
+            z-index: 999;
+            /* High z-index but below input */
             display: none;
             border: 1px solid rgba(94, 53, 177, 0.1);
         }
@@ -161,7 +167,8 @@
             right: 0;
             bottom: 0;
             background-color: rgba(0, 0, 0, 0.3);
-            z-index: 998; /* Below search results but above other content */
+            z-index: 998;
+            /* Below search results but above other content */
             display: none;
         }
 
@@ -172,7 +179,8 @@
             transition: var(--transition);
             display: flex;
             align-items: center;
-            background-color: white; /* Ensure each item has a solid background */
+            background-color: white;
+            /* Ensure each item has a solid background */
         }
 
         .search-result-item:last-child {
@@ -210,7 +218,8 @@
             padding: 20px;
             text-align: center;
             color: var(--text-light);
-            background-color: white; /* Ensure solid background */
+            background-color: white;
+            /* Ensure solid background */
         }
 
         /* Dashboard Section */
@@ -438,11 +447,22 @@
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .hero, .dashboard-title, .services-container, .quick-access, .search-container {
+        .hero,
+        .dashboard-title,
+        .services-container,
+        .quick-access,
+        .search-container {
             animation: fadeIn 0.5s ease forwards;
         }
 
@@ -451,28 +471,61 @@
             animation: fadeIn 0.5s ease forwards;
         }
 
-        .service-card:nth-child(2) { animation-delay: 0.1s; }
-        .service-card:nth-child(3) { animation-delay: 0.2s; }
-        .service-card:nth-child(4) { animation-delay: 0.3s; }
-        .service-card:nth-child(5) { animation-delay: 0.4s; }
-        .service-card:nth-child(6) { animation-delay: 0.5s; }
-        .service-card:nth-child(7) { animation-delay: 0.6s; }
-        .service-card:nth-child(8) { animation-delay: 0.7s; }
-        .service-card:nth-child(9) { animation-delay: 0.8s; }
-        .service-card:nth-child(10) { animation-delay: 0.9s; }
-        .service-card:nth-child(11) { animation-delay: 1s; }
-        .service-card:nth-child(12) { animation-delay: 1.1s; }
+        .service-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .service-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .service-card:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .service-card:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .service-card:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+
+        .service-card:nth-child(7) {
+            animation-delay: 0.6s;
+        }
+
+        .service-card:nth-child(8) {
+            animation-delay: 0.7s;
+        }
+
+        .service-card:nth-child(9) {
+            animation-delay: 0.8s;
+        }
+
+        .service-card:nth-child(10) {
+            animation-delay: 0.9s;
+        }
+
+        .service-card:nth-child(11) {
+            animation-delay: 1s;
+        }
+
+        .service-card:nth-child(12) {
+            animation-delay: 1.1s;
+        }
     </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-98REL9JCTR"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);} 
-      gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-      gtag('config', 'G-98REL9JCTR');
+        gtag('config', 'G-98REL9JCTR');
     </script>
 </head>
+
 <body>
     {% include 'navs/nav.html' %}
 
@@ -484,14 +537,16 @@
                     <img src="static/logoestudio.jpg" alt="Toyos y Espin - Estudio Jurídico" class="logo">
                 </div>
                 <h1>Toyos y Espin - Estudio Jurídico Previsional</h1>
-                <p>Herramientas especializadas para profesionales del derecho previsional en Salta Capital y toda Argentina</p>
+                <p>Herramientas especializadas para profesionales del derecho previsional en Salta Capital y toda
+                    Argentina</p>
             </div>
         </section>
 
         <!-- Search Bar -->
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-bar" id="toolSearch" placeholder="Buscar herramientas (ej: calculadora, movilidad, escritos...)">
+            <input type="text" class="search-bar" id="toolSearch"
+                placeholder="Buscar herramientas (ej: calculadora, movilidad, escritos...)">
             <div class="search-results" id="searchResults"></div>
         </div>
 
@@ -501,7 +556,8 @@
         <!-- Dashboard Title -->
         <div class="dashboard-title">
             <h2>Portal de Herramientas Previsionales</h2>
-            <p>Acceda a nuestras calculadoras y herramientas especializadas para optimizar su trabajo en derecho previsional</p>
+            <p>Acceda a nuestras calculadoras y herramientas especializadas para optimizar su trabajo en derecho
+                previsional</p>
         </div>
 
         <!-- Calculadoras Section -->
@@ -513,7 +569,8 @@
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <h2 class="service-title">Calculadora de Movilidad</h2>
-                    <p class="service-description">Calcule fácilmente los índices de movilidad previsional aplicables a cada caso según diferentes criterios jurisprudenciales.</p>
+                    <p class="service-description">Calcule fácilmente los índices de movilidad previsional aplicables a
+                        cada caso según diferentes criterios jurisprudenciales.</p>
                     <a href="/calculadora_movilidad" class="btn">Calcular</a>
                 </div>
 
@@ -522,7 +579,8 @@
                         <i class="fas fa-balance-scale"></i>
                     </div>
                     <h2 class="service-title">Calculadora de UMA</h2>
-                    <p class="service-description">Determine rápidamente los valores de la Unidad de Medida y Actualización para sus casos previsionales.</p>
+                    <p class="service-description">Determine rápidamente los valores de la Unidad de Medida y
+                        Actualización para sus casos previsionales.</p>
                     <a href="/calculadora_uma" class="btn">Calcular</a>
                 </div>
 
@@ -531,7 +589,8 @@
                         <i class="fas fa-chart-bar"></i>
                     </div>
                     <h2 class="service-title">Calculadora de Tope Máximo</h2>
-                    <p class="service-description">Calcule el haber previsional aplicando los topes máximos establecidos por ANSES según diferentes criterios.</p>
+                    <p class="service-description">Calcule el haber previsional aplicando los topes máximos establecidos
+                        por ANSES según diferentes criterios.</p>
                     <a href="/generador_tope_maximo" class="btn">Calcular</a>
                 </div>
 
@@ -540,7 +599,8 @@
                         <i class="fas fa-chalkboard-teacher"></i>
                     </div>
                     <h2 class="service-title">Planilla Docente</h2>
-                    <p class="service-description">Calcule el haber previsional docente considerando los regímenes especiales aplicables a este sector.</p>
+                    <p class="service-description">Calcule el haber previsional docente considerando los regímenes
+                        especiales aplicables a este sector.</p>
                     <a href="/planilla_docente" class="btn">Calcular</a>
                 </div>
 
@@ -550,8 +610,20 @@
                         <i class="fas fa-chalkboard-user"></i>
                     </div>
                     <h2 class="service-title">Calculadora Movilidad Docente</h2>
-                    <p class="service-description">Calcule la movilidad correspondiente a regímenes docentes, de forma clara y rápida.</p>
+                    <p class="service-description">Calcule la movilidad correspondiente a regímenes docentes, de forma
+                        clara y rápida.</p>
                     <a href="/calculadora_docente" class="btn">Calcular</a>
+                </div>
+
+                <!-- NUEVA: Calculadora Movilidad Docente Universitario -->
+                <div class="service-card" data-tool="calculadora-movilidad-docente-universitario">
+                    <div class="service-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h2 class="service-title">Calculadora Docente Universitario</h2>
+                    <p class="service-description">Calcule la movilidad para docentes universitarios según Ley 26.508
+                        (RIPDUN).</p>
+                    <a href="/calculadora_docente_universitario" class="btn">Calcular</a>
                 </div>
             </div>
         </section>
@@ -565,7 +637,8 @@
                         <i class="fas fa-gavel"></i>
                     </div>
                     <h2 class="service-title">Generador Escrito Regulación</h2>
-                    <p class="service-description">Cree escritos de regulación de honorarios profesionales de manera rápida y precisa.</p>
+                    <p class="service-description">Cree escritos de regulación de honorarios profesionales de manera
+                        rápida y precisa.</p>
                     <a href="/generador_regulacion" class="btn">Crear</a>
                 </div>
 
@@ -574,7 +647,8 @@
                         <i class="fas fa-file-invoice-dollar"></i>
                     </div>
                     <h2 class="service-title">Escritos Liquidación</h2>
-                    <p class="service-description">Genere escritos de liquidación previsional con todos los cálculos y fundamentos necesarios.</p>
+                    <p class="service-description">Genere escritos de liquidación previsional con todos los cálculos y
+                        fundamentos necesarios.</p>
                     <a href="/generador_escrito_liquidacion" class="btn">Crear</a>
                 </div>
             </div>
@@ -589,7 +663,8 @@
                         <i class="fas fa-shopping-cart"></i>
                     </div>
                     <h2 class="service-title">Comparativa de Poder Adquisitivo</h2>
-                    <p class="service-description">Compare el poder adquisitivo de sus clientes a lo largo del tiempo en relación con sus haberes previsionales.</p>
+                    <p class="service-description">Compare el poder adquisitivo de sus clientes a lo largo del tiempo en
+                        relación con sus haberes previsionales.</p>
                     <a href="/comparador_productos" class="btn">Comparar</a>
                 </div>
 
@@ -598,7 +673,8 @@
                         <i class="fas fa-briefcase"></i>
                     </div>
                     <h2 class="service-title">Herramientas para Demanda</h2>
-                    <p class="service-description">Acceda a comparaciones de Reparación Histórica y cuadros de Sumas no Remunerativas para fortalecer sus demandas.</p>
+                    <p class="service-description">Acceda a comparaciones de Reparación Histórica y cuadros de Sumas no
+                        Remunerativas para fortalecer sus demandas.</p>
                     <a href="/herramientas_demanda" class="btn">Analizar</a>
                 </div>
             </div>
@@ -613,7 +689,8 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <h2 class="service-title">Consultas</h2>
-                    <p class="service-description">Gestione sus clientes y complete formularios de consulta en pocos pasos para un seguimiento eficiente.</p>
+                    <p class="service-description">Gestione sus clientes y complete formularios de consulta en pocos
+                        pasos para un seguimiento eficiente.</p>
                     <a href="/consultas" class="btn">Ingresar</a>
                 </div>
 
@@ -622,7 +699,8 @@
                         <i class="fas fa-balance-scale-right"></i>
                     </div>
                     <h2 class="service-title">Jurisprudencia Previsional</h2>
-                    <p class="service-description">Suba sentencias para análisis con IA y acceda a una base de datos especializada en jurisprudencia previsional.</p>
+                    <p class="service-description">Suba sentencias para análisis con IA y acceda a una base de datos
+                        especializada en jurisprudencia previsional.</p>
                     <a href="/ver_casos" class="btn">Ingresar</a>
                 </div>
 
@@ -631,7 +709,8 @@
                         <i class="fas fa-book"></i>
                     </div>
                     <h2 class="service-title">Biblioteca</h2>
-                    <p class="service-description">Acceda a nuestra biblioteca digital especializada en derecho previsional, con búsqueda por autor, nombre, año o palabras clave.</p>
+                    <p class="service-description">Acceda a nuestra biblioteca digital especializada en derecho
+                        previsional, con búsqueda por autor, nombre, año o palabras clave.</p>
                     <a href="/ver_libros" class="btn">Ingresar</a>
                 </div>
 
@@ -640,7 +719,8 @@
                         <i class="fas fa-lightbulb"></i>
                     </div>
                     <h2 class="service-title">Próximamente</h2>
-                    <p class="service-description">Estamos desarrollando nuevas herramientas para mejorar su práctica en derecho previsional. ¡Manténgase atento!</p>
+                    <p class="service-description">Estamos desarrollando nuevas herramientas para mejorar su práctica en
+                        derecho previsional. ¡Manténgase atento!</p>
                     <a href="/home" class="btn">Más información</a>
                 </div>
             </div>
@@ -734,6 +814,15 @@
                     icon: 'fas fa-chalkboard-user',
                     url: '/calculadora_docente',
                     keywords: 'movilidad docente, movilidad, docente, calculadora, régimen docente'
+                },
+                // NUEVO: Calculadora Movilidad Docente Universitario
+                {
+                    id: 'calculadora-movilidad-docente-universitario',
+                    title: 'Calculadora Docente Universitario',
+                    description: 'Calcule movilidad para docentes universitarios (Ley 26.508)',
+                    icon: 'fas fa-user-graduate',
+                    url: '/calculadora_docente_universitario',
+                    keywords: 'movilidad universitario, docente universitario, universidad, RIPDUN, ley 26508'
                 },
                 {
                     id: 'generador-regulacion',
@@ -868,4 +957,5 @@
         });
     </script>
 </body>
+
 </html>

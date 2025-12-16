@@ -170,7 +170,7 @@
 
 <body>
     <hr>
-    <h1 style="margin-top: 10px;">Resultados — Haber Docente con Movilidad</h1>
+    <h1 style="margin-top: 10px;">Resultados — Haber Docente Universitario con Movilidad</h1>
     <hr style="margin-bottom: 20px;">
 
     <div class="image-container">
@@ -213,11 +213,11 @@
 
     <!-- Sección de Comparación con ANSES -->
     {% if comparar_con_anses %}
-    <h6>Comparación: Movilidad Docente vs ANSES</h6>
+    <h6>Comparación: Movilidad Docente Universitario vs ANSES</h6>
     <table class="resumen-table">
         <tr>
             <th class="first-column-cell2">Concepto</th>
-            <th>Movilidad Docente</th>
+            <th>Movilidad Doc. Univ.</th>
             <th>Movilidad ANSES</th>
         </tr>
         <tr>
@@ -249,7 +249,7 @@
     <!-- Gráfico principal -->
     <div class="graph-container">
         <img class="small-graph" src="data:image/png;base64,{{ grafico_linea_docente }}"
-            alt="Gráfico de evolución del haber docente">
+            alt="Gráfico de evolución del haber docente universitario">
     </div>
 
     <div class="page-break"></div>
@@ -260,9 +260,9 @@
         <thead>
             <tr class="font-large first-column-cell2">
                 <td class="negrita" style="width: 70px;">Periodo</td>
-                <td class="negrita col-docente-header">Haber Docente</td>
+                <td class="negrita col-docente-header">Haber Doc. Univ.</td>
                 {% if mostrar_indice %}
-                <td class="negrita col-docente-header">Índice Docente</td>
+                <td class="negrita col-docente-header">Índice Doc. Univ.</td>
                 {% endif %}
                 {% if comparar_con_anses %}
                 <td class="negrita col-anses-header">Haber ANSES</td>

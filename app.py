@@ -42,6 +42,7 @@ from services.generador_regulacion.generador_regulacion import Regulacion
 from services.generador_escritos_liquidacion.generador_escritos_liquidacion import Escrito_liquidacion
 from services.generador_escritos_agravios.generador_escritos_agravios import Escrito_agravios
 from services.calculadora_docente.calculadora_docente import CalculadorMovilidadDocente
+from services.calculadora_docente_universitario.calculadora_docente_universitario import CalculadorMovilidadDocenteUniversitario
 from services.generador_escritos_liquidacion.automatizacion import analizar_con_gemini, extraer_texto_pdf
 from services.calculadora_tope_maximo.generador_pdf import Comparativa
 from services.comparador_productos.comparador_productos import Comparador_productos
@@ -2455,6 +2456,11 @@ def resultado_calculadora_docente():
     establecimiento = request.form.get('establecimiento', '')
     localidad = request.form.get('localidad', '')
 
+    # Opción de comparación con ANSES
+    comparar_con_anses = request.form.get('comparar_con_anses', 'off') == 'on'
+    print(f"🔍 DEBUG - comparar_con_anses checkbox value: {request.form.get('comparar_con_anses')}")
+    print(f"🔍 DEBUG - comparar_con_anses boolean: {comparar_con_anses}")
+
     calc = CalculadorMovilidadDocente(
         nombre_docente=nombre_docente,
         cuil_expediente_tipo=cuil_expediente_tipo,
@@ -2467,7 +2473,55 @@ def resultado_calculadora_docente():
         nivel_educativo=nivel_educativo,
         situacion_revista=situacion_revista,
         establecimiento=establecimiento,
-        localidad=localidad
+        localidad=localidad,
+        comparar_con_anses=comparar_con_anses  # <- Nueva opción
+    )
+
+    resultado = calc.generar_pdf()
+    return resultado
+
+
+# ==================== CALCULADORA DOCENTE UNIVERSITARIO ====================
+@app.route('/calculadora_docente_universitario')
+@login_required
+def calculadora_docente_universitario():
+    return render_template('calculadora_docente_universitario/calculadora_docente_universitario.html')
+
+@app.route('/resultado_calculadora_docente_universitario', methods=['POST'])
+def resultado_calculadora_docente_universitario():
+    # Información del Docente Universitario
+    nombre_docente = request.form.get('nombre_docente', '')
+    cuil_expediente_tipo = request.form.get('cuil_expediente_tipo', 'Cuil')
+    numero_identificacion = request.form.get('numero_identificacion', '')
+    cargo_docente = request.form.get('cargo_docente', '')
+    periodo_desde = request.form.get('periodo_desde')
+    periodo_hasta = request.form.get('periodo_hasta')
+    monto = request.form.get('monto', '0')
+    antiguedad_docente = request.form.get('antiguedad_docente', '')
+    nivel_educativo = request.form.get('nivel_educativo', '')
+    situacion_revista = request.form.get('situacion_revista', '')
+    establecimiento = request.form.get('establecimiento', '')
+    localidad = request.form.get('localidad', '')
+
+    # Opción de comparación con ANSES
+    comparar_con_anses = request.form.get('comparar_con_anses', 'off') == 'on'
+    print(f"🔍 DEBUG UNIV - comparar_con_anses checkbox value: {request.form.get('comparar_con_anses')}")
+    print(f"🔍 DEBUG UNIV - comparar_con_anses boolean: {comparar_con_anses}")
+
+    calc = CalculadorMovilidadDocenteUniversitario(
+        nombre_docente=nombre_docente,
+        cuil_expediente_tipo=cuil_expediente_tipo,
+        numero_identificacion=numero_identificacion,
+        cargo_docente=cargo_docente,
+        periodo_desde=periodo_desde,
+        periodo_hasta=periodo_hasta,
+        monto=Decimal(str(monto)),
+        antiguedad_docente=antiguedad_docente,
+        nivel_educativo=nivel_educativo,
+        situacion_revista=situacion_revista,
+        establecimiento=establecimiento,
+        localidad=localidad,
+        comparar_con_anses=comparar_con_anses
     )
 
     resultado = calc.generar_pdf()

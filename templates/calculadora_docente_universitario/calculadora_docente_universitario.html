@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Movilidad Docente</title>
+    <title>Calculadora de Movilidad Docente Universitario</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -292,29 +292,30 @@
     {% include 'navs/nav.html' %}
     <div class="container">
         <div class="card">
-            <h1>Calculadora de Movilidad Docente</h1>
+            <h1>Calculadora de Movilidad Docente Universitario</h1>
             <p class="form-description">
-                Complete los datos del docente y los períodos de cálculo para obtener el análisis de movilidad
-                correspondiente.
+                Complete los datos del docente universitario y los períodos de cálculo para obtener el análisis de
+                movilidad
+                correspondiente (Ley 26.508).
             </p>
 
-            <form action="/resultado_calculadora_docente" method="POST">
-                <!-- Información del Docente -->
+            <form action="/resultado_calculadora_docente_universitario" method="POST">
+                <!-- Información del Docente Universitario -->
                 <div class="section-title">
-                    <i class="fas fa-chalkboard-teacher"></i> Información del Docente
+                    <i class="fas fa-user-graduate"></i> Información del Docente Universitario
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="nombre_docente">
-                            Nombre del Docente
+                            Nombre del Docente Universitario
                             <span class="tooltip">
                                 <i class="fas fa-info-circle"></i>
-                                <span class="tooltip-text">Ingrese el nombre completo del docente</span>
+                                <span class="tooltip-text">Ingrese el nombre completo del docente universitario</span>
                             </span>
                         </label>
                         <input type="text" id="nombre_docente" name="nombre_docente" required
-                            placeholder="Ej: María González">
+                            placeholder="Ej: Dr. María González">
                     </div>
 
                     <div class="form-group">
@@ -376,7 +377,8 @@
                             Monto Base ($)
                             <span class="tooltip">
                                 <i class="fas fa-info-circle"></i>
-                                <span class="tooltip-text">Monto base del haber docente para el cálculo</span>
+                                <span class="tooltip-text">Monto base del haber docente universitario para el
+                                    cálculo</span>
                             </span>
                         </label>
                         <input type="number" id="monto" name="monto" step="0.01" required placeholder="Ej: 180000.00">
@@ -402,7 +404,7 @@
                 </div>
 
                 <button type="submit" class="submit-button">
-                    <i class="fas fa-calculator"></i> Calcular Movilidad Docente
+                    <i class="fas fa-calculator"></i> Calcular Movilidad Docente Universitario
                 </button>
             </form>
         </div>
