@@ -43,6 +43,7 @@ from services.generador_escritos_liquidacion.generador_escritos_liquidacion impo
 from services.generador_escritos_agravios.generador_escritos_agravios import Escrito_agravios
 from services.calculadora_docente.calculadora_docente import CalculadorMovilidadDocente
 from services.calculadora_docente_universitario.calculadora_docente_universitario import CalculadorMovilidadDocenteUniversitario
+from services.calculadora_luz_fuerza.calculadora_luz_fuerza import CalculadorMovilidadLuzFuerza
 from services.generador_escritos_liquidacion.automatizacion import analizar_con_gemini, extraer_texto_pdf
 from services.calculadora_tope_maximo.generador_pdf import Comparativa
 from services.comparador_productos.comparador_productos import Comparador_productos
@@ -128,7 +129,7 @@ def calculadora_uma_publica():
 
 @app.route('/resultado_uma', methods=['POST'])
 def generar_pdf_route():
-    
+
     # Obtener los datos del formulario
     autos = request.form.get('Autos')
     expediente = request.form.get('Expediente')
@@ -161,7 +162,7 @@ def generar_pdf_route():
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
         return response
-        
+
 @app.route('/formulario_demandas', methods=['GET', 'POST'])
 @login_required
 def formulario_demandas():
@@ -400,7 +401,7 @@ def resultado_calculado_movilidad():
         comparacion_mov_alanis= request.form.get('comparacion_mov_alanis', False)
 
         #movilidad personalizada
-    
+
         primer_fecha_fin = datetime.strptime(request.form.get('primer_fecha_fin'), '%Y-%m-%d') if request.form.get('primer_fecha_fin') else None
         segunda_fecha_fin = datetime.strptime(request.form.get('segunda_fecha_fin'), '%Y-%m-%d') if request.form.get('segunda_fecha_fin') else None
         tercer_fecha_fin = datetime.strptime(request.form.get('tercer_fecha_fin'), '%Y-%m-%d') if request.form.get('tercer_fecha_fin') else None
@@ -558,7 +559,7 @@ def resultado_comparativa_tope_maximo():
     Alanis_Colina= request.form.get('Alanis_Colina',False)
 
 
-    
+
 
     pdf_generator = Comparativa(
         autos, expediente, segunda_fecha, haber_reclamado,caliva_mas_anses,badaro_mas_anses, badaro_mas_caliva, remuneracion_maxima, ochentaidos_remuneracion_maxima, rem_max_caliva_27551, martinez_mas_anses, anses_mas_palavecino, caliva_marquez_mas_palavecino, badaro_cm_palavecino, RM_Badaro_FP_CM_P_Anses, Alanis_Colina
@@ -610,13 +611,13 @@ def resultado_movilizador_de_haber():
 
     tupla=((primer_fecha_fin,movilidad_2),(segunda_fecha_fin,movilidad_3),(tercer_fecha_fin,movilidad_4), (cuarta_fecha_fin,movilidad_5), (quinta_fecha_fin,movilidad_6))
 
-    
+
     calculo = calculo_retroactivo(datos_del_actor, expediente, cuil_expediente, beneficio, 
                                   num_beneficio, fecha_inicio, fecha_fin, 
                                   fecha_adquisicion_del_derecho, monto, movilidad_1, tupla)
     resultado = calculo.generar_pdf()
     return resultado
-    
+
 @app.route('/comparador_productos')
 @login_required
 def comparador_productos():
@@ -642,7 +643,7 @@ def comparador_productos_resultado():
     responsee.headers['Content-Type'] = 'application/pdf'
     responsee.headers['Content-Disposition'] = 'attachment; filename=resultado.pdf'  # Cambia a 'attachment'
     return responsee
-    
+
 @app.route('/planilla_docente')
 @login_required
 def planilla_docente():
@@ -673,7 +674,7 @@ def procesar():
     datos['Porcentaje_Cargo_3'] = request.form.get("Porcentaje_Cargo_3")
     datos['planilla_Cargo_3'] = request.files["excelFile_3"]
 
-    
+
     planilla_docente = Planilla_Docente(datos)
     resultado = planilla_docente.crear_documento('planilla_percibidos')
 
@@ -706,7 +707,7 @@ def resultado_herramientas_demandas():
         # Extracción de valores con un valor predeterminado de 0 si están vacíos
         comparacion_reparacion_historica = request.form.get('comparacion_reparacion_historica', False)
         tabla_pbu = request.form.get('tabla_pbu', False)
-    
+
         def obtener_valor(form_value):
             valor = float(form_value)
             return valor if valor != 0 else 0
@@ -749,7 +750,7 @@ def resultado_herramientas_demandas():
 
 
 
-            
+
 
             "massalin_particulares": request.form.get('massalin_particulares', False),
             "Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo": request.form.get('Concepto_Asig_No_Rem_Ac_07_SUETRA_No_Remunerativo', False),
@@ -1022,7 +1023,7 @@ def resultado_herramientas_demandas():
             "hospital_nino_jesus": request.form.get('hospital_nino_jesus', False),
             "hospital_nino_jesus_561_redondeo": request.form.get('hospital_nino_jesus_561_redondeo', False),
             "hospital_nino_jesus_645_nivelador_res_2665_07": request.form.get('hospital_nino_jesus_645_nivelador_res_2665_07', False),
-            
+
             "codigo_1" : request.form.get('codigo_1'),
             "concepto_1" : request.form.get('concepto_1'),
             "codigo_2" : request.form.get('codigo_2'),
@@ -1035,7 +1036,7 @@ def resultado_herramientas_demandas():
             "concepto_5" : request.form.get('concepto_5'),
 
 
-            
+
         }
 
 
@@ -1387,7 +1388,7 @@ def chat():
         Importante: nunca uses el dato de id, siempre responderas en español y si se te pide informacion sobre un caso lo daras de manera ordenada y con parrafos en lo posible, respetando reglas gramaticales, aqui tienes un ejemplo:
 
         El caso Costanzo Emilse Noemi C/ANSES fue resuelto por la Cámara Federal de la Seguridad Social - Sala 1, que analizó un recurso interpuesto por ANSES en contra de la regulación de honorarios y la imposición de costas. La Cámara confirmó que ANSES debía asumir las costas conforme al principio objetivo de la derrota (art. 68 del CPCCN) y jurisprudencia de la CSJN (Rueda, Orlinda c/ ANSES y Morales, Blanca Azucena c/ ANSES). En cuanto a los honorarios, se consideró la complejidad del caso, el mérito profesional, las tareas realizadas en la ejecución y el precedente Finn Carlos Ignacio c/ ANSES, aplicando la Ley 27.423 (arts. 15, 16, 21, 24, 29, 41 y 51), la Acordada CSJN 30/2023 y la Resolución SGA 1497/2024, reduciéndolos a $1.575.300 (30 UMA). El expediente Nº 16712/2011 se encuentra en segunda instancia, con sentencia dictada el 30 de julio de 2024, bajo la jurisdicción de la Cámara Federal de la Seguridad Social - Sala 1, aunque sin mención de los jueces intervinientes. La carátula del expediente es Costanzo Emilse Noemi C/ANSES s/Incidente, y la sentencia permanece sujeta a revisión.
-        
+
         Responde de manera clara y concisa, refiriéndote a los casos específicos cuando sea necesario.
         Si no encuentras información relevante, indica que no tienes datos sobre ese caso.
         """
@@ -1431,7 +1432,7 @@ def biblioteca():
 
     # Abrir la hoja de cálculo utilizando el ID
     sheet = gc.open_by_key(SPREADSHEET_ID).sheet1
-    
+
     # Obtener todos los registros desde la hoja de cálculo
     data = sheet.get_all_records()
 
@@ -1683,63 +1684,63 @@ def ver_cliente(id):
             if request.form.get("2.91_Guarda_Documental"):
                 formularios.append("datos/formularios/2.91_Guarda_Documental.pdf")
                 lista_formularios.append("2.91 Guarda Documental")
-                
+
             if request.form.get("6.18_Solicitud_Prestaciones_Previsionales"):
                 formularios.append("datos/formularios/6.18_Solicitud_Prestaciones_Previsionales.pdf")
                 lista_formularios.append("6.18 Solicitud Prestaciones Previsionales")
-                
+
             if request.form.get("6.18_Solicitud_Prestaciones_Previsionales_pension"):
                 formularios.append("datos/formularios/6.18_Solicitud_Prestaciones_Previsionales_pension.pdf")
                 lista_formularios.append("6.18 Solicitud Prestaciones Previsionales pension")
-                
+
             if request.form.get("Anexo_Baja_Puam"):
                 formularios.append("datos/formularios/Anexo_Baja_Puam.pdf")
                 lista_formularios.append("Anexo Baja Puam")
-                
+
             if request.form.get("Anexo_I_Ley_27.625"):
                 formularios.append("datos/formularios/Anexo_I_Ley_27.625.pdf")
                 lista_formularios.append("Anexo I Ley 27.625")
-                
+
             if request.form.get("Anexo_II_DEC_894_01"):
                 formularios.append("datos/formularios/Anexo_II_DEC_894_01.pdf")
                 lista_formularios.append("Anexo II DEC 894 01")
-                
+
             if request.form.get("Anexo_II_980_05"):
                 formularios.append("datos/formularios/Anexo_II_980_05.pdf")
                 lista_formularios.append("Anexo II 980 05")
-                
+
             if request.form.get("Anexo_II_Socioeconómico_24.476"):
                 formularios.append("datos/formularios/Anexo_II_Socioeconómico_24.476.pdf")
                 lista_formularios.append("Anexo II Socioeconómico 24.476")
-                
+
             if request.form.get("Baja_PNC"):
                 formularios.append("datos/formularios/Baja_PNC.pdf")
                 lista_formularios.append("Baja PNC")
-                
+
             if request.form.get("Carta_Poder_SRT"):
                 formularios.append("datos/formularios/Carta_Poder_SRT.pdf")
                 lista_formularios.append("Carta Poder SRT")
-                
+
             if request.form.get("DDJJ_de_salud_resol_300"):
                 formularios.append("datos/formularios/DDJJ_de_salud_resol_300.pdf")
                 lista_formularios.append("DDJJ de salud resol 300")
-                
+
             if request.form.get("DDJJ_Ley_17562_6.9"):
                 formularios.append("datos/formularios/DDJJ_Ley_17562_6.9.pdf")
                 lista_formularios.append("DDJJ Ley 17562 6.9")
-                
+
             if request.form.get("F_3283_Autorización_ARCA"):
                 formularios.append("datos/formularios/F_3283_Autorización_ARCA.pdf")
                 lista_formularios.append("F 3283 Autorización ARCA")
-                
+
             if request.form.get("Formulario_Carta_Poder_(CSS)"):
                 formularios.append("datos/formularios/Formulario_Carta_Poder_(CSS).pdf")
                 lista_formularios.append("Formulario Carta Poder (CSS)")
-                
+
             if request.form.get("Formulario_encuesta_RTI"):
                 formularios.append("datos/formularios/Formulario_encuesta_RTI.pdf")
                 lista_formularios.append("Formulario encuesta RTI")
-                
+
             if request.form.get("PS_1.75_Carta_Poder_Cap_III_27.705"):
                 formularios.append("datos/formularios/PS_1.75_Carta_Poder_Cap_III_27.705.pdf")
                 lista_formularios.append("PS 1.75 Carta Poder Cap III 27.705")
@@ -1861,7 +1862,7 @@ def ver_cliente(id):
             if request.form.get("CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES"):
                 word_templates.append(("CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES", "datos/formularios/CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES.docx"))
                 lista_formularios.append("CONVENIO DE GASTOS ADMINISTRATIVOS JUDICIALES")
-            
+
 
             # Procesar cada template Word
             if word_templates:
@@ -2518,6 +2519,53 @@ def resultado_calculadora_docente_universitario():
         monto=Decimal(str(monto)),
         antiguedad_docente=antiguedad_docente,
         nivel_educativo=nivel_educativo,
+        situacion_revista=situacion_revista,
+        establecimiento=establecimiento,
+        localidad=localidad,
+        comparar_con_anses=comparar_con_anses
+    )
+
+    resultado = calc.generar_pdf()
+    return resultado
+
+
+# ==================== CALCULADORA LUZ Y FUERZA ====================
+@app.route('/calculadora_luz_fuerza')
+@login_required
+def calculadora_luz_fuerza():
+    return render_template('calculadora_luz_fuerza/calculadora_luz_fuerza.html')
+
+@app.route('/resultado_calculadora_luz_fuerza', methods=['POST'])
+def resultado_calculadora_luz_fuerza():
+    # Información del Afiliado
+    nombre_afiliado = request.form.get('nombre_afiliado', '')
+    cuil_expediente_tipo = request.form.get('cuil_expediente_tipo', 'Cuil')
+    numero_identificacion = request.form.get('numero_identificacion', '')
+    cargo = request.form.get('cargo_docente', '')
+    periodo_desde = request.form.get('periodo_desde')
+    periodo_hasta = request.form.get('periodo_hasta')
+    monto = request.form.get('monto', '0')
+    antiguedad = request.form.get('antiguedad_docente', '')
+    nivel = request.form.get('nivel_educativo', '')
+    situacion_revista = request.form.get('situacion_revista', '')
+    establecimiento = request.form.get('establecimiento', '')
+    localidad = request.form.get('localidad', '')
+
+    # Opción de comparación con ANSES
+    comparar_con_anses = request.form.get('comparar_con_anses', 'off') == 'on'
+    print(f"🔍 DEBUG LyF - comparar_con_anses checkbox value: {request.form.get('comparar_con_anses')}")
+    print(f"🔍 DEBUG LyF - comparar_con_anses boolean: {comparar_con_anses}")
+
+    calc = CalculadorMovilidadLuzFuerza(
+        nombre_afiliado=nombre_afiliado,
+        cuil_expediente_tipo=cuil_expediente_tipo,
+        numero_identificacion=numero_identificacion,
+        cargo=cargo,
+        periodo_desde=periodo_desde,
+        periodo_hasta=periodo_hasta,
+        monto=Decimal(str(monto)),
+        antiguedad=antiguedad,
+        nivel=nivel,
         situacion_revista=situacion_revista,
         establecimiento=establecimiento,
         localidad=localidad,
