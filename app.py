@@ -1068,6 +1068,18 @@ def calculadora_tope_maximo_publica():
 def comparador_productos_publica():
     return render_template('herramientas_publicas/comparador_productos_publica.html')
 
+@app.route('/calculadora_docente_publica')
+def calculadora_docente_publica():
+    return render_template('herramientas_publicas/calculadora_docente_publica.html')
+
+@app.route('/calculadora_docente_universitario_publica')
+def calculadora_docente_universitario_publica():
+    return render_template('herramientas_publicas/calculadora_docente_universitario_publica.html')
+
+@app.route('/calculadora_luz_fuerza_publica')
+def calculadora_luz_fuerza_publica():
+    return render_template('herramientas_publicas/calculadora_luz_fuerza_publica.html')
+
 # Agrega esto en tu archivo principal de Flask (app.py o similar)
 @app.template_filter('formato_moneda')
 def formato_moneda(value):
