@@ -1475,6 +1475,7 @@ def consultas():
         data_clientes = [dict(row._mapping) for row in result]
     return render_template('consultas/consultas.html', data_clientes=data_clientes)
 
+
 @app.route('/upload_dni', methods=['POST'])
 @login_required
 def upload_dni():
@@ -1549,11 +1550,22 @@ def upload_dni():
                 extracted_data
             )
             new_id = result.lastrowid
+
     except Exception as e:
+        flash(f"Error al guardar el cliente: {str(e)}", "danger")
         return redirect(url_for('consultas'))
+
+    # ✅ Notificación de éxito (aparece en la próxima pantalla gracias a flash)
+    dni = extracted_data.get("dni_number", "")
+    nombre = extracted_data.get("full_name_2", "") or extracted_data.get("full_name", "") or ""
+    if nombre and dni:
+        flash(f"✅ DNI cargado correctamente. Cliente registrado: {nombre} (DNI {dni}).", "success")
+    else:
+        flash("✅ DNI cargado correctamente. Cliente registrado.", "success")
 
     # Redirigir a la pantalla del cliente recién cargado
     return redirect(url_for('ver_cliente', id=new_id))
+
 
 @app.route('/agregar_cliente', methods=['POST'])
 @login_required
