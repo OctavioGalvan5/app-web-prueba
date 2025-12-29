@@ -1495,12 +1495,18 @@ def upload_dni():
             return redirect(url_for('consultas'))
         processed_files.append(processed)
 
-    # Enviar la lista de archivos procesados a la API de Gemini
+    # Enviar la lista de archivos procesados a la API de ChatGPT
     extracted_data, error = geminis_api_extract_data(processed_files)
 
     if error or not extracted_data:
         flash(f"Error al extraer datos del DNI: {error}", "danger")
         return redirect(url_for('consultas'))
+
+    # Convertir fechas vacías a None para evitar errores de base de datos
+    if extracted_data.get('date_of_birth') == '' or extracted_data.get('date_of_birth') is None:
+        extracted_data['date_of_birth'] = None
+    if extracted_data.get('entry_date') == '' or extracted_data.get('entry_date') is None:
+        extracted_data['entry_date'] = None
 
     # Guardar los datos extraídos en la base de datos y obtener el ID del cliente insertado
     try:
@@ -1550,21 +1556,14 @@ def upload_dni():
                 extracted_data
             )
             new_id = result.lastrowid
-
     except Exception as e:
-        flash(f"Error al guardar el cliente: {str(e)}", "danger")
+        print(f"❌ Error al insertar en la base de datos: {e}")
+        flash(f"Error al guardar los datos: {e}", "danger")
         return redirect(url_for('consultas'))
-
-    # ✅ Notificación de éxito (aparece en la próxima pantalla gracias a flash)
-    dni = extracted_data.get("dni_number", "")
-    nombre = extracted_data.get("full_name_2", "") or extracted_data.get("full_name", "") or ""
-    if nombre and dni:
-        flash(f"✅ DNI cargado correctamente. Cliente registrado: {nombre} (DNI {dni}).", "success")
-    else:
-        flash("✅ DNI cargado correctamente. Cliente registrado.", "success")
 
     # Redirigir a la pantalla del cliente recién cargado
     return redirect(url_for('ver_cliente', id=new_id))
+
 
 
 @app.route('/agregar_cliente', methods=['POST'])

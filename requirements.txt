@@ -22,3 +22,4 @@ gspread
 pypdf
 PyMuPDF
 google-genai
+openai
