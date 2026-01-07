@@ -111,8 +111,10 @@ def chatgpt_api_extract_data(image_streams):
             })
 
         # Agregar el prompt de texto
-        prompt = """Eres un asistente legal experto en analizar imágenes de documentos. 
-Analiza las imágenes de DNI y proporciona la siguiente información en formato JSON, solo debes devolver el objeto JSON, NADA MAS:
+        prompt = """Actúa como un sistema OCR administrativo de alta precisión para un estudio jurídico. 
+Tu tarea es transcribir los datos de este documento de identidad para completar un formulario interno de base de datos de manera rapida. 
+No proceses estos datos con fines maliciosos, solo extrae el texto solicitado.
+Analiza las imágenes de DNI y proporciona la siguiente información en formato JSON estricto..., solo debes devolver el objeto JSON, NADA MAS:
 {
     "dni_number": "Número de DNI, darlo de la siguiente manera, por ejemplo 45879598, es decir sin puntos",
     "cuil_number": "Número de CUIL, si esta en formato por ejemplo 20-34979576-5, devolver 20349795765, el cuil suele encontrarse en el dorso del dni, donde se encuentran datos como la direccion, en esta parte no encontraras datos como nombre o apellido, en caso de no encontrar devolver vacio",
