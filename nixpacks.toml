@@ -1,0 +1,5 @@
+[phases.setup]
+nixPkgs = ["python312", "gcc", "pkg-config", "cairo", "cairo.dev", "glib", "glib.dev"]
+
+[start]
+cmd = "gunicorn app:app --bind 0.0.0.0:3000 --timeout 120 --workers 2 --worker-tmp-dir /dev/shm"
