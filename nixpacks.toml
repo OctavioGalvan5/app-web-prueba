@@ -3,17 +3,23 @@ nixPkgs = [
   "python312",
   "gcc",
   "pkg-config",
-  "cairo",
-  "cairo.dev",
-  "glib",
-  "glib.dev"
-]
 
-[variables]
-PKG_CONFIG_PATH = "/root/.nix-profile/lib/pkgconfig:/root/.nix-profile/share/pkgconfig"
-LD_LIBRARY_PATH = "/root/.nix-profile/lib"
-C_INCLUDE_PATH = "/root/.nix-profile/include"
-LIBRARY_PATH = "/root/.nix-profile/lib"
+  "cairo",
+  "glib",
+  "freetype",
+  "fontconfig",
+
+  "xorg.libX11",
+  "xorg.libXrender",
+  "xorg.libXext",
+
+  "xorg.libxcb",
+  "xorg.xcbutil",
+  "xorg.xcbutilwm",
+  "xorg.xcbutilimage",
+  "xorg.xcbutilkeysyms",
+  "xorg.xcbutilrenderutil"
+]
 
 [start]
 cmd = "gunicorn app:app --bind 0.0.0.0:3000 --timeout 120 --workers 2 --worker-tmp-dir /dev/shm"
