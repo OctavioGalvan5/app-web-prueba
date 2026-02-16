@@ -3,6 +3,7 @@ nixPkgs = [
   "python312",
   "gcc",
   "pkg-config",
+  "cmake",
   "cairo",
   "cairo.dev",
   "glib",
@@ -16,7 +17,7 @@ nixPkgs = [
 
 [phases.install]
 cmds = [
-  "export PKG_CONFIG_PATH=$(pkg-config --variable pc_path pkg-config)",
+  "export PKG_CONFIG_PATH=$(find /nix/store -type d -path '*/lib/pkgconfig' | tr '\n' ':')",
   "python -m venv --copies /opt/venv",
   ". /opt/venv/bin/activate",
   "pip install -r requirements.txt"
