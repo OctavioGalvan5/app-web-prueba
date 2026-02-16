@@ -3,9 +3,6 @@ providers = ["python"]
 [variables]
 NIXPACKS_PYTHON_VERSION = "3.12"
 
-[setup]
-pkgs = ["python312", "gcc", "pkg-config"]
-
 [install]
 cmds = [
   "python -m venv --copies /opt/venv",
