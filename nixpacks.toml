@@ -19,6 +19,8 @@ nixPkgs = [
 
 [variables]
 PKG_CONFIG_PATH = "/root/.nix-profile/lib/pkgconfig:/root/.nix-profile/share/pkgconfig:/nix/var/nix/profiles/default/lib/pkgconfig:/nix/var/nix/profiles/default/share/pkgconfig"
+C_INCLUDE_PATH = "/root/.nix-profile/include"
+LIBRARY_PATH = "/root/.nix-profile/lib"
 
 [phases.install]
 cmds = [
