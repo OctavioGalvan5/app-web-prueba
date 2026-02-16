@@ -4,6 +4,7 @@ nixPkgs = [
   "gcc",
   "pkg-config",
   "cairo",
+  "cairo.dev",
   "glib",
   "freetype",
   "fontconfig",
