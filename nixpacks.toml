@@ -10,22 +10,26 @@ nixPkgs = [
   "freetype",
   "fontconfig",
   "xorg.libX11",
+  "xorg.libX11.dev",
   "xorg.libXrender",
+  "xorg.libXrender.dev",
   "xorg.libXext",
+  "xorg.libXext.dev",
   "xorg.libxcb",
   "xorg.libxcb.dev",
-  "xorg.xcbproto"
+  "xorg.xcbproto",
+  "xorg.xorgproto"
 ]
 
 [variables]
 PKG_CONFIG_PATH = "/root/.nix-profile/lib/pkgconfig:/root/.nix-profile/share/pkgconfig:/nix/var/nix/profiles/default/lib/pkgconfig:/nix/var/nix/profiles/default/share/pkgconfig"
-C_INCLUDE_PATH = "/root/.nix-profile/include"
-LIBRARY_PATH = "/root/.nix-profile/lib"
 
 [phases.install]
 cmds = [
   "python -m venv --copies /opt/venv",
   ". /opt/venv/bin/activate",
   "pip install --upgrade pip setuptools wheel",
+  "export C_INCLUDE_PATH=/root/.nix-profile/include:$C_INCLUDE_PATH",
+  "export LIBRARY_PATH=/root/.nix-profile/lib:$LIBRARY_PATH",
   "pip install -r requirements.txt"
 ]
