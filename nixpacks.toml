@@ -3,22 +3,22 @@ nixPkgs = [
   "python312",
   "gcc",
   "pkg-config",
-
   "cairo",
   "glib",
   "freetype",
   "fontconfig",
-
   "xorg.libX11",
   "xorg.libXrender",
   "xorg.libXext",
+  "xorg.libxcb"
+]
 
-  "xorg.libxcb",
-  "xorg.xcbutil",
-  "xorg.xcbutilwm",
-  "xorg.xcbutilimage",
-  "xorg.xcbutilkeysyms",
-  "xorg.xcbutilrenderutil"
+[phases.install]
+cmds = [
+  "export PKG_CONFIG_PATH=$(pkg-config --variable pc_path pkg-config)",
+  "python -m venv --copies /opt/venv",
+  ". /opt/venv/bin/activate",
+  "pip install -r requirements.txt"
 ]
 
 [start]
