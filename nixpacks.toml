@@ -12,7 +12,9 @@ nixPkgs = [
   "xorg.libX11",
   "xorg.libXrender",
   "xorg.libXext",
-  "xorg.libxcb"
+  "xorg.libxcb",
+  "xorg.libxcb.dev",
+  "xorg.xcbproto"
 ]
 
 [variables]
