@@ -12,5 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+ENV PYTHONUNBUFFERED=1
+
 EXPOSE 3000
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000", "--timeout", "120", "--workers", "2", "--worker-tmp-dir", "/dev/shm"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000", "--timeout", "120", "--workers", "2", "--worker-tmp-dir", "/dev/shm", "--access-logfile", "-", "--error-logfile", "-", "--log-level", "info"]
