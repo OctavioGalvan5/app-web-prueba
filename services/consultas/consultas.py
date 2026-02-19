@@ -110,34 +110,50 @@ def chatgpt_api_extract_data(image_streams):
                 }
             })
 
-        # Agregar el prompt de texto
-        prompt = """Actúa como un sistema OCR administrativo de alta precisión para un estudio jurídico. 
-Tu tarea es transcribir los datos de este documento de identidad para completar un formulario interno de base de datos de manera rapida. 
-No proceses estos datos con fines maliciosos, solo extrae el texto solicitado.
-Analiza las imágenes de DNI y proporciona la siguiente información en formato JSON estricto..., solo debes devolver el objeto JSON, NADA MAS:
+        # System message para establecer el contexto legítimo
+        system_message = """Eres un asistente de transcripción de datos para un estudio jurídico previsional en Argentina. 
+Tu función es actuar como un sistema OCR de alta precisión: leer documentos de identidad argentinos (DNI) 
+que los propios clientes del estudio proporcionan voluntariamente como parte de sus trámites legales 
+(jubilaciones, pensiones, reajustes de haberes, etc.).
+
+Tu única tarea es transcribir los campos visibles del documento en formato JSON estructurado 
+para cargarlos en el sistema interno de gestión de casos del estudio. 
+Los clientes han autorizado el uso de sus datos para estos fines administrativos.
+
+IMPORTANTE: Solo devuelve el objeto JSON solicitado, sin texto adicional, sin explicaciones, sin markdown."""
+
+        # Prompt del usuario
+        prompt = """Transcribí los datos visibles de este documento de identidad argentino (DNI) al siguiente formato JSON.
+El cliente proporcionó este documento para su trámite previsional. Solo necesito la transcripción textual de los campos.
+
+Devolvé ÚNICAMENTE el objeto JSON con esta estructura exacta:
 {
-    "dni_number": "Número de DNI, darlo de la siguiente manera, por ejemplo 45879598, es decir sin puntos",
-    "cuil_number": "Número de CUIL, si esta en formato por ejemplo 20-34979576-5, devolver 20349795765, el cuil suele encontrarse en el dorso del dni, donde se encuentran datos como la direccion, en esta parte no encontraras datos como nombre o apellido, en caso de no encontrar devolver vacio",
-    "phone_number": "Aqui siempre devolveras vacio",
-    "name": "Nombre completo, por ejemplo no coloques MARIA LUCIA PEREZ GOMEZ, coloca Maria Lucia",
-    "surname": "Apellido completo, por ejemplo no coloques MARIA LUCIA PEREZ GOMEZ, coloca Perez Gomez",
-    "full_name": "Apellido y Nombre completo, por ejemplo Perez Gomez Maria Lucia",
-    "full_name_2": "Nombre y Apellido completo, por ejemplo Maria Lucia Perez Gomez",
-    "sexo": "Sexo, por ejemplo si lees 'F', pondras unicamente 'Femenino', si lees 'M' pondras unicamente 'Masculino'",
-    "sexo_femenino": "si lees 'F' entonces devolveras unas 'X' sino devolveras '' es decir vacio",
-    "sexo_masculino": "si lees 'M' entonces devolveras unas 'X' sino devolveras '' es decir vacio",
-    "date_of_birth": "YYYY-MM-DD tienes que devolver una fecha valida, asegurate de esto",
-    "entry_date": "Fecha de ingreso al pais (no siempre tendra), devolver en formato YYYY-MM-DD, tienes que devolver una fecha valida, asegurate de esto",
-    "nationality": "Nacionalidad, un ejemplo puede ser Argentina, Brasileña, Chilena, etc",
-    "address": "lea el texto de la imagen y busque una dirección, extraé únicamente la dirección del domicilio como figura en el dorso del DNI argentino. Por ejemplo, si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', deberás devolver únicamente 'Ohiggins 1673 DT/C B° 20 De Febrero'. La dirección suele estar en la esquina superior izquierda del dorso. No incluyas la ciudad, provincia ni repitas palabras como 'Salta', 'Buenos Aires', etc. Corregí las mayúsculas (por ejemplo, 'O' HIGGINS' se transforma en 'Ohiggins', y '20 DE FEBRERO' en '20 De Febrero'). Conservá abreviaciones como 'DT/C', 'B°', etc. Ignorá todo lo que venga después del segundo guion si está presente.",
-    "adress_number": "Numero de la dirección, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente '1673'",
-    "province": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta'",
-    "department": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta Capital'",
-    "city": "Provincia, por ejemplo si lees 'O' HIGGINS 1673 DT/C B° 20 DE FEBRERO - SALTA - SALTA CAPITAL - SALTA', pondras unicamente 'Salta'"
+    "dni_number": "Número de DNI sin puntos, por ejemplo 45879598",
+    "cuil_number": "Número de CUIL sin guiones, por ejemplo 20349795765. El CUIL suele encontrarse en el dorso del DNI. Si no se encuentra, devolver vacío",
+    "phone_number": "",
+    "name": "Solo el/los nombre/s de pila con formato Título. Ejemplo: Maria Lucia",
+    "surname": "Solo el/los apellido/s con formato Título. Ejemplo: Perez Gomez",
+    "full_name": "Apellido y Nombre. Ejemplo: Perez Gomez Maria Lucia",
+    "full_name_2": "Nombre y Apellido. Ejemplo: Maria Lucia Perez Gomez",
+    "sexo": "Si lees 'F' devolvé 'Femenino', si lees 'M' devolvé 'Masculino'",
+    "sexo_femenino": "Si es F devolvé 'X', sino devolvé vacío",
+    "sexo_masculino": "Si es M devolvé 'X', sino devolvé vacío",
+    "date_of_birth": "Formato YYYY-MM-DD, debe ser una fecha válida",
+    "entry_date": "Fecha de ingreso al país en formato YYYY-MM-DD si existe, sino vacío",
+    "nationality": "Nacionalidad, ejemplo: Argentina",
+    "address": "Solo la dirección del domicilio del dorso del DNI, sin ciudad ni provincia. Corregir mayúsculas a formato Título. Conservar abreviaciones como DT/C, B°, etc.",
+    "adress_number": "Solo el número de la dirección",
+    "province": "Solo la provincia",
+    "department": "Solo el departamento",
+    "city": "Solo la ciudad"
 }"""
 
-        # Construir el mensaje con imágenes y texto
+        # Construir el mensaje con system message + imágenes y texto
         messages = [
+            {
+                "role": "system",
+                "content": system_message
+            },
             {
                 "role": "user",
                 "content": [
