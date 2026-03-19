@@ -59,6 +59,7 @@ from services.consultas.consultas import geminis_api_extract_data, update_client
 from models.entities.User import User
 
 # Importar la conexión a la base de datos
+from openai import OpenAI
 
 
 app = Flask(__name__)
@@ -1360,8 +1361,7 @@ if not API_KEY:
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    genai.configure(api_key=API_KEY)
-    model = genai.GenerativeModel('gemini-2.0-flash', system_instruction="Eres una IA de un estudio Juridico Toyos y Espin, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible")
+    openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     try:
         # Obtén los casos de la base de datos
         with engine.connect() as connection:
@@ -1405,9 +1405,22 @@ def chat():
         Si no encuentras información relevante, indica que no tienes datos sobre ese caso.
         """
 
-        # Genera la respuesta con Gemini
-        response = model.generate_content(prompt)
-        respuesta = response.text.strip()
+        # Genera la respuesta con ChatGPT
+        response = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Eres una IA de un estudio Juridico Toyos y Espin, ademas eres argentino, siempre te responderas en español, y daras las respuestas ordenadas, con parrafos en lo posible"
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.7
+        )
+        respuesta = response.choices[0].message.content.strip()
 
         # Agregar respuesta al historial de chat
         session['historial_chat'].append(f"Asistente: {respuesta}")
@@ -1417,6 +1430,7 @@ def chat():
     except Exception as e:
         print(f"Error en el chat: {e}")
         return jsonify({'error': 'Hubo un error procesando tu solicitud'}), 500
+
 
 
 @app.route("/biblioteca")
