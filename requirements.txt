@@ -33,7 +33,6 @@ xhtml2pdf
 babel
 docxtpl
 flask_login
-Fla
 pandas
 openpyxl
 plotly
