@@ -1,16 +1,12 @@
 import PyPDF2
 import pdfplumber
-import re
 import json
-import google.generativeai as genai
 import hashlib
 from datetime import datetime
 from sqlalchemy import text
-import base64
 from models.database import engine  # Verifica que la conexión esté bien configurada
 import os
-
-API_KEY = os.getenv("GOOGLE_API_KEY")
+from openai import OpenAI
 
 # ================== Funciones para extraer y analizar el PDF ==================
 
@@ -41,12 +37,10 @@ def extract_text_from_pdf(file_obj, max_pages=10):
 
 def analyze_book_document(texto_pdfs):
     try:
-        # Configurar la API (actualiza la key según corresponda)
-        genai.configure(api_key=API_KEY)
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
         texto_pdfs = texto_pdfs[:15000]
 
-        # Construir el prompt de análisis, incluyendo la imagen en base64 al inicio
         prompt = f"""Eres un asistente bibliotecario experto en analizar libros. A partir del texto extraído de un archivo PDF de un libro, extrae la siguiente información en formato JSON. Importante: NO uses acentos (reemplaza las vocales acentuadas por sus equivalentes sin acento). Si no se encuentra claramente un dato, devolvelo como cadena vacia ("").
 
         {{
@@ -63,23 +57,18 @@ def analyze_book_document(texto_pdfs):
         {texto_pdfs}
         """
 
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "Eres un asistente bibliotecario experto. Siempre devuelves JSON válido."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0,
+            response_format={"type": "json_object"}
+        )
+        json_response = response.choices[0].message.content
+        print("JSON extraido:", json_response)
 
-        # En este caso se envía un único elemento con todo el contenido (imagen + prompt)
-        contenido = [{"text": prompt}]
-        model = genai.GenerativeModel("gemini-2.0-flash")
-        response = model.generate_content(contenido)
-        json_response = response.text
-
-        # Buscar el bloque JSON en la respuesta
-        match = re.search(r'\{.*\}', json_response.replace('\n', ''), re.DOTALL)
-        if match:
-            json_response = match.group(0)
-            print("JSON extraido:", json_response)
-        else:
-            print("No se encontro un JSON valido en la respuesta")
-            return None
-
-        # Convertir la respuesta en JSON
         try:
             data = json.loads(json_response)
             return data
@@ -89,7 +78,7 @@ def analyze_book_document(texto_pdfs):
             return None
 
     except Exception as e:
-        print(f"Error al llamar a la API de Gemini: {e}")
+        print(f"Error al llamar a la API de OpenAI: {e}")
         return None
 
 def save_libro_to_db(data):
