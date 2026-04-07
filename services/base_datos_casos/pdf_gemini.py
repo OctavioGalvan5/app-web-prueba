@@ -2,7 +2,7 @@ import PyPDF2
 import pdfplumber
 import re
 import json
-import google.generativeai as genai
+from openai import OpenAI
 import hashlib
 from datetime import datetime
 from sqlalchemy import text
@@ -10,7 +10,7 @@ import base64
 from models.database import engine  # Verifica que la conexión esté bien configurada
 import os
 
-API_KEY = os.getenv("GOOGLE_API_KEY")
+API_KEY = os.getenv("OPENAI_API_KEY")
 
 # ================== Funciones para extraer y analizar el PDF ==================
 
@@ -20,7 +20,7 @@ def convertir_fecha(fecha_str):
         "%Y-%m-%d",  # Formato ISO (input date)
         "%d/%m/%Y",  # Formato original
         "%m/%Y",  # Formato sin día
-        "%Y-%m"  # Formato ISO sin día
+        "%Y-%m",  # Formato ISO sin día
     ]
     for formato in formatos:
         try:
@@ -36,25 +36,23 @@ def extract_text_from_pdf(file_obj):
     text_content = ""
     with pdfplumber.open(file_obj) as pdf:
         for page in pdf.pages:
-            text_content += page.extract_text(
-            ) or ""  # Evita errores con páginas vacías
+            text_content += (
+                page.extract_text() or ""
+            )  # Evita errores con páginas vacías
     return text_content
 
 
 def analyze_legal_documents(texto_pdfs, ultima_imagen):
     try:
-        # Configurar la API (actualiza la key según corresponda)
-        genai.configure(api_key=API_KEY)
+        # Configurar el cliente de OpenAI
+        client = OpenAI(api_key=API_KEY)
 
         # Convertir la imagen de la última página a base64
         ultima_imagen.seek(0)
         image_b64 = base64.b64encode(ultima_imagen.read()).decode("utf-8")
 
-        # Construir el prompt de análisis, incluyendo la imagen en base64 al inicio
-        prompt = f"""Adjunto la imagen de la ultima pagina en base64:
-{image_b64}
-
-Eres un asistente legal experto en analizar sentencias judiciales. Los siguientes documentos estan relacionados con un mismo caso. Analiza la informacion y proporciona un resumen consolidado en formato JSON, Importante: NO uses acentos (reemplaza las vocales acentuadas por sus equivalentes sin acento):
+        # Construir el prompt de análisis
+        prompt = f"""Eres un asistente legal experto en analizar sentencias judiciales. Los siguientes documentos estan relacionados con un mismo caso. Analiza la informacion y proporciona un resumen consolidado en formato JSON, Importante: NO uses acentos (reemplaza las vocales acentuadas por sus equivalentes sin acento):
 
 {{
     "resumen": "resumen breve del caso considerando ambos documentos, minimo 200 palabras",
@@ -78,15 +76,27 @@ Texto de los documentos:
 {texto_pdfs}
 """
 
-        # En este caso se envía un único elemento con todo el contenido (imagen + prompt)
-        contenido = [{"text": prompt}]
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        response = model.generate_content(contenido)
-        json_response = response.text
+        # Enviar la solicitud a OpenAI con la imagen como vision input
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": f"data:image/png;base64,{image_b64}"},
+                        },
+                        {"type": "text", "text": prompt},
+                    ],
+                }
+            ],
+            max_tokens=4096,
+        )
+        json_response = response.choices[0].message.content
 
         # Buscar el bloque JSON en la respuesta
-        match = re.search(r'\{.*\}', json_response.replace('\n', ''),
-                          re.DOTALL)
+        match = re.search(r"\{.*\}", json_response.replace("\n", ""), re.DOTALL)
         if match:
             json_response = match.group(0)
             print("JSON extraido:", json_response)
@@ -104,7 +114,7 @@ Texto de los documentos:
             return None
 
     except Exception as e:
-        print(f"Error al llamar a la API de Gemini: {e}")
+        print(f"Error al llamar a la API de OpenAI: {e}")
         return None
 
 
@@ -117,7 +127,7 @@ def save_sentencia_to_db(data):
     # --- CORRECCIÓN HONORARIOS ---
     # Limpiamos el valor si viene como texto "null", "None" o vacío
     honorarios = data.get("honorarios")
-    if str(honorarios).strip().lower() in ['null', 'none', '', 'nan']:
+    if str(honorarios).strip().lower() in ["null", "none", "", "nan"]:
         honorarios = None
     # -----------------------------
 
@@ -138,7 +148,7 @@ def save_sentencia_to_db(data):
         "numero_resolucion": data.get("numero_resolucion"),
         "estado_sentencia": data.get("estado_sentencia"),
         "drive_link": data.get("drive_link"),
-        "file_hash": data.get("file_hash")
+        "file_hash": data.get("file_hash"),
     }
 
     insert_query = text("""
@@ -170,7 +180,7 @@ def update_sentencia_in_db(data):
     # --- CORRECCIÓN HONORARIOS ---
     # Limpiamos el valor si viene como texto "null", "None" o vacío
     honorarios = data.get("honorarios")
-    if str(honorarios).strip().lower() in ['null', 'none', '', 'nan']:
+    if str(honorarios).strip().lower() in ["null", "none", "", "nan"]:
         honorarios = None
     # -----------------------------
 
@@ -191,8 +201,8 @@ def update_sentencia_in_db(data):
         "normativa": data.get("normativa"),
         "numero_resolucion": data.get("numero_resolucion"),
         "estado_sentencia": data.get("estado_sentencia"),
-        "drive_link": data.get("drive_link"), 
-        "file_hash": data.get("file_hash") 
+        "drive_link": data.get("drive_link"),
+        "file_hash": data.get("file_hash"),
     }
 
     update_query = text("""
