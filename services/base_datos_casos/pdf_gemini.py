@@ -20,7 +20,7 @@ def convertir_fecha(fecha_str):
         "%Y-%m-%d",  # Formato ISO (input date)
         "%d/%m/%Y",  # Formato original
         "%m/%Y",  # Formato sin día
-        "%Y-%m",  # Formato ISO sin día
+        "%Y-%m"  # Formato ISO sin día
     ]
     for formato in formatos:
         try:
@@ -36,9 +36,8 @@ def extract_text_from_pdf(file_obj):
     text_content = ""
     with pdfplumber.open(file_obj) as pdf:
         for page in pdf.pages:
-            text_content += (
-                page.extract_text() or ""
-            )  # Evita errores con páginas vacías
+            text_content += page.extract_text(
+            ) or ""  # Evita errores con páginas vacías
     return text_content
 
 
@@ -85,18 +84,24 @@ Texto de los documentos:
                     "content": [
                         {
                             "type": "image_url",
-                            "image_url": {"url": f"data:image/png;base64,{image_b64}"},
+                            "image_url": {
+                                "url": f"data:image/png;base64,{image_b64}"
+                            }
                         },
-                        {"type": "text", "text": prompt},
-                    ],
+                        {
+                            "type": "text",
+                            "text": prompt
+                        }
+                    ]
                 }
             ],
-            max_tokens=4096,
+            max_tokens=4096
         )
         json_response = response.choices[0].message.content
 
         # Buscar el bloque JSON en la respuesta
-        match = re.search(r"\{.*\}", json_response.replace("\n", ""), re.DOTALL)
+        match = re.search(r'\{.*\}', json_response.replace('\n', ''),
+                          re.DOTALL)
         if match:
             json_response = match.group(0)
             print("JSON extraido:", json_response)
@@ -127,7 +132,7 @@ def save_sentencia_to_db(data):
     # --- CORRECCIÓN HONORARIOS ---
     # Limpiamos el valor si viene como texto "null", "None" o vacío
     honorarios = data.get("honorarios")
-    if str(honorarios).strip().lower() in ["null", "none", "", "nan"]:
+    if str(honorarios).strip().lower() in ['null', 'none', '', 'nan']:
         honorarios = None
     # -----------------------------
 
@@ -148,7 +153,7 @@ def save_sentencia_to_db(data):
         "numero_resolucion": data.get("numero_resolucion"),
         "estado_sentencia": data.get("estado_sentencia"),
         "drive_link": data.get("drive_link"),
-        "file_hash": data.get("file_hash"),
+        "file_hash": data.get("file_hash")
     }
 
     insert_query = text("""
@@ -180,7 +185,7 @@ def update_sentencia_in_db(data):
     # --- CORRECCIÓN HONORARIOS ---
     # Limpiamos el valor si viene como texto "null", "None" o vacío
     honorarios = data.get("honorarios")
-    if str(honorarios).strip().lower() in ["null", "none", "", "nan"]:
+    if str(honorarios).strip().lower() in ['null', 'none', '', 'nan']:
         honorarios = None
     # -----------------------------
 
@@ -201,8 +206,8 @@ def update_sentencia_in_db(data):
         "normativa": data.get("normativa"),
         "numero_resolucion": data.get("numero_resolucion"),
         "estado_sentencia": data.get("estado_sentencia"),
-        "drive_link": data.get("drive_link"),
-        "file_hash": data.get("file_hash"),
+        "drive_link": data.get("drive_link"), 
+        "file_hash": data.get("file_hash") 
     }
 
     update_query = text("""
