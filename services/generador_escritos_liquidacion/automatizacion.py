@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Migrado al nuevo SDK "google-genai" (Developer API)
-# Referencias: https://ai.google.dev/gemini-api/docs/quickstart  (SDK & quickstart)
+# Migrado a OpenAI API (gpt-4o)
 
 import os
 import json
@@ -9,23 +8,18 @@ import time
 import random
 import fitz  # PyMuPDF
 
-from google import genai
-from google.genai import types
-from google.api_core.exceptions import ResourceExhausted
+from openai import OpenAI, RateLimitError
 
 # ========== CONFIGURACIÓN ==========
 PDF_PATH = "archivo.pdf"  # Cambia esto por el path real
 # Leer la API key desde variable de entorno
-API_KEY = os.getenv("GOOGLE_API_KEY")
+API_KEY = os.getenv("OPENAI_API_KEY")
 
 if not API_KEY:
-    raise ValueError("❌ No se encontró la variable de entorno GOOGLE_API_KEY")
+    raise ValueError("❌ No se encontró la variable de entorno OPENAI_API_KEY")
 
-# Cliente del nuevo SDK (Developer API; sin Vertex, sin env vars)
-client = genai.Client(
-    api_key=API_KEY,
-    http_options=types.HttpOptions(api_version="v1")  # versión estable del API
-)
+# Cliente de OpenAI
+client = OpenAI(api_key=API_KEY)
 
 
 # ========== UTILIDADES ==========
@@ -58,25 +52,23 @@ def backoff_sleep(i: int) -> None:
     time.sleep(min(2**i + random.random(), 30))
 
 
-def generar_con_backoff(model_name: str, prompt: str, retries: int = 5):
+def generar_con_backoff(prompt: str, retries: int = 5):
     for i in range(retries):
         try:
-            return client.models.generate_content(model=model_name,
-                                                  contents=prompt)
-        except ResourceExhausted as e:
-            # 429 / cuota: muestra región y límite si vienen en el mensaje
-            s = str(e)
-            loc = re.search(r'quota_location[^"]*"([^"]+)"', s)
-            val = re.search(r'quota_limit_value[^"]*"([^"]+)"', s)
-            print(
-                f"[429] ResourceExhausted. region={loc.group(1) if loc else '?'} "
-                f"limit={val.group(1) if val else '?'}  → reintento...")
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=4096
+            )
+            return response.choices[0].message.content
+        except RateLimitError as e:
+            print(f"[429] RateLimitError: {e} → reintento...")
             backoff_sleep(i)
             continue
         except Exception:
             raise
     raise RuntimeError(
-        "429 persistente tras reintentos (revisá tu cuota en ai.google.dev).")
+        "429 persistente tras reintentos (revisá tu cuota en OpenAI).")
 
 
 # ========== PROMPT ==========
@@ -107,17 +99,17 @@ CAMARA FEDERAL DE SALTA - SALA II' eso significa que tiene sentencia de segunda,
     "Fecha_de_cierre_de_liquidacion": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Las diferencias mensuales se calcularon por los períodos comprendidos entre el 06/10/2016 y el 30/04/2025.', por ejemplo lo que tienes que devolver en este caso es '30/04/2025' IMPORTANTE damela en formato YYYY-MM-DD no en DD/MM/YYYY, este dato siempre existira",
 
     "Fecha_de_cierre_de_intereses": "Este dato lo conseguiras en la parte del retroactivo, aparece como 'Los intereses por las diferencias de haber se calcularon hasta el 30/04/2025 con la tasa Pasiva para uso de la Justicia (Com. 14290 BCRA) .' es '30/04/2025', IMPORTANTE damela en formato YYYY-MM-DD no en DD/MM/YYYY , este dato siempre existira",
-    
+
     "Badaro_Si": "En el retroactivo, buscaras la movilidad aplicada, si la movilidad menciona INDEC, significa que es badaro, y devolveras True, sino devolveras False",
     "PBU_Si": "Si tiene PBU en el haber reajustado encontraras algo como lo siguiente 'P.B.U. = 2.674,54', si tiene pbu devolver True, sino tiene PBU devolver False",
     "Monto_PBU": "El monto del PBU (si es que tiene) se encuentra en el haber reajustado, lo encontraras por ejemplo como 'P.B.U. = 2.674,54' , en este caso devolveras '$2.674,54'",
     "Porcentaje_PBU": "El porcentaje del PBU (si es que tiene) se encuentra en el haber reajustado, lo encontraras por ejemplo como 'Diferencia porcentual de la PBU : 26.59%' en este caso devolveras '26.59%'",
     "Percibido": "A este dato lo encontraras en el retroactivo (es el mismo para todos los retroactivos), por ejemplo lo encontraras como 'Se parte de un Haber Percibido de 16.869,55 Pesos del 06/10/2016 que el 01/04/2017 fué reajustado a 18.759,09 Pesos Y luego el 01/04/2025 fue reajustado a 1.137.306,69 Pesos.', debes devolver ese parrafo tal cual.",
-    
+
     "Reclamado": "A este dato lo encontraras en el retroactivo (es el mismo para todos los retroactivos), por ejemplo lo encontraras como 'El Primer Haber Reclamado es de 20.022,59 Pesos del 06/10/2016', debes devolver ese parrafo tal cual.",
-    
+
     "Movilidad": "Aqui buscaras en el texto que te pasare un parrafo como el siguiente (aparece en el retroactivo) 'La movilidad del haber reclamado es siguiendo el índice: Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2017 y desde ahí Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahí Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahí Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y desde ahí fallo Palavecino, JosÚ hasta el 30/06/2024 y desde ahí Aumentos Generales de la ANSeS por movilidad' en este ejemplo la movilidad usada es 'Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2017 y desde ahí Aumento de Marzo 2018 Ley 26417 14% hasta el 30/06/2018 y desde ahí Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahí Aumentos fallo Marquez, Raimundo por Ley 27551 hasta el 31/12/2020 y desde ahí fallo Palavecino, JosÚ hasta el 30/06/2024 y desde ahí Aumentos Generales de la ANSeS por movilidad' eso es lo que tienes que devolver, puede ser el caso que haya varias movilidades, en este apartado debes devolver la que aparezca primero",
-    
+
     "Haber_de_Alta": "Este dato lo sacaras del retroactivo, aqui debes devolver el primer dato que te aparezca relacionado al haber de alta (ya que existe la posibilidad que haya varios), un ejemplo de como lo encontraras es 'Al 30/04/2025 el haber de Alta es de 1.577.573,12 Pesos' en este caso lo que debes devolver es '1.577.573,12'",
 
 "pagos_Si": "Este dato lo sacaras del retroactivo, puede tener pagos previos o no, sabras que tiene pagos previos cuando veas algo como 'Fecha Importe Tipo Descontado del 01/04/2017 94.993,31 Efectivo Saldo acumulado a la fecha del pago. Cantidad de Pagos Indicados: 1',",
@@ -197,13 +189,12 @@ Ejemplos negativos (=> False):
 """
 
 
-# ========== LLAMADA A GEMINI ==========
+# ========== LLAMADA A OPENAI ==========
 def analizar_con_gemini(texto_pdf: str):
-    model_name = "gemini-2.5-flash"  # modelo estable recomendado
-    resp = generar_con_backoff(model_name, PROMPT_LEGAL + "\n\n" + texto_pdf)
-    texto_limpio = limpiar_respuesta_json(getattr(resp, "text", ""))
+    resp = generar_con_backoff(PROMPT_LEGAL + "\n\n" + texto_pdf)
+    texto_limpio = limpiar_respuesta_json(resp or "")
 
-    print("Respuesta de Gemini:")
+    print("Respuesta de OpenAI:")
     print(texto_limpio)
 
     try:
