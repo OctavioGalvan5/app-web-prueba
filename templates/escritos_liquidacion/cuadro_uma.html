@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cuadro UMA Honorarios</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: avoid;
+        }
+        td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+        .negrita {
+            font-weight: bold;
+        }
+        .header-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .fuente-grande {
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 500px;"></div>
+    <table>
+        <tbody>
+            <!-- Fila: Montos -->
+            <tr class="fuente-grande">
+                <td rowspan="2" class="negrita header-cell">Según la fecha que se tome</td>
+                {% for col in columnas %}
+                <td class="negrita">Monto: {{ col.monto }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Fecha -->
+            <tr class="fuente-grande">
+                {% for col in columnas %}
+                <td>{{ fecha }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Norma -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Norma</td>
+                {% for col in columnas %}
+                <td>{{ acordada }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Valor UMA -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Valor UMA</td>
+                {% for col in columnas %}
+                <td>{{ valor_uma }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Cantidad en UMA -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Cantidad en UMA</td>
+                {% for col in columnas %}
+                <td>{{ col.cantidad_uma }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Cantidad en UMA dividido 2 -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Cantidad en UMA dividido 2</td>
+                {% for col in columnas %}
+                <td>{{ col.valor_dividido }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Escala art 21 -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Escala del art 21 de la ley 27.423</td>
+                {% for col in columnas %}
+                <td>{{ col.porcentajes }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Escala art 21 anterior -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Escala del art 21 de la ley 27.423 anterior</td>
+                {% for col in columnas %}
+                <td>
+                    {% if col.porcentaje_anterior == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ col.porcentaje_anterior }}
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Máx escala anterior x Porcentaje Máximo -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Máx. de la escala anterior x Porcentaje Máximo</td>
+                {% for col in columnas %}
+                <td>
+                    {% if col.primera_valor_uma_final == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ col.primera_valor_uma }} x 0.{{ col.porcentaje_maximo }} = {{ col.primera_valor_uma_final }}
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Alícuota mínima excedente -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Alícuota mínima excedente x Porcentaje Mínimo</td>
+                {% for col in columnas %}
+                <td>
+                    {% if col.segunda_valor_uma_final == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ col.segundo_valor_uma }} x 0.{{ col.porcentaje_minimo }} = {{ col.segunda_valor_uma_final }}
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Total -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Total</td>
+                {% for col in columnas %}
+                <td>{{ col.total_uma }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: 40% apoderado -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">40% por ser apoderado Art 20</td>
+                {% for col in columnas %}
+                <td>{{ col.apoderado }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Reducción 10% -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Reducción del 10% si no hubo excepciones Art 29</td>
+                {% for col in columnas %}
+                <td>{{ col.reduccion_excepciones }}</td>
+                {% endfor %}
+            </tr>
+            <!-- Fila: Art 58 -->
+            <tr class="fuente-grande">
+                <td class="negrita header-cell">Art 58 inc B (Honorarios Mínimos en Ejecución)</td>
+                <td colspan="{{ columnas|length }}" class="negrita fuente-grande" style="text-align: center;">Mínimo 6 UMA</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

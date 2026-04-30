@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herramientas Demanda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5e35b1;
+            --primary-light: #9162e4;
+            --primary-dark: #3c1f8b;
+            --secondary: #f8f9fa;
+            --accent: #ff9800;
+            --accent-light: #ffb74d;
+            --text-dark: #333;
+            --text-light: #6c757d;
+            --white: #ffffff;
+            --border-radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header styling with hero-like design */
+        .header-section {
+            background: linear-gradient(135deg, #f0f0ff, #e6e0ff);
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(94, 53, 177, 0.1);
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .header-section h1 {
+            color: var(--primary-dark);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header-section p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        /* Form container with modern styling */
+        .form-container {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.6s ease 0.1s forwards;
+            opacity: 0;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary-light);
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .label-with-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-tooltip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: help;
+            transition: var(--transition);
+        }
+
+        .info-tooltip:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background-color: #fafafa;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: var(--white);
+            box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.1);
+        }
+
+        /* Improved date input styling */
+        input[type="date"] {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%235e35b1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+
+        /* Checkbox group with card-like styling */
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: var(--white);
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--primary);
+            background-color: #f5f5ff;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* Conditional sections with smooth transitions */
+        .conditional-section {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-light);
+            animation: slideDown 0.4s ease forwards;
+        }
+
+        .conditional-section.visible {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Subsection titles */
+        .subsection-title {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subsection-title i {
+            color: var(--primary-light);
+            font-size: 1.1rem;
+        }
+
+        .conditional-section .form-row {
+            background-color: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .conditional-section .checkbox-group {
+            background-color: var(--white);
+        }
+
+        /* Submit button with modern styling */
+        .submit-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(94, 53, 177, 0.2);
+            transition: var(--transition);
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(94, 53, 177, 0.3);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .header-section h1 {
+                font-size: 1.6rem;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Google Analytics */
+        < !-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-98REL9JCTR"></script><script>window.dataLayer=window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-98REL9JCTR');
+        </script>
+    </style>
+</head>
+
+<body>
+    {% include 'navs/nav.html' %}
+    <div class="container" style="margin-top: 70px;">
+        <!-- Header with modern hero-like design -->
+        <div class="header-section">
+            <h1><i class="fas fa-briefcase"></i> Herramientas para Demandas</h1>
+            <p>Herramientas especializadas para comparaciones y análisis de demandas previsionales</p>
+        </div>
+
+        <div class="form-container">
+            <form action="/resultado_herramientas_demandas" method="POST">
+                <!-- Datos del Actor Section -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-user"></i> Datos del Actor</h2>
+
+                    <div class="form-group">
+                        <label for="datos_del_actor" class="label-with-icon">
+                            Nombre del actor
+                            <span class="info-tooltip"
+                                title="Ingrese el nombre completo del actor de la demanda">?</span>
+                        </label>
+                        <input type="text" id="datos_del_actor" name="datos_del_actor">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha_adquisicion_del_derecho">Fecha de adquisición del derecho</label>
+                        <input type="date" id="fecha_adquisicion_del_derecho" name="fecha_adquisicion_del_derecho">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="beneficio">Tipo de Beneficio</label>
+                            <select id="beneficio" name="beneficio">
+                                <option value="">Seleccione un tipo</option>
+                                <option value="Jubilacion Ordinaria">Jubilación Ordinaria</option>
+                                <option value="Retiro Transitorio por Discapacidad">Retiro Transitorio por Discapacidad
+                                </option>
+                                <option value="Prestacion Anticipada por Desempleo">Prestacion Anticipada por Desempleo
+                                </option>
+                                <option value="Pension Directa">Pension Directa</option>
+                                <option value="Pension Derivada">Pension Derivada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="num_beneficio">Número de Beneficio</label>
+                            <input type="text" id="num_beneficio" name="num_beneficio">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cuil_expediente">CUIL o Expediente</label>
+                            <select id="cuil_expediente" name="cuil_expediente">
+                                <option value="">Seleccione un tipo</option>
+                                <option value="Cuil">CUIL</option>
+                                <option value="Expediente">Nro. Expediente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="expediente">Número</label>
+                            <input type="text" id="expediente" name="expediente">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Herramientas Selection -->
+                <div class="form-section">
+                    <h2 class="section-title"><i class="fas fa-tools"></i> Seleccionar Herramientas</h2>
+
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="comparacion_reparacion_historica"
+                                name="comparacion_reparacion_historica">
+                            <label for="comparacion_reparacion_historica">Comparación Reparación Histórica</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sumas_remunerativas" name="sumas_remunerativas">
+                            <label for="sumas_remunerativas">Sumas Remunerativas</label>
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tabla_pbu" name="tabla_pbu">
+                            <label for="tabla_pbu">Tabla PBU</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparación Reparación Histórica Section -->
+                <div id="comparacion_reparacion_historica_section" class="conditional-section">
+                    <h2 class="subsection-title"><i class="fas fa-chart-bar"></i> Comparación Reparación Histórica</h2>
+
+                    <div class="form-group">
+                        <label for="fecha_comparacion_repa" class="label-with-icon">
+                            Fecha de Comparación
+                            <span class="info-tooltip" title="Fecha de los haberes a ingresar">?</span>
+                        </label>
+                        <input type="date" id="fecha_comparacion_repa" name="fecha_comparacion_repa">
+                    </div>
+
+                    <h3 class="subsection-title" style="margin-top: 25px; font-size: 1.1rem;"><i
+                            class="fas fa-check-circle"></i> Haber Percibido con Reparación Histórica</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="PBU_repa">PBU</label>
+                            <input type="number" id="PBU_repa" name="PBU_repa" value="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="PC_repa">PC</label>
+                            <input type="number" id="PC_repa" name="PC_repa" value="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="PAP_repa">PAP</label>
+                            <input type="number" id="PAP_repa" name="PAP_repa" value="0" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="REPA_repa">REPARACIÓN HISTÓRICA</label>
+                            <input type="number" id="REPA_repa" name="REPA_repa" value="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="OTROS_repa">OTROS</label>
+                            <input type="number" id="OTROS_repa" name="OTROS_repa" value="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <h3 class="subsection-title" style="margin-top: 25px; font-size: 1.1rem;"><i
+                            class="fas fa-dollar-sign"></i> Haber Reclamado</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="PBU_reclamado">PBU</label>
+                            <input type="number" id="PBU_reclamado" name="PBU_reclamado" value="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="PC_reclamado">PC</label>
+                            <input type="number" id="PC_reclamado" name="PC_reclamado" value="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="PAP_reclamado">PAP</label>
+                            <input type="number" id="PAP_reclamado" name="PAP_reclamado" value="0" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="REPA_reclamado">REPARACIÓN HISTÓRICA</label>
+                            <input type="number" id="REPA_reclamado" name="REPA_reclamado" value="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="OTROS_reclamado">OTROS</label>
+                            <input type="number" id="OTROS_reclamado" name="OTROS_reclamado" value="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <label style="margin-bottom: 12px; display: block;">¿Comparación con Reparación Histórica
+                            Movilizada?</label>
+                        <div class="checkbox-group" style="grid-template-columns: repeat(2, 1fr);max-width: 300px;">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="comparacion_repa_movilizado"
+                                    name="comparacion_repa_movilizado" value="true">
+                                <label for="comparacion_repa_movilizado">Sí</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="comparacion_repa_movilizado_No"
+                                    name="comparacion_repa_movilizado_No" value="true">
+                                <label for="comparacion_repa_movilizado_No">No</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="comparacion_repa_movilizado_section" class="conditional-section"
+                        style="border-left-color: var(--accent-light);">
+                        <h3 class="subsection-title"><i class="fas fa-sync-alt"></i> Haber con Reparación Histórica
+                            Movilizada</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="PBU_repa_movilizado">PBU</label>
+                                <input type="number" id="PBU_repa_movilizado" name="PBU_repa_movilizado" value="0"
+                                    step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="PC_repa_movilizado">PC</label>
+                                <input type="number" id="PC_repa_movilizado" name="PC_repa_movilizado" value="0"
+                                    step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="PAP_repa_movilizado">PAP</label>
+                                <input type="number" id="PAP_repa_movilizado" name="PAP_repa_movilizado" value="0"
+                                    step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="REPA_repa_movilizado">REPARACIÓN HISTÓRICA</label>
+                                <input type="number" id="REPA_repa_movilizado" name="REPA_repa_movilizado" value="0"
+                                    step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="OTROS_repa_movilizado">OTROS</label>
+                                <input type="number" id="OTROS_repa_movilizado" name="OTROS_repa_movilizado" value="0"
+                                    step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'herramientas_demanda/conceptos_sumas.html' %}
+
+                <button type="submit" class="submit-button"><i class="fas fa-file-pdf"></i> Generar PDF</button>
+            </form>
+        </div>
+    </div>
+    {% include 'footers/footer.html' %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = {
+                comparacion_reparacion_historica: document.getElementById('comparacion_reparacion_historica'),
+                sumas_remunerativas: document.getElementById('sumas_remunerativas'),
+                extras: document.getElementById('extras'),
+                municipalidad_salta: document.getElementById('municipalidad_salta'),
+                todo_obras_srl: document.getElementById('todo_obras_srl'),
+                hospital_materno_infantil: document.getElementById('hospital_materno_infantil'),
+                ministerio_salud_publica: document.getElementById('ministerio_salud_publica'),
+                tomografia_computada: document.getElementById('tomografia_computada'),
+                cruz_roja_salta: document.getElementById('cruz_roja_salta'),
+                gobierno_provincia_salta: document.getElementById('gobierno_provincia_salta'),
+                ministerio_educacion_salta: document.getElementById('ministerio_educacion_salta'),
+                hospital_senor_del_milagro: document.getElementById('hospital_senor_del_milagro'),
+                edesa_sa: document.getElementById('edesa_sa'),
+                hospital_san_bernardo: document.getElementById('hospital_san_bernardo'),
+                ips_salta: document.getElementById('ips_salta'),
+                alliance_one_tobacco: document.getElementById('alliance_one_tobacco'),
+                servicios_privados_postales: document.getElementById('servicios_privados_postales'),
+                banco_nacion_argentina: document.getElementById('banco_nacion_argentina'),
+                ypf_sa: document.getElementById('ypf_sa'),
+                camara_senadores_salta: document.getElementById('camara_senadores_salta'),
+                hospital_onativia: document.getElementById('hospital_onativia'),
+                politi_hector_armando: document.getElementById('politi_hector_armando'),
+                hospital_campo_quijano: document.getElementById('hospital_campo_quijano'),
+                hospital_la_poma: document.getElementById('hospital_la_poma'),
+                hospital_nazareno: document.getElementById('hospital_nazareno'),
+                ente_parques_industriales: document.getElementById('ente_parques_industriales'),
+                hospital_la_caldera: document.getElementById('hospital_la_caldera'),
+                hospital_san_antonio_cobres: document.getElementById('hospital_san_antonio_cobres'),
+                hospital_general_guemes: document.getElementById('hospital_general_guemes'),
+                merceria_salta: document.getElementById('merceria_salta'),
+                trans_gol_srl: document.getElementById('trans_gol_srl'),
+                el_sol_transporte: document.getElementById('el_sol_transporte'),
+                provincia_salta_derechos_humanos: document.getElementById('provincia_salta_derechos_humanos'),
+                hospital_del_milagro: document.getElementById('hospital_del_milagro'),
+                hospital_nino_jesus: document.getElementById('hospital_nino_jesus'),
+                massalin_particulares: document.getElementById('massalin_particulares'),
+                instituto_provincial_de_vivienda: document.getElementById('instituto_provincial_de_vivienda'),
+            };
+
+            const sections = {
+                comparacion_reparacion_historica_section: document.getElementById('comparacion_reparacion_historica_section'),
+                sumas_remunerativas_section: document.getElementById('sumas_remunerativas_section'),
+                extras_section: document.getElementById('extras_section'),
+                municipalidad_salta_section: document.getElementById('municipalidad_salta_section'),
+                todo_obras_srl_section: document.getElementById('todo_obras_srl_section'),
+                hospital_materno_infantil_section: document.getElementById('hospital_materno_infantil_section'),
+                ministerio_salud_publica_section: document.getElementById('ministerio_salud_publica_section'),
+                tomografia_computada_section: document.getElementById('tomografia_computada_section'),
+                cruz_roja_salta_section: document.getElementById('cruz_roja_salta_section'),
+                gobierno_provincia_salta_section: document.getElementById('gobierno_provincia_salta_section'),
+                ministerio_educacion_salta_section: document.getElementById('ministerio_educacion_salta_section'),
+                hospital_senor_del_milagro_section: document.getElementById('hospital_senor_del_milagro_section'),
+                edesa_sa_section: document.getElementById('edesa_sa_section'),
+                hospital_san_bernardo_section: document.getElementById('hospital_san_bernardo_section'),
+                ips_salta_section: document.getElementById('ips_salta_section'),
+                alliance_one_tobacco_section: document.getElementById('alliance_one_tobacco_section'),
+                servicios_privados_postales_section: document.getElementById('servicios_privados_postales_section'),
+                banco_nacion_argentina_section: document.getElementById('banco_nacion_argentina_section'),
+                ypf_sa_section: document.getElementById('ypf_sa_section'),
+                camara_senadores_salta_section: document.getElementById('camara_senadores_salta_section'),
+                hospital_onativia_section: document.getElementById('hospital_onativia_section'),
+                politi_hector_armando_section: document.getElementById('politi_hector_armando_section'),
+                hospital_campo_quijano_section: document.getElementById('hospital_campo_quijano_section'),
+                hospital_la_poma_section: document.getElementById('hospital_la_poma_section'),
+                hospital_nazareno_section: document.getElementById('hospital_nazareno_section'),
+                ente_parques_industriales_section: document.getElementById('ente_parques_industriales_section'),
+                hospital_la_caldera_section: document.getElementById('hospital_la_caldera_section'),
+                hospital_san_antonio_cobres_section: document.getElementById('hospital_san_antonio_cobres_section'),
+                hospital_general_guemes_section: document.getElementById('hospital_general_guemes_section'),
+                merceria_salta_section: document.getElementById('merceria_salta_section'),
+                trans_gol_srl_section: document.getElementById('trans_gol_srl_section'),
+                el_sol_transporte_section: document.getElementById('el_sol_transporte_section'),
+                provincia_salta_derechos_humanos_section: document.getElementById('provincia_salta_derechos_humanos_section'),
+                hospital_del_milagro_section: document.getElementById('hospital_del_milagro_section'),
+                hospital_nino_jesus_section: document.getElementById('hospital_nino_jesus_section'),
+                massalin_particulares_section: document.getElementById('massalin_particulares_section'),
+                instituto_provincial_de_vivienda_section: document.getElementById('instituto_provincial_de_vivienda_section')
+            };
+
+            function toggleSection(checkbox, section) {
+                if (checkbox && section) {
+                    checkbox.addEventListener('change', function () {
+                        if (this.checked) {
+                            section.style.display = 'block';
+                            section.classList.add('visible');
+                        } else {
+                            section.style.display = 'none';
+                            section.classList.remove('visible');
+                        }
+                    });
+                }
+            }
+
+            // Toggle para herramientas principales
+            toggleSection(checkboxes.comparacion_reparacion_historica, sections.comparacion_reparacion_historica_section);
+            toggleSection(checkboxes.sumas_remunerativas, sections.sumas_remunerativas_section);
+
+            // Toggle para las nuevas secciones
+            toggleSection(checkboxes.extras, sections.extras_section);
+            toggleSection(checkboxes.municipalidad_salta, sections.municipalidad_salta_section);
+            toggleSection(checkboxes.todo_obras_srl, sections.todo_obras_srl_section);
+            toggleSection(checkboxes.hospital_materno_infantil, sections.hospital_materno_infantil_section);
+            toggleSection(checkboxes.ministerio_salud_publica, sections.ministerio_salud_publica_section);
+            toggleSection(checkboxes.tomografia_computada, sections.tomografia_computada_section);
+            toggleSection(checkboxes.cruz_roja_salta, sections.cruz_roja_salta_section);
+            toggleSection(checkboxes.gobierno_provincia_salta, sections.gobierno_provincia_salta_section);
+            toggleSection(checkboxes.ministerio_educacion_salta, sections.ministerio_educacion_salta_section);
+            toggleSection(checkboxes.hospital_senor_del_milagro, sections.hospital_senor_del_milagro_section);
+            toggleSection(checkboxes.edesa_sa, sections.edesa_sa_section);
+            toggleSection(checkboxes.hospital_san_bernardo, sections.hospital_san_bernardo_section);
+            toggleSection(checkboxes.ips_salta, sections.ips_salta_section);
+            toggleSection(checkboxes.alliance_one_tobacco, sections.alliance_one_tobacco_section);
+            toggleSection(checkboxes.servicios_privados_postales, sections.servicios_privados_postales_section);
+            toggleSection(checkboxes.banco_nacion_argentina, sections.banco_nacion_argentina_section);
+            toggleSection(checkboxes.ypf_sa, sections.ypf_sa_section);
+            toggleSection(checkboxes.camara_senadores_salta, sections.camara_senadores_salta_section);
+            toggleSection(checkboxes.hospital_onativia, sections.hospital_onativia_section);
+            toggleSection(checkboxes.politi_hector_armando, sections.politi_hector_armando_section);
+            toggleSection(checkboxes.hospital_campo_quijano, sections.hospital_campo_quijano_section);
+            toggleSection(checkboxes.hospital_la_poma, sections.hospital_la_poma_section);
+            toggleSection(checkboxes.hospital_nazareno, sections.hospital_nazareno_section);
+            toggleSection(checkboxes.ente_parques_industriales, sections.ente_parques_industriales_section);
+            toggleSection(checkboxes.hospital_la_caldera, sections.hospital_la_caldera_section);
+            toggleSection(checkboxes.hospital_san_antonio_cobres, sections.hospital_san_antonio_cobres_section);
+            toggleSection(checkboxes.hospital_general_guemes, sections.hospital_general_guemes_section);
+            toggleSection(checkboxes.merceria_salta, sections.merceria_salta_section);
+            toggleSection(checkboxes.trans_gol_srl, sections.trans_gol_srl_section);
+            toggleSection(checkboxes.el_sol_transporte, sections.el_sol_transporte_section);
+            toggleSection(checkboxes.provincia_salta_derechos_humanos, sections.provincia_salta_derechos_humanos_section);
+            toggleSection(checkboxes.hospital_del_milagro, sections.hospital_del_milagro_section);
+            toggleSection(checkboxes.hospital_nino_jesus, sections.hospital_nino_jesus_section);
+            toggleSection(checkboxes.massalin_particulares, sections.massalin_particulares_section);
+            toggleSection(checkboxes.instituto_provincial_de_vivienda, sections.instituto_provincial_de_vivienda_section);
+        });
+    </script>
+</body>
+
+</html>

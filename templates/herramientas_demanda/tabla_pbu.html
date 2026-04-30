@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background-color: #D3D3D3;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #845EC2;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Made all table styles specific to .pbu-table class */
+        .pbu-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+        }
+
+        .pbu-table th {
+            background-color: #F5E6FA;
+            color: #845EC2;
+            font-weight: bold;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #D3D3D3;
+            font-size: 10px;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .pbu-table td {
+            border: 1px solid #E0E0E0;
+            padding: 6px 8px;
+            text-align: right;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        /* Columna de fecha alineada a la izquierda */
+        .pbu-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            background-color: #F9F9F9;
+        }
+
+        /* Filas alternadas */
+        .pbu-table tbody tr:nth-child(odd) {
+            background-color: #FAFAFA;
+        }
+
+        .pbu-table tbody tr:nth-child(even) {
+            background-color: #F4F4F4;
+        }
+
+        .pbu-table tbody tr:hover {
+            background-color: #F0E6F9;
+        }
+
+        .pbu-table .currency {
+            color: #2B5DB1;
+            font-weight: 500;
+        }
+
+        .info-header {
+            background-color: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-header p {
+            text-align: left;
+            margin: 5px 0;
+        }
+
+        @media print {
+            body {
+                font-size: 9px;
+            }
+
+            .pbu-table th {
+                font-size: 9px;
+            }
+
+            .pbu-table {
+                page-break-inside: avoid;
+            }
+        }
+
+        .print-button {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: #845EC2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #704A99;
+        }
+
+        @media screen {
+            .print-button {
+                display: flex;
+            }
+        }
+
+        @media print {
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <hr>
+        <h1>Tabla de PBU</h1>
+        <hr style="margin-bottom: 20px;">
+
+        <div class="print-button">
+            <button onclick="window.print()">Imprimir Tabla</button>
+        </div>
+
+        <!-- Added class="pbu-table" to make styles specific -->
+        <table class="pbu-table">
+            <thead>
+                <tr>
+                    <th>Período</th>
+                    <th>Pbu con Isbic al 02-09 + Aumento de Anses</th>
+                    <th>PBU con ING 2002-2006 + aumentos de Anses</th>
+                    <th>PBU según Anses</th>
+                    <th>PBU 27,5% del RIPTE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Updated all data rows from 2008-2025, removed index columns -->
+                <tr>
+                    <td>1/10/2008</td>
+                    <td class="currency">$ 1.025,05</td>
+                    <td class="currency">$ 554,10</td>
+                    <td class="currency">$ 326,10</td>
+                    <td class="currency">$ 722,79</td>
+                </tr>
+                <tr>
+                    <td>1/11/2008</td>
+                    <td class="currency">$ 1.035,92</td>
+                    <td class="currency">$ 554,10</td>
+                    <td class="currency">$ 326,10</td>
+                    <td class="currency">$ 712,85</td>
+                </tr>
+                <tr>
+                    <td>1/12/2008</td>
+                    <td class="currency">$ 1.063,65</td>
+                    <td class="currency">$ 554,10</td>
+                    <td class="currency">$ 326,10</td>
+                    <td class="currency">$ 722,00</td>
+                </tr>
+                <tr>
+                    <td>1/1/2009</td>
+                    <td class="currency">$ 1.065,37</td>
+                    <td class="currency">$ 554,10</td>
+                    <td class="currency">$ 326,10</td>
+                    <td class="currency">$ 713,50</td>
+                </tr>
+                <tr>
+                    <td>1/2/2009</td>
+                    <td class="currency">$ 1.070,80</td>
+                    <td class="currency">$ 554,10</td>
+                    <td class="currency">$ 326,10</td>
+                    <td class="currency">$ 709,13</td>
+                </tr>
+                <tr>
+                    <td>1/3/2009</td>
+                    <td class="currency">$ 1.195,97</td>
+                    <td class="currency">$ 618,87</td>
+                    <td class="currency">$ 364,10</td>
+                    <td class="currency">$ 737,48</td>
+                </tr>
+                <tr>
+                    <td>1/9/2009</td>
+                    <td class="currency">$ 1.283,76</td>
+                    <td class="currency">$ 664,30</td>
+                    <td class="currency">$ 390,82</td>
+                    <td class="currency">$ 756,80</td>
+                </tr>
+                <tr>
+                    <td>1/3/2010</td>
+                    <td class="currency">$ 1.389,16</td>
+                    <td class="currency">$ 718,84</td>
+                    <td class="currency">$ 422,91</td>
+                    <td class="currency">$ 889,13</td>
+                </tr>
+                <tr>
+                    <td>1/9/2010</td>
+                    <td class="currency">$ 1.623,92</td>
+                    <td class="currency">$ 840,32</td>
+                    <td class="currency">$ 494,38</td>
+                    <td class="currency">$ 1.022,73</td>
+                </tr>
+                <tr>
+                    <td>1/3/2011</td>
+                    <td class="currency">$ 1.905,35</td>
+                    <td class="currency">$ 985,95</td>
+                    <td class="currency">$ 580,06</td>
+                    <td class="currency">$ 1.179,62</td>
+                </tr>
+                <tr>
+                    <td>1/9/2011</td>
+                    <td class="currency">$ 2.225,83</td>
+                    <td class="currency">$ 1.151,79</td>
+                    <td class="currency">$ 677,63</td>
+                    <td class="currency">$ 1.384,51</td>
+                </tr>
+                <tr>
+                    <td>1/3/2012</td>
+                    <td class="currency">$ 2.618,02</td>
+                    <td class="currency">$ 1.354,73</td>
+                    <td class="currency">$ 797,02</td>
+                    <td class="currency">$ 1.570,73</td>
+                </tr>
+                <tr>
+                    <td>1/9/2012</td>
+                    <td class="currency">$ 2.917,00</td>
+                    <td class="currency">$ 1.509,44</td>
+                    <td class="currency">$ 888,04</td>
+                    <td class="currency">$ 1.808,83</td>
+                </tr>
+                <tr>
+                    <td>1/3/2013</td>
+                    <td class="currency">$ 3.359,80</td>
+                    <td class="currency">$ 1.738,58</td>
+                    <td class="currency">$ 1.022,85</td>
+                    <td class="currency">$ 2.059,94</td>
+                </tr>
+                <tr>
+                    <td>1/9/2013</td>
+                    <td class="currency">$ 3.843,94</td>
+                    <td class="currency">$ 1.989,10</td>
+                    <td class="currency">$ 1.170,24</td>
+                    <td class="currency">$ 2.320,89</td>
+                </tr>
+                <tr>
+                    <td>1/3/2014</td>
+                    <td class="currency">$ 4.278,69</td>
+                    <td class="currency">$ 2.214,07</td>
+                    <td class="currency">$ 1.302,60</td>
+                    <td class="currency">$ 2.649,56</td>
+                </tr>
+                <tr>
+                    <td>1/9/2014</td>
+                    <td class="currency">$ 5.015,06</td>
+                    <td class="currency">$ 2.595,11</td>
+                    <td class="currency">$ 1.526,77</td>
+                    <td class="currency">$ 3.133,15</td>
+                </tr>
+                <tr>
+                    <td>1/3/2015</td>
+                    <td class="currency">$ 5.930,81</td>
+                    <td class="currency">$ 3.068,98</td>
+                    <td class="currency">$ 1.805,56</td>
+                    <td class="currency">$ 3.539,25</td>
+                </tr>
+                <tr>
+                    <td>1/9/2015</td>
+                    <td class="currency">$ 6.671,57</td>
+                    <td class="currency">$ 3.452,30</td>
+                    <td class="currency">$ 2.031,08</td>
+                    <td class="currency">$ 4.120,43</td>
+                </tr>
+                <tr>
+                    <td>1/3/2016</td>
+                    <td class="currency">$ 7.695,65</td>
+                    <td class="currency">$ 3.982,23</td>
+                    <td class="currency">$ 2.342,85</td>
+                    <td class="currency">$ 4.668,75</td>
+                </tr>
+                <tr>
+                    <td>1/9/2016</td>
+                    <td class="currency">$ 8.785,36</td>
+                    <td class="currency">$ 4.546,11</td>
+                    <td class="currency">$ 2.674,60</td>
+                    <td class="currency">$ 5.408,27</td>
+                </tr>
+                <tr>
+                    <td>1/3/2017</td>
+                    <td class="currency">$ 9.923,94</td>
+                    <td class="currency">$ 5.135,28</td>
+                    <td class="currency">$ 3.021,22</td>
+                    <td class="currency">$ 6.128,51</td>
+                </tr>
+                <tr>
+                    <td>1/9/2017</td>
+                    <td class="currency">$ 11.245,81</td>
+                    <td class="currency">$ 5.819,30</td>
+                    <td class="currency">$ 3.423,65</td>
+                    <td class="currency">$ 6.912,50</td>
+                </tr>
+                <tr>
+                    <td>1/3/2018</td>
+                    <td class="currency">$ 12.044,26</td>
+                    <td class="currency">$ 11.887,94</td>
+                    <td class="currency">$ 6.151,59</td>
+                    <td class="currency">$ 7.719,89</td>
+                </tr>
+                <tr>
+                    <td>1/6/2018</td>
+                    <td class="currency">$ 12.603,11</td>
+                    <td class="currency">$ 12.564,37</td>
+                    <td class="currency">$ 6.501,61</td>
+                    <td class="currency">$ 8.139,48</td>
+                </tr>
+                <tr>
+                    <td>1/9/2018</td>
+                    <td class="currency">$ 13.451,30</td>
+                    <td class="currency">$ 13.402,41</td>
+                    <td class="currency">$ 6.935,27</td>
+                    <td class="currency">$ 8.668,98</td>
+                </tr>
+                <tr>
+                    <td>1/12/2018</td>
+                    <td class="currency">$ 14.183,05</td>
+                    <td class="currency">$ 14.445,12</td>
+                    <td class="currency">$ 7.474,83</td>
+                    <td class="currency">$ 9.443,39</td>
+                </tr>
+                <tr>
+                    <td>1/3/2019</td>
+                    <td class="currency">$ 15.104,95</td>
+                    <td class="currency">$ 16.153,97</td>
+                    <td class="currency">$ 8.359,11</td>
+                    <td class="currency">$ 10.693,22</td>
+                </tr>
+                <tr>
+                    <td>1/6/2019</td>
+                    <td class="currency">$ 16.453,82</td>
+                    <td class="currency">$ 17.888,91</td>
+                    <td class="currency">$ 9.256,87</td>
+                    <td class="currency">$ 11.435,66</td>
+                </tr>
+                <tr>
+                    <td>1/9/2019</td>
+                    <td class="currency">$ 18.630,66</td>
+                    <td class="currency">$ 20.074,93</td>
+                    <td class="currency">$ 10.388,06</td>
+                    <td class="currency">$ 12.508,44</td>
+                </tr>
+                <tr>
+                    <td>1/12/2019</td>
+                    <td class="currency">$ 19.923,63</td>
+                    <td class="currency">$ 21.829,48</td>
+                    <td class="currency">$ 11.295,98</td>
+                    <td class="currency">$ 13.632,94</td>
+                </tr>
+                <tr>
+                    <td>1/3/2020</td>
+                    <td class="currency">$ 21.792,47</td>
+                    <td class="currency">$ 23.831,56</td>
+                    <td class="currency">$ 13.055,79</td>
+                    <td class="currency">$ 15.640,04</td>
+                </tr>
+                <tr>
+                    <td>1/6/2020</td>
+                    <td class="currency">$ 23.751,61</td>
+                    <td class="currency">$ 25.290,05</td>
+                    <td class="currency">$ 13.854,80</td>
+                    <td class="currency">$ 16.049,53</td>
+                </tr>
+                <tr>
+                    <td>1/9/2020</td>
+                    <td class="currency">$ 27.247,85</td>
+                    <td class="currency">$ 27.186,81</td>
+                    <td class="currency">$ 14.893,91</td>
+                    <td class="currency">$ 17.025,22</td>
+                </tr>
+                <tr>
+                    <td>1/12/2020</td>
+                    <td class="currency">$ 27.961,74</td>
+                    <td class="currency">$ 28.546,15</td>
+                    <td class="currency">$ 15.638,61</td>
+                    <td class="currency">$ 18.389,21</td>
+                </tr>
+                <tr>
+                    <td>1/3/2021</td>
+                    <td class="currency">$ 32.038,56</td>
+                    <td class="currency">$ 30.849,82</td>
+                    <td class="currency">$ 16.900,64</td>
+                    <td class="currency">$ 20.847,50</td>
+                </tr>
+                <tr>
+                    <td>1/6/2021</td>
+                    <td class="currency">$ 36.322,12</td>
+                    <td class="currency">$ 34.588,82</td>
+                    <td class="currency">$ 18.949,00</td>
+                    <td class="currency">$ 23.241,22</td>
+                </tr>
+                <tr>
+                    <td>1/9/2021</td>
+                    <td class="currency">$ 40.491,90</td>
+                    <td class="currency">$ 38.874,38</td>
+                    <td class="currency">$ 21.296,78</td>
+                    <td class="currency">$ 25.893,35</td>
+                </tr>
+                <tr>
+                    <td>1/12/2021</td>
+                    <td class="currency">$ 45.112,02</td>
+                    <td class="currency">$ 43.582,06</td>
+                    <td class="currency">$ 23.875,82</td>
+                    <td class="currency">$ 28.212,20</td>
+                </tr>
+                <tr>
+                    <td>1/3/2022</td>
+                    <td class="currency">$ 49.154,06</td>
+                    <td class="currency">$ 48.933,94</td>
+                    <td class="currency">$ 26.807,77</td>
+                    <td class="currency">$ 33.335,59</td>
+                </tr>
+                <tr>
+                    <td>1/6/2022</td>
+                    <td class="currency">$ 58.080,44</td>
+                    <td class="currency">$ 56.274,03</td>
+                    <td class="currency">$ 30.828,94</td>
+                    <td class="currency">$ 38.854,56</td>
+                </tr>
+                <tr>
+                    <td>1/9/2022</td>
+                    <td class="currency">$ 67.698,56</td>
+                    <td class="currency">$ 65.013,39</td>
+                    <td class="currency">$ 35.616,68</td>
+                    <td class="currency">$ 45.490,76</td>
+                </tr>
+                <tr>
+                    <td>1/12/2022</td>
+                    <td class="currency">$ 79.261,47</td>
+                    <td class="currency">$ 75.168,48</td>
+                    <td class="currency">$ 41.180,00</td>
+                    <td class="currency">$ 53.398,13</td>
+                </tr>
+                <tr>
+                    <td>1/3/2023</td>
+                    <td class="currency">$ 93.037,12</td>
+                    <td class="currency">$ 87.977,19</td>
+                    <td class="currency">$ 48.197,07</td>
+                    <td class="currency">$ 65.967,75</td>
+                </tr>
+                <tr>
+                    <td>1/6/2023</td>
+                    <td class="currency">$ 114.938,06</td>
+                    <td class="currency">$ 106.382,02</td>
+                    <td class="currency">$ 58.279,90</td>
+                    <td class="currency">$ 83.204,71</td>
+                </tr>
+                <tr>
+                    <td>1/9/2023</td>
+                    <td class="currency">$ 144.970,70</td>
+                    <td class="currency">$ 131.158,39</td>
+                    <td class="currency">$ 71.853,29</td>
+                    <td class="currency">$ 103.563,44</td>
+                </tr>
+                <tr>
+                    <td>1/12/2023</td>
+                    <td class="currency">$ 180.443,86</td>
+                    <td class="currency">$ 158.531,14</td>
+                    <td class="currency">$ 86.849,07</td>
+                    <td class="currency">$ 133.182,06</td>
+                </tr>
+                <tr>
+                    <td>1/3/2024</td>
+                    <td class="currency">$ 232.049,90</td>
+                    <td class="currency">$ 201.619,91</td>
+                    <td class="currency">$ 110.454,65</td>
+                    <td class="currency">$ 194.103,96</td>
+                </tr>
+                <tr>
+                    <td>1/4/2024</td>
+                    <td class="currency">$ 232.049,90</td>
+                    <td class="currency">$ 256.863,77</td>
+                    <td class="currency">$ 140.719,22</td>
+                    <td class="currency">$ 225.362,97</td>
+                </tr>
+                <tr>
+                    <td>1/5/2024</td>
+                    <td class="currency">$ 232.049,90</td>
+                    <td class="currency">$ 285.144,47</td>
+                    <td class="currency">$ 156.212,41</td>
+                    <td class="currency">$ 241.857,85</td>
+                </tr>
+                <tr>
+                    <td>1/6/2024</td>
+                    <td class="currency">$ 338.197,24</td>
+                    <td class="currency">$ 310.322,72</td>
+                    <td class="currency">$ 170.005,96</td>
+                    <td class="currency">$ 256.624,46</td>
+                </tr>
+                <tr>
+                    <td>1/7/2024</td>
+                    <td class="currency">$ 338.197,24</td>
+                    <td class="currency">$ 323.294,22</td>
+                    <td class="currency">$ 177.112,21</td>
+                    <td class="currency">$ 273.537,38</td>
+                </tr>
+                <tr>
+                    <td>1/8/2024</td>
+                    <td class="currency">$ 338.197,24</td>
+                    <td class="currency">$ 338.101,09</td>
+                    <td class="currency">$ 185.223,95</td>
+                    <td class="currency">$ 283.912,88</td>
+                </tr>
+                <tr>
+                    <td>1/9/2024</td>
+                    <td class="currency">$ 447.129,89</td>
+                    <td class="currency">$ 351.726,56</td>
+                    <td class="currency">$ 192.688,48</td>
+                    <td class="currency">$ 295.664,90</td>
+                </tr>
+                <tr>
+                    <td>1/10/2024</td>
+                    <td class="currency">$ 447.129,89</td>
+                    <td class="currency">$ 366.393,56</td>
+                    <td class="currency">$ 200.723,59</td>
+                    <td class="currency">$ 315.280,40</td>
+                </tr>
+                <tr>
+                    <td>1/11/2024</td>
+                    <td class="currency">$ 447.129,89</td>
+                    <td class="currency">$ 379.107,42</td>
+                    <td class="currency">$ 207.688,69</td>
+                    <td class="currency">$ 324.204,47</td>
+                </tr>
+                <tr>
+                    <td>1/12/2024</td>
+                    <td class="currency">$ 515.152,04</td>
+                    <td class="currency">$ 389.305,41</td>
+                    <td class="currency">$ 213.275,52</td>
+                    <td class="currency">$ 330.805,17</td>
+                </tr>
+                <tr>
+                    <td>1/1/2025</td>
+                    <td class="currency">$ 515.152,04</td>
+                    <td class="currency">$ 398.765,53</td>
+                    <td class="currency">$ 218.458,11</td>
+                    <td class="currency">$ 339.531,06</td>
+                </tr>
+                <tr>
+                    <td>1/2/2025</td>
+                    <td class="currency">$ 515.152,04</td>
+                    <td class="currency">$ 409.532,20</td>
+                    <td class="currency">$ 224.356,49</td>
+                    <td class="currency">$ 360.348,40</td>
+                </tr>
+                <tr>
+                    <td>1/3/2025</td>
+                    <td class="currency">$ 576.378,73</td>
+                    <td class="currency">$ 418.582,86</td>
+                    <td class="currency">$ 229.314,76</td>
+                    <td class="currency">$ 374.965,34</td>
+                </tr>
+                <tr>
+                    <td>1/4/2025</td>
+                    <td class="currency">$ 576.378,73</td>
+                    <td class="currency">$ 428.628,85</td>
+                    <td class="currency">$ 234.818,32</td>
+                    <td class="currency">$ 385.716,82</td>
+                </tr>
+                <tr>
+                    <td>1/5/2025</td>
+                    <td class="currency">$ 576.378,73</td>
+                    <td class="currency">$ 444.616,71</td>
+                    <td class="currency">$ 243.577,04</td>
+                    <td class="currency">$ 392.881,86</td>
+                </tr>
+                <tr>
+                    <td>1/6/2025</td>
+                    <td class="currency">$ 653.321,25</td>
+                    <td class="currency">$ 456.977,05</td>
+                    <td class="currency">$ 250.348,48</td>
+                    <td class="currency">$ 403.737,33</td>
+                </tr>
+                <tr>
+                    <td>1/7/2025</td>
+                    <td class="currency">$ 653.321,25</td>
+                    <td class="currency">$ 463.831,71</td>
+                    <td class="currency">$ 254.103,71</td>
+                    <td class="currency">$ 415.437,22</td>
+                </tr>
+                <tr>
+                    <td>1/8/2025</td>
+                    <td class="currency">$ 653.321,25</td>
+                    <td class="currency">$ 471.345,78</td>
+                    <td class="currency">$ 258.220,19</td>
+                    <td class="currency">$ 420.831,76</td>
+                </tr>
+                <tr>
+                    <td>1/9/2025</td>
+                    <td class="currency">$ 703.452,16</td>
+                    <td class="currency">$ 480.301,35</td>
+                    <td class="currency">$ 263.126,37</td>
+                    <td class="currency">-</td>
+                </tr>
+                <tr>
+                    <td>1/10/2025</td>
+                    <td class="currency">$ 703.452,16</td>
+                    <td class="currency">$ 489.331,01</td>
+                    <td class="currency">$ 268.073,15</td>
+                    <td class="currency">-</td>
+                </tr>
+                <tr>
+                    <td>1/11/2025</td>
+                    <td class="currency">$ 703.452,16</td>
+                    <td class="currency">$ 499.606,97</td>
+                    <td class="currency">$ 273.702,69</td>
+                    <td class="currency">-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="print-button">
+            <button onclick="window.print()">Imprimir Tabla</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

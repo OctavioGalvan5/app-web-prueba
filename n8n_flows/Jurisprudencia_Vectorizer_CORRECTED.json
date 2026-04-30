@@ -1,0 +1,430 @@
+{
+  "name": "Jurisprudencia Vectorizer",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Vectorizador de Jurisprudencia\nRecibe sentencias desde Flask, las vectoriza y guarda en jurisprudencia_vectors (separado del chatbot)",
+        "height": 200,
+        "width": 600,
+        "color": 5
+      },
+      "id": "sticky-info",
+      "name": "Info",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-1920, 48]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jurisprudencia-vectorize",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-vectorize",
+      "name": "Webhook Vectorize",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1824, 352],
+      "webhookId": "jurisprudencia-vectorize-webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jurisprudencia-delete",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-delete",
+      "name": "Webhook Delete",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-1824, 656],
+      "webhookId": "jurisprudencia-delete-webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "sentencia-id",
+              "name": "sentencia_id",
+              "value": "={{ $json.body.sentencia_id }}",
+              "type": "string"
+            },
+            {
+              "id": "file-hash",
+              "name": "file_hash",
+              "value": "={{ $json.body.file_hash }}",
+              "type": "string"
+            },
+            {
+              "id": "texto",
+              "name": "texto",
+              "value": "={{ $json.body.texto }}",
+              "type": "string"
+            },
+            {
+              "id": "metadata",
+              "name": "metadata",
+              "value": "={{ $json.body.metadata }}",
+              "type": "object"
+            },
+            {
+              "id": "callback-url",
+              "name": "callback_url",
+              "value": "={{ $json.body.callback_url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-sentencia-info",
+      "name": "Set Sentencia Info",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-1600, 352]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM jurisprudencia_vectors WHERE sentencia_id = {{ $('Set Sentencia Info').item.json.sentencia_id }}",
+        "options": {}
+      },
+      "id": "delete-old-vectors",
+      "name": "Delete Old Vectors",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [-1376, 352],
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "text-for-split",
+              "name": "data",
+              "value": "={{ $('Set Sentencia Info').item.json.texto }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "prepare-text",
+      "name": "Prepare Text",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-1152, 352]
+    },
+    {
+      "parameters": {
+        "code": {
+          "execute": {
+            "code": "const { PromptTemplate } = require('@langchain/core/prompts');\n\n// ============================================================\n// CHUNKER INTELIGENTE PARA JURISPRUDENCIA\n// Divide sentencias judiciales por secciones semánticas\n// ============================================================\n\nlet documentContent = $input.item.json?.data || $input.item.json?.text || $input.item.json?.content;\n\nif (!documentContent) {\n    throw new Error('No se encontró texto para dividir');\n}\n\nconst llm = await this.getInputConnectionData('ai_languageModel', 0);\n\nfunction cleanText(text) {\n    return text.replace(/\\s+/g, ' ').trim();\n}\n\nfunction escapeForTemplate(text) {\n    return text.replace(/\\{/g, '{{').replace(/\\}/g, '}}');\n}\n\nconst fullText = cleanText(documentContent);\n\nconst MAX_CHUNK_SIZE = 1500;\nconst MIN_CHUNK_SIZE = 200;\nconst MAX_INPUT_LENGTH = 30000;\n\nasync function splitByTopics(text) {\n    if (text.length <= MAX_CHUNK_SIZE) {\n        return [text];\n    }\n\n    const textToProcess = text.length > MAX_INPUT_LENGTH\n        ? text.substring(0, MAX_INPUT_LENGTH)\n        : text;\n\n    const escapedText = escapeForTemplate(textToProcess);\n\n    const promptText = `Eres un experto en análisis de jurisprudencia legal.\n\nTu tarea es dividir esta sentencia judicial en bloques temáticos. Cada bloque debe:\n1. Cubrir UN tema específico (hechos, fundamentos, normativa, dispositivo, etc.)\n2. Ser AUTOCONTENIDO y entenderse sin leer otros bloques\n3. Incluir contexto completo (número de expediente, tribunal, etc. si es relevante)\n4. Tener entre ${MIN_CHUNK_SIZE} y ${MAX_CHUNK_SIZE} caracteres\n5. Mantener la integridad de conceptos legales (no cortar citas de leyes)\n\nREGLAS:\n- Si hay secciones claramente marcadas (VISTOS, CONSIDERANDO, RESUELVE), respétalas\n- Cada bloque debe mencionar de qué se trata al inicio\n- NO parafrasees ni reescribas, mantén el texto original\n- NO agregues títulos como \"Chunk 1\" o \"Sección:\"\n\nSENTENCIA:\n${escapedText}\n\nFORMATO DE RESPUESTA:\nDevolvé ÚNICAMENTE los bloques separados por:\n===CHUNK===\n\nEjemplo:\nEn autos \"García c/ ANSES s/ reajustes varios\" (Expte 12345), la Cámara Federal de la Seguridad Social resolvió sobre...\n===CHUNK===\nRespecto de la movilidad jubilatoria, el tribunal consideró que según la Ley 24.241...\n===CHUNK===\nPor lo expuesto, SE RESUELVE: 1) Hacer lugar a la demanda...\n\nNUNCA parafrasees, mantené el texto exacto de la sentencia.`;\n\n    const prompt = PromptTemplate.fromTemplate(promptText);\n    const chain = prompt.pipe(llm);\n\n    try {\n        const response = await chain.invoke();\n        const responseText = response.content || response.text || response.toString();\n\n        let rawChunks = responseText\n            .split('===CHUNK===')\n            .map(c => c.trim())\n            .filter(c => c.length > 0);\n\n        if (rawChunks.length <= 1) {\n            rawChunks = responseText.split(/\\n\\n\\n+/).map(c => c.trim()).filter(c => c.length > 0);\n        }\n\n        if (rawChunks.length <= 1) {\n            return fallbackSplit(text);\n        }\n\n        return rawChunks;\n    } catch (error) {\n        console.log('LLM falló, usando fallback:', error.message);\n        return fallbackSplit(text);\n    }\n}\n\nfunction fallbackSplit(text) {\n    const chunks = [];\n    let remaining = text;\n\n    while (remaining.length > 0) {\n        if (remaining.length <= MAX_CHUNK_SIZE) {\n            chunks.push(remaining);\n            break;\n        }\n\n        let breakPoint = MAX_CHUNK_SIZE;\n        const searchArea = remaining.substring(Math.floor(MAX_CHUNK_SIZE * 0.7), MAX_CHUNK_SIZE);\n        const sentenceEnd = searchArea.lastIndexOf('. ');\n        \n        if (sentenceEnd !== -1) {\n            breakPoint = Math.floor(MAX_CHUNK_SIZE * 0.7) + sentenceEnd + 2;\n        }\n\n        chunks.push(remaining.substring(0, breakPoint).trim());\n        remaining = remaining.substring(breakPoint).trim();\n    }\n\n    return chunks;\n}\n\nasync function processDocument(text) {\n    let rawChunks;\n\n    if (text.length > MAX_INPUT_LENGTH) {\n        rawChunks = [];\n        let offset = 0;\n\n        while (offset < text.length) {\n            let sectionEnd = offset + MAX_INPUT_LENGTH;\n\n            if (sectionEnd < text.length) {\n                const searchArea = text.substring(\n                    Math.max(offset + MAX_INPUT_LENGTH - 2000, offset),\n                    sectionEnd\n                );\n                const lastPeriod = searchArea.lastIndexOf('. ');\n                if (lastPeriod !== -1) {\n                    sectionEnd = Math.max(offset + MAX_INPUT_LENGTH - 2000, offset) + lastPeriod + 2;\n                }\n            } else {\n                sectionEnd = text.length;\n            }\n\n            const section = text.substring(offset, sectionEnd);\n            const sectionChunks = await splitByTopics(section);\n            rawChunks.push(...sectionChunks);\n            offset = sectionEnd;\n        }\n    } else {\n        rawChunks = await splitByTopics(text);\n    }\n\n    const finalChunks = [];\n    let buffer = '';\n\n    for (const chunk of rawChunks) {\n        if (buffer.length > 0) {\n            if (buffer.length + chunk.length + 1 <= MAX_CHUNK_SIZE) {\n                buffer += ' ' + chunk;\n                continue;\n            } else {\n                finalChunks.push(buffer);\n                buffer = '';\n            }\n        }\n\n        if (chunk.length < MIN_CHUNK_SIZE) {\n            buffer = chunk;\n        } else if (chunk.length > MAX_CHUNK_SIZE) {\n            const subChunks = fallbackSplit(chunk);\n            finalChunks.push(...subChunks);\n        } else {\n            finalChunks.push(chunk);\n        }\n    }\n\n    if (buffer.length > 0) {\n        if (finalChunks.length > 0 &&\n            finalChunks[finalChunks.length - 1].length + buffer.length + 1 <= MAX_CHUNK_SIZE) {\n            finalChunks[finalChunks.length - 1] += ' ' + buffer;\n        } else {\n            finalChunks.push(buffer);\n        }\n    }\n\n    return finalChunks;\n}\n\nconst processedChunks = await processDocument(fullText);\n\nconst returnData = processedChunks.map((content, index) => ({\n    json: {\n        content: content,\n        chunk: index + 1,\n        chunk_size: content.length,\n        total_chunks: processedChunks.length\n    }\n}));\n\nreturn returnData;"
+          }
+        },
+        "inputs": {
+          "input": [
+            {
+              "type": "ai_languageModel",
+              "maxConnections": 1,
+              "required": true
+            },
+            {
+              "type": "main",
+              "required": true
+            }
+          ]
+        },
+        "outputs": {
+          "output": [
+            {
+              "type": "main"
+            }
+          ]
+        }
+      },
+      "id": "langchain-splitter",
+      "name": "LangChain Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.code",
+      "typeVersion": 1,
+      "position": [-928, 352]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "id": "openai-chat",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [-992, 560],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-large",
+        "options": {}
+      },
+      "id": "embeddings-openai",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [-512, 560],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO jurisprudencia_vectors (sentencia_id, content, metadata, embedding)\nVALUES \n{{ $items().map((item, idx) => `(${$('Set Sentencia Info').item.json.sentencia_id}, '${item.json.content.replace(/'/g, \"''\")}', '${JSON.stringify($('Set Sentencia Info').item.json.metadata).replace(/'/g, \"''\")}', '[${item.json.embedding.join(',')}]')`).join(',\\n') }};",
+        "options": {}
+      },
+      "id": "insert-vectors",
+      "name": "Insert Vectors to PGVector",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [-304, 352],
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE biblioteca_jurisprudencia SET status = 'ready', updated_at = NOW() WHERE id = {{ $('Set Sentencia Info').item.json.sentencia_id }}",
+        "options": {}
+      },
+      "id": "update-status",
+      "name": "Update Status Ready",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [-96, 352],
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $('Set Sentencia Info').first().json.callback_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ status: 'ready' }) }}",
+        "options": {}
+      },
+      "id": "callback-flask",
+      "name": "Callback Flask",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [112, 352]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Sentencia vectorizada', sentencia_id: $('Set Sentencia Info').first().json.sentencia_id }) }}",
+        "options": {}
+      },
+      "id": "respond-success",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [320, 352]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "delete-id",
+              "name": "sentencia_id",
+              "value": "={{ $json.body.sentencia_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-delete-info",
+      "name": "Set Delete Info",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-1600, 656]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM jurisprudencia_vectors WHERE sentencia_id = {{ $json.sentencia_id }}",
+        "options": {}
+      },
+      "id": "delete-vectors",
+      "name": "Delete Vectors",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [-1376, 656],
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Vectores eliminados', sentencia_id: $('Set Delete Info').first().json.sentencia_id }) }}",
+        "options": {}
+      },
+      "id": "respond-delete",
+      "name": "Respond Delete Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [-1152, 656]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/embeddings",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: 'text-embedding-3-large',\n  input: $json.content\n}) }}",
+        "options": {}
+      },
+      "id": "generate-embedding",
+      "name": "Generate Embedding",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-720, 352],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "extract-embedding",
+              "name": "embedding",
+              "value": "={{ $json.data[0].embedding }}",
+              "type": "array"
+            },
+            {
+              "id": "keep-content",
+              "name": "content",
+              "value": "={{ $('LangChain Text Splitter').item.json.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extract-embedding",
+      "name": "Extract Embedding",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-512, 352]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Vectorize": {
+      "main": [[{"node": "Set Sentencia Info", "type": "main", "index": 0}]]
+    },
+    "Set Sentencia Info": {
+      "main": [[{"node": "Delete Old Vectors", "type": "main", "index": 0}]]
+    },
+    "Delete Old Vectors": {
+      "main": [[{"node": "Prepare Text", "type": "main", "index": 0}]]
+    },
+    "Prepare Text": {
+      "main": [[{"node": "LangChain Text Splitter", "type": "main", "index": 0}]]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [[{"node": "LangChain Text Splitter", "type": "ai_languageModel", "index": 0}]]
+    },
+    "LangChain Text Splitter": {
+      "main": [[{"node": "Generate Embedding", "type": "main", "index": 0}]]
+    },
+    "Generate Embedding": {
+      "main": [[{"node": "Extract Embedding", "type": "main", "index": 0}]]
+    },
+    "Extract Embedding": {
+      "main": [[{"node": "Insert Vectors to PGVector", "type": "main", "index": 0}]]
+    },
+    "Insert Vectors to PGVector": {
+      "main": [[{"node": "Update Status Ready", "type": "main", "index": 0}]]
+    },
+    "Update Status Ready": {
+      "main": [[{"node": "Callback Flask", "type": "main", "index": 0}]]
+    },
+    "Callback Flask": {
+      "main": [[{"node": "Respond Success", "type": "main", "index": 0}]]
+    },
+    "Webhook Delete": {
+      "main": [[{"node": "Set Delete Info", "type": "main", "index": 0}]]
+    },
+    "Set Delete Info": {
+      "main": [[{"node": "Delete Vectors", "type": "main", "index": 0}]]
+    },
+    "Delete Vectors": {
+      "main": [[{"node": "Respond Delete Success", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

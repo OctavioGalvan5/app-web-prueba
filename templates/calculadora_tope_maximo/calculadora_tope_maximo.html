@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Topes Previsionales</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #5e35b1;
+            --primary-light: #9162e4;
+            --primary-dark: #3c1f8b;
+            --primary-bg: #f5f2ff;
+            --secondary: #f8f9fa;
+            --text-dark: #333;
+            --text-light: #6c757d;
+            --white: #ffffff;
+            --border-radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #e4e8f0);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 100px auto 40px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            margin-bottom: 40px;
+            border: none;
+        }
+
+        .card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 15px;
+            font-size: 32px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .form-description {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 600;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: var(--primary-light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            color: var(--primary);
+            cursor: help;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--text-dark);
+            color: var(--white);
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: normal;
+            font-size: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--text-dark) transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            border-color: var(--primary);
+            outline: none;
+            background-color: var(--white);
+            box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.1);
+        }
+
+        input[type="date"] {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%235e35b1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 20px;
+        }
+
+        .checkbox-container {
+            background-color: var(--secondary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .checkbox-item:hover {
+            background-color: var(--primary-bg);
+            transform: translateY(-2px);
+            border-color: var(--primary-light);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+            margin-right: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked {
+            background-color: var(--primary);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+        .submit-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 80px auto 20px;
+            }
+            .card {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 26px;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-98REL9JCTR"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-98REL9JCTR');
+    </script>
+</head>
+<body>
+    {% include 'navs/nav.html' %}
+    <div class="container">
+        <div class="card">
+            <h1>Calculadora de Topes Previsionales</h1>
+            <p class="form-description">
+                Complete los datos del caso y seleccione los métodos de movilidad que desea comparar para obtener un análisis detallado.
+            </p>
+
+            <form action="/resultado_comparativa_tope_maximo" method="POST">
+                <!-- Información del Caso -->
+                <div class="section-title">
+                    <i class="fas fa-folder-open"></i> Información del Caso
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="autos">
+                            Autos
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Ingrese el nombre del caso o autos</span>
+                            </span>
+                        </label>
+                        <input type="text" id="autos" name="Autos" required placeholder="Ej: García c/ ANSES">
+                    </div>
+                    <div class="form-group">
+                        <label for="expediente">
+                            Expediente
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Ingrese el número de expediente</span>
+                            </span>
+                        </label>
+                        <input type="text" id="expediente" name="Expediente" required placeholder="Ej: 12345/2023">
+                    </div>
+                </div>
+
+                <!-- Datos de Cálculo -->
+                <div class="section-title">
+                    <i class="fas fa-calculator"></i> Datos de Cálculo
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="haber_reclamado">
+                            Haber Reclamado ($)
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Ingrese el monto del haber reclamado</span>
+                            </span>
+                        </label>
+                        <input type="number" id="haber_reclamado" name="haber_reclamado" step="0.01" required placeholder="Ej: 150000.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="segunda_fecha">
+                            Fecha a Comparar
+                            <span class="tooltip">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltip-text">Seleccione la fecha para realizar la comparación</span>
+                            </span>
+                        </label>
+                        <input type="date" id="segunda_fecha" name="segunda_fecha" required min="2018-01-01">
+                    </div>
+                </div>
+
+                <!-- Métodos de Movilidad -->
+                <div class="section-title">
+                    <i class="fas fa-sliders-h"></i> Métodos de Movilidad a Comparar
+                </div>
+                <div class="checkbox-container">
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="caliva_mas_anses" name="caliva_mas_anses" value="true">
+                            <label for="caliva_mas_anses">Caliva más ANSES</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="badaro_mas_anses" name="badaro_mas_anses" value="true">
+                            <label for="badaro_mas_anses">Badaro más ANSES</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="badaro_mas_caliva" name="badaro_mas_caliva" value="true">
+                            <label for="badaro_mas_caliva">Badaro más Caliva</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="remuneracion_maxima" name="remuneracion_maxima" value="true">
+                            <label for="remuneracion_maxima">Remuneración Máxima</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ochentaidos_remuneracion_maxima" name="ochentaidos_remuneracion_maxima" value="true">
+                            <label for="ochentaidos_remuneracion_maxima">82% Remuneración Máxima</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="rem_max_caliva_27551" name="rem_max_caliva_27551" value="true">
+                            <label for="rem_max_caliva_27551">Rem. Máx. Imponible Caliva Márquez 27551</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="martinez_mas_anses" name="martinez_mas_anses" value="true">
+                            <label for="martinez_mas_anses">Martínez más ANSES</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="anses_mas_palavecino" name="anses_mas_palavecino" value="true">
+                            <label for="anses_mas_palavecino">ANSES más Palavecino</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="caliva_marquez_mas_palavecino" name="caliva_marquez_mas_palavecino" value="true">
+                            <label for="caliva_marquez_mas_palavecino">Caliva Márquez más Palavecino</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="Alanis_Colina" name="Alanis_Colina" value="true">
+                            <label for="Alanis_Colina">Alanis mas Colina</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="badaro_cm_palavecino" name="badaro_cm_palavecino" value="true">
+                            <label for="badaro_cm_palavecino">Badaro + CM + ANSES</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="RM_Badaro_FP_CM_P_Anses" name="RM_Badaro_FP_CM_P_Anses" value="true">
+                            <label for="RM_Badaro_FP_CM_P_Anses">RM+Badaro+FP+CM+P+Anses</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-button" name="action" value="generar_pdf">
+                    <i class="fas fa-chart-bar"></i> Comparar Métodos
+                </button>
+            </form>
+        </div>
+    </div>
+    {% include 'footers/footer.html' %}
+
+    <script>
+        const maxCheckboxes = 8;
+        const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+
+        allCheckboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                if (checkedCount > maxCheckboxes) {
+                    this.checked = false;
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Límite alcanzado',
+                        text: `Solo puede seleccionar hasta ${maxCheckboxes} métodos de movilidad para comparar al mismo tiempo.`,
+                        confirmButtonColor: '#5e35b1'
+                    });
+                }
+            });
+        });
+
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (checked.length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Debe seleccionar al menos uno',
+                    text: 'Por favor, seleccione al menos un método de movilidad para comparar.',
+                    confirmButtonColor: '#5e35b1'
+                });
+            } else if (checked.length > maxCheckboxes) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Demasiadas opciones',
+                    text: `Ha seleccionado más de ${maxCheckboxes} métodos de movilidad. Por favor, reduzca su selección.`,
+                    confirmButtonColor: '#5e35b1'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

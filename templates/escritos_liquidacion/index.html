@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creador de Escritos de Liquidación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a0dad;
+            --primary-light: #9b59b6;
+            --primary-dark: #4a0080;
+            --secondary: #f0e6fa;
+            --text: #333;
+            --gray: #f8f9fa;
+            --border: #e0d8e8;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f0ff, #e6d9f2);
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .card-header .subtitle {
+            margin-top: 10px;
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        .drop-zone {
+            border: 3px dashed var(--primary-light);
+            border-radius: 15px;
+            padding: 60px 30px;
+            background: linear-gradient(135deg, #faf9ff, var(--secondary));
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--secondary), #e6d9f2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(106, 13, 173, 0.15);
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .drop-zone-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .drop-zone-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-subtext {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .file-input { display: none; }
+
+        .browse-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .browse-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .file-info {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .file-info.show { display: block; animation: fadeIn 0.3s ease; }
+
+        .file-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: var(--gray);
+            border-radius: 8px;
+            border-left: 4px solid var(--success);
+            margin-bottom: 8px;
+        }
+
+        .file-row .file-icon { color: var(--danger); font-size: 20px; flex-shrink: 0; }
+
+        .file-row .file-details { flex: 1; min-width: 0; }
+
+        .file-row .file-name-text {
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-row .file-size-text { font-size: 12px; color: #666; }
+
+        .file-row .opcion-select {
+            flex-shrink: 0;
+            width: 130px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--primary-dark);
+            background: white;
+            cursor: pointer;
+        }
+
+        .file-row .opcion-select:focus { outline: none; border-color: var(--primary); }
+
+        .remove-file {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 16px;
+            flex-shrink: 0;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .remove-file:hover { background: rgba(220, 53, 69, 0.1); }
+
+        .files-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+
+        .clear-all-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .clear-all-btn:hover { color: var(--danger); background: rgba(220,53,69,0.08); }
+
+        .submit-section { text-align: center; margin-top: 30px; }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(106, 13, 173, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .manual-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .manual-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: var(--gray);
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .features-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--gray);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon { font-size: 24px; color: var(--primary); min-width: 30px; }
+        .feature-text { font-size: 14px; font-weight: 500; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .processing { animation: pulse 2s infinite; }
+
+        @media (max-width: 768px) {
+            .container { margin: 20px auto; padding: 0 15px; }
+            .card-body { padding: 20px; }
+            .drop-zone { padding: 40px 20px; }
+            .card-header h1 { font-size: 24px; }
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    {% include 'navs/nav.html' %}
+
+    <div class="container">
+        <div class="main-card">
+            <div class="card-header">
+                <h1>
+                    <i class="fas fa-file-pdf"></i>
+                    Creador de Escritos de Liquidación
+                </h1>
+                <div class="subtitle">
+                    Sube tu documento PDF para procesamiento automático
+                </div>
+            </div>
+
+            <div class="card-body">
+                <!-- Formulario con PDF -->
+                <form action="/generador_escrito_liquidacion" method="post" enctype="multipart/form-data" id="uploadForm">
+                    <div class="upload-section">
+                        <div class="drop-zone" id="dropZone">
+                            <i class="fas fa-cloud-upload-alt drop-zone-icon" id="dropIcon"></i>
+                            <div class="drop-zone-text" id="dropText">
+                                Arrastra y suelta uno o más archivos PDF aquí
+                            </div>
+                            <div class="drop-zone-subtext" id="dropSubtext">
+                                o haz clic para seleccionar archivos
+                            </div>
+                            <button type="button" class="browse-btn" id="browseBtn">
+                                <i class="fas fa-folder-open"></i>
+                                Seleccionar Archivos
+                            </button>
+                        </div>
+
+                        <input type="file" name="pdf" id="pdfFile" class="file-input" accept=".pdf" multiple>
+
+                        <div class="file-info" id="fileInfo">
+                            <div id="fileList"></div>
+                            <div class="files-actions">
+                                <button type="button" class="clear-all-btn" onclick="clearAll()">
+                                    <i class="fas fa-times"></i> Quitar todos
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="progress-bar-container" id="progressBar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+
+                    <div class="submit-section">
+                        <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                            <i class="fas fa-cogs"></i>
+                            Procesar Documento
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Botón manual -->
+                <div class="submit-section">
+                    <form action="/generador_escrito_liquidacion" method="post">
+                        <button type="submit" class="manual-btn">
+                            <i class="fas fa-pen"></i>
+                            Completar manualmente sin PDF
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Características -->
+                <div class="features-section">
+                    <h3 style="text-align: center; color: var(--primary); margin-bottom: 20px;">
+                        <i class="fas fa-star me-2"></i>Características del Procesamiento
+                    </h3>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-search feature-icon"></i>
+                            <div class="feature-text">El orden de los retroactivos importa</div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-shield-alt feature-icon"></i>
+                            <div class="feature-text">Puede haber errores, revisa el formulario</div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-clock feature-icon"></i>
+                            <div class="feature-text">El proceso puede tardar unos segundos</div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-file-alt feature-icon"></i>
+                            <div class="feature-text">El documento debe ser un PDF unido con LexDoctor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footers/footer.html' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('pdfFile');
+        const browseBtn = document.getElementById('browseBtn');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileList = document.getElementById('fileList');
+        const submitBtn = document.getElementById('submitBtn');
+        const form = document.getElementById('uploadForm');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+
+        // Mapa de File → opción asignada
+        let archivos = [];
+
+        dropZone.addEventListener('click', e => {
+            if (!e.target.closest('.browse-btn')) fileInput.click();
+        });
+
+        browseBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            fileInput.click();
+        });
+
+        dropZone.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = [...e.dataTransfer.files].filter(f => f.type === 'application/pdf');
+            if (files.length === 0) {
+                alert('Por favor, arrastrá archivos PDF válidos.');
+                return;
+            }
+            setArchivos(files);
+        });
+
+        fileInput.addEventListener('change', e => {
+            const files = [...e.target.files].filter(f => f.type === 'application/pdf');
+            if (files.length > 0) setArchivos(files);
+        });
+
+        function setArchivos(files) {
+            if (files.length > 4) {
+                alert('Podés subir hasta 4 PDFs (una por opción).');
+                files = files.slice(0, 4);
+            }
+            archivos = files.map((f, i) => ({ file: f, opcion: i + 1 }));
+            renderFileList();
+            actualizarDropZone();
+            fileInfo.classList.add('show');
+            submitBtn.disabled = false;
+        }
+
+        function renderFileList() {
+            const opcionesUsadas = () => archivos.map(a => a.opcion);
+
+            fileList.innerHTML = archivos.map((item, idx) => {
+                const opciones = [1, 2, 3, 4].map(n =>
+                    `<option value="${n}" ${item.opcion === n ? 'selected' : ''}>${n === 1 ? 'Opción 1 (principal)' : 'Opción ' + n}</option>`
+                ).join('');
+                return `
+                <div class="file-row" data-idx="${idx}">
+                    <i class="fas fa-file-pdf file-icon"></i>
+                    <div class="file-details">
+                        <div class="file-name-text" title="${item.file.name}">${item.file.name}</div>
+                        <div class="file-size-text">${formatSize(item.file.size)}</div>
+                    </div>
+                    <select class="opcion-select" onchange="cambiarOpcion(${idx}, this.value)">
+                        ${opciones}
+                    </select>
+                    <button type="button" class="remove-file" onclick="quitarArchivo(${idx})" title="Quitar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>`;
+            }).join('');
+        }
+
+        function actualizarDropZone() {
+            const n = archivos.length;
+            if (n === 0) {
+                document.getElementById('dropIcon').className = 'fas fa-cloud-upload-alt drop-zone-icon';
+                document.getElementById('dropIcon').style.color = 'var(--primary)';
+                document.getElementById('dropText').textContent = 'Arrastra y suelta uno o más archivos PDF aquí';
+                document.getElementById('dropSubtext').textContent = 'o haz clic para seleccionar archivos';
+            } else {
+                document.getElementById('dropIcon').className = 'fas fa-check-circle drop-zone-icon';
+                document.getElementById('dropIcon').style.color = 'var(--success)';
+                document.getElementById('dropText').textContent = n === 1 ? '1 archivo seleccionado' : `${n} archivos seleccionados`;
+                document.getElementById('dropSubtext').textContent = 'Asigná la opción a cada PDF y hacé clic en "Procesar"';
+            }
+        }
+
+        window.cambiarOpcion = function(idx, valor) {
+            archivos[idx].opcion = parseInt(valor);
+        };
+
+        window.quitarArchivo = function(idx) {
+            archivos.splice(idx, 1);
+            renderFileList();
+            actualizarDropZone();
+            if (archivos.length === 0) {
+                fileInfo.classList.remove('show');
+                submitBtn.disabled = true;
+                fileInput.value = '';
+            }
+        };
+
+        window.clearAll = function() {
+            archivos = [];
+            fileList.innerHTML = '';
+            fileInfo.classList.remove('show');
+            submitBtn.disabled = true;
+            fileInput.value = '';
+            actualizarDropZone();
+        };
+
+        function formatSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (archivos.length === 0) {
+                alert('Por favor, seleccioná al menos un archivo PDF.');
+                return;
+            }
+
+            // Validar que no haya dos PDFs con la misma opción
+            const opciones = archivos.map(a => a.opcion);
+            const duplicados = opciones.filter((o, i) => opciones.indexOf(o) !== i);
+            if (duplicados.length > 0) {
+                alert(`Dos archivos tienen asignada la misma Opción ${duplicados[0]}. Cada PDF debe tener una opción distinta.`);
+                return;
+            }
+
+            // Ordenar por número de opción y reemplazar el input
+            const ordenados = [...archivos].sort((a, b) => a.opcion - b.opcion);
+            const dt = new DataTransfer();
+            ordenados.forEach(item => dt.items.add(item.file));
+            fileInput.files = dt.files;
+
+            progressBar.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+            submitBtn.classList.add('processing');
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                progressFill.style.width = progress + '%';
+            }, 200);
+            setTimeout(() => { clearInterval(interval); progressFill.style.width = '100%'; }, 1000);
+
+            form.submit();
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            margin-top: 60px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 35px;
+            width: 100%;
+        }
+        .form-inline {
+            display: flex;
+            flex-direction: column; /* Cambiar a columna para pantallas pequeñas */
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+        label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"],
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%; /* Asegura que los inputs ocupen todo el ancho */
+            box-sizing: border-box; /* Incluye padding y border en el ancho total */
+        }
+        .form-group.form-inline label {
+            display: block; /* Esto hará que las etiquetas con los checkboxes se muestren una debajo de la otra */
+            margin-bottom: 10px; /* Añade un pequeño margen para separar visualmente las checkboxes */
+        }
+        h2 {
+            text-align: left;
+            margin-bottom: 20px;
+            color: purple;
+        }
+        h3 {
+            margin-top: 10px;
+            text-align: left;
+            font-size: 24px;
+            font-weight: bold;
+            color: purple;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #6a1b9a;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #9c27b0;
+        }
+        .dropZone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 20px; /* Espacio entre el botón y la zona de arrastre */
+        }
+        .dropZone.hover {
+            border-color: #00f;
+        }
+
+        /* Media Queries para pantallas más pequeñas */
+        @media (min-width: 600px) {
+            .form-inline {
+                flex-direction: row; /* Cambiar a fila para pantallas más grandes */
+            }
+            .form-inline > div {
+                flex: 1; /* Permite que los elementos se distribuyan uniformemente */
+                margin-right: 10px; /* Espaciado entre elementos */
+            }
+            .form-inline > div:last-child {
+                margin-right: 0; /* Elimina el margen derecho del último elemento */
+            }
+        }
+        .label-with-icon {
+            display: flex;
+            align-items: center;
+        }
+        .info-icon {
+            margin-left: 5px;
+            cursor: help;
+            position: relative;
+        }
+        .info-icon::after {
+            content: "?";
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #6a1b9a;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .info-icon .tooltip {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .info-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+    <body>
+
+    {% include 'navs/nav.html' %}
+
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data" action="/formulario_demandas">
+
+            <h2>Componentes Demanda</h2>
+
+            <div class="form-group form-inline">
+                <label class="label-with-icon">
+                    <input type="checkbox" name="opcion_error_material"> Error Material
+                    <span class="info-icon">
+                        <span class="tooltip">Seleccione esta opción si hay un error material en el cálculo de su beneficio</span>
+                    </span>
+                </label>
+                <label class="label-with-icon">
+                    <input type="checkbox" name="opcion_sumas_remunerativas"> Suma no Remunerativas
+                    <span class="info-icon">
+                        <span class="tooltip">Seleccione esta opción si hay suma no remunerativa en el cálculo de su beneficio</span>
+                    </span>
+                </label>
+
+                <label><input type="checkbox" name="opcion_reajuste_pbu"> Reajuste PBU</label>
+                <label><input type="checkbox" name="opcion_tasa_complementacion"> Tasa de complementación</label>
+                <label><input type="checkbox" name="opcion_integralidad_haber_actualizacion_remuneraciones"> Integralidad del haber:                                                                                                 actualización de remuneraciones</label>
+                <label><input type="checkbox" name="opcion_movilidad_tope_haber_maximo"> Movilidad del tope del haber máximo</label>
+                <label><input type="checkbox" name="opcion_inaplicabilidad_tope_art_14_res_06_09"> Inaplicabilidad tope Art 14 de la                                                                                                                         Res 06.09</label>
+                <label><input type="checkbox" name="opcion_movilidad_haber_jubilatorio"> Movilidad del haber jubilatorio</label>
+                <label><input type="checkbox" name="opcion_inaplicabilidad_impuesto_ganancias"> Inaplicabilidad de impuesto a las                                                                                                                         ganancias</label>
+                <label><input type="checkbox" name="opcion_inaplicabilidad_tope_ley_24241"> Inaplicabilidad tope Art. 9 y 25 de la ley                                                                                                                           24.241</label>
+                <label><input type="checkbox" name="opcion_inco_articulo_3_ley_27426_y_4_ley_27609"> Inco articulo 3 ley 27.426 y 4 de                                                                                                                     la ley 27.609</label>
+                <label><input type="checkbox" name="opcion_inco_articulo_3_ley_27426"> Inco articulo 3 ley 27.426</label>
+            </div>
+
+
+            <h2>Datos del Cliente</h2>
+            <div class="form-group">
+                <label for="genero">Género:</label>
+                <select id="genero" name="genero" style="width: 50%;">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+
+                </select>
+            </div>
+
+            <!-- Nombre y DNI -->
+            <div class="form-group form-inline">
+                <div>
+                    <label for="nombre" class="label-with-icon">
+                        Nombre y Apellido:
+                        <span class="info-icon">
+                            <span class="tooltip">Ingrese nombre completo</span>
+                        </span>
+                    </label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div>
+                    <label for="DNI" class="label-with-icon">
+                        DNI:
+                        <span class="info-icon">
+                            <span class="tooltip">Ingrese su numero de documento</span>
+                        </span>
+                    </label>
+                    <input type="text" id="DNI" name="DNI" required>
+                </div>
+            </div>
+
+            <!-- Fecha de adquisición del derecho y checkbox -->
+            <div class="form-group form-inline">
+                <div style="flex: 1;">
+                    <label for="fecha">Fecha de adquisición del derecho:</label>
+                    <input type="date" id="fecha" name="fecha_adquisicion_derecho" required>
+                </div>
+                <div class="checkbox-group" style="flex: 1; display: flex; align-items: center;">
+                    <input type="checkbox" id="garciaVidal" name="garciaVidal" style="margin-right: 10px;">
+                    <label for="garciaVidal">Tiene García Vidal</label>
+                </div>
+            </div>
+
+
+            <!-- Domicilio y Localidad -->
+            <div class="form-group form-inline">
+                <div>
+                    <label for="domicilio">Domicilio:</label>
+                    <input type="text" id="domicilio" name="domicilio" required>
+                </div>
+                <div>
+                    <label for="localidad">Localidad:</label>
+                    <select id="localidad" name="localidad">
+                        <option value="Salta">Salta</option>
+                        <option value="Oran">Oran</option>
+                        <option value="Tartagal">Tartagal</option>
+                        <option value="Cafayate">Cafayate</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Título de Beneficio -->
+            <h3>Beneficio</h3>
+
+            <!-- Fecha de solicitud de reajuste y expediente -->
+            <div class="form-group form-inline">
+                <div>
+                    <label for="fechaReajuste">Fecha de solicitud de reajuste:</label>
+                    <input type="date" id="fechaReajuste" name="fechaReajuste" required>
+                </div>
+                <div>
+                    <label for="expedienteReajuste">Expediente reajuste:</label>
+                    <input type="text" id="expedienteReajuste" name="expedienteReajuste" required>
+                </div>
+                
+                <div>
+                    <label for="Beneficio">Numero de Beneficio:</label>
+                    <input type="text" id="Beneficio" name="Beneficio" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <label for="fechas">Períodos de remuneraciones tomados del:</label>
+                <div style="display: flex; gap: 10px;">
+                     <input type="date" id="fecha_inicio_remuneraciones" name="fecha_inicio_remuneraciones" required>
+                    <span>al</span>
+                    <input type="date" id="fecha_fin_remuneraciones" name="fecha_fin_remuneraciones" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <div>
+                    <label for="fechaReajuste">Fecha de Cese:</label>
+                    <input type="date" id="fechaCese" name="fechaCese" style="width: 50%;" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <label for="fechas">Ultima Remuneracion en Actividad:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="Ultima_Remuneracion_Actividad" name="Ultima_Remuneracion_Actividad" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"required>
+                    <span>al</span>
+                    <input type="date" id="fecha_Ultima_Remuneracion_Actividad" name="fecha_Ultima_Remuneracion_Actividad" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <div>
+                    <label for="Ultima_remuneracion_actualizada_Anses">Ultima remuneracion Actualizada por Anses:</label>
+                    <input type="text" id="Ultima_remuneracion_actualizada_Anses" name="Ultima_remuneracion_actualizada_Anses" style="width: 50%;" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <div>
+                    <label for="fecha_alta_primer_haber">Fecha de alta de primer haber:</label>
+                    <input type="date" id="fecha_alta_primer_haber" name="fecha_alta_primer_haber" required>
+                </div>
+                <div>
+                    <label for="Monto_primer_haber">Monto Primer haber jubilatorio:</label>
+                    <input type="text" id="Monto_primer_haber" name="Monto_primer_haber" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78"required>
+                </div>
+
+                <div>
+                    <label for="Taza_de_reemplazo"> Taza de reemplazo:</label>
+                    <input type="text" id="Taza_de_reemplazo" name="Taza_de_reemplazo" required>
+                </div>
+            </div>
+
+            <div class="form-group ">
+                <div>
+                    <label for="Ultima_remuneracion_actualizada_Anses">Servicios:</label>
+                      <label><input type="checkbox" name="Servicios_Autonomos"> Autonomos</label>
+                      <label><input type="checkbox" name="Servicios_Dependencia"> Dependencia</label>
+                </div>
+            </div>
+
+            <!-- Zona de Autonomos-->
+
+            <div id="ServiciosAutonomosSection" style="display: none; margin-top: 20px;">
+                <h3>Servicios Autonomos</h3>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Input 1:</label>
+                        <input type="text" id="errorInput1" name="Autonomos1">
+                    </div>
+                    <div>
+                        <label for="errorInput2">Input 2:</label>
+                        <input type="text" id="errorInput2" name="Autonomos2">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zona de Dependencia-->
+            <div id="ServiciosDependenciaSection" style="display: none; margin-top: 20px;">
+                <h3>Servicios en Dependencia</h3>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="cargo_desempleado">Cargo desempleado:</label>
+                        <input type="text" id="cargo_desempleado" name="cargo_desempleado">
+                    </div>
+                    <div>
+                        <label for="empleador">Empleador:</label>
+                        <input type="text" id="empleador" name="empleador">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <label for="fechas">Ultimo haber percibido:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="Ultimo_haber" name="Ultimo_haber" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" required>
+                    <span>al</span>
+                    <input type="date" id="fecha_Ultimo_haber" name="fecha_Ultimo_haber" required>
+                </div>
+            </div>
+
+            <div class="form-group form-inline">
+                <div>
+                    <label for="fechaReajuste">Fecha de inicio del Reclamo administrativo interruptivo de la prescripción:</label>
+                    <input type="date" id="fecha_reclamo" name="fecha_reclamo" style="width: 50%;" required>
+                </div>
+            </div>
+                    
+
+            <!-- Zona de Arrastre para Imágenes -->
+            <div  hidden class="dropZone dropZone.hover" id="dropZone">Arrastra y suelta una imagen aquí o haz clic para seleccionar</div>
+            <input hidden type="file" id="imageUpload" name="imageUpload" accept="image/*" style="display: none;">
+
+            <!-- Zona de Error material -->
+
+            <div id="errorMaterialSection" style="display: none; margin-top: 20px;">
+                <h3>Error Material</h3>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Lugar de trabajo durante el error material:</label>
+                        <input type="text" id="errorInput1" name="Lugar_error">
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="fechas">Períodos de remuneraciones tomadas erroneamente:</label>
+                        <div style="display: flex; gap: 10px;">
+                             <input type="date" id="fecha_inicio_remuneraciones" name="fecha_inicio_remuneraciones_error">
+                            <span>al</span>
+                            <input type="date" id="fecha_fin_remuneraciones" name="fecha_fin_remuneraciones_error">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div class="dropZone dropZone.hover" id="dropZoneError">Arrastre imagen de cuadro de error material</div>
+                    <input type="file" id="imagenError" name="imagenError" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="nombre">"W" con error material:</label>
+                        <input type="text" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" id="nombre" name="W_error">
+                    </div>
+                    <div>
+                        <label for="DNI">"W" sin error material:</label>
+                        <input type="text" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" id="DNI" name="W_sin_error">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zona de Sumas No remunerativas -->
+            <div id="SumasnoRemunerativasSection" style="display: none; margin-top: 20px;">
+                <h3>Sumas no Remunerativas</h3>
+
+                <div class="form-group">
+                    <div>
+                        <label for="Ultima_remuneracion_actualizada_Anses">Se posee recibos:</label>
+                        <label><input type="checkbox" name="Recibos_Si"> Si</label>
+                        <label><input type="checkbox" name="Recibos_No"> No</label>
+                    </div>
+                </div>
+
+                <div id="Recibos_SiSection" style="display: none; margin-top: 20px;">
+                    <div class="form-group form-inline">
+                        <div>
+                            <label for="Cargo_Desempeñado">Cargo Desempeñado:</label>
+                            <input type="text" id="Cargo_Desempeñado" name="Cargo_Desempeñado">
+                        </div>
+                        <div>
+                            <label for="Lugar_Desempeñado">Lugar:</label>
+                            <input type="text" id="Lugar_Desempeñado" name="Lugar_Desempeñado">
+                        </div>
+                        <div>
+                            <label for="Años_antiguedad">Años de Antiguedad:</label>
+                            <input type="text" id="Años_antiguedad" name="Años_antiguedad">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Recibos_NoSection" style="display: none; margin-top: 20px;">
+                    <div class="form-group form-inline">
+                        <div>
+                            <label for="Librar_oficio_a">Se libre oficio a:</label>
+                            <input type="text" id="Librar_oficio_a" name="Librar_oficio_a">
+                        </div>
+                        <div class="form-group form-inline">
+                            <label for="fechas">Periodo de recibos solicitados:</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="date" id="inicio_periodo_sumas" name="inicio_periodo_sumas" >
+                                <span>al</span>
+                                <input type="date" id="fin_periodo_sumas" name="fin_periodo_sumas" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group form-inline">
+                    <div class="dropZone dropZone.hover" id="dropZoneSumas">Arrastre imagen de cuadro de codigos y conceptos</div>
+                    <input type="file" id="imageUploadSumas" name="imageUploadSumas" accept="image/*" style="display: none;">
+                </div>
+            </div>
+            <!-- Zona de PBU -->
+
+            <div id="PBUSection" style="display: none; margin-top: 20px;">
+                <h3>Reajuste PBU</h3>
+                <div class="form-group form-inline">
+                    <div class="dropZone dropZone.hover" id="dropZonePBU1">Arrastre imagen de Calculo de Incidencia de PBU</div>
+                    <input type="file" id="imagenPBU1" name="imagenPBU1" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Porcentaje haber reemplazo:</label>
+                        <input type="text" id="errorInput1" name="porcentaje_haber_reemplazo">
+                    </div>
+                    <div>
+                        <label for="errorInput1">Porcentaje quita Soule:</label>
+                        <input type="text" id="errorInput1" name="porcentaje_quita_Soule">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label for="Ultima_remuneracion_actualizada_Anses">Tiene quita menor al 15%:</label>
+                        <label><input type="checkbox" name="quita_menor_15"> Si</label>
+                    </div>
+                </div>
+                <div id="Quita_menor_15_Section" style="display: none; margin-top: 20px;">
+                    <div class="form-group form-inline">
+                        <div class="dropZone dropZone.hover" id="dropZonePBU2">Arrastre imagen de Grafico Comparativo</div>
+                        <input type="file" id="imagenPBU2" name="imagenPBU2" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="form-group form-inline">
+                        <label for="fechas">De no aplicarse su actualización arrojaría una quita del :</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="quita_menor_15_1">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="fechas">Por lo que de aplicarse los topes cuya inaplicabilidad de solicita, no deberían superar el :</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="quita_menor_15_2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zona de Tasa de complementacion -->
+
+            <div id="Tasa_complementacion_Section" style="display: none; margin-top: 20px;">
+                <h3>Tasa de complementacion</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="Ultima_remuneracion_actualizada_Anses">Haber jubilatorio actual es menor al ripte:</label>
+                        <label><input type="checkbox" name="haber_menor_ripte"> Si</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label for="Ultima_remuneracion_actualizada_Anses">Hay print de equiparacion del caso:</label>
+                        <label><input type="checkbox" name="print_equiparacion"> Si</label>
+                    </div>
+                </div>
+                <div id="print_equiparacion_Section" style="display: none; margin-top: 20px;">
+                    <div class="form-group form-inline">
+                        <div class="dropZone dropZone.hover" id="dropZoneTaza">Arrastre imagen de print de equiparacion del caso</div>
+                        <input type="file" id="imagenTaza" name="imagenTaza" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="form-group form-inline">
+                        <label for="fechas">Ex empleador :</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="taza_ex_empleador">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="fechas">Ultimo cargo ejercido:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="ultimo_cargo_ejercido">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="fechas">Monto del cargo ejercido:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="monto_cargo_ejercido" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78">
+                            <span>al</span>
+                            <input type="date" id="fecha_Ultima_Remuneracion_Actividad" name="fecha_monto_cargo_ejercido">
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label for="fechas">Monto de jubilacion en el mismo mes:</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="Ultima_Remuneracion_Actividad" name="monto_jubilacion_taza" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zona de Tope haber maximo-->
+
+            <div id="TopeHaberMaximoSection" style="display: none; margin-top: 20px;">
+                <h3>Tope haber maximo</h3>
+                <div class="form-group form-inline">
+                    <div class="dropZone dropZone.hover" id="dropZoneHaberMaximo">Arrastre imagen de Comparacion de Topes</div>
+                    <input type="file" id="imagenHaberMaximo" name="imagenHaberMaximo" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Fecha del haber actual:</label>
+                        <input type="date" id="errorInput1" name="fecha_haber_actual">
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Reajustado cf. Ley 27.551 (50% IPC y 50% RIPTE mensual) sin topes:</label>
+                        <input type="text" id="Ultimo_haber" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" name="reajustado_cf_ley_27551_mensual">
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Reajustado cf. Ley 27.551 (50% IPC y 50% RIPTE retrasado tres meses) sin topes::</label>
+                        <input type="text" id="Ultimo_haber" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" name="reajustado_cf_ley_27551_tres_meses">
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Reajustado cf. IPC retrasado dos meses sin topes:</label>
+                        <input type="text" id="Ultimo_haber" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" name="reajustado_IPC_sin_topes">
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Tope de haber máximo de ANSES sin actualizar:</label>
+                        <input type="text" id="Ultimo_haber" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" name="tope_haber_maximo_anses">
+                    </div>
+                </div>
+                <div class="form-group form-inline">
+                    <div>
+                        <label for="errorInput1">Tope actualizado cf. Badaro más Caliva Márquez:</label>
+                        <input type="text" id="Ultimo_haber" pattern="^\d+(\.\d{2})?$" title="El formato debe ser un número con hasta dos decimales, por ejemplo 123456.78" name="tope_actualizado_cf_badaro_mas_caliva_marquez">
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="button">Generar Demanda</button>
+            </div>
+        </form>
+    <script>
+                // Función para manejar la visibilidad de las secciones
+                function toggleSection(checkbox, sectionId) {
+                    const section = document.getElementById(sectionId);
+                    section.style.display = checkbox.checked ? 'block' : 'none'; // Mostrar u ocultar según el estado del checkbox
+                }
+
+                // Inicialización de los checkboxes y secciones
+                document.addEventListener('DOMContentLoaded', () => {
+                    const serviciosAutonomosCheckbox = document.querySelector('input[name="Servicios_Autonomos"]');
+                    const serviciosDependenciaCheckbox = document.querySelector('input[name="Servicios_Dependencia"]');
+                    //sumas no remunerativas
+                    const sumasremunerativasCheckbox = document.querySelector('input[name="opcion_sumas_remunerativas"]');
+                    const Recibos_SiCheckbox = document.querySelector('input[name="Recibos_Si"]');
+                    const Recibos_NoCheckbox = document.querySelector('input[name="Recibos_No"]');
+                    //error material
+                    const errorMaterialCheckbox = document.querySelector('input[name="opcion_error_material"]');
+
+                    //Reajuste PBU
+                    const PBUCheckbox = document.querySelector('input[name="opcion_reajuste_pbu"]');
+                    const PBU_15Checkbox = document.querySelector('input[name="quita_menor_15"]');
+
+                    //Taza de complementacion
+                    const taza_complementacion_Checkbox = document.querySelector('input[name="opcion_tasa_complementacion"]');
+                    const print_taza_Checkbox = document.querySelector('input[name="print_equiparacion"]');
+
+                    //Tope haber maximo
+                    const tope_haber_maximo_Checkbox = document.querySelector('input[name="opcion_movilidad_tope_haber_maximo"]');
+
+                    // Eventos para checkboxes existentes
+                    if (serviciosAutonomosCheckbox) {
+                        serviciosAutonomosCheckbox.addEventListener('change', () => {
+                            toggleSection(serviciosAutonomosCheckbox, 'ServiciosAutonomosSection');
+                        });
+                    }
+
+                    if (serviciosDependenciaCheckbox) {
+                        serviciosDependenciaCheckbox.addEventListener('change', () => {
+                            toggleSection(serviciosDependenciaCheckbox, 'ServiciosDependenciaSection');
+                        });
+                    }
+
+                    // SUMAS NO REMUNERATIVAS
+                    if (sumasremunerativasCheckbox) {
+                        sumasremunerativasCheckbox.addEventListener('change', () => {
+                            toggleSection(sumasremunerativasCheckbox, 'SumasnoRemunerativasSection');
+                        });
+                    }
+
+                    if (Recibos_SiCheckbox) {
+                        Recibos_SiCheckbox.addEventListener('change', () => {
+                            toggleSection(Recibos_SiCheckbox, 'Recibos_SiSection');
+                        });
+                    }
+
+                    if (Recibos_NoCheckbox) {
+                        Recibos_NoCheckbox.addEventListener('change', () => {
+                            toggleSection(Recibos_NoCheckbox, 'Recibos_NoSection');
+                        });
+                    }
+                    
+
+
+                    // ERROR MATERIAL
+                    if (errorMaterialCheckbox) {
+                        errorMaterialCheckbox.addEventListener('change', () => {
+                            toggleSection(errorMaterialCheckbox, 'errorMaterialSection');
+                        });
+                    }
+
+                    // Reajuste PBU
+                    if (PBUCheckbox) {
+                        PBUCheckbox.addEventListener('change', () => {
+                            toggleSection(PBUCheckbox, 'PBUSection');
+                        });
+                    }
+                    if (PBU_15Checkbox) {
+                        PBU_15Checkbox.addEventListener('change', () => {
+                            toggleSection(PBU_15Checkbox, 'Quita_menor_15_Section');
+                        });
+                    }
+
+                    // Taza de complementacion
+                    if (taza_complementacion_Checkbox) {
+                        taza_complementacion_Checkbox.addEventListener('change', () => {
+                            toggleSection(taza_complementacion_Checkbox, 'Tasa_complementacion_Section');
+                        });
+                    }
+                    if (print_taza_Checkbox) {
+                        print_taza_Checkbox.addEventListener('change', () => {
+                            toggleSection(print_taza_Checkbox, 'print_equiparacion_Section');
+                        });
+                    }
+                    // Tope haber maximo
+                    if (tope_haber_maximo_Checkbox) {
+                        tope_haber_maximo_Checkbox.addEventListener('change', () => {
+                            toggleSection(tope_haber_maximo_Checkbox, 'TopeHaberMaximoSection');
+                        });
+                    }
+        });
+
+
+        function setupDragAndDrop(dropZoneId, imageUploadId) {
+            const dropZone = document.getElementById(dropZoneId);
+            const imageUpload = document.getElementById(imageUploadId);
+
+            // Muestra el selector de archivos al hacer clic en la zona de arrastre
+            dropZone.addEventListener('click', () => {
+                imageUpload.click();
+            });
+
+            // Manejo de eventos de arrastre
+            dropZone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                dropZone.classList.add('hover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('hover');
+            });
+
+            dropZone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('hover');
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    imageUpload.files = files;  // Asigna los archivos al input
+                    dropZone.textContent = files[0].name; // Muestra el nombre del archivo
+                }
+            });
+
+            // Asigna el archivo seleccionado al drop zone
+            imageUpload.addEventListener('change', () => {
+                if (imageUpload.files.length > 0) {
+                    dropZone.textContent = imageUpload.files[0].name; // Muestra el nombre del archivo
+                }
+            });
+        }
+
+        // Configurar múltiples zonas de arrastre
+        setupDragAndDrop('dropZone', 'imageUpload');
+        setupDragAndDrop('dropZoneSumas', 'imageUploadSumas');
+        setupDragAndDrop('dropZoneError', 'imagenError');
+        setupDragAndDrop('dropZonePBU1', 'imagenPBU1');
+        setupDragAndDrop('dropZonePBU2', 'imagenPBU2');
+        setupDragAndDrop('dropZoneTaza', 'imagenTaza');
+        setupDragAndDrop('dropZoneHaberMaximo', 'imagenHaberMaximo');
+
+
+
+        
+    </script>
+    </body>
+</html>

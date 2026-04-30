@@ -1,0 +1,446 @@
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: El Avance de la Inteligencia Artificial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Tailwind's default sans-serif is a good choice */
+            background-color: #F7FAFC; /* Light Gray Background */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Default max-width for charts */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px; /* Max height */
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .section-title {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700; /* bold */
+            color: #073B4C; /* Dark Blue/Navy from palette */
+            margin-bottom: 1rem; /* mb-4 */
+            text-align: center;
+        }
+        .subsection-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* semibold */
+            color: #118AB2; /* Blue from palette */
+            margin-top: 1.5rem; /* mt-6 */
+            margin-bottom: 0.75rem; /* mb-3 */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            padding: 1.5rem; /* p-6 */
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+        .big-number {
+            font-size: 3rem; /* text-5xl or 6xl */
+            font-weight: 800; /* extrabold */
+            color: #FF6B6B; /* Coral from palette */
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .text-content {
+            color: #4A5568; /* Gray-700 */
+            line-height: 1.75; /* leading-relaxed */
+            margin-bottom: 1rem;
+        }
+        .flowchart-item {
+            background-color: #118AB2; /* Blue */
+            color: white;
+            padding: 0.75rem 1.25rem; /* py-3 px-5 */
+            border-radius: 0.5rem; /* rounded-lg */
+            text-align: center;
+            margin: 0.5rem; /* m-2 */
+            min-width: 150px;
+        }
+        .flowchart-arrow {
+            font-size: 2rem; /* text-3xl */
+            color: #073B4C; /* Dark Blue/Navy */
+            margin: 0 0.5rem; /* mx-2 */
+            align-self: center;
+        }
+
+        /* Chosen Palette: Energetic & Playful */
+        /* Coral: #FF6B6B */
+        /* Yellow: #FFD166 */
+        /* Green: #06D6A0 */
+        /* Blue: #118AB2 */
+        /* Dark Blue/Navy: #073B4C */
+        /* Background: Light Gray #F7FAFC or White #FFFFFF */
+        /* Text: Dark Gray #2D3748 or #4A5568 */
+
+        /* Infographic Plan Summary:
+        1. Title & Intro: Hook with "Exponential Growth" (Big Number).
+        2. Key Areas: ML/DL (HTML/CSS diagram), NLP (Bar Chart), Vision (Pictograph), Robotics (Donut), Generative AI (Stacked Bar).
+        3. Sector Impact: Table.
+        4. Challenges: HTML List.
+        5. Future: HTML/CSS Flowchart.
+        6. Conclusion: "Transformative Potential" (Big Number).
+        NO SVG was used. NO Mermaid JS was used.
+        */
+
+        /* Visualization Choices Summary:
+        - Exponential Growth (Intro): Goal: Inform, Vis: Single Big Number (HTML/Tailwind), Justification: Highlight growth. NO SVG.
+        - ML/DL Relation (Key Areas): Goal: Organize, Vis: HTML/CSS Diagram, Justification: Show hierarchy. NO SVG, NO MERMAID.
+        - LLM Capabilities (NLP): Goal: Compare, Vis: Bar Chart (Chart.js Canvas), Justification: Compare features. NO SVG. Label wrapping & tooltip config applied.
+        - Computer Vision Apps (Vision): Goal: Inform, Vis: Pictograph (Unicode + HTML/Tailwind), Justification: Illustrate simply. NO SVG.
+        - Robot Types (Robotics): Goal: Compare (Composition), Vis: Donut Chart (Chart.js Canvas), Justification: Show proportions. NO SVG. Label wrapping & tooltip config applied.
+        - Generative AI Content (GenAI): Goal: Compare (Composition), Vis: Stacked Bar Chart (Chart.js Canvas), Justification: Show content types. NO SVG. Label wrapping & tooltip config applied.
+        - Sector Impact (Impact): Goal: Organize/Compare, Vis: Table (HTML/Tailwind), Justification: Clear presentation. NO SVG.
+        - Ethical Challenges (Challenges): Goal: Organize, Vis: List (HTML ul), Justification: Enumerate clearly. NO SVG.
+        - Future Trends (Future): Goal: Organize (Process), Vis: Flow Chart (HTML/CSS/Tailwind), Justification: Show progression. NO SVG, NO MERMAID.
+        - Transformative Potential (Conclusion): Goal: Inform, Vis: Single Big Number (HTML/Tailwind), Justification: Emphasize impact. NO SVG.
+        */
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800">
+
+    <header class="bg-gradient-to-r from-[#073B4C] to-[#118AB2] text-white py-12 px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">El Imparable Avance de la Inteligencia Artificial</h1>
+        <p class="text-lg md:text-xl max-w-3xl mx-auto">Una mirada profunda a la transformación actual y futura impulsada por la IA.</p>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="introduccion" class="mb-12">
+            <div class="card">
+                <h2 class="section-title">Un Crecimiento Exponencial</h2>
+                <p class="text-content text-center max-w-2xl mx-auto">
+                    La Inteligencia Artificial ha pasado de ser una promesa futurista a una realidad tangible que redefine industrias y nuestra vida cotidiana. Su evolución, especialmente en los últimos años, ha sido vertiginosa, abriendo un universo de posibilidades y desafíos.
+                </p>
+                <div class="big-number">🚀</div>
+                <p class="text-center text-2xl font-semibold text-[#073B4C]">¡Despegue Tecnológico!</p>
+                <p class="text-content text-center max-w-2xl mx-auto mt-2">
+                    Impulsada por el aumento de la capacidad computacional, la abundancia de datos y algoritmos más sofisticados, la IA está en una trayectoria de innovación constante.
+                </p>
+            </div>
+        </section>
+
+        <section id="areas-clave" class="mb-12">
+            <h2 class="section-title">Áreas Clave de Avance</h2>
+            <p class="text-content text-center max-w-3xl mx-auto mb-8">
+                El progreso de la IA se manifiesta en diversas especializaciones, cada una con un impacto transformador. Estas son algunas de las más destacadas:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="card">
+                    <h3 class="subsection-title text-center">1. Aprendizaje Automático y Profundo</h3>
+                    <p class="text-content">
+                        El <strong>Machine Learning (ML)</strong> permite a los sistemas aprender de los datos, mientras que el <strong>Deep Learning (DL)</strong>, un subcampo del ML, utiliza redes neuronales profundas para análisis complejos, siendo el motor de avances en reconocimiento de imágenes, voz y PNL.
+                    </p>
+                    <div class="mt-4 p-3 bg-slate-100 rounded-lg">
+                        <div class="flex flex-col items-center text-sm">
+                            <div class="bg-[#06D6A0] text-white py-2 px-4 rounded-md shadow">Inteligencia Artificial (IA)</div>
+                            <div class="my-1 text-[#073B4C]">↓</div>
+                            <div class="bg-[#118AB2] text-white py-2 px-4 rounded-md shadow">Machine Learning (ML)</div>
+                            <div class="my-1 text-[#073B4C]">↓</div>
+                            <div class="bg-[#FFD166] text-black py-2 px-4 rounded-md shadow">Deep Learning (DL) - Redes Neuronales</div>
+                        </div>
+                    </div>
+                     <p class="text-content mt-2 text-sm">Modelos como CNN (visión) y Transformers (secuencias) demuestran capacidades extraordinarias.</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="subsection-title text-center">2. Procesamiento del Lenguaje Natural (NLP)</h3>
+                    <p class="text-content">
+                        El NLP se enfoca en la interacción entre computadoras y lenguaje humano. Los Modelos de Lenguaje Grandes (LLMs) como GPT y PaLM pueden comprender, generar y traducir texto con una fluidez asombrosa.
+                    </p>
+                    <div class="chart-container h-[250px] md:h-[300px]">
+                        <canvas id="nlpChart"></canvas>
+                    </div>
+                    <p class="text-content mt-2 text-sm">Esto impulsa chatbots avanzados, asistentes virtuales y herramientas de generación de contenido.</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="subsection-title text-center">3. Visión por Computadora</h3>
+                    <p class="text-content">
+                        Permite a las máquinas "ver" e interpretar información visual. Los sistemas identifican objetos, personas y escenas con alta precisión.
+                    </p>
+                    <div class="flex justify-around items-center text-center mt-4 p-4 bg-slate-100 rounded-lg">
+                        <div>
+                            <span class="text-4xl">📱</span>
+                            <p class="text-sm mt-1">Desbloqueo Facial</p>
+                        </div>
+                        <div>
+                            <span class="text-4xl">🚗</span>
+                            <p class="text-sm mt-1">Vehículos Autónomos</p>
+                        </div>
+                        <div>
+                            <span class="text-4xl">🩺</span>
+                            <p class="text-sm mt-1">Diagnóstico Médico</p>
+                        </div>
+                    </div>
+                    <p class="text-content mt-2 text-sm">Aplicaciones van desde smartphones hasta sistemas de vigilancia avanzados.</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="subsection-title text-center">4. Robótica y Sistemas Autónomos</h3>
+                    <p class="text-content">
+                        La IA es fundamental para robots más inteligentes: colaborativos (cobots), vehículos autónomos (coches, drones) y robótica asistencial.
+                    </p>
+                    <div class="chart-container h-[250px] md:h-[300px]">
+                        <canvas id="roboticsChart"></canvas>
+                    </div>
+                    <p class="text-content mt-2 text-sm">Estos sistemas operan con IA para percepción, decisión y navegación.</p>
+                </div>
+
+                <div class="card">
+                    <h3 class="subsection-title text-center">5. IA Generativa</h3>
+                    <p class="text-content">
+                        Una de las áreas de más rápido crecimiento, capaz de crear texto, imágenes (DALL-E, Midjourney), audio, video y código a partir de descripciones.
+                    </p>
+                     <div class="chart-container h-[250px] md:h-[300px]">
+                        <canvas id="generativeAiChart"></canvas>
+                    </div>
+                    <p class="text-content mt-2 text-sm">Ofrece nuevas herramientas creativas y productivas, pero plantea interrogantes sobre originalidad.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="impacto-sectorial" class="mb-12">
+            <h2 class="section-title">Impacto y Aplicaciones Sectoriales</h2>
+            <p class="text-content text-center max-w-3xl mx-auto mb-8">
+                La IA no es una tecnología aislada; su influencia se extiende por una multitud de sectores, redefiniendo procesos, productos y servicios.
+            </p>
+            <div class="card overflow-x-auto">
+                <table class="w-full min-w-max text-left">
+                    <thead class="border-b bg-[#073B4C] text-white">
+                        <tr>
+                            <th class="p-3">Sector</th>
+                            <th class="p-3">Aplicaciones Clave de IA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b hover:bg-slate-100">
+                            <td class="p-3 font-semibold text-[#118AB2]">Salud</td>
+                            <td class="p-3 text-content">Diagnóstico asistido, descubrimiento de fármacos, medicina personalizada, robots quirúrgicos.</td>
+                        </tr>
+                        <tr class="border-b hover:bg-slate-100">
+                            <td class="p-3 font-semibold text-[#118AB2]">Finanzas</td>
+                            <td class="p-3 text-content">Detección de fraude, trading algorítmico, robo-advisors.</td>
+                        </tr>
+                        <tr class="border-b hover:bg-slate-100">
+                            <td class="p-3 font-semibold text-[#118AB2]">Retail y E-commerce</td>
+                            <td class="p-3 text-content">Sistemas de recomendación, personalización, optimización de cadena de suministro.</td>
+                        </tr>
+                        <tr class="border-b hover:bg-slate-100">
+                            <td class="p-3 font-semibold text-[#118AB2]">Manufactura</td>
+                            <td class="p-3 text-content">Mantenimiento predictivo, control de calidad, optimización de procesos (Industria 4.0).</td>
+                        </tr>
+                        <tr class="border-b hover:bg-slate-100">
+                            <td class="p-3 font-semibold text-[#118AB2]">Transporte</td>
+                            <td class="p-3 text-content">Vehículos autónomos, optimización de rutas, gestión del tráfico.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-100">
+                            <td class="p-3 font-semibold text-[#118AB2]">Educación</td>
+                            <td class="p-3 text-content">Tutoría personalizada, aprendizaje adaptativo, automatización administrativa.</td>
+                        </tr>
+                         <tr class="hover:bg-slate-100">
+                            <td class="p-3 font-semibold text-[#118AB2]">Entretenimiento</td>
+                            <td class="p-3 text-content">Efectos especiales, desarrollo de videojuegos, personalización de contenidos.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="desafios-eticos" class="mb-12">
+            <h2 class="section-title">Desafíos y Consideraciones Éticas</h2>
+            <p class="text-content text-center max-w-3xl mx-auto mb-8">
+                El avance de la IA conlleva responsabilidades. Abordar estos desafíos es crucial para un desarrollo ético y beneficioso.
+            </p>
+            <div class="card">
+                <ul class="list-disc list-inside space-y-3 text-content">
+                    <li><strong class="text-[#FF6B6B]">Sesgos en Datos y Algoritmos:</strong> Pueden perpetuar o amplificar discriminación si no se controlan.</li>
+                    <li><strong class="text-[#FF6B6B]">Transparencia y Explicabilidad (XAI):</strong> Dificultad para entender cómo modelos complejos toman decisiones.</li>
+                    <li><strong class="text-[#FF6B6B]">Privacidad y Seguridad de Datos:</strong> La IA requiere datos, planteando preocupaciones sobre su uso y protección.</li>
+                    <li><strong class="text-[#FF6B6B]">Impacto en el Empleo:</strong> La automatización puede desplazar trabajadores, requiriendo adaptación.</li>
+                    <li><strong class="text-[#FF6B6B]">Regulación y Gobernanza:</strong> Necesidad de marcos para maximizar beneficios y mitigar riesgos.</li>
+                    <li><strong class="text-[#FF6B6B]">Uso Malintencionado:</strong> Potencial para armas autónomas, desinformación (deepfakes).</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="futuro-ia" class="mb-12">
+            <h2 class="section-title">El Futuro de la IA</h2>
+            <p class="text-content text-center max-w-3xl mx-auto mb-8">
+                La IA continuará su rápida evolución. Estas son algunas tendencias que marcarán su desarrollo futuro:
+            </p>
+            <div class="card">
+                <div class="flex flex-col md:flex-row justify-center items-center flex-wrap">
+                    <div class="flowchart-item">IA General Artificial (AGI)</div>
+                    <div class="flowchart-arrow hidden md:block">→</div>
+                    <div class="flowchart-item bg-[#06D6A0]">IA Híbrida</div>
+                    <div class="flowchart-arrow hidden md:block">→</div>
+                    <div class="flowchart-item">IA Federada</div>
+                    <div class="flowchart-arrow hidden md:block">→</div>
+                    <div class="flowchart-item bg-[#FFD166] text-black">Green AI (Sostenible)</div>
+                    <div class="flowchart-arrow hidden md:block">→</div>
+                    <div class="flowchart-item bg-[#FF6B6B]">Mayor Integración Humano-IA</div>
+                </div>
+                 <p class="text-content mt-4 text-center">El objetivo a largo plazo de la AGI (inteligencia comparable a la humana) sigue siendo un motor de investigación, mientras que enfoques como la IA híbrida, federada, sostenible y centrada en la colaboración humano-IA ganan tracción.</p>
+            </div>
+        </section>
+
+        <section id="conclusion" class="text-center mb-12">
+             <div class="card">
+                <h2 class="section-title">Un Futuro Moldeado por la IA</h2>
+                <p class="text-content max-w-2xl mx-auto">
+                    La Inteligencia Artificial ofrece un potencial sin precedentes para transformar nuestro mundo. Abordar proactivamente sus desafíos éticos y técnicos es clave para asegurar que su desarrollo se guíe por la responsabilidad y el beneficio humano.
+                </p>
+                <div class="big-number">💡</div>
+                <p class="text-center text-2xl font-semibold text-[#073B4C]">Potencial Transformador Global</p>
+                 <p class="text-content max-w-2xl mx-auto mt-2">
+                    La colaboración entre investigadores, empresas y la sociedad civil definirá cómo esta poderosa tecnología modelará las décadas venideras.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#073B4C] text-white text-center p-6">
+        <p>&copy; 2025 Infografía sobre el Avance de la IA. Basado en el informe proporcionado.</p>
+    </footer>
+
+    <script>
+        const CHART_COLORS = {
+            coral: '#FF6B6B',
+            yellow: '#FFD166',
+            green: '#06D6A0',
+            blue: '#118AB2',
+            darkBlue: '#073B4C',
+            lightGray: '#E2E8F0' // slate-200 for borders/grids
+        };
+
+        function processLabels(labels) {
+            return labels.map(label => {
+                if (typeof label === 'string' && label.length > 16) {
+                    const words = label.split(' ');
+                    const newLabel = [];
+                    let currentLine = '';
+                    words.forEach(word => {
+                        if ((currentLine + word).length > 16 && currentLine.length > 0) {
+                            newLabel.push(currentLine.trim());
+                            currentLine = word + ' ';
+                        } else {
+                            currentLine += word + ' ';
+                        }
+                    });
+                    newLabel.push(currentLine.trim());
+                    return newLabel;
+                }
+                return label;
+            });
+        }
+
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: CHART_COLORS.darkBlue,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            } else {
+                              return label;
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: CHART_COLORS.lightGray },
+                    ticks: { color: CHART_COLORS.darkBlue, font: { size: 10 } }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: CHART_COLORS.darkBlue, font: { size: 10 } }
+                }
+            }
+        };
+
+        // Chart 1: NLP Capabilities
+        const nlpCtx = document.getElementById('nlpChart').getContext('2d');
+        new Chart(nlpCtx, {
+            type: 'bar',
+            data: {
+                labels: processLabels(['Comprensión Profunda', 'Generación de Texto Coherente', 'Traducción Multilingüe Precisa']),
+                datasets: [{
+                    label: 'Capacidad de LLMs (Escala 1-10)',
+                    data: [8.5, 9, 8],
+                    backgroundColor: [CHART_COLORS.green, CHART_COLORS.blue, CHART_COLORS.yellow],
+                    borderColor: [CHART_COLORS.green, CHART_COLORS.blue, CHART_COLORS.yellow],
+                    borderWidth: 1
+                }]
+            },
+            options: commonChartOptions
+        });
+
+        // Chart 2: Robotics Types
+        const roboticsCtx = document.getElementById('roboticsChart').getContext('2d');
+        new Chart(roboticsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: processLabels(['Robots Colaborativos (Cobots)', 'Vehículos Autónomos', 'Robótica Asistencial']),
+                datasets: [{
+                    label: 'Distribución de Tipos de Robots',
+                    data: [40, 35, 25],
+                    backgroundColor: [CHART_COLORS.coral, CHART_COLORS.green, CHART_COLORS.blue],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { color: CHART_COLORS.darkBlue, font: {size: 11}} },
+                    tooltip: commonChartOptions.plugins.tooltip
+                }
+            }
+        });
+
+        // Chart 3: Generative AI Content Types
+        const genAiCtx = document.getElementById('generativeAiChart').getContext('2d');
+        new Chart(genAiCtx, {
+            type: 'bar', // Could be a stacked bar if showing multiple aspects per content type
+            data: {
+                labels: processLabels(['Texto Creativo', 'Imágenes Artísticas', 'Composiciones Musicales', 'Código Funcional']),
+                datasets: [{
+                    label: 'Sofisticación de IA Generativa (Escala 1-10)',
+                    data: [8, 9, 7, 7.5],
+                    backgroundColor: [CHART_COLORS.yellow, CHART_COLORS.coral, CHART_COLORS.green, CHART_COLORS.blue],
+                    borderColor: [CHART_COLORS.yellow, CHART_COLORS.coral, CHART_COLORS.green, CHART_COLORS.blue],
+                    borderWidth: 1
+                }]
+            },
+            options: commonChartOptions
+        });
+
+    </script>
+</body>
+</html>

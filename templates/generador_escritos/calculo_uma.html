@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado {{autos}} {{expediente}} </title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+            background-image: url('static/logoestudiomarca.jpg');
+            background-repeat: no-repeat;
+            background-object-position: 130 580px;
+            background-height: 500px;
+            background-width: 500px;
+            background-opacity: 0.25;
+        }
+        body {
+            font-size: 13px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: avoid;
+        }
+        td {
+            border: 1px solid black;
+            padding: 4px;
+            text-align: left;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        .negrita {
+            font-weight: bold;
+        }
+        .font-large {
+            font-size: 13px;
+        }
+        /* Estilos del primer cuadro */
+        .custom-table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ccc;
+            font-family: Arial, sans-serif;
+            margin-bottom: 10px;
+            page-break-inside: avoid;
+        }
+        .custom-table td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+        .custom-table .narrow-column {
+            width: 30%; /* Mantén un ancho fijo en la primera columna si lo deseas */
+        }
+        .custom-table .wide-column {
+            /* Elimina el ancho para que la columna se ajuste al contenido automáticamente */
+        }
+        .header-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .regular-cell {
+            background-color: #f9f9f9;
+            font-size: 15px;
+        }
+        .first-column-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .page-break {
+            page-break-before: always; /* Salto de página antes de esta tabla */
+        }
+
+        .fuente-grande{
+            font-size: 15px;
+        }
+    </style>
+    
+</head>
+<body>
+    <div style="margin-bottom: 500px;">
+        
+    </div>
+    <table>
+        <tbody>
+            <tr class="font-large first-column-cell">
+                <td rowspan="2" class="negrita first-column-cell">Según la fecha que se tome</td>
+                <td class="negrita">Monto: {{total_liquidacion}}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="negrita">Monto: {{Total_Segunda_Liquidacion}}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="negrita">Monto: {{Total_Primera_Liquidacion_IPC}}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="wide-column negrita">Monto: {{Total_Segunda_Liquidacion_IPC}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="fuente-grande">{{ fecha_de_cierre_de_liquidacion }}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{ fecha_de_cierre_de_liquidacion }}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{ fecha_de_cierre_de_liquidacion }}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{ fecha_de_cierre_de_liquidacion }}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Norma</td>
+                <td class="fuente-grande">{{Acordada_fecha_de_cierre_de_liquidacion}}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{Acordada_fecha_de_cierre_de_liquidacion}}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{Acordada_fecha_de_cierre_de_liquidacion}}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{Acordada_fecha_de_cierre_de_liquidacion}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Valor UMA</td>
+                <td class="fuente-grande">{{UMA_fecha_de_cierre_de_liquidacion}}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{UMA_fecha_de_cierre_de_liquidacion}}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{UMA_fecha_de_cierre_de_liquidacion}}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{UMA_fecha_de_cierre_de_liquidacion}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Cantidad en UMA</td>
+                <td class="fuente-grande">{{cantidad_FCL}}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{cantidad_AS}}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{cantidad_R}}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{cantidad_TP}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Cantidad en UMA divido 2</td>
+                <td class="fuente-grande">{{valor_dividido_FCL}}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{valor_dividido_AS}}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{valor_dividido_R}}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{valor_dividido_TP}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Escala del art 21 de la ley 27.423</td>
+                <td class="fuente-grande">{{porcentajes_FCL}}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{porcentajes_AS}}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{porcentajes_R}}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{porcentajes_TP}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Escala del art 21 de la ley 27.423 anterior</td>
+
+                <td class="fuente-grande">
+                    {% if porcentaje_anterior_FCL == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ porcentaje_anterior_FCL }}
+                    {% endif %}
+                </td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">
+                    {% if porcentaje_anterior_AS == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ porcentaje_anterior_AS }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">
+                    {% if porcentaje_anterior_R == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ porcentaje_anterior_R }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">
+                    {% if porcentaje_anterior_TP == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ porcentaje_anterior_TP }}
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Máx. de la escala anterior x Porcentaje Máximo</td>
+                <td class="fuente-grande">
+                    {% if primera_valor_uma_final_FCL == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ primera_valor_uma_FCL }} x 0.{{ porcentaje_maximo_FCL }} = {{ primera_valor_uma_final_FCL }}
+                    {% endif %}
+                </td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">
+                    {% if primera_valor_uma_final_AS == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ primera_valor_uma_AS }} x 0.{{ porcentaje_maximo_AS }} = {{ primera_valor_uma_final_AS }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">
+                    {% if primera_valor_uma_final_R == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ primera_valor_uma_R }} x 0.{{ porcentaje_maximo_R }} = {{ primera_valor_uma_final_R }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">
+                    {% if primera_valor_uma_final_TP == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ primera_valor_uma_TP }} x 0.{{ porcentaje_maximo_TP }} = {{ primera_valor_uma_final_TP }}
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Alicuota mínima excedente x Porcentaje Minimo</td>
+                <td class="fuente-grande">
+                    {% if segunda_valor_uma_final_FCL == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ segundo_valor_uma_FCL }} x 0.{{ porcentaje_minimo_FCL }} = {{ segunda_valor_uma_final_FCL }}
+                    {% endif %}
+                </td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">
+                    {% if segunda_valor_uma_final_AS == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ segundo_valor_uma_AS }} x 0.{{ porcentaje_minimo_AS }} = {{ segunda_valor_uma_final_AS }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">
+                    {% if segunda_valor_uma_final_R == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ segundo_valor_uma_R }} x 0.{{ porcentaje_minimo_R }} = {{ segunda_valor_uma_final_R }}
+                    {% endif %}
+                </td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">
+                    {% if segunda_valor_uma_final_TP == 0 %}
+                        No aplica
+                    {% else %}
+                        {{ segundo_valor_uma_TP }} x 0.{{ porcentaje_minimo_TP }} = {{ segunda_valor_uma_final_TP }}
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Total</td>
+                <td class="fuente-grande">{{total_uma_FCL}}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{total_uma_AS}}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{total_uma_R}}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{total_uma_TP}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">40% por ser apoderado Art 20</td>
+                <td class="fuente-grande">{{apoderado_FCL}}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td class="fuente-grande">{{apoderado_AS}}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td class="fuente-grande">{{apoderado_R}}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td class="fuente-grande">{{apoderado_TP}}</td>
+                {% endif %}
+            </tr>
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Reducción del 10% si no hubo excepciones Art 29</td>
+                <td>{{reduccion_excepciones_FCL}}</td>
+
+                {% if Segunda_Liquidacion_Si %}
+                <td>{{reduccion_excepciones_AS}}</td>
+                {% endif %}
+
+                {% if IPC_Liquidacion_Si %}
+                <td>{{reduccion_excepciones_R}}</td>
+                {% endif %}
+
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}
+                <td>{{reduccion_excepciones_TP}}</td>
+                {% endif %}
+            </tr>
+
+            <tr class="font-large">
+                <td class="negrita first-column-cell">Art 58 inc B (Honorarios Minimos en Ejecucion)</td>
+                {% set columnas_adicionales = 0 %}
+                {% if Segunda_Liquidacion_Si %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
+                {% if IPC_Liquidacion_Si %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
+                {% if Segunda_Liquidacion_Si and IPC_Liquidacion_Si and bandera_segunda_liquidacion_ipc %}{% set columnas_adicionales = columnas_adicionales + 1 %}{% endif %}
+                {% set colspan_total = 1 + columnas_adicionales %}
+                <td colspan="{{ colspan_total }}" class="negrita fuente-grande" style="text-align: center;">Mínimo 6 UMA</td>
+
+            </tr>
+        </tbody>
+    </table>

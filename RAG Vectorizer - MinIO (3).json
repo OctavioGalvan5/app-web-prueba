@@ -1,0 +1,1231 @@
+{
+  "name": "RAG Vectorizer - MinIO",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## RAG Vectorizer con MinIO\nRecibe webhooks desde la app Flask para vectorizar o eliminar documentos.\n- POST /vectorize: Sube y vectoriza un nuevo documento\n- POST /delete: Elimina un documento del vector store",
+        "height": 200,
+        "width": 600,
+        "color": 5
+      },
+      "id": "d1b4f607-0727-4cc2-9bcb-1e17f3bd036c",
+      "name": "Info",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1920,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rag-vectorize",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "2e9ad8fd-f204-4b0e-af54-78b420a2775e",
+      "name": "Webhook Vectorize",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1824,
+        352
+      ],
+      "webhookId": "rag-vectorize-webhook"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rag-delete",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "056103ac-fcbe-417f-a835-766b1f46ead5",
+      "name": "Webhook Delete",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1824,
+        656
+      ],
+      "webhookId": "rag-delete-webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "file-id",
+              "name": "file_id",
+              "value": "={{ $json.body.document_id }}",
+              "type": "string"
+            },
+            {
+              "id": "file-title",
+              "name": "file_title",
+              "value": "={{ $json.body.original_filename }}",
+              "type": "string"
+            },
+            {
+              "id": "file-type",
+              "name": "file_type",
+              "value": "={{ $json.body.file_type }}",
+              "type": "string"
+            },
+            {
+              "id": "minio-url",
+              "name": "minio_url",
+              "value": "={{ $json.body.minio_url }}",
+              "type": "string"
+            },
+            {
+              "id": "callback-url",
+              "name": "callback_url",
+              "value": "={{ $json.body.callback_url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0bfffbfd-5818-41e4-b2ac-5611446fa17f",
+      "name": "Set File Info",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1600,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Set File Info').item.json.minio_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "c46e0840-4286-44e0-8a2b-99860f4a0a8a",
+      "name": "Download from MinIO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1376,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM documents_pg WHERE metadata->>'file_id' = '{{ $('Set File Info').item.json.file_id }}'",
+        "options": {}
+      },
+      "id": "4a66db7d-ff5e-41b5-b016-35eee07a58e5",
+      "name": "Delete Old Vectors",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1152,
+        352
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7q3N6rw6WMrm6mms",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM document_rows WHERE dataset_id = '{{ $('Set File Info').item.json.file_id }}'",
+        "options": {}
+      },
+      "id": "06d3502f-e981-44da-acc2-368aeb55cb8f",
+      "name": "Delete Old Doc Rows",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -944,
+        352
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7q3N6rw6WMrm6mms",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "document_metadata",
+          "mode": "list",
+          "cachedResultName": "document_metadata"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Set File Info').item.json.file_id }}",
+            "title": "={{ $('Set File Info').item.json.file_title }}",
+            "url": "={{ $('Set File Info').item.json.minio_url }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": true,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4f6c109a-89bd-42cd-a27d-0cee11cffea0",
+      "name": "Insert Document Metadata",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -720,
+        352
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7q3N6rw6WMrm6mms",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "xlsx-check",
+                    "leftValue": "={{ $('Set File Info').item.json.file_type }}",
+                    "rightValue": "xlsx",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "csv-check",
+                    "leftValue": "={{ $('Set File Info').item.json.file_type }}",
+                    "rightValue": "csv",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "pdf-check",
+                    "leftValue": "={{ $('Set File Info').item.json.file_type }}",
+                    "rightValue": "pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "docx-check",
+                    "leftValue": "={{ $('Set File Info').item.json.file_type }}",
+                    "rightValue": "docx",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "983d517e-96a8-465b-af33-5f7946679554",
+      "name": "Switch File Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        -496,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "id": "d31b92ad-0e2d-45f6-8b92-16d2ddb99e13",
+      "name": "Extract from Excel",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "49551a56-dd17-443b-8ee6-e319a09e7a66",
+      "name": "Extract from CSV",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "c78c722e-f669-4794-8da2-a3b745af5044",
+      "name": "Extract PDF Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "options": {}
+      },
+      "id": "f0c1bf34-eb90-47b7-b652-e47ad6f00781",
+      "name": "Extract Plain Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        752
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://whatsapp-dashboard.estudiotye.com/api/extract-docx",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d788687d-11c3-4cd9-9226-ffe37d2abaa0",
+      "name": "Extract DOCX Text",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -224,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "ee3d1b0a-01db-4d72-a1a2-0572de403b4f",
+      "name": "Aggregate Excel",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        0,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "id": "409aa502-af68-4f95-b2d3-b8ab45c4000e",
+      "name": "Aggregate CSV",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        0,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "concatenate",
+              "field": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5e5b43ce-b0f5-4277-aa07-3e556c0d9f48",
+      "name": "Summarize Tabular",
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1,
+      "position": [
+        224,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "document_rows",
+          "mode": "list",
+          "cachedResultName": "document_rows"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "dataset_id": "={{ $('Set File Info').item.json.file_id }}",
+            "row_data": "={{ $json.toJsonString().replaceAll(/'/g, \"''\") }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "dataset_id",
+              "displayName": "dataset_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_data",
+              "displayName": "row_data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "af614442-e40b-4c06-8d35-1d0b04867eed",
+      "name": "Insert Table Rows (Excel)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7q3N6rw6WMrm6mms",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "document_rows",
+          "mode": "list",
+          "cachedResultName": "document_rows"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "dataset_id": "={{ $('Set File Info').item.json.file_id }}",
+            "row_data": "={{ $json.toJsonString().replaceAll(/'/g, \"''\") }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "dataset_id",
+              "displayName": "dataset_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_data",
+              "displayName": "row_data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "01ee91f2-3324-44ac-b918-6720ba1d4e7a",
+      "name": "Insert Table Rows (CSV)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        416
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7q3N6rw6WMrm6mms",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "code": {
+          "execute": {
+            "code": "const { PromptTemplate } = require('@langchain/core/prompts');\n\n// ============================================================\n// CHUNKER INTELIGENTE POR TEMAS — GPT-4.1\n// Analiza el documento completo y divide por temas semánticos\n// Optimizado para carga en PGVector\n// ============================================================\n\n// Buscar contenido en múltiples campos posibles\nlet documentContent = $input.item.json?.data || $input.item.json?.text || $input.item.json?.content || $input.item.json?.body;\n\n// Si hay datos binarios, convertir a string\nif (!documentContent && $input.item.binary) {\n    const binaryKey = Object.keys($input.item.binary)[0];\n    if (binaryKey) {\n        documentContent = Buffer.from($input.item.binary[binaryKey].data, 'base64').toString('utf-8');\n    }\n}\n\nif (!documentContent) {\n    throw new Error('No document found in input. Available fields: ' + JSON.stringify(Object.keys($input.item.json || {})));\n}\n\nconst llm = await this.getInputConnectionData('ai_languageModel', 0);\n\nfunction cleanText(text) {\n    return text.replace(/\\s+/g, ' ').trim();\n}\n\nfunction escapeForTemplate(text) {\n    return text.replace(/\\{/g, '{{').replace(/\\}/g, '}}');\n}\n\nconst fullText = cleanText(documentContent);\n\n// ============================================================\n// CONFIGURACIÓN\n// ============================================================\nconst MAX_CHUNK_SIZE = 1500;    // Máximo caracteres por chunk\nconst MIN_CHUNK_SIZE = 200;     // Mínimo caracteres por chunk\nconst MAX_INPUT_LENGTH = 30000; // Máximo para enviar al LLM de una vez\n\n// ============================================================\n// PASO 1: El LLM analiza el documento y lo divide por temas\n// ============================================================\n\nasync function splitByTopics(text) {\n    // Si el texto es muy corto, devolver como un solo chunk\n    if (text.length <= MAX_CHUNK_SIZE) {\n        return [text];\n    }\n\n    // Si el documento es muy largo, dividirlo en secciones primero\n    // y procesar cada sección por separado\n    const textToProcess = text.length > MAX_INPUT_LENGTH\n        ? text.substring(0, MAX_INPUT_LENGTH)\n        : text;\n\n    const escapedText = escapeForTemplate(textToProcess);\n\n    const promptText = `Eres un experto en organización de información para bases de datos vectoriales (PGVector).\n\nTu tarea es dividir el siguiente documento en bloques temáticos independientes. Cada bloque debe:\n1. Cubrir UN solo tema o concepto específico\n2. Ser AUTOCONTENIDO: debe entenderse sin necesidad de leer otros bloques\n3. Incluir contexto completo (no empezar con \"El mismo...\" o \"También...\" sin decir de qué se habla)\n4. Tener entre ${MIN_CHUNK_SIZE} y ${MAX_CHUNK_SIZE} caracteres aproximadamente\n5. Si hay formato pregunta-respuesta, NUNCA separar una pregunta de su respuesta\n\nREGLAS IMPORTANTES:\n- Si varias preguntas/respuestas son del MISMO tema (ej: varias preguntas sobre expedientes), UNIFICARLAS en un solo bloque\n- Si una pregunta/respuesta es de un tema DISTINTO, ponerla en un bloque separado\n- Cada bloque debe empezar mencionando el contexto (ej: \"La Caja de Abogados de Salta...\" o \"En la Caja de Abogados de Salta...\")\n- NO incluir metadatos como \"Chunk 1\" o \"Tema:\" en el contenido\n- NO repetir información entre bloques\n\nDOCUMENTO A DIVIDIR:\n${escapedText}\n\nFORMATO DE RESPUESTA:\nDevolvé ÚNICAMENTE los bloques separados por la línea exacta:\n===CHUNK===\nNo agregues explicaciones, títulos ni numeración. Solo el contenido de cada bloque separado por ===CHUNK===\n\nEjemplo de formato correcto:\nLa Caja de Abogados de Salta se encuentra en Av. Sarmiento 302. El horario de atención es de lunes a viernes de 8:00 a 13:30.\n===CHUNK===\nPara comunicarse con la Caja de Abogados de Salta se puede llamar al +54 387 4224991 o escribir a mesadeentrada@cajaabogadossalta.com.ar\n\n\nIMPORTANTE NUNCA parafrasees, reescribas ni agregues información que no esté en el texto original. Mantené el contenido exacto del documento, solo reorganizalo en bloques temáticos.`;\n\n    const prompt = PromptTemplate.fromTemplate(promptText);\n    const chain = prompt.pipe(llm);\n\n    try {\n        const response = await chain.invoke();\n        const responseText = response.content || response.text || response.toString();\n\n        // Parsear la respuesta del LLM\n        let rawChunks = responseText\n            .split('===CHUNK===')\n            .map(c => c.trim())\n            .filter(c => c.length > 0);\n\n        // Si el LLM no respetó el formato, intentar con doble salto de línea\n        if (rawChunks.length <= 1) {\n            rawChunks = responseText\n                .split(/\\n\\n\\n+/)\n                .map(c => c.trim())\n                .filter(c => c.length > 0);\n        }\n\n        // Si aún así hay un solo chunk, devolver el texto dividido por tamaño\n        if (rawChunks.length <= 1) {\n            console.log('LLM returned single chunk, falling back to size-based split');\n            return fallbackSplit(text);\n        }\n\n        return rawChunks;\n\n    } catch (error) {\n        console.log('LLM topic analysis failed, using fallback:', error.message);\n        return fallbackSplit(text);\n    }\n}\n\n// ============================================================\n// PASO 2: Fallback — División por tamaño si el LLM falla\n// ============================================================\n\nfunction fallbackSplit(text) {\n    const chunks = [];\n    let remaining = text;\n\n    while (remaining.length > 0) {\n        if (remaining.length <= MAX_CHUNK_SIZE) {\n            chunks.push(remaining);\n            break;\n        }\n\n        // Buscar el mejor punto de corte antes del máximo\n        let breakPoint = MAX_CHUNK_SIZE;\n        const searchArea = remaining.substring(Math.floor(MAX_CHUNK_SIZE * 0.7), MAX_CHUNK_SIZE);\n\n        // Buscar fin de oración\n        const sentenceEnd = searchArea.lastIndexOf('. ');\n        if (sentenceEnd !== -1) {\n            breakPoint = Math.floor(MAX_CHUNK_SIZE * 0.7) + sentenceEnd + 2;\n        } else {\n            // Buscar fin de pregunta/respuesta\n            const qaBreak = searchArea.lastIndexOf('Respuesta:');\n            if (qaBreak !== -1) {\n                const nextQuestion = searchArea.indexOf('Pregunta:', qaBreak);\n                if (nextQuestion !== -1) {\n                    breakPoint = Math.floor(MAX_CHUNK_SIZE * 0.7) + nextQuestion;\n                }\n            }\n        }\n\n        chunks.push(remaining.substring(0, breakPoint).trim());\n        remaining = remaining.substring(breakPoint).trim();\n    }\n\n    return chunks;\n}\n\n// ============================================================\n// PASO 3: Post-procesamiento — Validar y limpiar chunks\n// ============================================================\n\nasync function processDocument(text) {\n    let rawChunks;\n\n    // Si el documento es muy largo, procesarlo en partes\n    if (text.length > MAX_INPUT_LENGTH) {\n        rawChunks = [];\n        let offset = 0;\n\n        while (offset < text.length) {\n            // Buscar un buen punto de corte para la sección\n            let sectionEnd = offset + MAX_INPUT_LENGTH;\n\n            if (sectionEnd < text.length) {\n                // Intentar cortar en un punto limpio\n                const searchArea = text.substring(\n                    Math.max(offset + MAX_INPUT_LENGTH - 2000, offset),\n                    sectionEnd\n                );\n                const lastPeriod = searchArea.lastIndexOf('. ');\n                if (lastPeriod !== -1) {\n                    sectionEnd = Math.max(offset + MAX_INPUT_LENGTH - 2000, offset) + lastPeriod + 2;\n                }\n            } else {\n                sectionEnd = text.length;\n            }\n\n            const section = text.substring(offset, sectionEnd);\n            const sectionChunks = await splitByTopics(section);\n            rawChunks.push(...sectionChunks);\n\n            offset = sectionEnd;\n        }\n    } else {\n        rawChunks = await splitByTopics(text);\n    }\n\n    // Post-procesamiento: fusionar chunks muy pequeños\n    const finalChunks = [];\n    let buffer = '';\n\n    for (const chunk of rawChunks) {\n        if (buffer.length > 0) {\n            // Si el buffer + chunk caben, fusionar\n            if (buffer.length + chunk.length + 1 <= MAX_CHUNK_SIZE) {\n                buffer += ' ' + chunk;\n                continue;\n            } else {\n                // Guardar el buffer y empezar de nuevo\n                finalChunks.push(buffer);\n                buffer = '';\n            }\n        }\n\n        if (chunk.length < MIN_CHUNK_SIZE) {\n            buffer = chunk;\n        } else if (chunk.length > MAX_CHUNK_SIZE) {\n            // Si un chunk es muy grande, subdividirlo\n            const subChunks = fallbackSplit(chunk);\n            finalChunks.push(...subChunks);\n        } else {\n            finalChunks.push(chunk);\n        }\n    }\n\n    // No olvidar el buffer final\n    if (buffer.length > 0) {\n        if (finalChunks.length > 0 &&\n            finalChunks[finalChunks.length - 1].length + buffer.length + 1 <= MAX_CHUNK_SIZE) {\n            finalChunks[finalChunks.length - 1] += ' ' + buffer;\n        } else {\n            finalChunks.push(buffer);\n        }\n    }\n\n    return finalChunks;\n}\n\n// ============================================================\n// EJECUTAR\n// ============================================================\n\nconst processedChunks = await processDocument(fullText);\n\nconst returnData = processedChunks.map((content, index) => ({\n    json: {\n        content: content,\n        chunk: index + 1,\n        chunk_size: content.length,\n        total_chunks: processedChunks.length\n    }\n}));\n\nreturn returnData;"
+          }
+        },
+        "inputs": {
+          "input": [
+            {
+              "type": "ai_languageModel",
+              "maxConnections": 1,
+              "required": true
+            },
+            {
+              "type": "main",
+              "required": true
+            }
+          ]
+        },
+        "outputs": {
+          "output": [
+            {
+              "type": "main"
+            }
+          ]
+        }
+      },
+      "id": "546ee2de-5fe2-449c-a3da-7f569716425a",
+      "name": "LangChain Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.code",
+      "typeVersion": 1,
+      "position": [
+        448,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "id": "ac9c0071-ddd0-488d-9942-d9a87f6a505f",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        512,
+        672
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "4XHjeRsqDgqaKcz0",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-large",
+        "options": {}
+      },
+      "id": "c8f64616-b1d2-4343-a01e-1c7dc678cda8",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [
+        768,
+        480
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "4XHjeRsqDgqaKcz0",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.content || $json.data || $json.text || $json.concatenated_data }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "file_id",
+                "value": "={{ $('Set File Info').first().json.file_id }}"
+              },
+              {
+                "name": "file_title",
+                "value": "={{ $('Set File Info').first().json.file_title }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "b9ee2423-6740-412b-9f93-73d0ff521880",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        928,
+        624
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f17644ef-6a29-46f3-a5fe-2afb2855e98f",
+      "name": "Recursive Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        992,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": "documents_pg",
+        "options": {}
+      },
+      "id": "6ef2d886-b6ef-4bf3-bf82-e6b000383925",
+      "name": "PGVector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        256
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7q3N6rw6WMrm6mms",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Document vectorized successfully', file_id: $('Set File Info').first().json.file_id }) }}",
+        "options": {}
+      },
+      "id": "e6e37fc9-dc53-4484-989e-5957ccabce44",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1280,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "delete-file-id",
+              "name": "file_id",
+              "value": "={{ $json.body.document_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a19bbb6f-f1c8-475e-916d-1dac23d2e8f2",
+      "name": "Set Delete Info",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1600,
+        656
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM documents_pg WHERE metadata->>'file_id' = '{{ $json.file_id }}'",
+        "options": {}
+      },
+      "id": "ad0e587f-c035-48db-b1dd-7e854df4024d",
+      "name": "Delete from PGVector",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1376,
+        656
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7q3N6rw6WMrm6mms",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM document_rows WHERE dataset_id = '{{ $('Set Delete Info').item.json.file_id }}'",
+        "options": {}
+      },
+      "id": "ef231c10-adb0-4619-a969-e323be5e18eb",
+      "name": "Delete Rows",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -1152,
+        656
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7q3N6rw6WMrm6mms",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM document_metadata WHERE id = '{{ $('Set Delete Info').item.json.file_id }}'",
+        "options": {}
+      },
+      "id": "4ec930b7-4716-4738-9ac3-6d0f0bf88968",
+      "name": "Delete Metadata",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -944,
+        656
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "7q3N6rw6WMrm6mms",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Document deleted successfully', file_id: $('Set Delete Info').first().json.file_id }) }}",
+        "options": {}
+      },
+      "id": "c023a395-5024-46aa-9aad-b4f9011fe3ae",
+      "name": "Respond Delete Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -720,
+        656
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $('Set File Info').first().json.callback_url }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ status: 'ready' }) }}",
+        "options": {}
+      },
+      "id": "013f2114-03c5-4bf8-977d-95d3127c53aa",
+      "name": "Update Status Ready via API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1104,
+        256
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Vectorize": {
+      "main": [
+        [
+          {
+            "node": "Set File Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set File Info": {
+      "main": [
+        [
+          {
+            "node": "Delete Old Vectors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Old Vectors": {
+      "main": [
+        [
+          {
+            "node": "Delete Old Doc Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Old Doc Rows": {
+      "main": [
+        [
+          {
+            "node": "Insert Document Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Document Metadata": {
+      "main": [
+        [
+          {
+            "node": "Download from MinIO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download from MinIO": {
+      "main": [
+        [
+          {
+            "node": "Switch File Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch File Type": {
+      "main": [
+        [
+          {
+            "node": "Extract from Excel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract from CSV",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract PDF Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract DOCX Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Plain Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from Excel": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Excel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Insert Table Rows (Excel)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from CSV": {
+      "main": [
+        [
+          {
+            "node": "Aggregate CSV",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Insert Table Rows (CSV)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Excel": {
+      "main": [
+        [
+          {
+            "node": "Summarize Tabular",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate CSV": {
+      "main": [
+        [
+          {
+            "node": "Summarize Tabular",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Tabular": {
+      "main": [
+        [
+          {
+            "node": "PGVector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract PDF Text": {
+      "main": [
+        [
+          {
+            "node": "LangChain Text Splitter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Plain Text": {
+      "main": [
+        [
+          {
+            "node": "LangChain Text Splitter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract DOCX Text": {
+      "main": [
+        [
+          {
+            "node": "LangChain Text Splitter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LangChain Text Splitter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LangChain Text Splitter": {
+      "main": [
+        [
+          {
+            "node": "PGVector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "PGVector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "PGVector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PGVector Store": {
+      "main": [
+        [
+          {
+            "node": "Update Status Ready via API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Delete": {
+      "main": [
+        [
+          {
+            "node": "Set Delete Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Delete Info": {
+      "main": [
+        [
+          {
+            "node": "Delete from PGVector",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete from PGVector": {
+      "main": [
+        [
+          {
+            "node": "Delete Rows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Rows": {
+      "main": [
+        [
+          {
+            "node": "Delete Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Metadata": {
+      "main": [
+        [
+          {
+            "node": "Respond Delete Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status Ready via API": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c2ea5a0f-4896-46a8-8223-b17639180973",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7f2f9ac2bdc88579dc26364a1bdd57a52765314b976787b85e1bce5d630f3729"
+  },
+  "id": "03Y9aqqH2GctrIwp",
+  "tags": []
+}

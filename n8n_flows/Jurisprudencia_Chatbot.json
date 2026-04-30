@@ -1,0 +1,210 @@
+{
+  "name": "Chatbot Jurisprudencia",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Chatbot especializado en Jurisprudencia\nBusca en sentencias judiciales usando RAG.\nTabla de vectores: jurisprudencia_vectors (separada del chatbot general)",
+        "height": 200,
+        "width": 600,
+        "color": 5
+      },
+      "id": "sticky-info-chat",
+      "name": "Info",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-800, 48]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "jurisprudencia-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-chat",
+      "name": "Webhook Chat",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-704, 352],
+      "webhookId": "jurisprudencia-chat"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "user-query",
+              "name": "query",
+              "value": "={{ $json.body.query || $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "user-id",
+              "name": "user_id",
+              "value": "={{ $json.body.user_id || 'anonymous' }}",
+              "type": "string"
+            },
+            {
+              "id": "filtros",
+              "name": "filters",
+              "value": "={{ $json.body.filters || {} }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-query",
+      "name": "Set Query",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-480, 352]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Eres un asistente legal experto en jurisprudencia previsional argentina.\n\nTu función es:\n1. Buscar sentencias relevantes en la base de datos usando la herramienta de búsqueda\n2. Analizar las sentencias encontradas\n3. Proporcionar respuestas claras y fundamentadas\n\nREGLAS IMPORTANTES:\n- SIEMPRE usa la herramienta de búsqueda antes de responder\n- Cita las sentencias mencionando: carátula, tribunal, fecha\n- Si no encuentras información relevante, dilo claramente\n- NO inventes jurisprudencia\n- Proporciona links a las sentencias cuando sea posible\n\nFormato de respuesta:\n1. Breve resumen de lo encontrado\n2. Sentencias relevantes (con citas)\n3. Conclusión o recomendación"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [-256, 352],
+      "id": "ai-agent-jurisprudencia",
+      "name": "AI Agent Jurisprudencia"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [-560, 592],
+      "id": "openai-chat-model",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Set Query').item.json.user_id }}"
+      },
+      "id": "memory-chat",
+      "name": "Postgres Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1,
+      "position": [-432, 592],
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-3-large",
+        "options": {}
+      },
+      "id": "embeddings-search",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1,
+      "position": [-304, 592],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve",
+        "tableName": "jurisprudencia_vectors",
+        "options": {
+          "queryName": "similarity_search_jurisprudencia"
+        }
+      },
+      "id": "pgvector-retriever",
+      "name": "PGVector Retriever",
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1.3,
+      "position": [-176, 592],
+      "credentials": {
+        "postgres": {
+          "id": "YOUR_POSTGRES_CREDENTIAL_ID",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "buscar_jurisprudencia",
+        "description": "Busca sentencias judiciales relevantes en la base de datos. Usa esta herramienta para encontrar jurisprudencia sobre temas específicos, jueces, tribunales o palabras clave.",
+        "returnType": "string"
+      },
+      "id": "retriever-tool",
+      "name": "Retriever Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolRetriever",
+      "typeVersion": 1,
+      "position": [-48, 592]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ \n  success: true, \n  response: $json.output, \n  user_id: $('Set Query').first().json.user_id \n}) }}",
+        "options": {}
+      },
+      "id": "respond-chat",
+      "name": "Respond Chat",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [-32, 352]
+    }
+  ],
+  "connections": {
+    "Webhook Chat": {
+      "main": [[{ "node": "Set Query", "type": "main", "index": 0 }]]
+    },
+    "Set Query": {
+      "main": [[{ "node": "AI Agent Jurisprudencia", "type": "main", "index": 0 }]]
+    },
+    "AI Agent Jurisprudencia": {
+      "main": [[{ "node": "Respond Chat", "type": "main", "index": 0 }]]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [[{ "node": "AI Agent Jurisprudencia", "type": "ai_languageModel", "index": 0 }]]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [[{ "node": "AI Agent Jurisprudencia", "type": "ai_memory", "index": 0 }]]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [[{ "node": "PGVector Retriever", "type": "ai_embedding", "index": 0 }]]
+    },
+    "PGVector Retriever": {
+      "ai_vectorStore": [[{ "node": "Retriever Tool", "type": "ai_vectorStore", "index": 0 }]]
+    },
+    "Retriever Tool": {
+      "ai_tool": [[{ "node": "AI Agent Jurisprudencia", "type": "ai_tool", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "chatbot-jurisprudencia-v1",
+  "tags": []
+}

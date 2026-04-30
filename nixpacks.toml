@@ -1,0 +1,25 @@
+[phases.setup]
+nixPkgs = [
+  "python312",
+  "gcc",
+  "pkg-config",
+  "cmake",
+  "cairo",
+  "cairo.dev",
+  "glib",
+  "freetype",
+  "fontconfig",
+  "xorg.libX11",
+  "xorg.libXrender",
+  "xorg.libXext",
+  "xorg.libxcb",
+  "xorg.libxcb.dev"
+]
+
+[variables]
+PKG_CONFIG_PATH = "/root/.nix-profile/lib/pkgconfig:/root/.nix-profile/share/pkgconfig:/nix/var/nix/profiles/default/lib/pkgconfig:/nix/var/nix/profiles/default/share/pkgconfig"
+
+[phases.install]
+cmds = [
+  "python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install --upgrade pip setuptools wheel && export C_INCLUDE_PATH=$(find /nix/store -maxdepth 1 -name '*libX11*-dev' -print -quit)/include:$(find /nix/store -maxdepth 1 -name '*libxcb*-dev' -print -quit)/include:$(find /nix/store -maxdepth 1 -name '*xorgproto*' -print -quit)/include:$(find /nix/store -maxdepth 1 -name '*libXrender*-dev' -print -quit)/include:$(find /nix/store -maxdepth 1 -name '*libXext*-dev' -print -quit)/include:/root/.nix-profile/include && export LIBRARY_PATH=/root/.nix-profile/lib && pip install -r requirements.txt"
+]

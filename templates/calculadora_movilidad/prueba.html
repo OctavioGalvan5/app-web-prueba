@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Haberes</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+            background-image: url('static/logoestudiomarca.jpg');
+            background-repeat: no-repeat;
+            background-object-position: 130 270px;
+            background-height: 500px;
+            background-width: 500px;
+            background-opacity: 0.25;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            font-weight: bold;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+        .negrita {
+            font-weight: bold;
+        }
+        .font-large {
+            font-size: 13px;
+        }
+        .first-column-cell {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            width: 25%; /* Aumentar el ancho de la primera columna */
+            word-wrap: break-word; /* Ajustar palabra a varias líneas si es necesario */
+            word-break: break-word;
+        }
+        .first-column-cell2 {
+            background-color: #c8daf6;
+            font-weight: bold;
+            width: 25%; /* Aumentar el ancho de la primera columna */
+            word-wrap: break-word; /* Ajustar palabra a varias líneas si es necesario */
+            word-break: break-word;
+        }
+        .first-column-cell3 {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        .custom-table .narrow-column {
+            width: 30%;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr class="font-large first-column-cell2">
+            <td style="visibility: hidden;">Indices</td>
+            <td class="negrita">IPC</td>
+            <td class="negrita">RIPTE</td>
+            <td class="negrita">UMA</td>
+            <td class="negrita">Movilidad de Sentencia</td>
+            <td class="negrita">Ley 27426 con rezago</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Diferencia con Anses</td>
+            <td> {{ comparacion.dif_anses_ipc }}</td>
+            <td> {{ comparacion.dif_anses_ripte }}</td>
+            <td> {{ comparacion.dif_anses_UMA }}</td>
+            <td> {{ comparacion.dif_anses_sent }}</td>
+            <td> {{ comparacion.dif_anses_ley27426 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
+            <td>{{ comparacion.conf_anses_ipc }}</td>
+            <td>{{ comparacion.conf_anses_ripte }}</td>
+            <td>{{ comparacion.conf_anses_UMA }}</td>
+            <td>{{ comparacion.conf_anses_sent }}</td>
+            <td>{{ comparacion.conf_anses_ley27426 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Diferencia con el haber de sentencia</td>
+            <td> {{ comparacion.dif_sent_ipc }}</td>
+            <td> {{ comparacion.dif_sent_ripte }}</td>
+            <td> {{ comparacion.dif_sent_UMA }}</td>
+            <td>-</td> <!-- Vacío, ya que no aplica -->
+            <td> {{ comparacion.dif_sent_ley27426 }}</td>
+        </tr>
+        <tr class="font-large">
+            <td class="negrita first-column-cell">Confiscatoriedad por la quita</td>
+            <td>{{ comparacion.conf_sent_ipc }}</td>
+            <td>{{ comparacion.conf_sent_ripte }}</td>
+            <td>{{ comparacion.conf_sent_UMA }}</td>
+            <td>-</td> <!-- Vacío, ya que no aplica -->
+            <td>{{ comparacion.conf_sent_ley27426 }}</td>
+        </tr>
+    </table>
+
+    <div class="page-break"></div>
+    <table>
+        <thead>
+            <tr class="font-large first-column-cell2">
+                <th class="negrita">Fecha</th>
+                <th class="negrita">Haber con Anses</th>
+                <th class="negrita">Haber con IPC</th>
+                <th class="negrita">Haber con RIPTE</th>
+                <th class="negrita">Haber con UMA</th>
+                <th class="negrita">Haber con Movilidad de Sentencia</th>
+                <th class="negrita">Haber con ley 2700</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in filas %}
+            <tr class="font-large">
+                <td class="negrita first-column-cell3">{{ fila[0] }}</td>
+                <td>{{ fila[1] }}</td>
+                <td>{{ fila[2] }}</td>
+                <td>{{ fila[3] }}</td>
+                <td>{{ fila[4] }}</td>
+                <td>{{ fila[5] }}</td>
+                <td>{{ fila[6] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

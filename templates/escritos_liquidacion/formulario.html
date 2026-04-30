@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Liquidación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a0dad; --primary-light: #9b59b6; --primary-dark: #4a0080;
+            --secondary: #f0e6fa; --text: #333; --gray: #f8f9fa; --border: #e0d8e8;
+            --success: #28a745; --danger: #dc3545;
+        }
+        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f5f0ff, #e6d9f2); min-height: 100vh; color: var(--text); }
+        .main-card { background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.1); overflow: hidden; margin-bottom: 30px; }
+        .card-header-custom { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 25px 30px; }
+        .card-header-custom h1 { margin: 0; font-size: 24px; font-weight: 600; }
+        .card-body-custom { padding: 30px; }
+        .section-title { font-size: 18px; font-weight: 600; color: var(--primary); margin: 25px 0 15px; padding-bottom: 8px; border-bottom: 2px solid var(--secondary); display: flex; align-items: center; gap: 10px; }
+        .section-title:first-child { margin-top: 0; }
+        .form-label { font-weight: 500; font-size: 14px; margin-bottom: 4px; }
+        .form-control, .form-select { border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; transition: all .2s; }
+        .form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(106,13,173,.1); }
+        .form-check-input:checked { background-color: var(--primary); border-color: var(--primary); }
+        .conditional-section { display: none; padding: 15px; background: var(--gray); border-radius: 10px; margin-top: 10px; border-left: 3px solid var(--primary-light); }
+        .conditional-section.active { display: block; animation: fadeIn .3s ease; }
+        .opcion-card { background: var(--gray); border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); transition: all .2s; }
+        .opcion-card:hover { border-color: var(--primary-light); }
+        .opcion-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .opcion-title { font-weight: 600; color: var(--primary); font-size: 16px; }
+        .btn-remove-opcion { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 18px; padding: 4px 8px; border-radius: 6px; transition: all .2s; }
+        .btn-remove-opcion:hover { background: rgba(220,53,69,.1); }
+        .btn-add-opcion { background: var(--secondary); color: var(--primary); border: 2px dashed var(--primary-light); padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; font-weight: 500; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-add-opcion:hover { background: var(--primary); color: white; border-style: solid; }
+        .submit-btn { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all .3s; display: inline-flex; align-items: center; gap: 10px; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(106,13,173,.3); }
+        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+        .checkbox-item { background: var(--gray); padding: 12px 16px; border-radius: 8px; transition: all .2s; }
+        .checkbox-item:hover { background: var(--secondary); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .card-body-custom { padding: 20px; } .checkbox-group { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    {% include 'navs/nav.html' %}
+
+    <div class="container" style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+        <div class="main-card">
+            <div class="card-header-custom">
+                <h1><i class="fas fa-file-contract me-2"></i>Formulario de Escrito de Liquidación</h1>
+            </div>
+            <div class="card-body-custom">
+                <form action="/resultado_escrito_liquidacion" method="post" id="formEscrito">
+
+                    <!-- TIPO DE ESCRITO -->
+                    <div class="section-title"><i class="fas fa-gavel"></i> Tipo de Escrito</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipo_escrito" id="tipo_primera_vez" value="primera_vez" {{ 'checked' if datos.tipo_escrito == 'primera_vez' }}>
+                                <label class="form-check-label" for="tipo_primera_vez">Primera vez</label>
+                            </div>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipo_escrito" id="tipo_impugnacion" value="impugnacion" {{ 'checked' if datos.tipo_escrito == 'impugnacion' }}>
+                                <label class="form-check-label" for="tipo_impugnacion">Impugnación</label>
+                            </div>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="tipo_escrito" id="tipo_readecuacion" value="readecuacion" {{ 'checked' if datos.tipo_escrito == 'readecuacion' }}>
+                                <label class="form-check-label" for="tipo_readecuacion">Readecuación</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DATOS DEL CASO -->
+                    <div class="section-title"><i class="fas fa-folder-open"></i> Datos del Caso</div>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Nombre Carátula</label>
+                            <input type="text" class="form-control" name="nombre_caratula" value="{{ datos.nombre_caratula }}" placeholder="BARAGIOLA RITA MARGARITA">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nº Expediente</label>
+                            <input type="text" class="form-control" name="numero_expte" value="{{ datos.numero_expte }}" placeholder="33872">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Año Expediente</label>
+                            <input type="text" class="form-control" name="anio_expte" value="{{ datos.anio_expte }}" placeholder="2018">
+                        </div>
+                    </div>
+
+                    <!-- SALA -->
+                    <div class="section-title"><i class="fas fa-building"></i> Sala</div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="sala" id="sala_1" value="1" {{ 'checked' if datos.sala == '1' }}>
+                                <label class="form-check-label" for="sala_1">Sala I</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="sala" id="sala_2" value="2" {{ 'checked' if datos.sala == '2' }}>
+                                <label class="form-check-label" for="sala_2">Sala II</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HABERES Y FECHAS -->
+                    <div class="section-title"><i class="fas fa-dollar-sign"></i> Haberes y Fechas</div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Haber Reclamado</label>
+                            <input type="text" class="form-control" name="haber_reclamado" value="{{ datos.haber_reclamado }}" placeholder="20.022,59">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Haber Reclamado</label>
+                            <input type="text" class="form-control" name="fecha_haber_reclamado" value="{{ datos.fecha_haber_reclamado }}" placeholder="06/10/2016">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Haber Percibido</label>
+                            <input type="text" class="form-control" name="haber_percibido" value="{{ datos.haber_percibido }}" placeholder="16.869,55">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Haber de Alta</label>
+                            <input type="text" class="form-control" name="haber_de_alta" value="{{ datos.haber_de_alta }}" placeholder="1.577.573,12">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha Inicial de Pago</label>
+                            <input type="text" class="form-control" name="fecha_inicial_de_pago" value="{{ datos.fecha_inicial_de_pago }}" placeholder="06/10/2016">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha de Cierre</label>
+                            <input type="text" class="form-control" name="fecha_de_cierre" value="{{ datos.fecha_de_cierre }}" placeholder="30/04/2025">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha de Intereses</label>
+                            <input type="text" class="form-control" name="fecha_intereses" value="{{ datos.fecha_intereses }}" placeholder="30/04/2025">
+                        </div>
+                    </div>
+
+                    <!-- OPCIONES DE LIQUIDACIÓN -->
+                    <div class="section-title"><i class="fas fa-calculator"></i> Opciones de Liquidación</div>
+                    <div id="opcionesContainer">
+                        {% for opcion in datos.opciones %}
+                        <div class="opcion-card" data-opcion="{{ opcion.numero }}">
+                            <div class="opcion-header">
+                                <span class="opcion-title">Opción {{ opcion.numero }}</span>
+                                {% if opcion.numero > 2 %}
+                                <button type="button" class="btn-remove-opcion" onclick="removeOpcion(this)"><i class="fas fa-times"></i></button>
+                                {% endif %}
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Movilidad</label>
+                                    <input type="text" class="form-control" name="movilidad_opcion_{{ opcion.numero }}" value="{{ opcion.movilidad }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Capital</label>
+                                    <input type="text" class="form-control" name="capital_opcion_{{ opcion.numero }}" value="{{ opcion.capital }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Intereses</label>
+                                    <input type="text" class="form-control" name="intereses_opcion_{{ opcion.numero }}" value="{{ opcion.intereses }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Total</label>
+                                    <input type="text" class="form-control" name="total_opcion_{{ opcion.numero }}" value="{{ opcion.total }}">
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="tope_9_opcion_{{ opcion.numero }}" id="tope_{{ opcion.numero }}" {{ 'checked' if opcion.tope_9 }}>
+                                        <label class="form-check-label" for="tope_{{ opcion.numero }}">Tope Art. 9 inc. 3 Ley 24.463</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        {% if datos.opciones|length == 0 %}
+                        <!-- Opción 1 por defecto -->
+                        <div class="opcion-card" data-opcion="1">
+                            <div class="opcion-header"><span class="opcion-title">Opción 1</span></div>
+                            <div class="row g-3">
+                                <div class="col-12"><label class="form-label">Movilidad</label><input type="text" class="form-control" name="movilidad_opcion_1"></div>
+                                <div class="col-md-4"><label class="form-label">Capital</label><input type="text" class="form-control" name="capital_opcion_1"></div>
+                                <div class="col-md-4"><label class="form-label">Intereses</label><input type="text" class="form-control" name="intereses_opcion_1"></div>
+                                <div class="col-md-4"><label class="form-label">Total</label><input type="text" class="form-control" name="total_opcion_1"></div>
+                                <div class="col-12"><div class="form-check"><input class="form-check-input" type="checkbox" name="tope_9_opcion_1" id="tope_1"><label class="form-check-label" for="tope_1">Tope Art. 9 inc. 3 Ley 24.463</label></div></div>
+                            </div>
+                        </div>
+                        <!-- Opción 2 por defecto -->
+                        <div class="opcion-card" data-opcion="2">
+                            <div class="opcion-header"><span class="opcion-title">Opción 2</span></div>
+                            <div class="row g-3">
+                                <div class="col-12"><label class="form-label">Movilidad</label><input type="text" class="form-control" name="movilidad_opcion_2"></div>
+                                <div class="col-md-4"><label class="form-label">Capital</label><input type="text" class="form-control" name="capital_opcion_2"></div>
+                                <div class="col-md-4"><label class="form-label">Intereses</label><input type="text" class="form-control" name="intereses_opcion_2"></div>
+                                <div class="col-md-4"><label class="form-label">Total</label><input type="text" class="form-control" name="total_opcion_2"></div>
+                                <div class="col-12"><div class="form-check"><input class="form-check-input" type="checkbox" name="tope_9_opcion_2" id="tope_2"><label class="form-check-label" for="tope_2">Tope Art. 9 inc. 3 Ley 24.463</label></div></div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="button" class="btn-add-opcion mt-2" id="addOpcionBtn" onclick="addOpcion()">
+                        <i class="fas fa-plus"></i> Agregar Opción
+                    </button>
+
+                    <!-- CONDICIONALES -->
+                    <div class="section-title"><i class="fas fa-balance-scale"></i> Inconstitucionalidades</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="inconstitucionalidad_27426_si" id="inc_27426" {{ 'checked' if datos.inconstitucionalidad_27426_si }}>
+                                <label class="form-check-label" for="inc_27426">Ley 27.426</label>
+                            </div>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="inconstitucionalidad_27541_si" id="inc_27541" {{ 'checked' if datos.inconstitucionalidad_27541_si }}>
+                                <label class="form-check-label" for="inc_27541">Ley 27.541</label>
+                            </div>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="inconstitucionalidad_27609_si" id="inc_27609" {{ 'checked' if datos.inconstitucionalidad_27609_si }}>
+                                <label class="form-check-label" for="inc_27609">Ley 27.609</label>
+                            </div>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="inconstitucionalidad_decreto_274_si" id="inc_274" {{ 'checked' if datos.inconstitucionalidad_decreto_274_si }}>
+                                <label class="form-check-label" for="inc_274">Decreto 274/2024</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MOTIVOS DE IMPUGNACIÓN (solo visible si tipo=impugnación) -->
+                    <div class="conditional-section" id="seccionImpugnacion">
+                        <div class="section-title"><i class="fas fa-exclamation-triangle"></i> Motivos de Impugnación</div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="no_reajusta_pbu" id="no_reajusta_pbu" {{ 'checked' if datos.no_reajusta_pbu }}>
+                                    <label class="form-check-label" for="no_reajusta_pbu">No reajusta PBU</label>
+                                </div>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="corta_intereses_tres_meses" id="corta_intereses" {{ 'checked' if datos.corta_intereses_tres_meses }}>
+                                    <label class="form-check-label" for="corta_intereses">Corta intereses 3 meses antes</label>
+                                </div>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="reajusta_haber" id="reajusta_haber" {{ 'checked' if datos.reajusta_haber }}>
+                                    <label class="form-check-label" for="reajusta_haber">Reajusta solo con movilidad general</label>
+                                </div>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="no_toma_sumas_rem" id="no_toma_sumas" {{ 'checked' if datos.no_toma_sumas_rem }}>
+                                    <label class="form-check-label" for="no_toma_sumas">No toma sumas no remunerativas</label>
+                                </div>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="no_corrige_error_material" id="no_corrige_error" {{ 'checked' if datos.no_corrige_error_material }}>
+                                    <label class="form-check-label" for="no_corrige_error">No corrige error material</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OTROS -->
+                    <div class="section-title"><i class="fas fa-cog"></i> Otros</div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="reparacion_historica" id="reparacion_historica" {{ 'checked' if datos.reparacion_historica }}>
+                                <label class="form-check-label" for="reparacion_historica">Reparación Histórica</label>
+                            </div>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="tuvo_pagos" id="tuvo_pagos" {{ 'checked' if datos.tuvo_pagos }}>
+                                <label class="form-check-label" for="tuvo_pagos">Tuvo pagos previos</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTÓN GENERAR -->
+                    <div class="text-center mt-4 pt-3" style="border-top: 2px solid var(--secondary);">
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-file-word"></i>
+                            Generar Escrito
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footers/footer.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Mostrar/ocultar sección impugnación
+    document.querySelectorAll('input[name="tipo_escrito"]').forEach(radio => {
+        radio.addEventListener('change', toggleImpugnacion);
+    });
+    function toggleImpugnacion() {
+        const sec = document.getElementById('seccionImpugnacion');
+        sec.classList.toggle('active', document.getElementById('tipo_impugnacion').checked);
+    }
+    toggleImpugnacion();
+
+    // Agregar/quitar opciones de liquidación
+    function getOpcionCount() {
+        return document.querySelectorAll('.opcion-card').length;
+    }
+
+    function addOpcion() {
+        const count = getOpcionCount();
+        if (count >= 4) { alert('Máximo 4 opciones'); return; }
+        const num = count + 1;
+        const html = `
+        <div class="opcion-card" data-opcion="${num}">
+            <div class="opcion-header">
+                <span class="opcion-title">Opción ${num}</span>
+                <button type="button" class="btn-remove-opcion" onclick="removeOpcion(this)"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="row g-3">
+                <div class="col-12"><label class="form-label">Movilidad</label><input type="text" class="form-control" name="movilidad_opcion_${num}"></div>
+                <div class="col-md-4"><label class="form-label">Capital</label><input type="text" class="form-control" name="capital_opcion_${num}"></div>
+                <div class="col-md-4"><label class="form-label">Intereses</label><input type="text" class="form-control" name="intereses_opcion_${num}"></div>
+                <div class="col-md-4"><label class="form-label">Total</label><input type="text" class="form-control" name="total_opcion_${num}"></div>
+                <div class="col-12"><div class="form-check"><input class="form-check-input" type="checkbox" name="tope_9_opcion_${num}" id="tope_${num}"><label class="form-check-label" for="tope_${num}">Tope Art. 9 inc. 3 Ley 24.463</label></div></div>
+            </div>
+        </div>`;
+        document.getElementById('opcionesContainer').insertAdjacentHTML('beforeend', html);
+        if (getOpcionCount() >= 4) document.getElementById('addOpcionBtn').style.display = 'none';
+    }
+
+    function removeOpcion(btn) {
+        btn.closest('.opcion-card').remove();
+        // Renumerar
+        document.querySelectorAll('.opcion-card').forEach((card, i) => {
+            const num = i + 1;
+            card.dataset.opcion = num;
+            card.querySelector('.opcion-title').textContent = `Opción ${num}`;
+            card.querySelectorAll('input').forEach(inp => {
+                const oldName = inp.name;
+                if (oldName) inp.name = oldName.replace(/_\d+$/, `_${num}`);
+                if (inp.id) inp.id = inp.id.replace(/_\d+$/, `_${num}`);
+            });
+            card.querySelectorAll('label').forEach(lbl => {
+                if (lbl.htmlFor) lbl.htmlFor = lbl.htmlFor.replace(/_\d+$/, `_${num}`);
+            });
+        });
+        document.getElementById('addOpcionBtn').style.display = '';
+    }
+    </script>
+</body>
+</html>

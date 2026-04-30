@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado — {{ nombre_docente }} {{ numero_identificacion }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+            background-image: url('static/logoestudiomarca.jpg');
+            background-repeat: no-repeat;
+            background-object-position: 130 270px;
+            background-height: 500px;
+            background-width: 500px;
+            background-opacity: 0.1;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background-color: #D3D3D3;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #845EC2;
+            text-align: center;
+            margin: 0;
+            padding-bottom: 1px;
+        }
+
+        h6 {
+            font-size: 16px;
+            color: #8400DA;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: avoid;
+            margin-bottom: 20px;
+        }
+
+        table td,
+        table th {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        .negrita {
+            font-weight: bold;
+        }
+
+        .font-large {
+            font-size: 12px;
+        }
+
+        .font-pequeña {
+            font-size: 8px;
+        }
+
+        .first-column-cell2 {
+            background-color: #e2e8f0;
+            font-weight: bold;
+            width: 25%;
+        }
+
+        .first-column-cell,
+        .first-column-cell3 {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .info-section {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .graph-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .graph-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .image-container {
+            text-align: center;
+        }
+
+        .image-container img {
+            width: 300px;
+            height: auto;
+        }
+
+        .small-graph {
+            width: 600px;
+            height: auto;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        .resumen-table th {
+            background: #e2e8f0;
+            font-weight: bold;
+        }
+
+        .haber {
+            color: #2b6cb0;
+        }
+
+        .confiscatoriedad {
+            color: #e53e3e;
+        }
+
+        /* Estilos para columnas comparativas */
+        .col-docente {
+            background-color: #f3e8ff;
+            /* Fondo morado claro */
+            color: #6b21a8;
+        }
+
+        .col-docente-header {
+            background-color: #c4b5fd !important;
+            /* Fondo morado más fuerte */
+            color: #4c1d95;
+            font-weight: bold;
+        }
+
+        .col-anses {
+            background-color: #dbeafe;
+            /* Fondo azul claro */
+            color: #1e40af;
+        }
+
+        .col-anses-header {
+            background-color: #93c5fd !important;
+            /* Fondo azul más fuerte */
+            color: #1e3a8a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <hr>
+    <h1 style="margin-top: 10px;">Resultados — Haber Luz y Fuerza con Movilidad</h1>
+    <hr style="margin-bottom: 20px;">
+
+    <div class="image-container">
+        <img src="static/logoestudio.jpg" alt="Logo">
+    </div>
+
+    <!-- Datos del afiliado -->
+    <div class="info-section">
+        <p>
+            <strong>Nombre:</strong> {{ nombre_afiliado }}
+            &nbsp;&nbsp;&nbsp; <strong>{{ cuil_expediente_tipo }}:</strong> {{ numero_identificacion }}
+        </p>
+        <p>
+            <strong>Monto inicial (haber base):</strong> {{ monto_inicial_fmt }}
+            {% if antiguedad %}&nbsp;&nbsp;&nbsp; <strong>Antigüedad:</strong> {{ antiguedad }} años{%
+            endif %}
+        </p>
+        <p>
+            <strong>Período calculado:</strong> desde {{ periodo_desde_fmt }} hasta {{ periodo_hasta_fmt }}
+            &nbsp;&nbsp;&nbsp; <strong>Fecha de emisión:</strong> {{ fecha_emision }}
+        </p>
+    </div>
+
+    <!-- Resumen de resultados -->
+    <h6>Resumen</h6>
+    <table class="resumen-table">
+        <tr>
+            <th class="first-column-cell2">Métrica</th>
+            <th>Valor</th>
+        </tr>
+        <tr>
+            <td class="first-column-cell">Haber final al {{ periodo_hasta_fmt }}</td>
+            <td class="haber">{{ monto_final_fmt }}</td>
+        </tr>
+        <tr>
+            <td class="first-column-cell">Variación acumulada</td>
+            <td>{{ variacion_pct_fmt }} ({{ variacion_abs_fmt }})</td>
+        </tr>
+    </table>
+
+    <!-- Sección de Comparación con ANSES -->
+    {% if comparar_con_anses %}
+    <h6>Comparación: Movilidad Luz y Fuerza vs ANSES</h6>
+    <table class="resumen-table">
+        <tr>
+            <th class="first-column-cell2">Concepto</th>
+            <th>Movilidad Luz y Fuerza</th>
+            <th>Movilidad ANSES</th>
+        </tr>
+        <tr>
+            <td class="first-column-cell">Haber final al {{ periodo_hasta_fmt }}</td>
+            <td class="haber" style="color: #845EC2;">{{ monto_final_fmt }}</td>
+            <td class="haber" style="color: #2b6cb0;">{{ monto_final_anses_fmt }}</td>
+        </tr>
+        <tr>
+            <td class="first-column-cell">Diferencia (Luz y Fuerza - ANSES)</td>
+            <td colspan="2" style="text-align: center; font-weight: bold;">
+                {{ diferencia_docente_anses_fmt }} ({{ diferencia_pct_docente_anses_fmt }})
+            </td>
+        </tr>
+        <tr>
+            <td class="first-column-cell">Resultado</td>
+            <td colspan="2" style="text-align: center;">
+                {% if resultado_comparacion_clase == 'lyf-mayor' %}
+                <span style="color: #845EC2; font-weight: bold;">{{ resultado_comparacion }}</span>
+                {% elif resultado_comparacion_clase == 'anses-mayor' %}
+                <span style="color: #2b6cb0; font-weight: bold;">{{ resultado_comparacion }}</span>
+                {% else %}
+                <span style="font-weight: bold;">{{ resultado_comparacion }}</span>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+
+    <!-- Gráfico principal -->
+    <div class="graph-container">
+        <img class="small-graph" src="data:image/png;base64,{{ grafico_linea_docente }}"
+            alt="Gráfico de evolución del haber Luz y Fuerza">
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- Detalle mensual -->
+    <h6>Detalle mensual del haber actualizado</h6>
+    <table>
+        <thead>
+            <tr class="font-large first-column-cell2">
+                <td class="negrita" style="width: 70px;">Periodo</td>
+                <td class="negrita col-docente-header">Haber Luz y Fuerza</td>
+                {% if mostrar_indice %}
+                <td class="negrita col-docente-header">Índice LyF</td>
+                {% endif %}
+                {% if comparar_con_anses %}
+                <td class="negrita col-anses-header">Haber ANSES</td>
+                <td class="negrita col-anses-header">Índice ANSES</td>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in filas_detalle %}
+            <tr class="font-pequeña">
+                <td class="first-column-cell3" style="padding-top: 1px; padding-bottom: 1px;">
+                    {{ fila.periodo }}
+                </td>
+                <td class="col-docente">{{ fila.haber_fmt }}</td>
+                {% if mostrar_indice %}
+                <td class="col-docente">{{ fila.indice_fmt }}</td>
+                {% endif %}
+                {% if comparar_con_anses %}
+                <td class="col-anses">{{ fila.haber_anses_fmt }}</td>
+                <td class="col-anses">{{ fila.indice_anses_fmt }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Notas opcionales -->
+    {% if notas %}
+    <div class="info-section">
+        <p class="negrita">Notas:</p>
+        <ul>
+            {% for n in notas %}
+            <li>{{ n }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</body>
+
+</html>
