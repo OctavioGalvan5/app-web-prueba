@@ -12,7 +12,7 @@ from docxtpl import DocxTemplate, InlineImage
 from docx.shared import Mm
 
 from blueprints.escritos_liquidacion.schemas import DatosEscrito
-from blueprints.escritos_liquidacion.service import generar_cuadro_uma_imagen
+from blueprints.escritos_liquidacion.service import generar_cuadro_uma_imagen, calcular_tope_maximo
 
 
 # Ruta a la plantilla docx
@@ -52,6 +52,22 @@ def generar_documento(datos: DatosEscrito) -> str:
     except Exception as e:
         print(f"Error generando cuadro UMA: {e}")
         context['cuadro_honorarios'] = ""
+
+    # Calcular variables del tope de haber máximo (si está activado)
+    if datos.tope_maximo_si and datos.haber_tope_maximo:
+        try:
+            tope_vars = calcular_tope_maximo(datos)
+            context.update(tope_vars)
+        except Exception as e:
+            print(f"Error calculando tope máximo: {e}")
+            
+    # Calcular párrafo de descuentos
+    try:
+        from blueprints.escritos_liquidacion.service import procesar_tuplas_descuentos
+        context['parrafo_descuentos'] = procesar_tuplas_descuentos(datos)
+    except Exception as e:
+        print(f"Error generando párrafo de descuentos: {e}")
+        context['parrafo_descuentos'] = ""
 
     # Renderizar documento
     doc.render(context)

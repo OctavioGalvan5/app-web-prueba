@@ -82,9 +82,13 @@ class DatosEscrito:
     # --- Otros condicionales ---
     reparacion_historica: bool = False
     tuvo_pagos: bool = False
-    
+
     # --- Pagos (texto descriptivo) ---
     pagos_descripcion: str = ""
+
+    # --- Tope de Haber Máximo ---
+    tope_maximo_si: bool = False
+    haber_tope_maximo: str = ""
 
     @classmethod
     def from_form(cls, form_data) -> 'DatosEscrito':
@@ -158,6 +162,30 @@ class DatosEscrito:
         datos.reparacion_historica = form_data.get('reparacion_historica', '') == 'on'
         datos.tuvo_pagos = form_data.get('tuvo_pagos', '') == 'on'
         datos.pagos_descripcion = form_data.get('pagos_descripcion', '')
+        
+        # Pagos Previos (Descuentos)
+        datos.monto_descontado_1 = form_data.get('monto_descontado_1', '')
+        datos.fecha_descuento_1 = form_data.get('fecha_descuento_1', '')
+        datos.monto_descontado_2 = form_data.get('monto_descontado_2', '')
+        datos.fecha_descuento_2 = form_data.get('fecha_descuento_2', '')
+        datos.monto_descontado_3 = form_data.get('monto_descontado_3', '')
+        datos.fecha_descuento_3 = form_data.get('fecha_descuento_3', '')
+        datos.monto_descontado_4 = form_data.get('monto_descontado_4', '')
+        datos.fecha_descuento_4 = form_data.get('fecha_descuento_4', '')
+        
+        # Pagos Previos (Descuentos)
+        datos.monto_descontado_1 = form_data.get('monto_descontado_1', '')
+        datos.fecha_descuento_1 = form_data.get('fecha_descuento_1', '')
+        datos.monto_descontado_2 = form_data.get('monto_descontado_2', '')
+        datos.fecha_descuento_2 = form_data.get('fecha_descuento_2', '')
+        datos.monto_descontado_3 = form_data.get('monto_descontado_3', '')
+        datos.fecha_descuento_3 = form_data.get('fecha_descuento_3', '')
+        datos.monto_descontado_4 = form_data.get('monto_descontado_4', '')
+        datos.fecha_descuento_4 = form_data.get('fecha_descuento_4', '')
+
+        # Tope de Haber Máximo
+        datos.tope_maximo_si = form_data.get('tope_maximo_si', '') == 'on'
+        datos.haber_tope_maximo = form_data.get('haber_tope_maximo', '')
 
         return datos
 
@@ -233,5 +261,19 @@ class DatosEscrito:
         # --- Otros ---
         ctx['reparación_historica'] = self.reparacion_historica
         ctx['if_tuvo_pagos'] = self.tuvo_pagos
+
+        # --- Tope de Haber Máximo ---
+        ctx['Tope_Haber_Maximo_Si'] = self.tope_maximo_si
+        ctx['haber_tope_maximo'] = self.haber_tope_maximo
+
+        # Alias de fecha para el párrafo del tope (el docx usa este nombre)
+        ctx['Fecha_de_cierre_de_intereses'] = self.fecha_intereses
+
+        # Defaults para las variables calculadas del tope (se sobreescriben en document_generator si aplica)
+        ctx.setdefault('tope_anses', '')
+        ctx.setdefault('tope_ocheintados_rem_max', '')
+        ctx.setdefault('dif_ocheintados_rem_max_anses', '')
+        ctx.setdefault('dif_haber_reclamado_anses', '')
+        ctx.setdefault('porc_haber_reclamado_anses', '')
 
         return ctx

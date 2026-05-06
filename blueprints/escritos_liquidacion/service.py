@@ -163,7 +163,16 @@ IMPORTANTE:
 
     "reparacion_historica": "true si en algun retroactivo se menciona Reparacion Historica, false si no",
 
-    "tuvo_pagos": "true si se detectan pagos previos descontados en algun retroactivo, false si no"
+    "tuvo_pagos": "true si se detectan pagos previos descontados en algun retroactivo, false si no",
+
+    "monto_descontado_1": "El monto del primer pago descontado (si lo hay) en la sección Detalles del retroactivo. Lo encontraras como 'Fecha Importe Tipo Descontado del XX/XX/XXXX 94.993,31'. Devolver solo el monto formateado.",
+    "fecha_descuento_1": "La fecha del primer pago descontado, formato DD/MM/YYYY.",
+    "monto_descontado_2": "El monto del segundo pago descontado (si lo hay) en la sección Detalles del retroactivo. Si no hay 2 pagos, dejar vacio.",
+    "fecha_descuento_2": "La fecha del segundo pago descontado, formato DD/MM/YYYY.",
+    "monto_descontado_3": "El monto del tercer pago descontado (si lo hay). Si no hay 3 pagos, dejar vacio.",
+    "fecha_descuento_3": "La fecha del tercer pago descontado, formato DD/MM/YYYY.",
+    "monto_descontado_4": "El monto del cuarto pago descontado (si lo hay). Si no hay 4 pagos, dejar vacio.",
+    "fecha_descuento_4": "La fecha del cuarto pago descontado, formato DD/MM/YYYY."
 }}
 """
 
@@ -435,6 +444,105 @@ def calcular_honorarios_opciones(datos: DatosEscrito) -> dict:
         resultado['columnas'].append(col)
 
     return resultado
+
+
+def procesar_tuplas_descuentos(datos: DatosEscrito) -> str:
+    """Procesa los montos y fechas de descuento y genera el párrafo natural."""
+    tuplas = []
+    if datos.monto_descontado_1 and datos.fecha_descuento_1:
+        tuplas.append((datos.monto_descontado_1, datos.fecha_descuento_1))
+    if datos.monto_descontado_2 and datos.fecha_descuento_2:
+        tuplas.append((datos.monto_descontado_2, datos.fecha_descuento_2))
+    if datos.monto_descontado_3 and datos.fecha_descuento_3:
+        tuplas.append((datos.monto_descontado_3, datos.fecha_descuento_3))
+    if datos.monto_descontado_4 and datos.fecha_descuento_4:
+        tuplas.append((datos.monto_descontado_4, datos.fecha_descuento_4))
+        
+    if not tuplas:
+        return ""
+        
+    if len(tuplas) > 1:
+        resultado = "Se descontaron pagos de "
+        bandera = 1
+    else:
+        resultado = "Se descontó pago de "
+        bandera = 0
+        
+    for i, elemento in enumerate(tuplas):
+        try:
+            fecha_str = elemento[1]
+            if '-' in fecha_str:
+                fecha = datetime.strptime(fecha_str, '%Y-%m-%d')
+            else:
+                fecha = datetime.strptime(fecha_str, '%d/%m/%Y')
+            fecha_formateada = fecha.strftime('%d/%m/%Y')
+        except ValueError:
+            fecha_formateada = elemento[1]
+            
+        if bandera == 1:
+            if i == len(tuplas) - 1:
+                resultado += "$" + elemento[0] + " en el periodo " + fecha_formateada + "."
+            else:
+                resultado += "$" + elemento[0] + " en el periodo " + fecha_formateada + " , "
+        else:
+            resultado += "$" + elemento[0] + " en el periodo " + fecha_formateada + "."
+
+    return resultado.strip()
+
+
+def calcular_tope_maximo(datos: DatosEscrito) -> dict:
+    """Calcula las variables del tope de haber máximo para insertar en el Word.
+
+    Consulta la tabla topes_maximo y calcula diferencias y porcentajes
+    en base al haber_tope_maximo ingresado y la fecha de cierre de intereses.
+
+    Returns:
+        dict con tope_anses, tope_ocheintados_rem_max, dif_ocheintados_rem_max_anses,
+        dif_haber_reclamado_anses, porc_haber_reclamado_anses.
+        Dict vacío si falla o faltan datos.
+    """
+    from decimal import Decimal
+    from services.calculadora_tope_maximo.generador_pdf import obtener_monto
+
+    fecha = datos.fecha_intereses or datos.fecha_de_cierre
+    haber_str = datos.haber_tope_maximo
+
+    if not fecha or not haber_str:
+        return {}
+
+    # Convertir fecha DD/MM/YYYY → YYYY-MM-DD (formato que espera obtener_monto)
+    try:
+        fecha_dt = datetime.strptime(fecha, '%d/%m/%Y')
+        fecha_iso = fecha_dt.strftime('%Y-%m-%d')
+    except ValueError:
+        # Si ya viene en ISO, usarla directamente
+        fecha_iso = fecha
+
+    result = obtener_monto(fecha_iso)
+    if not result:
+        return {}
+
+    (caliva_anses, anses, badaro, badaro_cm, ocheintados_rem_max, rem_max,
+     rem_max_imponible_cm_extendido_27551, martinez, anses_palavecino,
+     caliva_palavecino, badaro_cm_palavecino, RM_Badaro_FP_CM_P_Anses,
+     Alanis_colina) = result
+
+    # Convertir haber ingresado (formato "1.483.802,27") a Decimal
+    try:
+        haber_decimal = Decimal(haber_str.replace('.', '').replace(',', '.'))
+    except Exception:
+        return {}
+
+    if anses == 0:
+        return {}
+
+    return {
+        'tope_anses': formatear_dinero(anses),
+        'tope_ocheintados_rem_max': formatear_dinero(ocheintados_rem_max),
+        'dif_ocheintados_rem_max_anses': str(round((ocheintados_rem_max / anses - 1) * 100, 2)) + '%',
+        'dif_haber_reclamado_anses': formatear_dinero(haber_decimal - anses),
+        'porc_haber_reclamado_anses': str(round((haber_decimal / anses - 1) * 100, 2)) + '%',
+    }
 
 
 def generar_cuadro_uma_imagen(datos: DatosEscrito) -> str:
