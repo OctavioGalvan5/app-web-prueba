@@ -4,22 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Creador de Escritos de Liquidación — T&E</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
 :root {
-  --azul: #1a3a5c;
-  --azul-med: #2c5282;
-  --azul-light: #ebf4ff;
-  --ciruela: #8e44ad;
-  --ciruela-light: #f5eefa;
-  --ciruela-dark: #6c3483;
+  /* Rosa Vino — Opción C */
+  --bordo: #8b2463;
+  --bordo2: #ae2d7c;
+  --bordo-light: #fdf0f6;
+  --bordo-dim: rgba(139,36,99,0.08);
+  --bordo-border: rgba(139,36,99,0.2);
+  /* aliases */
+  --azul: #8b2463;
+  --azul-med: #ae2d7c;
+  --azul-light: #fdf0f6;
+  --ciruela: #8b2463;
+  --ciruela-light: rgba(139,36,99,0.08);
+  --ciruela-dark: #6b1a4a;
   --gris: #4a5568;
   --gris-light: #f7f8fa;
-  --borde: #e2e8f0;
-  --verde: #276749;
-  --rojo: #9b2c2c;
+  --borde: #e4e7ec;
+  --verde: #2d7a4f;
+  --rojo: #c0392b;
   --blanco: #ffffff;
+  --shadow: 0 1px 6px rgba(0,0,0,0.08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -34,10 +42,10 @@ header {
   display: flex;
   align-items: center;
   gap: 16px;
-  border-bottom: 3px solid var(--ciruela);
+  box-shadow: 0 2px 8px rgba(139,36,99,0.3);
 }
 header h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   color: white;
   font-size: 1.25rem;
   font-weight: 700;
@@ -56,7 +64,7 @@ header span {
   padding: 36px 20px 60px;
 }
 .page-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   color: var(--azul);
   font-size: 1.6rem;
   font-weight: 700;
@@ -78,7 +86,7 @@ header span {
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 .card-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1rem;
   color: var(--azul);
   margin-bottom: 20px;

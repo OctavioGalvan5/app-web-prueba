@@ -4,23 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Movilidad Previsional</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --azul: #1a3a5c;
-            --azul-med: #2c5282;
-            --azul-light: #ebf4ff;
-            --ciruela: #8e44ad;
-            --ciruela-dark: #6c3483;
-            --ciruela-light: #f5eefa;
-            --gris: #4a5568;
-            --gris-light: #f7f8fa;
-            --borde: #e2e8f0;
-            --verde: #276749;
-            --rojo: #9b2c2c;
-            --blanco: #ffffff;
-        }
+    /* Rosa Vino — Opción C */
+    --bordo: #8b2463;
+    --bordo2: #ae2d7c;
+    --bordo-light: #fdf0f6;
+    --bordo-dim: rgba(139,36,99,0.08);
+    --bordo-border: rgba(139,36,99,0.2);
+    /* aliases para compatibilidad */
+    --azul: #8b2463;
+    --azul-med: #ae2d7c;
+    --azul-light: #fdf0f6;
+    --ciruela: #8b2463;
+    --ciruela-dark: #6b1a4a;
+    --ciruela-light: rgba(139,36,99,0.08);
+    --gris: #4a5568;
+    --gris-light: #f7f8fa;
+    --borde: #e4e7ec;
+    --verde: #2d7a4f;
+    --verde-light: #f0faf4;
+    --verde-border: rgba(45,122,79,0.25);
+    --rojo: #c0392b;
+    --rojo-light: #fef2f2;
+    --blanco: #ffffff;
+    --shadow: 0 1px 6px rgba(0,0,0,0.08);
+    --shadow2: 0 4px 16px rgba(0,0,0,0.10);
+    --texto: #1a1a2e;
+    --texto2: #4a5568;
+}
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -37,11 +51,11 @@
             display: flex;
             align-items: center;
             gap: 16px;
-            border-bottom: 3px solid var(--ciruela);
+            box-shadow: 0 2px 8px rgba(139,36,99,0.3);
         }
 
         .page-header h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cormorant Garamond', serif;
             color: white;
             font-size: 1.25rem;
             font-weight: 700;
@@ -72,7 +86,7 @@
         }
 
         .card-title {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cormorant Garamond', serif;
             font-size: 1.05rem;
             color: var(--azul);
             margin-bottom: 20px;
@@ -138,7 +152,7 @@
             outline: none;
             border-color: var(--ciruela);
             background: white;
-            box-shadow: 0 0 0 3px rgba(142,68,173,0.1);
+            box-shadow: 0 0 0 3px rgba(139,36,99,0.1);
         }
 
         .hint {
@@ -857,58 +871,12 @@
                             <input type="text" id="ms-search" placeholder="Buscar método...">
                         </div>
                         <div class="multiselect-options-list" id="ms-options">
+                            {% for m in metodos %}
                             <label class="ms-option">
-                                <input type="checkbox" id="ipc" name="ipc" value="true">
-                                <span>IPC — Precios al Consumidor</span>
+                                <input type="checkbox" id="{{ m.form_key }}" name="{{ m.form_key }}" value="true">
+                                <span>{{ m.label }}</span>
                             </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="ripte" name="ripte" value="true">
-                                <span>RIPTE — Rem. Imponible Promedio Trabajadores Estables</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="uma" name="uma" value="true">
-                                <span>UMA — Poder Judicial de la Nación</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="caliva_mas_anses" name="caliva_mas_anses" value="true">
-                                <span>Caliva más ANSES</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="Alanis_Mas_Anses" name="Alanis_Mas_Anses" value="true">
-                                <span>Alanis más ANSES</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="alanis_ipc" name="alanis_ipc" value="true">
-                                <span>Alanis con IPC</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="alanis_ripte" name="alanis_ripte" value="true">
-                                <span>Alanis con RIPTE</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="Alanis_con_27551_con_3_meses_rezago" name="Alanis_con_27551_con_3_meses_rezago" value="true">
-                                <span>Alanis 27551 — 3 meses rezago</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="Alanis_Colina" name="Alanis_Colina" value="true">
-                                <span>Alanis con Colina</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="Caliva_Palavecino" name="Caliva_Palavecino" value="true">
-                                <span>Caliva más Palavecino</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="Anses_Palavecino" name="Anses_Palavecino" value="true">
-                                <span>ANSES más Palavecino</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="fallo_martinez" name="fallo_martinez" value="true">
-                                <span>Fallo Martínez</span>
-                            </label>
-                            <label class="ms-option">
-                                <input type="checkbox" id="Ley_27426_rezago" name="Ley_27426_rezago" value="true">
-                                <span>Ley 27426 con rezago</span>
-                            </label>
+                            {% endfor %}
                         </div>
                         <div class="ms-no-results" id="ms-no-results">Sin resultados</div>
                     </div>

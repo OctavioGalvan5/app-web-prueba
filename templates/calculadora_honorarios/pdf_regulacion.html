@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 0;
+    background-image: url('static/logoestudiomarca.jpg');
+    background-repeat: no-repeat;
+    background-object-position: 100 300px;
+    background-height: 480px;
+    background-width: 480px;
+    background-opacity: 0.07;
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    color: #1a1a1a;
+    line-height: 1.45;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ── HEADER BAND ── */
+  .hdr {
+    background-color: #8b2463;
+    padding: 18px 28px 14px 28px;
+  }
+  .hdr-inner {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .hdr-title {
+    color: #ffffff;
+    font-size: 18pt;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    padding: 0;
+    vertical-align: bottom;
+  }
+  .hdr-sub {
+    color: rgba(255,255,255,0.75);
+    font-size: 8pt;
+    letter-spacing: 0.06em;
+    padding: 2px 0 0 0;
+  }
+  .hdr-brand {
+    text-align: right;
+    vertical-align: middle;
+    color: #ffffff;
+    font-size: 11pt;
+    font-weight: bold;
+    padding: 0;
+  }
+  .hdr-brand-sub {
+    color: rgba(255,255,255,0.65);
+    font-size: 7.5pt;
+    text-align: right;
+  }
+
+  /* ── BODY WRAPPER ── */
+  .body-wrap {
+    padding: 20px 28px 24px 28px;
+  }
+
+  /* ── SECTION TITLES ── */
+  .stitle {
+    font-size: 7.5pt;
+    font-weight: bold;
+    color: #8b2463;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1.5pt solid #8b2463;
+    padding-bottom: 3px;
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+
+  /* ── INFO GRID (2 cols) ── */
+  .info-grid {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 4px;
+  }
+  .info-col {
+    width: 50%;
+    vertical-align: top;
+    padding: 0 14px 0 0;
+  }
+  .info-col-r {
+    width: 50%;
+    vertical-align: top;
+    padding: 0 0 0 14px;
+    border-left: 1pt solid #e0e0e0;
+  }
+  .info-lbl {
+    font-size: 7.5pt;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .info-val {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin-bottom: 7px;
+  }
+
+  /* ── MAIN TABLE ── */
+  .main-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    margin-bottom: 14px;
+  }
+  .main-tbl th {
+    background-color: #8b2463;
+    color: #ffffff;
+    padding: 7px 9px;
+    font-size: 8pt;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    border: 1pt solid #6b1a4a;
+    text-align: left;
+  }
+  .main-tbl th.r { text-align: right; }
+  .main-tbl td {
+    padding: 7px 9px;
+    border: 1pt solid #e0e0e0;
+    vertical-align: top;
+    background-color: #ffffff;
+  }
+  .main-tbl td.r { text-align: right; }
+  .main-tbl td.art {
+    text-align: center;
+    color: #8b2463;
+    font-weight: bold;
+  }
+  .main-tbl tr.alt td { background-color: #faf5f8; }
+  .main-tbl tr.tot td {
+    background-color: #8b2463;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 9.5pt;
+    border: 1pt solid #6b1a4a;
+    padding: 8px 9px;
+  }
+  .main-tbl tr.tot td.r { text-align: right; }
+  .warn { color: #c0392b; font-size: 8pt; }
+  .nota { color: #aaa; font-size: 8pt; }
+
+  /* ── SUMMARY BOXES ── */
+  .sum-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+  }
+  .sum-tbl td {
+    width: 25%;
+    padding: 10px 12px;
+    border: 1pt solid #d4a5c3;
+    background-color: #fdf0f6;
+    vertical-align: top;
+  }
+  .sum-lbl {
+    font-size: 7.5pt;
+    color: #8b2463;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .sum-val {
+    font-size: 11.5pt;
+    font-weight: bold;
+    color: #1a1a1a;
+  }
+  .sum-val-hi {
+    font-size: 12.5pt;
+    font-weight: bold;
+    color: #8b2463;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 22px;
+    padding-top: 7px;
+    border-top: 1pt solid #ddd;
+    font-size: 7.5pt;
+    color: #aaa;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <table class="hdr-inner">
+    <tr>
+      <td class="hdr-title" style="width:65%">
+        ESTIMACIÓN DE HONORARIOS<br>
+        <span class="hdr-sub">LEY 27.423 &nbsp;·&nbsp; TASA PASIVA BCRA COM. P14290</span>
+      </td>
+      <td style="width:35%;text-align:right;vertical-align:middle">
+        <p class="hdr-brand">Toyos &amp; Espin</p>
+        <p class="hdr-brand-sub">Soluciones Jurídicas Previsionales</p>
+        <p class="hdr-brand-sub">Salta, Argentina</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="body-wrap">
+
+  <!-- EXPEDIENTE + PARÁMETROS -->
+  <div class="stitle">Datos del Expediente &nbsp;&amp;&nbsp; Parámetros</div>
+  <table class="info-grid">
+    <tr>
+      <td class="info-col">
+        <p class="info-lbl">Carátula</p>
+        <p class="info-val">{{ data.car or '—' }}</p>
+        <p class="info-lbl">Expediente N°</p>
+        <p class="info-val">{{ data.exp or '—' }}</p>
+        <p class="info-lbl">Juzgado</p>
+        <p class="info-val">{{ data.juz or '—' }}</p>
+        <p class="info-lbl">Fecha</p>
+        <p class="info-val">{{ data.fec or '—' }}</p>
+      </td>
+      <td class="info-col-r">
+        <p class="info-lbl">Base Regulatoria</p>
+        <p class="info-val">{{ fmt(data.base) }}</p>
+        <p class="info-lbl">Valor UMA</p>
+        <p class="info-val">{{ fmt(data.uma) }}</p>
+        <p class="info-lbl">Base en UMA</p>
+        <p class="info-val">{{ '{:.2f}'.format(data.base / data.uma) }} UMA</p>
+        <p class="info-lbl">Carácter</p>
+        <p class="info-val">{{ 'Apoderada — +40% art. 20' if data.cm == 1.4 else 'Patrocinante' }}</p>
+      </td>
+    </tr>
+  </table>
+
+  <!-- TRABAJOS -->
+  <div class="stitle">Trabajos Regulados</div>
+  <table class="main-tbl">
+    <thead>
+      <tr>
+        <th style="width:34%">Trabajo</th>
+        <th style="width:9%;text-align:center">Norma</th>
+        <th style="width:11%" class="r">Base (UMA)</th>
+        <th style="width:16%" class="r">Honorario</th>
+        <th style="width:9%" class="r">UMA</th>
+        <th style="width:21%" class="r">A cargo ANSeS</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in data.et %}
+      <tr{% if loop.index is even %} class="alt"{% endif %}>
+        <td>
+          <strong>{{ e.n }}</strong>
+          {% if e.low %}<br><span class="warn">&#9888; Mínimo {{ '{:.2f}'.format(e.m) }} UMA aplicado</span>{% endif %}
+          {% if e.nota %}<br><span class="nota">{{ e.nota }}</span>{% endif %}
+        </td>
+        <td class="art">{{ e.a }}</td>
+        <td class="r">{{ '{:.2f}'.format(e.bu) }}</td>
+        <td class="r"><strong>{{ fmt(e.h) }}</strong></td>
+        <td class="r">{{ '{:.2f}'.format(e.hu) }}</td>
+        <td class="r">
+          {{ fmt(e.hc) }}<br>
+          <span class="nota">{{ (e.c * 100) | int }}% costas</span>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr class="tot">
+        <td colspan="3"><strong>TOTAL HONORARIOS</strong></td>
+        <td class="r"><strong>{{ fmt(data.tH) }}</strong></td>
+        <td class="r"><strong>{{ '{:.2f}'.format(data.tU) }} UMA</strong></td>
+        <td class="r"><strong>{{ fmt(data.tC) }}</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- RESUMEN -->
+  <div class="stitle">Resumen</div>
+  <table class="sum-tbl">
+    <tr>
+      <td>
+        <p class="sum-lbl">Total Honorarios</p>
+        <p class="sum-val-hi">{{ fmt(data.tH) }}</p>
+      </td>
+      <td>
+        <p class="sum-lbl">Total en UMA</p>
+        <p class="sum-val">{{ '{:.2f}'.format(data.tU) }} UMA</p>
+      </td>
+      <td>
+        <p class="sum-lbl">A cargo ANSeS</p>
+        <p class="sum-val">{{ fmt(data.tC) }}</p>
+      </td>
+      <td>
+        <p class="sum-lbl">Valor UMA</p>
+        <p class="sum-val">{{ fmt(data.uma) }}</p>
+      </td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    Arts. 21, 41, 47 y 58 inc. b) Ley 27.423 &nbsp;·&nbsp; Mínimos de orden público (art. 16 in fine) &nbsp;·&nbsp; Tope máximo no aplicado
+  </div>
+
+</div><!-- /body-wrap -->
+</body>
+</html>

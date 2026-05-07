@@ -349,7 +349,9 @@ def formulario_demandas():
 @app.route('/calculadora_movilidad')
 @login_required
 def prueba():
-    return render_template('calculadora_movilidad/calculadora_movilidad.html')
+    from services.calculadora_movilidad.calculadora import METODOS_SELECCIONABLES
+    return render_template('calculadora_movilidad/calculadora_movilidad.html',
+                           metodos=METODOS_SELECCIONABLES)
 
 
 @app.route('/resultado_calculado_movilidad', methods=['POST'])
@@ -380,22 +382,11 @@ def resultado_calculado_movilidad():
         fecha_adquisicion_del_derecho= transformar_fecha(request.form['fecha_adquisicion_del_derecho'])
         monto = float(request.form['monto'])
 
-        ipc = request.form.get('ipc')
-        ripte = request.form.get('ripte', False)
-        uma = request.form.get('uma', False)
-        movilidad_sentencia = request.form.get('movilidad_sentencia', False)
-        Ley_27426_rezago = request.form.get('Ley_27426_rezago', False)
-        caliva_mas_anses= request.form.get('caliva_mas_anses', False)
-        Caliva_Marquez_con_27551_con_3_rezago = request.form.get('Caliva_Marquez_con_27551_con_3_rezago', False)
-        Caliva_Marquez_con_27551_con_6_rezago= request.form.get('Caliva_Marquez_con_27551_con_6_rezago', False)
-        Alanis_Mas_Anses= request.form.get('Alanis_Mas_Anses', False)
-        Alanis_con_27551_con_3_meses_rezago= request.form.get('Alanis_con_27551_con_3_meses_rezago', False)
-        fallo_martinez= request.form.get('fallo_martinez', False)
-        alanis_ipc= request.form.get('alanis_ipc', False)
-        alanis_ripte= request.form.get('alanis_ripte', False)
-        Caliva_Palavecino = request.form.get('Caliva_Palavecino', False)
-        Anses_Palavecino= request.form.get('Anses_Palavecino', False)
-        Alanis_Colina = request.form.get('Alanis_Colina', False)
+        from services.calculadora_movilidad.calculadora import METODOS_SELECCIONABLES
+        metodos_seleccionados = {
+            m['form_key'] for m in METODOS_SELECCIONABLES
+            if request.form.get(m['form_key'])
+        }
         movilidad_personalizada = request.form.get('movilidad_personalizada', False)
 
         comparacion_mov_sentencia_si = request.form.get('comparacion_mov_sentencia_si', False)
@@ -445,7 +436,15 @@ def resultado_calculado_movilidad():
         tupla_haber_reajustado=((fecha_haber_reajustado_1,monto_reajustado_1),(fecha_haber_reajustado_2,monto_reajustado_2), (fecha_haber_reajustado_3,monto_reajustado_3),(fecha_haber_reajustado_4,monto_reajustado_4))
 
 
-        calculo = CalculadorMovilidad(datos_del_actor, fallecido, fecha_fallecimiento,cobrador_pension,  expediente,cuil_expediente, beneficio,num_beneficio, fecha_inicio, fecha_fin,fecha_adquisicion_del_derecho,monto, ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,Caliva_Marquez_con_27551_con_6_rezago,Alanis_Mas_Anses,Alanis_con_27551_con_3_meses_rezago, fallo_martinez, alanis_ipc, alanis_ripte, comparacion_mov_sentencia_si, comparacion_mov_sentencia_no, comparacion_mov_caliva, comparacion_mov_alanis, movilidad_personalizada, Caliva_Palavecino, Anses_Palavecino, Alanis_Colina, movilidad_1, tupla, tupla_haber_reajustado, haber_reajustado)
+        calculo = CalculadorMovilidad(
+            datos_del_actor, fallecido, fecha_fallecimiento, cobrador_pension,
+            expediente, cuil_expediente, beneficio, num_beneficio,
+            fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto,
+            metodos_seleccionados,
+            comparacion_mov_sentencia_si, comparacion_mov_sentencia_no,
+            comparacion_mov_caliva, comparacion_mov_alanis,
+            movilidad_personalizada, movilidad_1, tupla, tupla_haber_reajustado, haber_reajustado,
+        )
 
         resultado = calculo.generar_pdf()
         return resultado
@@ -1581,6 +1580,66 @@ def upload_dni():
     # Redirigir a la pantalla del cliente recién cargado
     return redirect(url_for('ver_cliente', id=new_id))
 
+
+
+@app.route('/calculadora_honorarios')
+@login_required
+def calculadora_honorarios():
+    return render_template('calculadora_honorarios/sistema_honorarios_v5.html')
+
+
+@app.route('/api/pdf_regulacion', methods=['POST'])
+@login_required
+def api_pdf_regulacion():
+    data = request.get_json(force=True)
+
+    def fmt(n):
+        try:
+            v = float(n)
+            s = '{:,.2f}'.format(v)
+            s = s.replace(',', 'X').replace('.', ',').replace('X', '.')
+            return '$ ' + s
+        except Exception:
+            return str(n)
+
+    rendered = render_template('calculadora_honorarios/pdf_regulacion.html', data=data, fmt=fmt)
+    pdf_buffer = BytesIO()
+    pisa_status = pisa.CreatePDF(rendered, dest=pdf_buffer)
+    if pisa_status.err:
+        return jsonify({'error': 'Error generando PDF'}), 500
+    pdf_buffer.seek(0)
+    response = make_response(pdf_buffer.read())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=estimacion_honorarios.pdf'
+    return response
+
+
+@app.route('/api/analizar', methods=['POST'])
+@login_required
+def api_analizar():
+    import anthropic as _anthropic
+    api_key = os.environ.get('ANTHROPIC_API_KEY', '')
+    if not api_key:
+        return jsonify({'error': 'ANTHROPIC_API_KEY no configurada en el servidor'}), 500
+    data = request.get_json(force=True)
+    pdf_b64 = data.get('pdf_b64', '')
+    prompt = data.get('prompt', '')
+    if not pdf_b64 or not prompt:
+        return jsonify({'error': 'Faltan campos pdf_b64 o prompt'}), 400
+    client = _anthropic.Anthropic(api_key=api_key)
+    message = client.messages.create(
+        model='claude-sonnet-4-20250514',
+        max_tokens=4000,
+        messages=[{
+            'role': 'user',
+            'content': [
+                {'type': 'document', 'source': {'type': 'base64', 'media_type': 'application/pdf', 'data': pdf_b64}},
+                {'type': 'text', 'text': prompt}
+            ]
+        }]
+    )
+    resultado = message.content[0].text
+    return jsonify({'resultado': resultado})
 
 
 @app.route('/agregar_cliente', methods=['POST'])

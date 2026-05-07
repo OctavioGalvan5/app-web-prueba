@@ -4,32 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Formulario de Liquidación — T&E</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
 :root {
-  --azul: #1a3a5c;
-  --azul-med: #2c5282;
-  --azul-light: #ebf4ff;
-  --ciruela: #8e44ad;
-  --ciruela-light: #f5eefa;
-  --ciruela-dark: #6c3483;
+  /* Rosa Vino — Opción C */
+  --bordo: #8b2463;
+  --bordo2: #ae2d7c;
+  --bordo-light: #fdf0f6;
+  --bordo-dim: rgba(139,36,99,0.08);
+  --bordo-border: rgba(139,36,99,0.2);
+  /* aliases */
+  --azul: #8b2463;
+  --azul-med: #ae2d7c;
+  --azul-light: #fdf0f6;
+  --ciruela: #8b2463;
+  --ciruela-light: rgba(139,36,99,0.08);
+  --ciruela-dark: #6b1a4a;
   --gris: #4a5568;
   --gris-light: #f7f8fa;
-  --borde: #e2e8f0;
-  --verde: #276749;
-  --rojo: #9b2c2c;
+  --borde: #e4e7ec;
+  --verde: #2d7a4f;
+  --rojo: #c0392b;
+  --blanco: #ffffff;
+  --shadow: 0 1px 6px rgba(0,0,0,0.08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Source Sans 3', sans-serif; background: var(--gris-light); color: #2d3748; min-height: 100vh; }
 
 .container { max-width: 900px; margin: 0 auto; padding: 36px 20px 60px; }
-.page-title { font-family: 'Playfair Display', serif; color: var(--azul); font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+.page-title { font-family: 'Cormorant Garamond', serif; color: var(--azul); font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
 .page-subtitle { color: var(--gris); font-size: 0.93rem; margin-bottom: 28px; }
 
 .card { background: white; border-radius: 8px; border: 1px solid var(--borde); padding: 24px 28px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
 .card-title {
-  font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--azul);
+  font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--azul);
   margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--borde);
   display: flex; align-items: center; gap: 10px;
 }
@@ -52,7 +61,7 @@ body { font-family: 'Source Sans 3', sans-serif; background: var(--gris-light); 
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
 }
 .form-group input:focus, .form-group select:focus {
-  outline: none; border-color: var(--ciruela); box-shadow: 0 0 0 3px rgba(142,68,173,0.1);
+  outline: none; border-color: var(--ciruela); box-shadow: 0 0 0 3px rgba(139,36,99,0.1);
 }
 
 /* CHECKBOXES */
@@ -74,7 +83,7 @@ body { font-family: 'Source Sans 3', sans-serif; background: var(--gris-light); 
   border-radius: 8px; padding: 18px; margin-bottom: 14px;
 }
 .opcion-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-.opcion-title { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--azul); font-weight: 700; }
+.opcion-title { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; color: var(--azul); font-weight: 700; }
 .btn-remove {
   background: none; border: none; color: var(--rojo); cursor: pointer;
   font-size: 16px; padding: 3px 7px; border-radius: 5px; transition: background 0.15s;
@@ -104,7 +113,7 @@ body { font-family: 'Source Sans 3', sans-serif; background: var(--gris-light); 
   font-size: 1rem; cursor: pointer; letter-spacing: 0.04em; transition: all 0.2s;
   display: inline-flex; align-items: center; gap: 10px;
 }
-.btn-submit:hover { background: var(--azul-med); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,58,92,0.25); }
+.btn-submit:hover { background: var(--azul-med); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(139,36,99,0.25); }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 640px) {

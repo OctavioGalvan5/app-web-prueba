@@ -48,5 +48,6 @@ pypdf
 PyMuPDF
 google-genai
 openai
+anthropic
 pycairo==1.27.0
 python-dotenv

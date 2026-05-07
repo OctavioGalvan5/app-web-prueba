@@ -36,6 +36,31 @@ COLUMNAS_DB = [
 # Índices de COLUMNAS_DB que reciben el bono +$1500 cuando id == 243 (marzo 2020)
 _BONO_243 = frozenset({0, 11, 15})  # ANSES, martinez, Anses_Palavecino
 
+# ---------------------------------------------------------------------------
+# Registro de métodos seleccionables — FUENTE DE VERDAD ÚNICA
+# Para agregar un nuevo índice: agregar una entrada aquí + columna en la DB.
+# form_key  → name del checkbox en el formulario HTML
+# idx       → posición en COLUMNAS_DB (debe coincidir exactamente)
+# label     → texto que ve el usuario
+# ---------------------------------------------------------------------------
+METODOS_SELECCIONABLES = [
+    {'form_key': 'ipc',                                  'idx': 1,  'label': 'IPC — Precios al Consumidor'},
+    {'form_key': 'ripte',                                'idx': 2,  'label': 'RIPTE — Rem. Imponible Promedio Trabajadores Estables'},
+    {'form_key': 'uma',                                  'idx': 3,  'label': 'UMA — Poder Judicial de la Nación'},
+    {'form_key': 'caliva_mas_anses',                     'idx': 7,  'label': 'Caliva más ANSES'},
+    {'form_key': 'Alanis_Mas_Anses',                     'idx': 9,  'label': 'Alanis más ANSES'},
+    {'form_key': 'alanis_ipc',                           'idx': 12, 'label': 'Alanis con IPC'},
+    {'form_key': 'alanis_ripte',                         'idx': 13, 'label': 'Alanis con RIPTE'},
+    {'form_key': 'Alanis_con_27551_con_3_meses_rezago',  'idx': 10, 'label': 'Alanis 27551 — 3 meses rezago'},
+    {'form_key': 'Alanis_Colina',                        'idx': 16, 'label': 'Alanis con Colina'},
+    {'form_key': 'Caliva_Palavecino',                    'idx': 14, 'label': 'Caliva más Palavecino'},
+    {'form_key': 'Anses_Palavecino',                     'idx': 15, 'label': 'ANSES más Palavecino'},
+    {'form_key': 'fallo_martinez',                       'idx': 11, 'label': 'Fallo Martínez'},
+    {'form_key': 'Ley_27426_rezago',                     'idx': 5,  'label': 'Ley 27426 con rezago'},
+    {'form_key': 'Caliva_Marquez_con_27551_con_3_rezago','idx': 6,  'label': 'Caliva más Cendán'},
+    {'form_key': 'Caliva_Marquez_con_27551_con_6_rezago','idx': 8,  'label': 'Caliva Márquez 27551 — 6 meses rezago'},
+]
+
 
 # ---------------------------------------------------------------------------
 # Helpers internos
@@ -436,45 +461,31 @@ def _calcular_comparacion(ultimos_valores, ultimo_valor_personalizado):
 
 def generar_grafico_linea(
     lista_filas_bf,
-    ipc_flag, ripte_flag, uma_flag, movilidad_sentencia_flag,
-    ley_27426_rezago_flag, caliva_marquez_3_rezago_flag, caliva_mas_anses_flag,
-    caliva_marquez_6_rezago_flag, alanis_mas_anses_flag, alanis_3_meses_rezago_flag,
-    fallo_martinez_flag, alanis_ipc_flag, alanis_ripte_flag,
-    caliva_palavecino_bf_flag, anses_palavecino_bf_flag, alanis_colina_bf_flag,
+    metodos_seleccionados,
     datos_mov_personalizada, movilidad_personalizada_flag,
     titulo
 ):
     fechas = [transformar_fecha_2(fila[0]) for fila in lista_filas_bf]
     montos_bf = list(zip(*[fila[1:] for fila in lista_filas_bf]))
 
-    conceptos_bf = [
-        'ANSES', 'IPC', 'RIPTE', 'UMA', 'Mov de Sentencia', 'Ley 27426',
-        'Caliva mas Cendan', 'Caliva mas Anses', 'Caliva 6 Rezago',
-        'Alanis mas Anses', 'Alanis con 3 meses Rezago', 'Martínez',
-        'Alanis con IPC', 'Alanis con RIPTE', 'Caliva Palavecino',
-        'Anses Palavecino', 'Alanis con Colina',
-    ]
-
-    booleanos_bf = [
-        True, ipc_flag, ripte_flag, uma_flag, movilidad_sentencia_flag,
-        ley_27426_rezago_flag, caliva_marquez_3_rezago_flag, caliva_mas_anses_flag,
-        caliva_marquez_6_rezago_flag, alanis_mas_anses_flag, alanis_3_meses_rezago_flag,
-        fallo_martinez_flag, alanis_ipc_flag, alanis_ripte_flag,
-        caliva_palavecino_bf_flag, anses_palavecino_bf_flag, alanis_colina_bf_flag,
-    ]
+    # ANSES siempre se incluye (índice 0); el resto según selección
+    indices_a_incluir = {0: 'ANSES'}
+    for m in METODOS_SELECCIONABLES:
+        if m['form_key'] in metodos_seleccionados:
+            indices_a_incluir[m['idx']] = m['label']
 
     fig = go.Figure()
 
     def _parse_money(m):
         return float(str(m).replace('$', '').replace(' ', '').replace('.', '').replace(',', '.'))
 
-    for i, (serie, incluir) in enumerate(zip(montos_bf, booleanos_bf)):
-        if incluir and i < len(conceptos_bf):
+    for i, serie in enumerate(montos_bf):
+        if i in indices_a_incluir:
             fig.add_trace(go.Scatter(
                 x=fechas,
                 y=[_parse_money(m) for m in serie],
                 mode='lines',
-                name=conceptos_bf[i]
+                name=indices_a_incluir[i]
             ))
 
     if movilidad_personalizada_flag:
@@ -600,16 +611,13 @@ class CalculadorMovilidad:
     def __init__(self, datos_del_actor, fallecido, fecha_fallecimiento, cobrador_pension,
                  expediente, cuil_expediente, beneficio, num_beneficio,
                  fecha_inicio, fecha_fin, fecha_adquisicion_del_derecho, monto,
-                 ipc, ripte, uma, movilidad_sentencia, Ley_27426_rezago,
-                 caliva_mas_anses, Caliva_Marquez_con_27551_con_3_rezago,
-                 Caliva_Marquez_con_27551_con_6_rezago, Alanis_Mas_Anses,
-                 Alanis_con_27551_con_3_meses_rezago, fallo_martinez,
-                 alanis_ipc, alanis_ripte,
+                 metodos_seleccionados,
                  comparacion_mov_sentencia_si, comparacion_mov_sentencia_no,
                  comparacion_mov_caliva, comparacion_mov_alanis,
-                 movilidad_personalizada, Caliva_Palavecino, Anses_Palavecino,
-                 Alanis_Colina, movilidad_1, tupla, tupla_reajuste, haber_reajustado):
-
+                 movilidad_personalizada, movilidad_1, tupla, tupla_reajuste, haber_reajustado):
+        """
+        metodos_seleccionados: set de form_key strings (ej: {'ipc', 'ripte', 'uma'})
+        """
         self.datos_del_actor = datos_del_actor
         self.fallecido = fallecido
         self.fecha_fallecimiento = fecha_fallecimiento
@@ -622,27 +630,34 @@ class CalculadorMovilidad:
         self.fecha_fin = fecha_fin
         self.fecha_adquisicion_del_derecho = fecha_adquisicion_del_derecho
         self.monto = monto
-        self.ipc = ipc
-        self.ripte = ripte
-        self.uma = uma
-        self.movilidad_sentencia = movilidad_sentencia
-        self.Ley_27426_rezago = Ley_27426_rezago
-        self.caliva_mas_anses = caliva_mas_anses
-        self.Caliva_Marquez_con_27551_con_3_rezago = Caliva_Marquez_con_27551_con_3_rezago
-        self.Caliva_Marquez_con_27551_con_6_rezago = Caliva_Marquez_con_27551_con_6_rezago
-        self.Alanis_Mas_Anses = Alanis_Mas_Anses
-        self.Alanis_con_27551_con_3_meses_rezago = Alanis_con_27551_con_3_meses_rezago
-        self.fallo_martinez = fallo_martinez
-        self.alanis_ipc = alanis_ipc
-        self.alanis_ripte = alanis_ripte
+        self.metodos_seleccionados = metodos_seleccionados
+
+        # Flags individuales derivados del set — compatibilidad con el template de resultado
+        def _sel(key):
+            return key in metodos_seleccionados
+
+        self.ipc = _sel('ipc')
+        self.ripte = _sel('ripte')
+        self.uma = _sel('uma')
+        self.movilidad_sentencia = False  # no es checkbox directo, siempre calculado
+        self.Ley_27426_rezago = _sel('Ley_27426_rezago')
+        self.caliva_mas_anses = _sel('caliva_mas_anses')
+        self.Caliva_Marquez_con_27551_con_3_rezago = _sel('Caliva_Marquez_con_27551_con_3_rezago')
+        self.Caliva_Marquez_con_27551_con_6_rezago = _sel('Caliva_Marquez_con_27551_con_6_rezago')
+        self.Alanis_Mas_Anses = _sel('Alanis_Mas_Anses')
+        self.Alanis_con_27551_con_3_meses_rezago = _sel('Alanis_con_27551_con_3_meses_rezago')
+        self.fallo_martinez = _sel('fallo_martinez')
+        self.alanis_ipc = _sel('alanis_ipc')
+        self.alanis_ripte = _sel('alanis_ripte')
+        self.Caliva_Palavecino = _sel('Caliva_Palavecino')
+        self.Anses_Palavecino = _sel('Anses_Palavecino')
+        self.Alanis_Colina = _sel('Alanis_Colina')
+
         self.comparacion_mov_sentencia_si = comparacion_mov_sentencia_si
         self.comparacion_mov_sentencia_no = comparacion_mov_sentencia_no
         self.comparacion_mov_caliva = comparacion_mov_caliva
         self.comparacion_mov_alanis = comparacion_mov_alanis
         self.movilidad_personalizada = movilidad_personalizada
-        self.Caliva_Palavecino = Caliva_Palavecino
-        self.Anses_Palavecino = Anses_Palavecino
-        self.Alanis_Colina = Alanis_Colina
         self.movilidad_1 = movilidad_1
         self.tupla = tupla
         self.resultado = procesar_tuplas(self.tupla, self.movilidad_1)
@@ -658,27 +673,13 @@ class CalculadorMovilidad:
         datos = [uv[0], uv[base_idx]]
         etiquetas = ['Anses', base_label]
 
-        pares = [
-            (self.ipc,                                  1,  'IPC'),
-            (self.ripte,                                2,  'RIPTE'),
-            (self.uma,                                  3,  'UMA'),
-            (self.Ley_27426_rezago,                     5,  'Ley 27426 con rezago'),
-            (self.Caliva_Marquez_con_27551_con_3_rezago,6,  'Caliva Marquez + Cendan'),
-            (self.Caliva_Marquez_con_27551_con_6_rezago,8,  'Caliva Marquez con 27551 con 6 rezago'),
-            (self.caliva_mas_anses,                     7,  'Caliva mas Anses'),
-            (self.Alanis_con_27551_con_3_meses_rezago,  10, 'Alanis con 27551 con 3 rezago'),
-            (self.fallo_martinez,                       11, 'Fallo Martinez'),
-            (self.alanis_ipc,                           12, 'Alanis con IPC'),
-            (self.alanis_ripte,                         13, 'Alanis con RIPTE'),
-            (self.Caliva_Palavecino,                    14, 'Caliva Palavecino'),
-            (self.Anses_Palavecino,                     15, 'Anses Palavecino'),
-            (self.Alanis_Colina,                        16, 'Alanis con Colina'),
-            (self.movilidad_personalizada,              None, 'Movilidad personalizada'),
-        ]
-        for flag, idx, label in pares:
-            if flag:
-                datos.append(ultimo_valor_personalizado if idx is None else uv[idx])
-                etiquetas.append(label)
+        for m in METODOS_SELECCIONABLES:
+            if m['form_key'] in self.metodos_seleccionados and m['idx'] != base_idx:
+                datos.append(uv[m['idx']])
+                etiquetas.append(m['label'])
+        if self.movilidad_personalizada:
+            datos.append(ultimo_valor_personalizado)
+            etiquetas.append('Movilidad personalizada')
 
         return datos, etiquetas
 
@@ -705,29 +706,13 @@ class CalculadorMovilidad:
         uv = ultimos_valores
         datos_1 = [uv[0]]
         etiquetas_1 = ['Anses']
-        pares_1 = [
-            (self.ipc,                                  1,  'IPC'),
-            (self.ripte,                                2,  'RIPTE'),
-            (self.uma,                                  3,  'UMA'),
-            (self.movilidad_sentencia,                  4,  'Movilidad de Sentencia (Caliva)'),
-            (self.Ley_27426_rezago,                     5,  'Ley 27426 con rezago'),
-            (self.Caliva_Marquez_con_27551_con_3_rezago,6,  'Caliva Marquez + fallo Cendan'),
-            (self.caliva_mas_anses,                     7,  'Caliva mas Anses'),
-            (self.Caliva_Marquez_con_27551_con_6_rezago,8,  'Caliva Marquez con 27551 con 6 rezago'),
-            (self.Alanis_Mas_Anses,                     9,  'Alanis mas Anses'),
-            (self.Alanis_con_27551_con_3_meses_rezago,  10, 'Alanis con 27551 con 3 rezago'),
-            (self.fallo_martinez,                       11, 'Fallo Martinez'),
-            (self.alanis_ipc,                           12, 'Alanis con IPC'),
-            (self.alanis_ripte,                         13, 'Alanis con RIPTE'),
-            (self.Caliva_Palavecino,                    14, 'Caliva Palavecino'),
-            (self.Anses_Palavecino,                     15, 'Anses Palavecino'),
-            (self.Alanis_Colina,                        16, 'Alanis con Colina'),
-            (self.movilidad_personalizada,              None, 'Movilidad personalizada'),
-        ]
-        for flag, idx, label in pares_1:
-            if flag:
-                datos_1.append(ultimo_valor_personalizado if idx is None else uv[idx])
-                etiquetas_1.append(label)
+        for m in METODOS_SELECCIONABLES:
+            if m['form_key'] in self.metodos_seleccionados:
+                datos_1.append(uv[m['idx']])
+                etiquetas_1.append(m['label'])
+        if self.movilidad_personalizada:
+            datos_1.append(ultimo_valor_personalizado)
+            etiquetas_1.append('Movilidad personalizada')
 
         grafico1 = crear_graficos(datos_1, etiquetas_1, "Haber a la fecha de cierre")
 
@@ -749,12 +734,7 @@ class CalculadorMovilidad:
 
         grafico_4 = generar_grafico_linea(
             lista_filas,
-            self.ipc, self.ripte, self.uma, self.movilidad_sentencia,
-            self.Ley_27426_rezago, self.Caliva_Marquez_con_27551_con_3_rezago,
-            self.caliva_mas_anses, self.Caliva_Marquez_con_27551_con_6_rezago,
-            self.Alanis_Mas_Anses, self.Alanis_con_27551_con_3_meses_rezago,
-            self.fallo_martinez, self.alanis_ipc, self.alanis_ripte,
-            self.Caliva_Palavecino, self.Anses_Palavecino, self.Alanis_Colina,
+            self.metodos_seleccionados,
             filas_dinero, self.movilidad_personalizada,
             self.datos_del_actor
         )
