@@ -336,13 +336,20 @@ def procesar_pdfs(archivos: list) -> DatosEscrito:
 
 def _obtener_valor_uma(fecha_str: str) -> float:
     """Obtiene el valor UMA vigente a una fecha dada desde la base de datos."""
-    try:
-        fecha_dt = datetime.strptime(fecha_str, '%d/%m/%Y').date()
-    except ValueError:
+    if not fecha_str:
+        return 0
+    fecha_str = fecha_str.strip()
+    fecha_dt = None
+    for fmt in ('%d/%m/%Y', '%Y-%m-%d', '%d-%m-%Y', '%d.%m.%Y', '%d/%m/%y', '%Y/%m/%d'):
         try:
-            fecha_dt = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+            fecha_dt = datetime.strptime(fecha_str, fmt).date()
+            break
         except ValueError:
-            return 0
+            pass
+    if not fecha_dt:
+        print(f"⚠️ DEBUG UMA: No se pudo parsear la fecha '{fecha_str}' con ningún formato conocido en _obtener_valor_uma.")
+        return 0
+
 
     with engine.connect() as conn:
         result = conn.execute(text("SELECT * FROM valor_uma"))
@@ -359,13 +366,20 @@ def _obtener_valor_uma(fecha_str: str) -> float:
 
 def _obtener_acordada(fecha_str: str) -> str:
     """Obtiene la acordada vigente a una fecha dada desde la base de datos."""
-    try:
-        fecha_dt = datetime.strptime(fecha_str, '%d/%m/%Y').date()
-    except ValueError:
+    if not fecha_str:
+        return ""
+    fecha_str = fecha_str.strip()
+    fecha_dt = None
+    for fmt in ('%d/%m/%Y', '%Y-%m-%d', '%d-%m-%Y', '%d.%m.%Y', '%d/%m/%y', '%Y/%m/%d'):
         try:
-            fecha_dt = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+            fecha_dt = datetime.strptime(fecha_str, fmt).date()
+            break
         except ValueError:
-            return ""
+            pass
+    if not fecha_dt:
+        print(f"⚠️ DEBUG UMA: No se pudo parsear la fecha '{fecha_str}' con ningún formato conocido en _obtener_acordada.")
+        return ""
+
 
     with engine.connect() as conn:
         result = conn.execute(text("SELECT * FROM valor_uma"))
@@ -385,7 +399,12 @@ def _monto_str_a_float(monto_str: str) -> float:
     if not monto_str:
         return 0.0
     limpio = monto_str.replace('$', '').replace(' ', '').strip()
-    limpio = limpio.replace('.', '').replace(',', '.')
+    # Si tiene formato inglés (ej: 1,234.56), ajustamos
+    if ',' in limpio and '.' in limpio and limpio.rfind('.') > limpio.rfind(','):
+        limpio = limpio.replace(',', '')
+    else:
+        # Formato argentino (ej: 1.234,56)
+        limpio = limpio.replace('.', '').replace(',', '.')
     try:
         return float(limpio)
     except ValueError:
@@ -397,14 +416,18 @@ def calcular_honorarios_opciones(datos: DatosEscrito) -> dict:
 
     Retorna un dict con los datos necesarios para generar el cuadro UMA.
     """
-    fecha = datos.fecha_intereses or datos.fecha_de_cierre
+    # Intentamos obtener la fecha más relevante para los honorarios
+    fecha = datos.fecha_intereses or datos.fecha_de_cierre or datos.fecha_inicial_de_pago
     if not fecha:
+        print("⚠️ DEBUG UMA: No se encontró fecha_intereses, fecha_de_cierre ni fecha_inicial_de_pago. Retornando {}")
         return {}
+
 
     valor_uma = _obtener_valor_uma(fecha)
     acordada = _obtener_acordada(fecha)
 
     if valor_uma == 0:
+        print(f"⚠️ DEBUG UMA: El valor_uma devuelto para la fecha '{fecha}' es 0. Abortando cuadro.")
         return {}
 
     resultado = {
@@ -417,6 +440,7 @@ def calcular_honorarios_opciones(datos: DatosEscrito) -> dict:
     for opcion in datos.opciones:
         monto = _monto_str_a_float(opcion.total)
         if monto <= 0:
+            print(f"⚠️ DEBUG UMA: Omitiendo opción {opcion.numero} porque el monto total procesado es <= 0 (valor original: '{opcion.total}')")
             continue
 
         (cantidad_uma, valor_dividido, porcentajes, porcentaje_anterior,
