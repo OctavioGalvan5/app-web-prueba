@@ -405,6 +405,7 @@ input:checked+.swt:before{transform:translateX(16px);}
     <div class="g2">
       <div class="fg"><label>Sentencia Regulatoria (PDF)</label><input type="file" id="f-sent" accept=".pdf"><span class="hint">El juez reguló — querés apelar</span></div>
       <div class="fg"><label>Tu Pedido Anterior (Word o PDF, opcional)</label><input type="file" id="f-ped" accept=".docx,.doc,.pdf"><span class="hint">La IA lo compara con la sentencia y agrega agravios si el juez reguló menos de lo pedido</span></div>
+      <div class="fg"><label>Modelo de Apelación (Word o PDF, opcional)</label><input type="file" id="f-mod" accept=".docx,.doc,.pdf"><span class="hint">Apelación bien escrita que la IA usa como referencia de estilo y estructura</span></div>
     </div>
     <div class="g2" style="margin-top:11px">
       <div class="fg"><label>UMA en la Sentencia ($)</label><input type="number" id="e3-us" placeholder="Ej: 66436"></div>
@@ -565,6 +566,8 @@ async function analizar(){
     var b64=await new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result.split(',')[1]);};r.onerror=function(){rej(new Error('Error leyendo archivo'));};r.readAsDataURL(f);});
     var pedidoTexto='';
     var pedidoB64='';
+    var modeloB64='';
+    var modeloTexto='';
     var fPed=document.getElementById('f-ped').files[0];
     if(fPed){
       try{
@@ -577,18 +580,33 @@ async function analizar(){
         }
       }catch(e){}
     }
+    var fMod=document.getElementById('f-mod').files[0];
+    if(fMod){
+      try{
+        if(fMod.name.toLowerCase().endsWith('.pdf')){
+          modeloB64=await new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result.split(',')[1]);};r.onerror=rej;r.readAsDataURL(fMod);});
+        } else {
+          var arrBuf2=await new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=rej;r.readAsArrayBuffer(fMod);});
+          var mResult2=await mammoth.extractRawText({arrayBuffer:arrBuf2});
+          modeloTexto=mResult2.value.trim();
+        }
+      }catch(e){}
+    }
     var us=document.getElementById('e3-us').value||'no indicado',ua=document.getElementById('e3-ua').value||'92482';
     var prompt='Sos abogado senior en honorarios del fuero federal previsional de Salta (Ley 27.423). Analizá esta sentencia regulatoria.\n\nERRORES A DETECTAR:\n1. BASE SIN INTERESES: ¿Solo tomó capital histórico sin actualizar con tasa pasiva BCRA? (arts. 22, 24, 52 — nulidad)\n2. TRABAJOS COLAPSADOS: ¿Reguló los 4 trabajos como uno? (incidencias art. 47, ejecuciones art. 41)\n3. ENCUADRE LEGAL: ¿Usó art. 21 para ejecución en vez de art. 41 (mitad escala)? ¿Ley 21.839?\n4. MÍNIMOS VIOLADOS: ¿Bajo 6 UMA (art. 58 inc.b) o 5 UMA (art. 47)?\n5. ART. 34 INDEBIDO: ¿Aplicó -10% con impugnaciones?\n6. ETAPAS OMITIDAS: ¿Faltó regular alguna con costas propias?\n7. SIN FUNDAMENTACIÓN: ¿No explicó base ni artículos? (art. 15)\n\nPrecedentes CFAS Sala II: "Martino c/ ANSeS" (18/09/2025), "López c/ ANSeS" (18/09/2025), "AFIP c/ Douthat" (07/05/2025), "Galíndez c/ ANSeS" (13/03/2025), "Torres c/ ANSeS" (27/03/2026).\n\nUMA sentencia: $'+us+' — UMA actual: $'+ua+'\n\nFormato EXACTO:\nERRORES_DETECTADOS:\n[lista numerada]\n\nAPELACION:\n[escrito completo con Objeto, Antecedentes, Agravios numerados, Estimación, Petitorio]';
     if(pedidoTexto)prompt+='\n\nESCRITO PREVIO DEL ABOGADO (cotejar con la sentencia — si el juez reguló menos de lo pedido o ignoró trabajos, usarlo como agravio adicional):\n'+pedidoTexto;
-    if(pedidoB64)prompt+='\n\nSEGUNDO DOCUMENTO ADJUNTO: Es el escrito previo del abogado. Comparalo con la sentencia — si el juez reguló menos de lo pedido o ignoró trabajos, usarlo como agravio adicional.';
+    if(pedidoB64)prompt+='\n\nSEGUNDO DOCUMENTO: Es el escrito previo del abogado. Comparalo con la sentencia — si el juez reguló menos de lo pedido o ignoró trabajos, usarlo como agravio adicional.';
+    if(modeloTexto)prompt+='\n\nMODELO DE APELACIÓN (usarlo como referencia exacta de estilo, estructura, tono y formato — respetá la forma de redactar los agravios, el petitorio y los encabezados):\n'+modeloTexto;
+    if(modeloB64)prompt+='\n\nÚLTIMO DOCUMENTO ADJUNTO: Es un modelo de apelación bien redactado. Usalo como referencia exacta de estilo, estructura, tono y formato — respetá la forma de redactar los agravios, el petitorio y los encabezados.';
     var result;
     if(proxyUrl){
-      var resp=await fetch(proxyUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pdf_b64:b64,prompt:prompt,pedido_b64:pedidoB64})});
+      var resp=await fetch(proxyUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pdf_b64:b64,prompt:prompt,pedido_b64:pedidoB64,modelo_b64:modeloB64})});
       if(!resp.ok)throw new Error('Error del proxy: '+resp.status);
       var data=await resp.json();result=data.resultado;
     } else {
       var content=[{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}}];
       if(pedidoB64)content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:pedidoB64}});
+      if(modeloB64)content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:modeloB64}});
       content.push({type:'text',text:prompt});
       var resp2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,messages:[{role:'user',content:content}]})});
       if(!resp2.ok){var e=await resp2.json();throw new Error(e.error&&e.error.message?e.error.message:resp2.statusText);}

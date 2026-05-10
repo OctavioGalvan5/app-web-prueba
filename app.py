@@ -1622,12 +1622,15 @@ def api_analizar():
     pdf_b64 = data.get('pdf_b64', '')
     prompt = data.get('prompt', '')
     pedido_b64 = data.get('pedido_b64', '')
+    modelo_b64 = data.get('modelo_b64', '')
     if not pdf_b64 or not prompt:
         return jsonify({'error': 'Faltan campos pdf_b64 o prompt'}), 400
     client = _anthropic.Anthropic(api_key=api_key)
     content = [{'type': 'document', 'source': {'type': 'base64', 'media_type': 'application/pdf', 'data': pdf_b64}}]
     if pedido_b64:
         content.append({'type': 'document', 'source': {'type': 'base64', 'media_type': 'application/pdf', 'data': pedido_b64}})
+    if modelo_b64:
+        content.append({'type': 'document', 'source': {'type': 'base64', 'media_type': 'application/pdf', 'data': modelo_b64}})
     content.append({'type': 'text', 'text': prompt})
     message = client.messages.create(
         model='claude-sonnet-4-6',
