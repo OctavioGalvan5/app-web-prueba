@@ -1621,22 +1621,49 @@ def api_analizar():
     data = request.get_json(force=True)
     pdf_b64 = data.get('pdf_b64', '')
     prompt = data.get('prompt', '')
+    pedido_b64 = data.get('pedido_b64', '')
     if not pdf_b64 or not prompt:
         return jsonify({'error': 'Faltan campos pdf_b64 o prompt'}), 400
     client = _anthropic.Anthropic(api_key=api_key)
+    content = [{'type': 'document', 'source': {'type': 'base64', 'media_type': 'application/pdf', 'data': pdf_b64}}]
+    if pedido_b64:
+        content.append({'type': 'document', 'source': {'type': 'base64', 'media_type': 'application/pdf', 'data': pedido_b64}})
+    content.append({'type': 'text', 'text': prompt})
     message = client.messages.create(
         model='claude-sonnet-4-6',
         max_tokens=4000,
-        messages=[{
-            'role': 'user',
-            'content': [
-                {'type': 'document', 'source': {'type': 'base64', 'media_type': 'application/pdf', 'data': pdf_b64}},
-                {'type': 'text', 'text': prompt}
-            ]
-        }]
+        messages=[{'role': 'user', 'content': content}]
     )
     resultado = message.content[0].text
     return jsonify({'resultado': resultado})
+
+
+@app.route('/api/generar_docx', methods=['POST'])
+def api_generar_docx():
+    from docx import Document
+    from docx.shared import Pt, Cm
+    data = request.get_json(force=True)
+    texto = data.get('texto', '')
+    nombre = data.get('nombre', 'apelacion_honorarios')
+    doc = Document()
+    for section in doc.sections:
+        section.top_margin = Cm(2.5)
+        section.bottom_margin = Cm(2.5)
+        section.left_margin = Cm(3)
+        section.right_margin = Cm(3)
+    style = doc.styles['Normal']
+    style.font.name = 'Times New Roman'
+    style.font.size = Pt(12)
+    for linea in texto.split('\n'):
+        p = doc.add_paragraph(linea)
+        p.paragraph_format.space_after = Pt(0)
+    buffer = BytesIO()
+    doc.save(buffer)
+    buffer.seek(0)
+    response = make_response(buffer.read())
+    response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    response.headers['Content-Disposition'] = f'attachment; filename={nombre}.docx'
+    return response
 
 
 @app.route('/agregar_cliente', methods=['POST'])

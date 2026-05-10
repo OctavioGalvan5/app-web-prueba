@@ -404,7 +404,7 @@ input:checked+.swt:before{transform:translateX(16px);}
     <div class="ch"><div class="chb"></div><h3>Documentos</h3></div>
     <div class="g2">
       <div class="fg"><label>Sentencia Regulatoria (PDF)</label><input type="file" id="f-sent" accept=".pdf"><span class="hint">El juez reguló — querés apelar</span></div>
-      <div class="fg"><label>Tu Pedido Anterior (Word, opcional)</label><input type="file" id="f-ped" accept=".docx,.doc"><span class="hint">La IA lo compara con la sentencia y agrega agravios si el juez reguló menos de lo pedido</span></div>
+      <div class="fg"><label>Tu Pedido Anterior (Word o PDF, opcional)</label><input type="file" id="f-ped" accept=".docx,.doc,.pdf"><span class="hint">La IA lo compara con la sentencia y agrega agravios si el juez reguló menos de lo pedido</span></div>
     </div>
     <div class="g2" style="margin-top:11px">
       <div class="fg"><label>UMA en la Sentencia ($)</label><input type="number" id="e3-us" placeholder="Ej: 66436"></div>
@@ -416,7 +416,7 @@ input:checked+.swt:before{transform:translateX(16px);}
   <div id="re3-box" style="display:none">
     <div class="card"><div class="ch"><div class="chb"></div><h3>Errores Detectados</h3></div><div id="e3-err"></div></div>
     <div class="card"><div class="ch"><div class="chb"></div><h3>Apelación Generada</h3></div>
-      <div class="cr"><button class="btn bg2 bs" onclick="copiar('e3-txt','ck-e3')">📋 Copiar</button><button class="btn bv bs" onclick="descTxt('e3-txt','apelacion_honorarios.txt')">⬇ TXT</button><button class="btn bg2 bs" onclick="descPDF('e3-txt','apelacion_honorarios.pdf')">⬇ PDF</button><span class="ck" id="ck-e3">✓ Copiado</span></div>
+      <div class="cr"><button class="btn bg2 bs" onclick="copiar('e3-txt','ck-e3')">📋 Copiar</button><button class="btn bv bs" onclick="descWord('e3-txt','apelacion_honorarios')">⬇ Word</button><button class="btn bv bs" onclick="descTxt('e3-txt','apelacion_honorarios.txt')">⬇ TXT</button><button class="btn bg2 bs" onclick="descPDF('e3-txt','apelacion_honorarios.pdf')">⬇ PDF</button><span class="ck" id="ck-e3">✓ Copiado</span></div>
       <div id="e3-txt" class="escrito"></div>
     </div>
   </div>
@@ -564,24 +564,33 @@ async function analizar(){
   try{
     var b64=await new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result.split(',')[1]);};r.onerror=function(){rej(new Error('Error leyendo archivo'));};r.readAsDataURL(f);});
     var pedidoTexto='';
+    var pedidoB64='';
     var fPed=document.getElementById('f-ped').files[0];
     if(fPed){
       try{
-        var arrBuf=await new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=rej;r.readAsArrayBuffer(fPed);});
-        var mResult=await mammoth.extractRawText({arrayBuffer:arrBuf});
-        pedidoTexto=mResult.value.trim();
+        if(fPed.name.toLowerCase().endsWith('.pdf')){
+          pedidoB64=await new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result.split(',')[1]);};r.onerror=rej;r.readAsDataURL(fPed);});
+        } else {
+          var arrBuf=await new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=rej;r.readAsArrayBuffer(fPed);});
+          var mResult=await mammoth.extractRawText({arrayBuffer:arrBuf});
+          pedidoTexto=mResult.value.trim();
+        }
       }catch(e){}
     }
     var us=document.getElementById('e3-us').value||'no indicado',ua=document.getElementById('e3-ua').value||'92482';
     var prompt='Sos abogado senior en honorarios del fuero federal previsional de Salta (Ley 27.423). Analizá esta sentencia regulatoria.\n\nERRORES A DETECTAR:\n1. BASE SIN INTERESES: ¿Solo tomó capital histórico sin actualizar con tasa pasiva BCRA? (arts. 22, 24, 52 — nulidad)\n2. TRABAJOS COLAPSADOS: ¿Reguló los 4 trabajos como uno? (incidencias art. 47, ejecuciones art. 41)\n3. ENCUADRE LEGAL: ¿Usó art. 21 para ejecución en vez de art. 41 (mitad escala)? ¿Ley 21.839?\n4. MÍNIMOS VIOLADOS: ¿Bajo 6 UMA (art. 58 inc.b) o 5 UMA (art. 47)?\n5. ART. 34 INDEBIDO: ¿Aplicó -10% con impugnaciones?\n6. ETAPAS OMITIDAS: ¿Faltó regular alguna con costas propias?\n7. SIN FUNDAMENTACIÓN: ¿No explicó base ni artículos? (art. 15)\n\nPrecedentes CFAS Sala II: "Martino c/ ANSeS" (18/09/2025), "López c/ ANSeS" (18/09/2025), "AFIP c/ Douthat" (07/05/2025), "Galíndez c/ ANSeS" (13/03/2025), "Torres c/ ANSeS" (27/03/2026).\n\nUMA sentencia: $'+us+' — UMA actual: $'+ua+'\n\nFormato EXACTO:\nERRORES_DETECTADOS:\n[lista numerada]\n\nAPELACION:\n[escrito completo con Objeto, Antecedentes, Agravios numerados, Estimación, Petitorio]';
     if(pedidoTexto)prompt+='\n\nESCRITO PREVIO DEL ABOGADO (cotejar con la sentencia — si el juez reguló menos de lo pedido o ignoró trabajos, usarlo como agravio adicional):\n'+pedidoTexto;
+    if(pedidoB64)prompt+='\n\nSEGUNDO DOCUMENTO ADJUNTO: Es el escrito previo del abogado. Comparalo con la sentencia — si el juez reguló menos de lo pedido o ignoró trabajos, usarlo como agravio adicional.';
     var result;
     if(proxyUrl){
-      var resp=await fetch(proxyUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pdf_b64:b64,prompt:prompt,uma_sent:us,uma_act:ua})});
+      var resp=await fetch(proxyUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pdf_b64:b64,prompt:prompt,pedido_b64:pedidoB64})});
       if(!resp.ok)throw new Error('Error del proxy: '+resp.status);
       var data=await resp.json();result=data.resultado;
     } else {
-      var resp2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,messages:[{role:'user',content:[{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},{type:'text',text:prompt}]}]})});
+      var content=[{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}}];
+      if(pedidoB64)content.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:pedidoB64}});
+      content.push({type:'text',text:prompt});
+      var resp2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:4000,messages:[{role:'user',content:content}]})});
       if(!resp2.ok){var e=await resp2.json();throw new Error(e.error&&e.error.message?e.error.message:resp2.statusText);}
       var data2=await resp2.json();result=data2.content[0].text;
     }
@@ -606,6 +615,14 @@ function descPdfReg(){
 }
 
 // COPIAR Y DESCARGAR
+function descWord(id,nom){
+  var t=document.getElementById(id);
+  if(!t||!t.textContent||t.textContent.length<10){alert('Generá el escrito primero');return;}
+  fetch('/api/generar_docx',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({texto:t.textContent,nombre:nom})})
+    .then(function(r){if(!r.ok)throw new Error('Error '+r.status);return r.blob();})
+    .then(function(blob){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nom+'.docx';a.click();})
+    .catch(function(e){alert('Error al generar Word: '+e.message);});
+}
 function copiar(id,okId){navigator.clipboard.writeText(document.getElementById(id).textContent).then(function(){var el=document.getElementById(okId);if(el){el.classList.add('on');setTimeout(function(){el.classList.remove('on');},2000);}});}
 function descTxt(id,nom){var t=document.getElementById(id);if(!t||!t.textContent||t.textContent.length<10){alert('Generá el escrito primero');return;}var b=new Blob([t.textContent],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=nom;a.click();}
 function descPDF(id,nom){
