@@ -1583,13 +1583,11 @@ def upload_dni():
 
 
 @app.route('/calculadora_honorarios')
-@login_required
 def calculadora_honorarios():
     return render_template('calculadora_honorarios/sistema_honorarios_v5.html')
 
 
 @app.route('/api/pdf_regulacion', methods=['POST'])
-@login_required
 def api_pdf_regulacion():
     data = request.get_json(force=True)
 
@@ -1615,7 +1613,6 @@ def api_pdf_regulacion():
 
 
 @app.route('/api/analizar', methods=['POST'])
-@login_required
 def api_analizar():
     import anthropic as _anthropic
     api_key = os.environ.get('ANTHROPIC_API_KEY', '')
