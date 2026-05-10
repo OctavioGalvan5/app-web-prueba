@@ -555,9 +555,8 @@ function loadKey(){
 
 async function analizar(){
   var key=document.getElementById('api-k').value.trim();
-  var proxyUrl='';
-  try{var cfg=JSON.parse(localStorage.getItem('te_cfg')||'{}');proxyUrl=cfg.proxy||'';}catch(e){}
-  if(!key&&!proxyUrl){alert('Ingresá tu API key o configurá la URL del proxy en Configuración');return;}
+  var proxyUrl=window.location.origin+'/api/analizar';
+  try{var cfg=JSON.parse(localStorage.getItem('te_cfg')||'{}');proxyUrl=cfg.proxy||proxyUrl;}catch(e){}
   var f=document.getElementById('f-sent').files[0];
   if(!f){alert('Subí la sentencia en PDF');return;}
   var btn=document.getElementById('btn-an');

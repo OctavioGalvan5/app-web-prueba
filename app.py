@@ -1628,7 +1628,7 @@ def api_analizar():
         return jsonify({'error': 'Faltan campos pdf_b64 o prompt'}), 400
     client = _anthropic.Anthropic(api_key=api_key)
     message = client.messages.create(
-        model='claude-sonnet-4-20250514',
+        model='claude-sonnet-4-6',
         max_tokens=4000,
         messages=[{
             'role': 'user',
