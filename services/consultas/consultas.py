@@ -4,10 +4,9 @@ import os
 import json
 from datetime import datetime
 from sqlalchemy import text
-from models.database import engine  # Verifica que la conexión esté bien configurada
+from models.database import engine
 from io import BytesIO
 import fitz  # PyMuPDF
-from PIL import Image
 
 # En consultas.py, define esta lista (puede ir al inicio del archivo, por ejemplo)
 # Mapeo de nombres de checkboxes HTML a nombres de columnas en la base de datos
@@ -73,6 +72,50 @@ CHECKBOX_MAPPING = {
     "Telegrama_revocando_poder": "telegrama_revocando_poder",
 }
 
+FORMULARIOS_MAPPING = {
+    # PDFs
+    "2.91_Guarda_Documental":                               {"path": "datos/formularios/2.91_Guarda_Documental.pdf",                              "label": "2.91 Guarda Documental"},
+    "6.18_Solicitud_Prestaciones_Previsionales":            {"path": "datos/formularios/6.18_Solicitud_Prestaciones_Previsionales.pdf",           "label": "6.18 Solicitud Prestaciones Previsionales"},
+    "6.18_Solicitud_Prestaciones_Previsionales_pension":    {"path": "datos/formularios/6.18_Solicitud_Prestaciones_Previsionales_pension.pdf",   "label": "6.18 Solicitud Prestaciones Previsionales pension"},
+    "Anexo_Baja_Puam":                                      {"path": "datos/formularios/Anexo_Baja_Puam.pdf",                                     "label": "Anexo Baja Puam"},
+    "Anexo_I_Ley_27.625":                                   {"path": "datos/formularios/Anexo_I_Ley_27.625.pdf",                                  "label": "Anexo I Ley 27.625"},
+    "Anexo_II_DEC_894_01":                                  {"path": "datos/formularios/Anexo_II_DEC_894_01.pdf",                                 "label": "Anexo II DEC 894 01"},
+    "Anexo_II_980_05":                                      {"path": "datos/formularios/Anexo_II_980_05.pdf",                                     "label": "Anexo II 980 05"},
+    "Anexo_II_Socioeconómico_24.476":                       {"path": "datos/formularios/Anexo_II_Socioeconómico_24.476.pdf",                      "label": "Anexo II Socioeconómico 24.476"},
+    "Baja_PNC":                                             {"path": "datos/formularios/Baja_PNC.pdf",                                           "label": "Baja PNC"},
+    "Carta_Poder_SRT":                                      {"path": "datos/formularios/Carta_Poder_SRT.pdf",                                     "label": "Carta Poder SRT"},
+    "DDJJ_de_salud_resol_300":                              {"path": "datos/formularios/DDJJ_de_salud_resol_300.pdf",                             "label": "DDJJ de salud resol 300"},
+    "DDJJ_Ley_17562_6.9":                                   {"path": "datos/formularios/DDJJ_Ley_17562_6.9.pdf",                                  "label": "DDJJ Ley 17562 6.9"},
+    "F_3283_Autorización_ARCA":                             {"path": "datos/formularios/F_3283_Autorización_ARCA.pdf",                            "label": "F 3283 Autorización ARCA"},
+    "Formulario_Carta_Poder_(CSS)":                         {"path": "datos/formularios/Formulario_Carta_Poder_(CSS).pdf",                        "label": "Formulario Carta Poder (CSS)"},
+    "Formulario_encuesta_RTI":                              {"path": "datos/formularios/Formulario_encuesta_RTI.pdf",                             "label": "Formulario encuesta RTI"},
+    "PS_1.75_Carta_Poder_Cap_III_27.705":                   {"path": "datos/formularios/PS_1.75_Carta_Poder_Cap_III_27.705.pdf",                  "label": "PS 1.75 Carta Poder Cap III 27.705"},
+    "PS_5.7_Derivacion_aportes_Obra_Social":                {"path": "datos/formularios/PS_5.7_Derivacion_aportes_Obra_Social.pdf",              "label": "PS 5.7 Derivacion aportes Obra Social"},
+    "PS_5.11_Aceptacion_de_la_Obra_Social":                 {"path": "datos/formularios/PS_5.11_Aceptacion_de_la_Obra_Social.pdf",               "label": "PS 5.11 Aceptacion de la Obra Social"},
+    "PS_6.2_Certific_de_Servicios":                         {"path": "datos/formularios/PS_6.2_Certific_de_Servicios.pdf",                       "label": "PS 6.2 Certific de Servicios"},
+    "PS_6.3_Nivel_de_estudios_RTI":                         {"path": "datos/formularios/PS_6.3_Nivel_de_estudios_RTI.pdf",                       "label": "PS 6.3 Nivel de estudios RTI"},
+    "PS_6.4_Carta_Poder":                                   {"path": "datos/formularios/PS_6.4_Carta_Poder.pdf",                                  "label": "PS 6.4 Carta Poder"},
+    "PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS":              {"path": "datos/formularios/PS_6.8_DDJJ_TESTIMONIAL_ACRED_SERVICIOS.pdf",             "label": "PS 6.8 DDJJ TESTIMONIAL ACRED SERVICIOS"},
+    "PS_6.13_DDJJ_Testimonial_dependencia_económica":       {"path": "datos/formularios/PS_6.13_DDJJ_Testimonial_dependencia_económica.pdf",      "label": "PS 6.13 DDJJ Testimonial dependencia económica"},
+    "PS_6.268_Certific_de_Servicios_(Ampliatoria)":         {"path": "datos/formularios/PS_6.268_Certific_de_Servicios_(Ampliatoria).pdf",        "label": "PS 6.268 Certific de Servicios (Ampliatoria)"},
+    "PS_6.273_Certific_complementaria_investigadores":      {"path": "datos/formularios/PS_6.273_Certific_complementaria_investigadores.pdf",     "label": "PS 6.273 Certific complementaria investigadores"},
+    "PS_6.278_Dto_de_cuotas_jubilación":                    {"path": "datos/formularios/PS_6.278_Dto_de_cuotas_jubilación.pdf",                   "label": "PS 6.278 Dto de cuotas jubilación"},
+    "PS_6.279_Dto_de_cuotas_pensión":                       {"path": "datos/formularios/PS_6.279_Dto_de_cuotas_pensión.pdf",                      "label": "PS 6.279 Dto de cuotas pensión"},
+    "PS_6.284_DDJJ_Fzas_Armadas":                           {"path": "datos/formularios/PS_6.284_DDJJ_Fzas_Armadas.pdf",                         "label": "PS 6.284 DDJJ Fzas Armadas"},
+    "PS_6.292_DDJJ_solicitante_SDM":                        {"path": "datos/formularios/PS_6.292_DDJJ_solicitante_SDM.pdf",                      "label": "PS 6.292 DDJJ solicitante SDM"},
+    "PS_6.293_DDJJ_Dador_de_trabajo_SDM":                   {"path": "datos/formularios/PS_6.293_DDJJ_Dador_de_trabajo_SDM.pdf",                  "label": "PS 6.293 DDJJ Dador de trabajo SDM"},
+    "PS_6.294_DDJJ_renuncia_SDM":                           {"path": "datos/formularios/PS_6.294_DDJJ_renuncia_SDM.pdf",                         "label": "PS 6.294 DDJJ renuncia SDM"},
+    "PS_6.305_Carta_Poder":                                 {"path": "datos/formularios/PS_6.305_Carta_Poder.pdf",                               "label": "PS 6.305 Carta Poder"},
+    "Renuncia_condicionada":                                {"path": "datos/formularios/Renuncia_condicionada.pdf",                               "label": "Renuncia condicionada"},
+    "Telegrama_revocando_poder":                            {"path": "datos/formularios/Telegrama_revocando_poder.pdf",                           "label": "Telegrama revocando poder"},
+    # DOCX
+    "Acta_Poder":                                           {"path": "datos/formularios/Acta_Poder.docx",                                        "label": "Acta Poder"},
+    "(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado":  {"path": "datos/formularios/(Beneficios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado.docx", "label": "(Beneficios) NUEVO CONVENIO DE HONORARIOS Numerado"},
+    "(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado":     {"path": "datos/formularios/(Juicios)_NUEVO_CONVENIO_DE_HONORARIOS_Numerado.docx",    "label": "(Juicios) NUEVO CONVENIO DE HONORARIOS Numerado"},
+    "CONVENIO_MAGISTRADOS":                                 {"path": "datos/formularios/CONVENIO_MAGISTRADOS.docx",                              "label": "CONVENIO MAGISTRADOS"},
+    "CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES":        {"path": "datos/formularios/CONVENIO_DE_GASTOS_ADMINISTRATIVOS_JUDICIALES.docx",     "label": "CONVENIO DE GASTOS ADMINISTRATIVOS JUDICIALES"},
+}
+
 def convertir_fecha(fecha_str):
     formatos = [
         "%Y-%m-%d",  # Formato ISO (input date)
@@ -94,7 +137,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 
-def chatgpt_api_extract_data(image_streams):
+def openai_api_extract_data(image_streams):
     """Extrae datos de imágenes de DNI usando ChatGPT Vision (GPT-4o)"""
     try:
         # Preparar las imágenes en formato base64 para la API de OpenAI
@@ -187,10 +230,6 @@ Devolvé ÚNICAMENTE el objeto JSON con esta estructura exacta:
         return None, str(e)
 
 
-# Mantener compatibilidad con el nombre anterior de la función
-def geminis_api_extract_data(image_streams):
-    """Wrapper para mantener compatibilidad - ahora usa ChatGPT"""
-    return chatgpt_api_extract_data(image_streams)
 
 
 def procesar_datos_extraidos(json_texto):
@@ -290,67 +329,60 @@ def update_cliente_in_db(data):
 
 
 def convert_pdf_to_image(file):
+    """Convierte todas las páginas del PDF a imágenes JPEG. Retorna lista de BytesIO."""
     file_bytes = file.read()
     try:
         doc = fitz.open(stream=file_bytes, filetype="pdf")
     except Exception as e:
         print("Error al abrir el PDF:", e)
-        return None
-    if doc.page_count == 0:
-        return None
-    # Procesa la primera página
-    page = doc.load_page(0)
-    pix = page.get_pixmap()
-    # Convertir el pixmap a bytes en formato JPEG
-    image_bytes = pix.tobytes("jpeg")
-    # Envolver en BytesIO para que se comporte como un stream
-    image_io = BytesIO(image_bytes)
-    image_io.seek(0)
-    return image_io
+        return []
+    pages = []
+    for i in range(doc.page_count):
+        pix = doc.load_page(i).get_pixmap()
+        image_io = BytesIO(pix.tobytes("jpeg"))
+        image_io.seek(0)
+        pages.append(image_io)
+    return pages
 
-# Función para procesar el archivo: si es PDF se convierte; si es imagen, se envuelve en BytesIO
 def process_file(file):
+    """Retorna lista de BytesIO: una imagen por página (PDF) o una imagen directa."""
     if file.filename.lower().endswith('.pdf'):
         return convert_pdf_to_image(file)
     else:
         file_bytes = file.read()
         file_io = BytesIO(file_bytes)
         file_io.seek(0)
-        return file_io
+        return [file_io]
 
 
 def calcular_cuil(sexo, dni):
     if not dni:
         return ""
 
-    # Definir el prefijo dependiendo del sexo
     if sexo == "Femenino":
         cuil_prefix = "27"
     elif sexo == "Masculino":
         cuil_prefix = "20"
     else:
-        cuil_prefix = "20"  # Para otros casos, usamos el código de hombre
+        cuil_prefix = "20"
 
-    # Asegurarse de que el DNI sea un número de 8 dígitos
-    dni = ''.join(filter(str.isdigit, dni))  # Extrae solo los dígitos
+    dni = ''.join(filter(str.isdigit, dni))
     if len(dni) != 8:
-        return ""  # Si no tiene 8 dígitos, no es un DNI válido
+        return ""
 
-    # Convertir el DNI en una lista de números
-    dni_digits = list(map(int, dni[:8]))  # Solo tomamos los primeros 8 dígitos
-
-    # El algoritmo para calcular el verificador se basa en los primeros 8 dígitos del DNI
-    cuil_digits = [int(cuil_prefix[0]), int(cuil_prefix[1])] + dni_digits
-
-    # Los coeficientes para calcular el verificador
+    cuil_digits = [int(cuil_prefix[0]), int(cuil_prefix[1])] + list(map(int, dni))
     coef = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
-    suma = sum([coef[i] * cuil_digits[i] for i in range(10)])
-
-    # Calcular el verificador
+    suma = sum(coef[i] * cuil_digits[i] for i in range(10))
     resto = suma % 11
-    verificador = (11 - resto) if resto != 0 else 0
 
-    # Formar el CUIL
-    cuil = f"{cuil_prefix}{dni}{verificador}"
+    if resto == 0:
+        verificador = 0
+    elif resto == 1:
+        # Cuando el verificador sería 10 (dos dígitos), el estándar argentino
+        # asigna prefijo "23" y verificador 9 para ambos sexos
+        cuil_prefix = "23"
+        verificador = 9
+    else:
+        verificador = 11 - resto
 
-    return cuil
+    return f"{cuil_prefix}{dni}{verificador}"
