@@ -1861,12 +1861,14 @@ def ver_cliente(id):
             # 3) Enviar el ZIP como attachment
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             zip_filename = f"formularios_{timestamp}.zip"
-            return send_file(
+            response = make_response(send_file(
                 zip_buffer,
                 as_attachment=True,
                 download_name=zip_filename,
                 mimetype='application/zip'
-            )
+            ))
+            response.set_cookie('fileDownloadReady', '1', max_age=60, samesite='Lax')
+            return response
 
 
         elif accion == 'guardar_cambios':

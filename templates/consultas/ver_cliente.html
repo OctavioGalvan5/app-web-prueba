@@ -771,6 +771,13 @@
     // LOADING OVERLAY on formulario generation
     document.getElementById('btnGenerar').addEventListener('click', function() {
         document.getElementById('lov').classList.add('show');
+        const poll = setInterval(function() {
+            if (document.cookie.split(';').some(c => c.trim().startsWith('fileDownloadReady='))) {
+                document.cookie = 'fileDownloadReady=; max-age=0; path=/';
+                document.getElementById('lov').classList.remove('show');
+                clearInterval(poll);
+            }
+        }, 500);
     });
 
     // CHECKBOX SYNC: tramite → documentos
