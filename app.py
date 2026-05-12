@@ -1867,7 +1867,7 @@ def ver_cliente(id):
                 download_name=zip_filename,
                 mimetype='application/zip'
             ))
-            response.set_cookie('fileDownloadReady', '1', max_age=60, samesite='Lax')
+            response.set_cookie('fileDownloadReady', '1', max_age=60, samesite='Lax', path='/')
             return response
 
 

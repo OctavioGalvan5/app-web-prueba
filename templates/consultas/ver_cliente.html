@@ -770,12 +770,21 @@
 
     // LOADING OVERLAY on formulario generation
     document.getElementById('btnGenerar').addEventListener('click', function() {
-        document.getElementById('lov').classList.add('show');
+        const lov = document.getElementById('lov');
+        lov.classList.add('show');
+
+        // Failsafe: hide overlay after 30 seconds if cookie doesn't appear
+        const failsafe = setTimeout(() => {
+            lov.classList.remove('show');
+            clearInterval(poll);
+        }, 30000);
+
         const poll = setInterval(function() {
             if (document.cookie.split(';').some(c => c.trim().startsWith('fileDownloadReady='))) {
                 document.cookie = 'fileDownloadReady=; max-age=0; path=/';
-                document.getElementById('lov').classList.remove('show');
+                lov.classList.remove('show');
                 clearInterval(poll);
+                clearTimeout(failsafe);
             }
         }, 500);
     });
