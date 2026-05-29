@@ -1574,6 +1574,12 @@ def calculadora_honorarios():
     return render_template('calculadora_honorarios/sistema_honorarios_v5.html')
 
 
+@app.route('/api/indices')
+def api_indices():
+    from services.bcra_indices import get_indices
+    return jsonify(get_indices())
+
+
 @app.route('/api/pdf_regulacion', methods=['POST'])
 def api_pdf_regulacion():
     data = request.get_json(force=True)
