@@ -639,7 +639,7 @@
                     </thead>
                     <tbody>
                         {% for caso in casos %}
-                        <tr>
+                        <tr data-palabras-clave="{{ caso.palabras_clave if caso.palabras_clave else '' }}">
                             <td>{{ caso.nombre_caso }}</td>
                             <td>{{ caso.numero_expediente }}</td>
                             <td>{{ caso.fecha_sentencia.strftime('%d/%m/%Y') if caso.fecha_sentencia else '' }}</td>
@@ -857,12 +857,15 @@
             const instanciaSeleccionada = filtroInstancia.value;
 
             filas.forEach(fila => {
-                // Convertir nombre del caso y expediente a minúsculas y sin acentos
+                // Convertir nombre del caso, expediente y palabras clave a minúsculas y sin acentos
                 const nombreCaso = eliminarAcentos(fila.cells[0].textContent.toLowerCase());
                 const expediente = eliminarAcentos(fila.cells[1].textContent.toLowerCase());
+                const palabrasClave = eliminarAcentos((fila.getAttribute('data-palabras-clave') || '').toLowerCase());
                 const instancia = fila.cells[3].textContent;
 
-                const coincideTexto = nombreCaso.includes(textoBusqueda) || expediente.includes(textoBusqueda);
+                const coincideTexto = nombreCaso.includes(textoBusqueda) || 
+                                      expediente.includes(textoBusqueda) || 
+                                      palabrasClave.includes(textoBusqueda);
                 const coincideInstancia = instanciaSeleccionada === "" || instancia === instanciaSeleccionada;
 
                 fila.style.display = (coincideTexto && coincideInstancia) ? '' : 'none';

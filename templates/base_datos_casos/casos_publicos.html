@@ -693,7 +693,7 @@
                     </thead>
                     <tbody>
                         {% for caso in casos %}
-                        <tr>
+                        <tr data-palabras-clave="{{ caso.palabras_clave if caso.palabras_clave else '' }}">
                             <td>{{ caso.nombre_caso }}</td>
                             <td>{{ caso.numero_expediente }}</td>
                             <td>{{ caso.fecha_sentencia.strftime('%d/%m/%Y') if caso.fecha_sentencia else '' }}</td>
@@ -916,9 +916,12 @@
                     // Se normalizan los textos de cada celda para una comparación justa
                     const nombreCaso = fila.cells[0].textContent.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
                     const expediente = fila.cells[1].textContent.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                    const palabrasClave = (fila.getAttribute('data-palabras-clave') || '').normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
                     const instancia = fila.cells[3].textContent;
 
-                    const coincideTexto = nombreCaso.includes(textoBusqueda) || expediente.includes(textoBusqueda);
+                    const coincideTexto = nombreCaso.includes(textoBusqueda) || 
+                                          expediente.includes(textoBusqueda) || 
+                                          palabrasClave.includes(textoBusqueda);
                     const coincideInstancia = instanciaSeleccionada === "" || instancia === instanciaSeleccionada;
 
                     if (coincideTexto && coincideInstancia) {
