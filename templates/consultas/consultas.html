@@ -517,23 +517,36 @@
             return str.normalize("NFD").replace(/[̀-ͯ]/g, "");
         }
 
+        // Cachear datos de filas al cargar para no leer el DOM en cada búsqueda
+        let filasCache = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            filasCache = Array.from(document.querySelectorAll('tbody tr')).map(fila => ({
+                el: fila,
+                texto: removeAccents(
+                    (fila.cells[0].textContent + ' ' +
+                     fila.cells[1].textContent + ' ' +
+                     fila.cells[2].textContent).toLowerCase()
+                )
+            }));
+            filtrarCasos();
+        });
+
+        let debounceTimer;
         function filtrarCasos() {
-            const texto = removeAccents(document.getElementById('busquedaInput').value.toLowerCase());
-            const filas = document.querySelectorAll('tbody tr');
-            let visible = 0;
-            filas.forEach(fila => {
-                const nombre   = removeAccents(fila.cells[0].textContent.toLowerCase());
-                const apellido = removeAccents(fila.cells[1].textContent.toLowerCase());
-                const dni      = removeAccents(fila.cells[2].textContent.toLowerCase());
-                const match = nombre.includes(texto) || apellido.includes(texto) || dni.includes(texto);
-                fila.style.display = match ? '' : 'none';
-                if (match) visible++;
-            });
-            document.getElementById('contador').textContent = visible;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const texto = removeAccents(document.getElementById('busquedaInput').value.toLowerCase());
+                let visible = 0;
+                filasCache.forEach(({ el, texto: textoFila }) => {
+                    const match = textoFila.includes(texto);
+                    el.style.display = match ? '' : 'none';
+                    if (match) visible++;
+                });
+                document.getElementById('contador').textContent = visible;
+            }, 150);
         }
 
         document.getElementById('busquedaInput').addEventListener('input', filtrarCasos);
-        document.addEventListener('DOMContentLoaded', filtrarCasos);
     </script>
 </body>
 </html>
