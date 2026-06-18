@@ -1850,6 +1850,21 @@ def ver_cliente(id):
                 return "Error al crear el PDF", 500
             pdf_buffer.seek(0)
 
+            # 1b) Generar sábana: todos los formularios PDF fusionados en uno solo
+            sabana_buffer = None
+            pdfs_para_sabana = {k: v for k, v in archivos_generados.items() if k.endswith('.pdf')}
+            if pdfs_para_sabana:
+                sabana_writer = PdfWriter()
+                for filename, file_data in pdfs_para_sabana.items():
+                    file_data.seek(0)
+                    reader_sabana = PdfReader(file_data)
+                    for page in reader_sabana.pages:
+                        sabana_writer.add_page(page)
+                    file_data.seek(0)
+                sabana_buffer = BytesIO()
+                sabana_writer.write(sabana_buffer)
+                sabana_buffer.seek(0)
+
             # 2) Crear el ZIP en memoria y agregar todos los archivos
             zip_buffer = BytesIO()
             with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
@@ -1861,6 +1876,10 @@ def ver_cliente(id):
                 # b) El PDF recién creado
                 # Le puedes dar el nombre que quieras dentro del ZIP
                 zip_file.writestr('formularios_impresos.pdf', pdf_buffer.getvalue())
+
+                # c) Sábana con todos los formularios PDF fusionados
+                if sabana_buffer:
+                    zip_file.writestr('SABANA_todos_los_formularios.pdf', sabana_buffer.getvalue())
 
             zip_buffer.seek(0)
 
