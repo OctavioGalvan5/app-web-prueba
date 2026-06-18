@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base de Datos de Clientes</title>
+    <title>Base de Datos de Personas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-98REL9JCTR"></script>
@@ -330,7 +330,7 @@
 
     <div class="page-header">
         <div>
-            <h1><i class="fas fa-users" style="margin-right:10px;opacity:0.85"></i>Base de Datos de Clientes</h1>
+            <h1><i class="fas fa-users" style="margin-right:10px;opacity:0.85"></i>Base de Datos de Personas</h1>
             <span>Estudio TYE — Gestión Previsional</span>
         </div>
     </div>
@@ -354,7 +354,7 @@
         <div class="card">
             <h2 class="card-title">
                 <span class="card-title-bar"></span>
-                <i class="fas fa-list"></i> Clientes Registrados
+                <i class="fas fa-list"></i> Personas Registradas
             </h2>
 
             <div class="search-row">
@@ -364,7 +364,7 @@
                         placeholder="Buscar por nombre, apellido o DNI...">
                 </div>
                 <div class="contador">
-                    Mostrando <span id="contador">0</span> de {{ data_clientes|length }} clientes
+                    Mostrando <span id="contador">0</span> de {{ data_clientes|length }} personas
                 </div>
             </div>
 
@@ -399,7 +399,7 @@
                                     </a>
                                     <form action="{{ url_for('eliminar_cliente', id=data.id) }}" method="POST" style="margin:0">
                                         <button type="submit" class="btn-eliminar"
-                                            onclick="return confirm('¿Eliminar este cliente?')">
+                                            onclick="return confirm('¿Eliminar esta persona?')">
                                             <i class="fas fa-trash-alt"></i> Eliminar
                                         </button>
                                     </form>
@@ -444,11 +444,11 @@
                     <i class="fas fa-user-plus"></i> Ingresar Manualmente
                 </h2>
                 <p style="font-size:0.88rem;color:var(--texto2);margin:0 0 20px">
-                    Creá un registro vacío y completá los datos a mano en la pantalla de detalle.
+                    Creá un registro vacío y completá los datos a mano en la pantalla de detalle de la persona.
                 </p>
                 <form action="{{ url_for('agregar_cliente') }}" method="POST">
                     <button type="submit" class="btn btn-outline btn-full">
-                        <i class="fas fa-plus-circle"></i> Crear Cliente Vacío
+                        <i class="fas fa-plus-circle"></i> Crear Persona Vacía
                     </button>
                 </form>
             </div>
