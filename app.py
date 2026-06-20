@@ -18,6 +18,16 @@ from google.oauth2.service_account import Credentials
 from pypdf import PdfReader, PdfWriter
 from werkzeug.utils import secure_filename
 
+_MESES_ES = {
+    'January': 'enero', 'February': 'febrero', 'March': 'marzo',
+    'April': 'abril', 'May': 'mayo', 'June': 'junio',
+    'July': 'julio', 'August': 'agosto', 'September': 'septiembre',
+    'October': 'octubre', 'November': 'noviembre', 'December': 'diciembre',
+}
+
+def _fecha_es(d):
+    return f"{_MESES_ES[d.strftime('%B')]} {d.year}" if d else None
+
 #Models
 from models.ModelUser import ModelUser
 from sqlalchemy import text
@@ -339,7 +349,7 @@ def prueba():
     from services.calculadora_movilidad.calculadora import METODOS_SELECCIONABLES
     with engine.connect() as conn:
         row = conn.execute(text("SELECT MAX(fechas) as ultima FROM tabla_movilidades")).fetchone()
-        ultima_fecha_movilidad = row.ultima.strftime('%B %Y') if row and row.ultima else None
+        ultima_fecha_movilidad = _fecha_es(row.ultima) if row and row.ultima else None
     return render_template('calculadora_movilidad/calculadora_movilidad.html',
                            metodos=METODOS_SELECCIONABLES,
                            ultima_fecha=ultima_fecha_movilidad)
@@ -531,7 +541,7 @@ def resultado_regulacion():
 def generador_tope_maximo():
     with engine.connect() as conn:
         row = conn.execute(text("SELECT MAX(fecha) as ultima FROM topes_maximo")).fetchone()
-        ultima_fecha_tope = row.ultima.strftime('%B %Y') if row and row.ultima else None
+        ultima_fecha_tope = _fecha_es(row.ultima) if row and row.ultima else None
     return render_template('calculadora_tope_maximo/calculadora_tope_maximo.html',
                            ultima_fecha=ultima_fecha_tope)
 
@@ -1058,14 +1068,14 @@ def ejemplo():
 def calculadora_movilidad_publica():
     with engine.connect() as conn:
         row = conn.execute(text("SELECT MAX(fechas) as ultima FROM tabla_movilidades")).fetchone()
-        ultima_fecha = row.ultima.strftime('%B %Y') if row and row.ultima else None
+        ultima_fecha = _fecha_es(row.ultima) if row and row.ultima else None
     return render_template('herramientas_publicas/calculadora_movilidad_publica.html', ultima_fecha=ultima_fecha)
 
 @app.route('/calculadora_tope_maximo_publica')
 def calculadora_tope_maximo_publica():
     with engine.connect() as conn:
         row = conn.execute(text("SELECT MAX(fecha) as ultima FROM topes_maximo")).fetchone()
-        ultima_fecha = row.ultima.strftime('%B %Y') if row and row.ultima else None
+        ultima_fecha = _fecha_es(row.ultima) if row and row.ultima else None
     return render_template('herramientas_publicas/calculadora_tope_maximo_publica.html', ultima_fecha=ultima_fecha)
 
 @app.route('/comparador_productos_publica')
