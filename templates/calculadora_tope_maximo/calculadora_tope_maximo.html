@@ -338,6 +338,12 @@
             <p class="form-description">
                 Complete los datos del caso y seleccione los métodos de movilidad que desea comparar para obtener un análisis detallado.
             </p>
+            {% if ultima_fecha %}
+            <div style="display:inline-flex; align-items:center; gap:6px; background:#f5f2ff; border:1px solid rgba(94,53,177,0.2); border-radius:8px; padding:6px 14px; font-size:0.82rem; color:#5e35b1; margin-top:8px;">
+                <i class="fas fa-calendar-check"></i>
+                Topes actualizados hasta <strong>{{ ultima_fecha }}</strong>
+            </div>
+            {% endif %}
 
             <form action="/resultado_comparativa_tope_maximo" method="POST">
                 <!-- Información del Caso -->

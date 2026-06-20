@@ -337,8 +337,12 @@ def formulario_demandas():
 @login_required
 def prueba():
     from services.calculadora_movilidad.calculadora import METODOS_SELECCIONABLES
+    with engine.connect() as conn:
+        row = conn.execute(text("SELECT MAX(fechas) as ultima FROM tabla_movilidades")).fetchone()
+        ultima_fecha_movilidad = row.ultima.strftime('%B %Y') if row and row.ultima else None
     return render_template('calculadora_movilidad/calculadora_movilidad.html',
-                           metodos=METODOS_SELECCIONABLES)
+                           metodos=METODOS_SELECCIONABLES,
+                           ultima_fecha=ultima_fecha_movilidad)
 
 
 @app.route('/resultado_calculado_movilidad', methods=['POST'])
@@ -525,7 +529,11 @@ def resultado_regulacion():
 @app.route('/generador_tope_maximo')
 @login_required
 def generador_tope_maximo():
-    return render_template('calculadora_tope_maximo/calculadora_tope_maximo.html')
+    with engine.connect() as conn:
+        row = conn.execute(text("SELECT MAX(fecha) as ultima FROM topes_maximo")).fetchone()
+        ultima_fecha_tope = row.ultima.strftime('%B %Y') if row and row.ultima else None
+    return render_template('calculadora_tope_maximo/calculadora_tope_maximo.html',
+                           ultima_fecha=ultima_fecha_tope)
 
 @app.route('/resultado_comparativa_tope_maximo', methods=['POST'])
 def resultado_comparativa_tope_maximo():
@@ -1048,11 +1056,17 @@ def ejemplo():
 
 @app.route('/calculadora_movilidad_publica')
 def calculadora_movilidad_publica():
-    return render_template('herramientas_publicas/calculadora_movilidad_publica.html')
+    with engine.connect() as conn:
+        row = conn.execute(text("SELECT MAX(fechas) as ultima FROM tabla_movilidades")).fetchone()
+        ultima_fecha = row.ultima.strftime('%B %Y') if row and row.ultima else None
+    return render_template('herramientas_publicas/calculadora_movilidad_publica.html', ultima_fecha=ultima_fecha)
 
 @app.route('/calculadora_tope_maximo_publica')
 def calculadora_tope_maximo_publica():
-    return render_template('herramientas_publicas/calculadora_tope_maximo_publica.html')
+    with engine.connect() as conn:
+        row = conn.execute(text("SELECT MAX(fecha) as ultima FROM topes_maximo")).fetchone()
+        ultima_fecha = row.ultima.strftime('%B %Y') if row and row.ultima else None
+    return render_template('herramientas_publicas/calculadora_tope_maximo_publica.html', ultima_fecha=ultima_fecha)
 
 @app.route('/comparador_productos_publica')
 def comparador_productos_publica():

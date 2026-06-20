@@ -636,6 +636,12 @@
             <h1>Calculadora de Movilidad Previsional</h1>
             <span>T&amp;E · Análisis de índices</span>
         </div>
+        {% if ultima_fecha %}
+        <div style="margin-left:auto; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:8px; padding:6px 14px; font-size:0.82rem; color:#fff; display:flex; align-items:center; gap:6px;">
+            <i class="fas fa-calendar-check" style="opacity:0.85;"></i>
+            Índices actualizados hasta <strong>{{ ultima_fecha }}</strong>
+        </div>
+        {% endif %}
     </div>
 
     <div class="container">
@@ -743,17 +749,13 @@
                                 <span class="tooltip-text">No debe ser inferior al 01/01/2000</span>
                             </span>
                         </label>
-                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2000-01-01" max="2026-03-31">
+                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2000-01-01">
                     </div>
                     <div class="form-group">
                         <label>
                             Fecha de cierre del haber
-                            <span class="tooltip">
-                                <i class="fas fa-info-circle"></i>
-                                <span class="tooltip-text">No debe ser superior al 31/03/2026</span>
-                            </span>
                         </label>
-                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2000-01-01" max="2026-03-31">
+                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2000-01-01">
                     </div>
                 </div>
                 <div class="form-grid" style="margin-top: 16px;">
@@ -786,7 +788,7 @@
                         </div>
                         <div class="form-group">
                             <label>Fecha reajuste 1</label>
-                            <input type="date" id="fecha_haber_reajustado_1" name="fecha_haber_reajustado_1" min="2000-01-01" max="2025-09-30">
+                            <input type="date" id="fecha_haber_reajustado_1" name="fecha_haber_reajustado_1" min="2000-01-01">
                         </div>
                     </div>
                     <div class="form-grid" style="margin-bottom: 12px;">
@@ -796,7 +798,7 @@
                         </div>
                         <div class="form-group">
                             <label>Fecha reajuste 2</label>
-                            <input type="date" id="fecha_haber_reajustado_2" name="fecha_haber_reajustado_2" min="2000-01-01" max="2025-09-30">
+                            <input type="date" id="fecha_haber_reajustado_2" name="fecha_haber_reajustado_2" min="2000-01-01">
                         </div>
                     </div>
                     <div class="form-grid" style="margin-bottom: 12px;">
@@ -806,7 +808,7 @@
                         </div>
                         <div class="form-group">
                             <label>Fecha reajuste 3</label>
-                            <input type="date" id="fecha_haber_reajustado_3" name="fecha_haber_reajustado_3" min="2000-01-01" max="2025-09-30">
+                            <input type="date" id="fecha_haber_reajustado_3" name="fecha_haber_reajustado_3" min="2000-01-01">
                         </div>
                     </div>
                     <div class="form-grid">
@@ -816,7 +818,7 @@
                         </div>
                         <div class="form-group">
                             <label>Fecha reajuste 4</label>
-                            <input type="date" id="fecha_haber_reajustado_4" name="fecha_haber_reajustado_4" min="2000-01-01" max="2025-09-30">
+                            <input type="date" id="fecha_haber_reajustado_4" name="fecha_haber_reajustado_4" min="2000-01-01">
                         </div>
                     </div>
                 </div>

@@ -492,6 +492,12 @@
                 Complete los datos del beneficiario y seleccione los métodos de movilidad que desea comparar para
                 obtener un análisis detallado.
             </p>
+            {% if ultima_fecha %}
+            <div style="display:inline-flex; align-items:center; gap:6px; background:#f5f2ff; border:1px solid rgba(94,53,177,0.2); border-radius:8px; padding:6px 14px; font-size:0.82rem; color:#5e35b1; margin-top:8px;">
+                <i class="fas fa-calendar-check"></i>
+                Índices actualizados hasta <strong>{{ ultima_fecha }}</strong>
+            </div>
+            {% endif %}
 
             <form action="/resultado_calculado_movilidad" method="POST">
                 <!-- Información del Beneficiario -->
@@ -595,25 +601,12 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="fecha_inicio">
-                            Fecha de haber de partida
-                            <span class="tooltip">
-                                <i class="fas fa-info-circle"></i>
-                                <span class="tooltip-text">No debe ser inferior al 01/01/2000</span>
-                            </span>
-                        </label>
-                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2000-01-01"
-                            max="2025-09-31">
+                        <label for="fecha_inicio">Fecha de haber de partida</label>
+                        <input type="date" id="fecha_inicio" name="fecha_inicio" required min="2000-01-01">
                     </div>
                     <div class="form-group">
-                        <label for="fecha_fin">
-                            Fecha de cierre del haber
-                            <span class="tooltip">
-                                <i class="fas fa-info-circle"></i>
-                                <span class="tooltip-text">No debe ser superior al 31/03/2026</span>
-                            </span>
-                        </label>
-                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2000-01-01" max="2026-03-31">
+                        <label for="fecha_fin">Fecha de cierre del haber</label>
+                        <input type="date" id="fecha_fin" name="fecha_fin" required min="2000-01-01">
                     </div>
                 </div>
 
@@ -651,7 +644,7 @@
                         <div class="form-group">
                             <label for="fecha_haber_reajustado_1">Fecha del haber reajustado 1</label>
                             <input type="date" id="fecha_haber_reajustado_1" name="fecha_haber_reajustado_1"
-                                min="2000-01-01" max="2025-09-31">
+                                min="2000-01-01">
                         </div>
                     </div>
 
@@ -664,7 +657,7 @@
                         <div class="form-group">
                             <label for="fecha_haber_reajustado_2">Fecha del haber reajustado 2</label>
                             <input type="date" id="fecha_haber_reajustado_2" name="fecha_haber_reajustado_2"
-                                min="2000-01-01" max="2025-09-31">
+                                min="2000-01-01">
                         </div>
                     </div>
 
@@ -677,7 +670,7 @@
                         <div class="form-group">
                             <label for="fecha_haber_reajustado_3">Fecha del haber reajustado 3</label>
                             <input type="date" id="fecha_haber_reajustado_3" name="fecha_haber_reajustado_3"
-                                min="2000-01-01" max="2025-09-31">
+                                min="2000-01-01">
                         </div>
                     </div>
 
@@ -690,7 +683,7 @@
                         <div class="form-group">
                             <label for="fecha_haber_reajustado_4">Fecha del haber reajustado 4</label>
                             <input type="date" id="fecha_haber_reajustado_4" name="fecha_haber_reajustado_4"
-                                min="2000-01-01" max="2025-09-31">
+                                min="2000-01-01">
                         </div>
                     </div>
                 </div>
