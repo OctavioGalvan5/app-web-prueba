@@ -1604,6 +1604,20 @@ def api_indices():
     return jsonify(get_indices())
 
 
+@app.route('/api/uma')
+def api_uma():
+    from models.database import engine
+    try:
+        with engine.connect() as conn:
+            result = conn.execute(text("SELECT * FROM valor_uma_copia ORDER BY fecha DESC LIMIT 1"))
+            row = result.fetchone()
+            if row:
+                return jsonify({"uma": float(row[4]), "acordada": str(row[3])})
+            return jsonify({"error": "Sin datos"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/api/pdf_regulacion', methods=['POST'])
 def api_pdf_regulacion():
     data = request.get_json(force=True)

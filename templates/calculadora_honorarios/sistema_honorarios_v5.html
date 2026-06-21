@@ -21,7 +21,23 @@ async function loadIdx(){
   window._idxReady = true;
   document.dispatchEvent(new Event('idxReady'));
 }
+async function loadUMA(){
+  try {
+    var r = await fetch('/api/uma');
+    var d = await r.json();
+    if(d.uma){
+      var v = d.uma;
+      ['r-uma','e2-uma','e3-ua','c-uma'].forEach(function(id){
+        var el=document.getElementById(id);
+        if(el) el.value=v;
+      });
+      var hint=document.getElementById('r-uma-hint');
+      if(hint&&d.acordada) hint.textContent='Acordada '+d.acordada+' — editable';
+    }
+  } catch(e) {}
+}
 loadIdx();
+loadUMA();
 })();
 </script>
 <style>
@@ -118,9 +134,9 @@ input[type=file]{background:white;border:1px solid var(--border2);border-radius:
 .rb.rb-v .rb-t{color:var(--verde);}
 .rg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;}
 .ri{display:flex;flex-direction:column;gap:2px;}
-.rl{font-size:0.62rem;color:var(--texto3);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;}
+.rl{font-size:0.69rem;color:var(--texto3);font-weight:600;letter-spacing:0.01em;}
 .rv{font-size:1.05rem;font-weight:700;color:var(--texto);font-family:'Cormorant Garamond',serif;}
-.rv.g{font-size:1.25rem;}.rv.v{color:var(--verde);}.rv.b{color:var(--bordo);}
+.rv.g{font-size:1.25rem;}.rv.v{color:var(--verde);}.rv.b{color:var(--oro);}
 .sep{height:1px;background:var(--border);margin:12px 0;}
 
 /* TABLAS */
@@ -248,9 +264,9 @@ input:checked+.swt:before{transform:translateX(16px);}
           <div class="ri"><span class="rl">Total (Capital + Intereses)</span><span class="rv g v" id="ri-tot">—</span></div>
         </div>
         <div class="sep"></div>
-        <div style="font-size:0.7rem;color:var(--texto3);display:grid;grid-template-columns:1fr 1fr;gap:7px">
-          <div>t₀ (<span id="ri-dto"></span>): <strong id="ri-to" style="color:var(--texto2)"></strong></div>
-          <div>tₘ (<span id="ri-dtm"></span>): <strong id="ri-tm" style="color:var(--texto2)"></strong></div>
+        <div style="font-size:0.73rem;color:var(--texto2);display:grid;grid-template-columns:1fr 1fr;gap:7px">
+          <div>t₀ (<span id="ri-dto"></span>): <strong id="ri-to"></strong></div>
+          <div>tₘ (<span id="ri-dtm"></span>): <strong id="ri-tm"></strong></div>
         </div>
       </div>
       <div class="bgrp">
@@ -277,7 +293,7 @@ input:checked+.swt:before{transform:translateX(16px);}
     <div class="ch"><div class="chb"></div><h3>Base y Parámetros</h3></div>
     <div class="g4">
       <div class="fg"><label>Base Regulatoria ($)</label><input type="number" id="r-base" placeholder="0.00" step="0.01"><span class="hint" id="r-bh">O calculá en pestaña Intereses</span></div>
-      <div class="fg"><label>Valor UMA ($)</label><input type="number" id="r-uma" value="92482"><span class="hint">Acordada vigente — editable</span></div>
+      <div class="fg"><label>Valor UMA ($)</label><input type="number" id="r-uma" placeholder="Cargando..."><span class="hint" id="r-uma-hint">Acordada vigente — editable</span></div>
       <div class="fg"><label>Carácter</label><select id="r-car2"><option value="1.4">Apoderada (+40% art. 20)</option><option value="1.0">Patrocinante</option></select></div>
       <div class="fg"><label>Costas</label><select id="r-cos"><option value="1">100% ANSeS</option><option value="0.8">80% ANSeS</option><option value="0.5">Por su orden</option></select></div>
     </div>
@@ -361,7 +377,7 @@ input:checked+.swt:before{transform:translateX(16px);}
   <div class="card">
     <div class="ch"><div class="chb"></div><h3>Regulación Simultánea</h3></div>
     <div class="g3">
-      <div class="fg"><label>Valor UMA ($)</label><input type="number" id="e2-uma" value="92482"></div>
+      <div class="fg"><label>Valor UMA ($)</label><input type="number" id="e2-uma" placeholder="Cargando..."></div>
       <div class="fg"><label>Carácter</label><select id="e2-car2"><option value="1.4">Apoderada (+40%)</option><option value="1.0">Patrocinante</option></select></div>
       <div class="fg"><label>Profesional</label><input type="text" id="e2-prf" placeholder="Nombre y apellido"></div>
     </div>
@@ -397,7 +413,7 @@ input:checked+.swt:before{transform:translateX(16px);}
     </div>
     <div class="g2" style="margin-top:11px">
       <div class="fg"><label>UMA en la Sentencia ($)</label><input type="number" id="e3-us" placeholder="Ej: 66436"></div>
-      <div class="fg"><label>UMA Actual ($)</label><input type="number" id="e3-ua" value="92482"></div>
+      <div class="fg"><label>UMA Actual ($)</label><input type="number" id="e3-ua" placeholder="Cargando..."></div>
     </div>
     <div class="bgrp"><button class="btn bb" id="btn-an" onclick="analizar()">🔍 Analizar y Generar Apelación</button></div>
   </div>
@@ -424,7 +440,7 @@ input:checked+.swt:before{transform:translateX(16px);}
   </div>
   <div class="card"><div class="ch"><div class="chb"></div><h3>Parámetros Arancelarios</h3></div>
     <div class="g3">
-      <div class="fg"><label>Valor UMA ($)</label><input type="number" id="c-uma" value="92482"></div>
+      <div class="fg"><label>Valor UMA ($)</label><input type="number" id="c-uma" placeholder="Cargando..."></div>
       <div class="fg"><label>Acordada</label><input type="text" id="c-acor" value="05/2026"></div>
       <div class="fg"><label>Juzgado por defecto</label><input type="text" id="c-juz" value="Juzgado Federal de Salta N° 1"></div>
     </div>
@@ -483,8 +499,9 @@ var lastReg=null;
 function togW(id){var cb=document.getElementById('w-'+id),eb=document.getElementById('eb-'+id),ew=document.getElementById('ew-'+id);if(cb.checked){eb.style.display='block';ew.classList.add('on');}else{eb.style.display='none';ew.classList.remove('on');}}
 
 function calcReg(){
-  var base=parseFloat(document.getElementById('r-base').value),uma=parseFloat(document.getElementById('r-uma').value)||92482,cm=parseFloat(document.getElementById('r-car2').value)||1.4;
+  var base=parseFloat(document.getElementById('r-base').value),uma=parseFloat(document.getElementById('r-uma').value),cm=parseFloat(document.getElementById('r-car2').value)||1.4;
   if(!base||base<=0){alert('Ingresá la base regulatoria');return;}
+  if(!uma||uma<=0){alert('El valor UMA no está disponible aún');return;}
   var et=[],rP=calcH(base,uma,1,cm,false);
   if(document.getElementById('w-liq1').checked){var c=parseFloat(document.getElementById('liq1-c').value)||1,h=Math.max(rP.hon*.08,5*uma);et.push({n:'Incidencia de Liquidación (Capital e Intereses)',a:'Art. 47',b:base,bu:rP.bu,tr:rP.tr,h:h,hc:h*c,hu:h/uma,c:c,m:5,low:rP.hon*.08<5*uma});}
   if(document.getElementById('w-ejec1').checked){var c2=parseFloat(document.getElementById('ejec1-c').value)||1,se=document.getElementById('ejec1-e').value==='0',r2=calcH(base,uma,.5,cm,se),h2=Math.max(r2.hon,6*uma);et.push({n:'Ejecución de Sentencia (Planilla 1)',a:'Art. 41',b:base,bu:r2.bu,tr:r2.tr,h:h2,hc:h2*c2,hu:h2/uma,c:c2,m:6,low:r2.hon<6*uma});}
@@ -514,8 +531,9 @@ function genE1(){
 var lastE2=null;
 function genE2(){
   var cap=parseFloat(document.getElementById('e2-cap').value),cor=document.getElementById('e2-cor').value,pag=document.getElementById('e2-pag').value,apr=document.getElementById('e2-apr').value;
-  var uma=parseFloat(document.getElementById('e2-uma').value)||92482,cm=parseFloat(document.getElementById('e2-car2').value)||1.4,prof=document.getElementById('e2-prf').value,car=document.getElementById('e2-car').value,exp=document.getElementById('e2-exp').value;
+  var uma=parseFloat(document.getElementById('e2-uma').value),cm=parseFloat(document.getElementById('e2-car2').value)||1.4,prof=document.getElementById('e2-prf').value,car=document.getElementById('e2-car').value,exp=document.getElementById('e2-exp').value;
   if(!cap||!cor||!pag){alert('Completá capital, fecha de corte y fecha de pago');return;}
+  if(!uma||uma<=0){alert('El valor UMA no está disponible aún');return;}
   if(!window._idxReady){alert('Índices aún cargando');return;}
   var dC=new Date(cor+'T12:00:00'),dT=new Date(dC);dT.setDate(dT.getDate()-1);
   var ts=dT.getFullYear()+'-'+String(dT.getMonth()+1).padStart(2,'0')+'-'+String(dT.getDate()).padStart(2,'0');
