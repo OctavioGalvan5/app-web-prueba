@@ -1609,10 +1609,13 @@ def api_uma():
     from models.database import engine
     try:
         with engine.connect() as conn:
-            result = conn.execute(text("SELECT * FROM valor_uma_copia ORDER BY fecha DESC LIMIT 1"))
+            conn.connection.ping(reconnect=True)
+            result = conn.execute(text("SELECT * FROM valor_uma_copia ORDER BY 2 DESC LIMIT 1"))
             row = result.fetchone()
             if row:
-                return jsonify({"uma": float(row[4]), "acordada": str(row[3])})
+                fecha = row[1]
+                fecha_str = fecha.strftime('%d/%m/%Y') if hasattr(fecha, 'strftime') else str(fecha)
+                return jsonify({"uma": float(row[4]), "acordada": str(row[3]), "fecha": fecha_str})
             return jsonify({"error": "Sin datos"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500

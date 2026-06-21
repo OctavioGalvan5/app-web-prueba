@@ -32,7 +32,12 @@ async function loadUMA(){
         if(el) el.value=v;
       });
       var hint=document.getElementById('r-uma-hint');
-      if(hint&&d.acordada) hint.textContent='Acordada '+d.acordada+' — editable';
+      if(hint){
+        var txt='Editable';
+        if(d.acordada) txt='Acordada '+d.acordada;
+        if(d.fecha) txt+=' · vigente desde '+d.fecha;
+        hint.textContent=txt;
+      }
     }
   } catch(e) {}
 }
@@ -135,7 +140,7 @@ input[type=file]{background:white;border:1px solid var(--border2);border-radius:
 .rg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;}
 .ri{display:flex;flex-direction:column;gap:2px;}
 .rl{font-size:0.69rem;color:var(--texto3);font-weight:600;letter-spacing:0.01em;}
-.rv{font-size:1.05rem;font-weight:700;color:var(--texto);font-family:'Cormorant Garamond',serif;}
+.rv{font-size:1.05rem;font-weight:700;color:var(--texto);}
 .rv.g{font-size:1.25rem;}.rv.v{color:var(--verde);}.rv.b{color:var(--oro);}
 .sep{height:1px;background:var(--border);margin:12px 0;}
 
