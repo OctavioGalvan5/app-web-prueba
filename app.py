@@ -1613,9 +1613,14 @@ def api_uma():
             result = conn.execute(text("SELECT * FROM valor_uma_copia ORDER BY 2 DESC LIMIT 1"))
             row = result.fetchone()
             if row:
-                fecha = row[1]
-                fecha_str = fecha.strftime('%d/%m/%Y') if hasattr(fecha, 'strftime') else str(fecha)
-                return jsonify({"uma": float(row[4]), "acordada": str(row[3]), "fecha": fecha_str})
+                def fmt_date(v):
+                    return v.strftime('%d/%m/%Y') if hasattr(v, 'strftime') else (str(v) if v is not None else None)
+                keys = list(result.keys())
+                row_dict = {k: (fmt_date(v) if hasattr(v, 'strftime') else v) for k, v in zip(keys, row)}
+                row_dict['uma'] = float(row[4])
+                row_dict['acordada'] = str(row[3]) if row[3] is not None else None
+                row_dict['fecha'] = fmt_date(row[1])
+                return jsonify(row_dict)
             return jsonify({"error": "Sin datos"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500

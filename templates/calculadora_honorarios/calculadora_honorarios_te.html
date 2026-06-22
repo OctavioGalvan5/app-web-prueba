@@ -1263,8 +1263,7 @@ window.onload = function() {
       if(el) el.value=d.uma;
       var hint=el&&el.parentElement.querySelector('.hint');
       if(hint){
-        var txt='Editable';
-        if(d.acordada) txt='Acordada '+d.acordada;
+        var txt=d.acordada||'Acordada vigente';
         if(d.fecha) txt+=' · vigente desde '+d.fecha;
         hint.textContent=txt;
       }
