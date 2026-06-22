@@ -124,7 +124,7 @@ Analizalos cuidadosamente y devuelve EXCLUSIVAMENTE un JSON con esta estructura:
     "numero_beneficio": "Número completo del beneficio jubilatorio tal como figura en los documentos (ej: 14-0-9084463-0-1)",
     "fecha_adquisicion": "Fecha de adquisición del derecho jubilatorio en formato DD/MM/AAAA",
     "fecha_alta": "Mes y año de alta del beneficio en formato MM/AAAA (ej: 08/2018)",
-    "fecha_desde_retroactivo": "Fecha desde la cual corren los retroactivos (dos años antes de la presentación del reclamo administrativo), en formato DD/MM/AAAA",
+    "fecha_desde_retroactivo": "",
     "minuta_actor": "Redacción en tercera persona de TODOS los puntos reclamados por el actor. Enumerar punto por punto los temas, pretensiones y fundamentos de la demanda. Usar redacción judicial formal en castellano argentino. Máximo 800 caracteres.",
     "minuta_anses": "Redacción en tercera persona indicando: (a) qué puntos contesta ANSES con argumentos, y (b) qué puntos guarda silencio o niega sin argumentar. Distinguir claramente ambas categorías. Redacción judicial formal. Máximo 600 caracteres.",
     "resumen_conflicto": "Párrafo de síntesis de la posición del Fiscal Federal: si dictaminó a favor, en contra o parcialmente a favor, y sobre qué puntos específicos. Redacción judicial formal. Máximo 400 caracteres.",
