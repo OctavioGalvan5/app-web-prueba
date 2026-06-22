@@ -128,9 +128,9 @@ IMPORTANTE:
         {{
             "numero": 1,
             "movilidad": "Los indices de movilidad aplicados en el retroactivo. NO incluir el prefijo 'La movilidad del haber reclamado es siguiendo el indice:'. Devolver SOLO los indices, ejemplo: 'Aumentos Generales de la ANSeS por movilidad hasta el 31/12/2019 y desde ahi Aumentos fallo Marquez por Ley 27551 hasta el 31/12/2020'",
-            "capital": "IMPORTANTE: Al final del retroactivo hay una seccion 'Detalle' con varias filas: 'Total Adeudado del periodo', posibles pagos descontados, e intereses acumulados. SIEMPRE tomar los valores de la fila 'Saldo al XX/XX/XXXX' que es la ULTIMA fila del Detalle, NO la fila 'Suma' ni 'Total Adeudado del periodo'. El capital del Saldo, ejemplo: 18.773.660,94",
-            "intereses": "Los intereses de la fila 'Saldo' (ultima fila del Detalle), ejemplo: 13.320.942,92",
-            "total": "El total de la fila 'Saldo' (ultima fila del Detalle), ejemplo: 31.148.161,45. Este monto SIEMPRE es mayor o igual al 'Total Adeudado del periodo'",
+            "capital": "El capital total de la liquidacion. Buscarlo en la seccion 'Saldos a la Fecha de Consolidacion' en la fila 'Efectivo', columna Capital. Tambien puede aparecer como 'Suma' al pie de la tabla de periodos. Ejemplo: 15.746.636,88",
+            "intereses": "Los intereses totales de la liquidacion. Buscarlo en la seccion 'Saldos a la Fecha de Consolidacion' en la fila 'Efectivo', columna Intereses. Puede tambien aparecer como 'Suma' al pie de la tabla. Ejemplo: 13.890.677,17. IMPORTANTE: este campo NUNCA debe quedar vacio si hay una liquidacion valida.",
+            "total": "El total (capital + intereses) de la liquidacion. Buscarlo en la seccion 'Saldos a la Fecha de Consolidacion' en la fila 'Efectivo', columna Total. Ejemplo: 29.637.314,05",
             "tope_9": "true si se aplico tope del art 9 inc 3 ley 24463, false si no"
         }},
         {{
@@ -269,9 +269,9 @@ IMPORTANTE:
 Devuelve SOLO este JSON:
 {{
     "movilidad": "Los indices de movilidad aplicados. Devolver SOLO los indices, sin el prefijo 'La movilidad del haber reclamado es siguiendo el indice:'",
-    "capital": "El capital de la fila 'Saldo' (ultima fila del Detalle)",
-    "intereses": "Los intereses de la fila 'Saldo'",
-    "total": "El total de la fila 'Saldo'",
+    "capital": "El capital total. Buscarlo en 'Saldos a la Fecha de Consolidacion', fila 'Efectivo', columna Capital. O como 'Suma' al pie de la tabla.",
+    "intereses": "Los intereses totales. Buscarlo en 'Saldos a la Fecha de Consolidacion', fila 'Efectivo', columna Intereses. NUNCA dejar vacio si hay liquidacion valida.",
+    "total": "El total (capital + intereses). Buscarlo en 'Saldos a la Fecha de Consolidacion', fila 'Efectivo', columna Total.",
     "tope_9": "true si se aplico tope del art 9 inc 3 ley 24463, false si no"
 }}
 """
