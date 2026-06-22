@@ -220,10 +220,9 @@ class DatosEscrito:
         ctx['fecha_intereses'] = self.fecha_intereses
 
         # --- Opciones de liquidación ---
-        # El docx usa opción_1 (siempre presente), opción_3 y opción_4 como condicionales
-        # opción_2 siempre se muestra (no tiene condicional en el docx)
         opciones_presentes = {op.numero for op in self.opciones}
         ctx['opción_1'] = 1 in opciones_presentes
+        ctx['opción_2'] = 2 in opciones_presentes
         ctx['opción_3'] = 3 in opciones_presentes
         ctx['opción_4'] = 4 in opciones_presentes
 
