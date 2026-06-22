@@ -70,6 +70,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 from blueprints.escritos_liquidacion import escritos_liquidacion_bp
 app.register_blueprint(escritos_liquidacion_bp)
 
+# Blueprint: Creación de Sentencias
+from blueprints.creacion_sentencias import creacion_sentencias_bp
+app.register_blueprint(creacion_sentencias_bp)
+
 csrf = CSRFProtect()
 login_manager_app = LoginManager(app)
 

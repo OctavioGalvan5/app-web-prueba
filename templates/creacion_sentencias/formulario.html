@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revisar Sentencia — T&E</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+:root {
+  --ciruela: #8b2463;
+  --ciruela-light: rgba(139,36,99,0.08);
+  --ciruela-dark: #6b1a4a;
+  --azul: #8b2463;
+  --azul-med: #ae2d7c;
+  --gris: #4a5568;
+  --gris-light: #f7f8fa;
+  --borde: #e4e7ec;
+  --verde: #2d7a4f;
+  --verde-light: rgba(45,122,79,0.08);
+  --amarillo: #d97706;
+  --amarillo-light: rgba(217,119,6,0.1);
+  --rojo: #c0392b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Source Sans 3', sans-serif; background: var(--gris-light); color: #2d3748; min-height: 100vh; }
+.container { max-width: 860px; margin: 0 auto; padding: 36px 20px 80px; }
+.page-title { font-family: 'Cormorant Garamond', serif; color: var(--azul); font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+.page-subtitle { color: var(--gris); font-size: 0.95rem; margin-bottom: 28px; }
+
+.card { background: white; border-radius: 8px; border: 1px solid var(--borde); padding: 28px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--azul); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--borde); display: flex; align-items: center; gap: 10px; }
+.card-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--ciruela); border-radius: 2px; flex-shrink: 0; }
+
+/* Form fields */
+.form-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; margin-bottom: 4px; }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--gris); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.form-input { width: 100%; padding: 9px 12px; border: 1px solid var(--borde); border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 0.9rem; color: #2d3748; background: white; transition: border-color 0.2s; }
+.form-input:focus { outline: none; border-color: var(--ciruela); box-shadow: 0 0 0 2px var(--ciruela-light); }
+.form-textarea { width: 100%; padding: 12px; border: 1px solid var(--borde); border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 0.9rem; color: #2d3748; resize: vertical; min-height: 140px; line-height: 1.6; transition: border-color 0.2s; }
+.form-textarea:focus { outline: none; border-color: var(--ciruela); box-shadow: 0 0 0 2px var(--ciruela-light); }
+.form-hint { font-size: 0.78rem; color: #999; margin-top: 4px; }
+
+/* Checkpoints */
+.checkpoints-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.checkpoint-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 7px; border: 1.5px solid var(--borde); background: white; cursor: pointer; transition: all 0.15s; position: relative; }
+.checkpoint-item:hover { border-color: var(--ciruela); background: var(--ciruela-light); }
+.checkpoint-item.detected { border-color: var(--verde); background: var(--verde-light); }
+.checkpoint-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--ciruela); cursor: pointer; flex-shrink: 0; }
+.checkpoint-label { font-size: 0.88rem; font-weight: 600; color: #2d3748; flex: 1; cursor: pointer; }
+.badge-ia { display: inline-block; background: var(--verde); color: white; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 3px; padding: 2px 5px; margin-left: 6px; vertical-align: middle; }
+
+/* Info banner */
+.ia-banner { background: var(--amarillo-light); border: 1px solid rgba(217,119,6,0.3); border-radius: 7px; padding: 12px 16px; margin-bottom: 20px; font-size: 0.85rem; color: #92400e; display: flex; align-items: center; gap: 10px; }
+
+/* Select all / none */
+.checkpoint-actions { display: flex; gap: 10px; margin-bottom: 14px; }
+.link-btn { background: none; border: none; color: var(--ciruela); font-size: 0.82rem; font-weight: 600; cursor: pointer; text-decoration: underline; font-family: 'Source Sans 3', sans-serif; padding: 0; }
+.link-btn:hover { color: var(--ciruela-dark); }
+.detected-count { font-size: 0.82rem; color: var(--gris); margin-left: auto; }
+
+/* Submit */
+.submit-card { background: white; border-radius: 8px; border: 1px solid var(--borde); padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 4px rgba(0,0,0,0.06); position: sticky; bottom: 20px; }
+.submit-info { font-size: 0.85rem; color: var(--gris); }
+.submit-info strong { color: #2d3748; }
+.btn { padding: 11px 26px; border: none; border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; letter-spacing: 0.03em; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-ciruela { background: var(--ciruela); color: white; }
+.btn-ciruela:hover { background: var(--ciruela-dark); }
+.btn-outline { background: transparent; color: var(--ciruela); border: 1.5px solid var(--ciruela); }
+.btn-outline:hover { background: var(--ciruela-light); }
+
+@media (max-width: 640px) {
+  .container { padding: 16px 12px 80px; }
+  .card { padding: 18px; }
+  .form-row { grid-template-columns: 1fr; }
+  .checkpoints-grid { grid-template-columns: 1fr; }
+  .submit-card { flex-direction: column; gap: 14px; text-align: center; }
+}
+</style>
+</head>
+<body>
+{% include 'navs/nav.html' %}
+
+<div class="container">
+  <p class="page-title"><i class="fas fa-gavel" style="color:var(--ciruela);margin-right:10px;font-size:1.3rem;"></i>Revisar y generar sentencia</p>
+  <p class="page-subtitle">La IA analizó el expediente. Revisá las minutas, confirmá los checkpoints y generá el documento.</p>
+
+  {% set detectados_count = analisis.checkpoints_detectados | length %}
+  {% if detectados_count > 0 %}
+  <div class="ia-banner">
+    <i class="fas fa-robot" style="font-size:1.1rem;flex-shrink:0;"></i>
+    La IA detectó <strong>{{ detectados_count }} punto{{ 's' if detectados_count != 1 else '' }}</strong> en disputa y los marcó automáticamente. Revisá y ajustá según corresponda.
+  </div>
+  {% endif %}
+
+  <form action="/creador_sentencias/resultado" method="post" id="sentenciaForm">
+
+    <!-- DATOS DEL CASO -->
+    <div class="card">
+      <div class="card-title">Datos del expediente</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Carátula</label>
+          <input type="text" name="nombre_caratula" class="form-input" value="{{ analisis.nombre_caratula }}" placeholder="APELLIDO, Nombre c/ ANSES">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nº Expediente</label>
+          <input type="text" name="numero_expte" class="form-input" value="{{ analisis.numero_expte }}" placeholder="12345">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Año</label>
+          <input type="text" name="anio_expte" class="form-input" value="{{ analisis.anio_expte }}" placeholder="2023">
+        </div>
+      </div>
+    </div>
+
+    <!-- MINUTA DEL ACTOR -->
+    <div class="card">
+      <div class="card-title">Minuta del actor — puntos reclamados</div>
+      <div class="form-group">
+        <textarea name="minuta_actor" class="form-textarea" style="min-height:180px;" placeholder="La IA generará aquí un resumen de los puntos reclamados por el actor...">{{ analisis.minuta_actor }}</textarea>
+        <p class="form-hint">Podés editar este texto antes de generar la sentencia.</p>
+      </div>
+    </div>
+
+    <!-- MINUTA DE ANSES -->
+    <div class="card">
+      <div class="card-title">Minuta de ANSES — lo que responde y lo que no</div>
+      <div class="form-group">
+        <textarea name="minuta_anses" class="form-textarea" style="min-height:180px;" placeholder="La IA generará aquí un resumen de la contestación de ANSES, indicando qué puntos responde y cuáles no...">{{ analisis.minuta_anses }}</textarea>
+        <p class="form-hint">Podés editar este texto antes de generar la sentencia.</p>
+      </div>
+    </div>
+
+    <!-- RESUMEN DEL CONFLICTO -->
+    <div class="card">
+      <div class="card-title">Resumen del conflicto{% if not analisis.resumen_conflicto %} <span style="font-size:0.75rem;font-weight:400;color:var(--gris);margin-left:4px;">(sin dictamen de fiscalía)</span>{% endif %}</div>
+      <div class="form-group">
+        <textarea name="resumen_conflicto" class="form-textarea" style="min-height:130px;" placeholder="La IA generará aquí un párrafo de síntesis del conflicto...">{{ analisis.resumen_conflicto }}</textarea>
+        <p class="form-hint">Podés editar este texto antes de generar la sentencia.</p>
+      </div>
+    </div>
+
+    <!-- CHECKPOINTS -->
+    <div class="card">
+      <div class="card-title">Puntos a incluir en la sentencia</div>
+
+      <div class="checkpoint-actions">
+        <button type="button" class="link-btn" onclick="marcarTodos()">Marcar todos</button>
+        <button type="button" class="link-btn" onclick="desmarcarTodos()">Desmarcar todos</button>
+        {% if detectados_count > 0 %}
+        <span class="detected-count"><i class="fas fa-robot" style="margin-right:4px;"></i>{{ detectados_count }} detectado{{ 's' if detectados_count != 1 else '' }} por IA</span>
+        {% endif %}
+      </div>
+
+      <div class="checkpoints-grid">
+        {% for cp_id, cp_label in checkpoints %}
+        {% set is_detected = cp_id in analisis.checkpoints_detectados %}
+        <label class="checkpoint-item {% if is_detected %}detected{% endif %}" for="cp_{{ cp_id }}">
+          <input type="checkbox"
+                 name="checkpoint_{{ cp_id }}"
+                 id="cp_{{ cp_id }}"
+                 value="on"
+                 {% if is_detected %}checked{% endif %}
+                 onchange="actualizarEstilo(this)">
+          <span class="checkpoint-label">
+            {{ cp_label }}
+            {% if is_detected %}
+            <span class="badge-ia">IA</span>
+            {% endif %}
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-card">
+      <div class="submit-info">
+        <strong id="count-selected">{{ detectados_count }}</strong> punto{{ 's' if detectados_count != 1 else '' }} seleccionado{{ 's' if detectados_count != 1 else '' }}
+        <br><span style="font-size:0.78rem;">Se generará el documento Word con los párrafos correspondientes</span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <a href="/creador_sentencias" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Volver</a>
+        <button type="submit" class="btn btn-ciruela" style="padding:12px 32px;font-size:0.95rem;">
+          <i class="fas fa-file-word"></i> Generar Sentencia
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+{% include 'footers/footer.html' %}
+
+<script>
+function actualizarEstilo(checkbox) {
+  const item = checkbox.closest('.checkpoint-item');
+  if (checkbox.checked) {
+    item.style.borderColor = 'var(--verde)';
+    item.style.background = 'var(--verde-light)';
+  } else {
+    // Si fue detectado por IA, mantener color verde base al desmarcar
+    const detected = item.classList.contains('detected');
+    item.style.borderColor = detected ? '#ccc' : '';
+    item.style.background = '';
+  }
+  actualizarContador();
+}
+
+function actualizarContador() {
+  const total = document.querySelectorAll('.checkpoints-grid input[type="checkbox"]:checked').length;
+  const el = document.getElementById('count-selected');
+  el.textContent = total;
+  el.nextSibling.textContent = ` punto${total !== 1 ? 's' : ''} seleccionado${total !== 1 ? 's' : ''}`;
+}
+
+function marcarTodos() {
+  document.querySelectorAll('.checkpoints-grid input[type="checkbox"]').forEach(cb => {
+    cb.checked = true;
+    actualizarEstilo(cb);
+  });
+}
+
+function desmarcarTodos() {
+  document.querySelectorAll('.checkpoints-grid input[type="checkbox"]').forEach(cb => {
+    cb.checked = false;
+    actualizarEstilo(cb);
+  });
+}
+
+// Init: pintar los detectados que vienen pre-checked
+document.querySelectorAll('.checkpoints-grid input[type="checkbox"]:checked').forEach(cb => {
+  actualizarEstilo(cb);
+});
+</script>
+</body>
+</html>
