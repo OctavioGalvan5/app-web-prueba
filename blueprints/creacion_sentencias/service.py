@@ -2,7 +2,7 @@
 Servicio para el módulo de creación de sentencias.
 
 Extrae texto de los 3 PDFs (demanda, contestación, fiscalía) y los analiza
-con GPT-4o para generar minutas y detectar checkpoints automáticamente.
+con Claude para generar minutas y detectar checkpoints automáticamente.
 """
 
 import os
@@ -12,26 +12,26 @@ import random
 import tempfile
 
 import fitz  # PyMuPDF
+import anthropic
 from dotenv import load_dotenv
-from openai import OpenAI, RateLimitError
 
 load_dotenv()
 
-from blueprints.creacion_sentencias.schemas import AnalisisIA, CHECKPOINTS_DISPONIBLES, CHECKPOINT_IDS
+from blueprints.creacion_sentencias.schemas import AnalisisIA, CHECKPOINTS_DISPONIBLES
 
 
-# ========== CONFIGURACIÓN OPENAI ==========
+# ========== CONFIGURACIÓN ANTHROPIC ==========
 
 _client = None
 
 
-def _get_openai_client():
+def _get_client():
     global _client
     if _client is None:
-        api_key = os.getenv("OPENAI_API_KEY")
+        api_key = os.getenv("ANTHROPIC_API_KEY")
         if not api_key:
-            raise ValueError("No se encontró la variable de entorno OPENAI_API_KEY")
-        _client = OpenAI(api_key=api_key)
+            raise ValueError("No se encontró la variable de entorno ANTHROPIC_API_KEY")
+        _client = anthropic.Anthropic(api_key=api_key)
     return _client
 
 
@@ -58,7 +58,7 @@ def _extraer_texto_de_archivo(archivo) -> str:
             pass
 
 
-# ========== LLAMADA A OPENAI ==========
+# ========== LLAMADA A CLAUDE ==========
 
 def _limpiar_respuesta_json(respuesta: str) -> str:
     texto = (respuesta or "").strip()
@@ -74,25 +74,25 @@ def _limpiar_respuesta_json(respuesta: str) -> str:
 
 
 def _generar_con_backoff(prompt: str, retries: int = 5) -> str:
-    client = _get_openai_client()
+    client = _get_client()
     for i in range(retries):
         try:
-            response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=[{"role": "user", "content": prompt}],
+            message = client.messages.create(
+                model="claude-sonnet-4-6",
                 max_tokens=4096,
+                messages=[{"role": "user", "content": prompt}],
             )
-            return response.choices[0].message.content
-        except RateLimitError as e:
-            print(f"[OpenAI] Rate limit intento {i+1}/{retries}: {e}")
+            return message.content[0].text
+        except anthropic.RateLimitError as e:
+            print(f"[Claude] Rate limit intento {i+1}/{retries}: {e}")
             time.sleep(min(2**i + random.random(), 30))
         except Exception as e:
-            print(f"[OpenAI] Error inesperado: {type(e).__name__}: {e}")
+            print(f"[Claude] Error inesperado: {type(e).__name__}: {e}")
             raise
     raise RuntimeError("Rate limit persistente tras reintentos.")
 
 
-def _truncar_texto(texto: str, max_chars: int = 30000) -> str:
+def _truncar_texto(texto: str, max_chars: int = 60000) -> str:
     if len(texto) <= max_chars:
         return texto
     return texto[:max_chars] + "\n[... texto truncado por longitud ...]"
@@ -112,16 +112,22 @@ Se te proporcionan tres documentos de un mismo expediente judicial previsional:
 
 1. DEMANDA (escrito inicial del actor contra ANSES)
 2. CONTESTACION DE ANSES (respuesta del organismo demandado)
-3. DICTAMEN DE FISCALIA (puede estar vacío si no se proporcionó)
+3. DICTAMEN DE FISCALIA (vista al fiscal federal)
 
 Analizalos cuidadosamente y devuelve EXCLUSIVAMENTE un JSON con esta estructura:
 {{
-    "nombre_caratula": "Apellido y nombre del actor tal como figura en el expediente, en mayúsculas",
-    "numero_expte": "Número de expediente sin año ni barra (solo el número)",
+    "nombre_caratula": "Apellido y nombre del actor en mayúsculas seguido de 'c/ ANSES s/REAJUSTES POR MOVILIDAD', tal como figura en el expediente",
+    "numero_expte": "Número de expediente completo tal como figura (por ejemplo: FSA 7216/2021)",
     "anio_expte": "Año del expediente con 4 dígitos",
-    "minuta_actor": "Redacción en tercera persona de TODOS los puntos reclamados por el actor. Enumerar punto por punto los temas, pretensiones y fundamentos de la demanda. Usar redacción judicial formal en castellano argentino.",
-    "minuta_anses": "Redacción en tercera persona indicando: (a) qué puntos reconoce, admite o contesta ANSES argumentando, y (b) qué puntos guarda silencio o no responde expresamente. Distinguir claramente ambas categorías. Redacción judicial formal.",
-    "resumen_conflicto": "Párrafo de síntesis del conflicto. Si hay dictamen de fiscalía, incorporar su posición. Redacción judicial formal.",
+    "nombre_actora": "Solo el apellido y nombre del actor/actora en mayúsculas, sin el 'c/ ANSES...'",
+    "dni_actora": "Número de DNI del actor/actora con puntos (ej: 12.139.718)",
+    "numero_beneficio": "Número completo del beneficio jubilatorio tal como figura en los documentos (ej: 14-0-9084463-0-1)",
+    "fecha_adquisicion": "Fecha de adquisición del derecho jubilatorio en formato DD/MM/AAAA",
+    "fecha_alta": "Mes y año de alta del beneficio en formato MM/AAAA (ej: 08/2018)",
+    "fecha_desde_retroactivo": "Fecha desde la cual corren los retroactivos (dos años antes de la presentación del reclamo administrativo), en formato DD/MM/AAAA",
+    "minuta_actor": "Redacción en tercera persona de TODOS los puntos reclamados por el actor. Enumerar punto por punto los temas, pretensiones y fundamentos de la demanda. Usar redacción judicial formal en castellano argentino. Máximo 800 caracteres.",
+    "minuta_anses": "Redacción en tercera persona indicando: (a) qué puntos contesta ANSES con argumentos, y (b) qué puntos guarda silencio o niega sin argumentar. Distinguir claramente ambas categorías. Redacción judicial formal. Máximo 600 caracteres.",
+    "resumen_conflicto": "Párrafo de síntesis de la posición del Fiscal Federal: si dictaminó a favor, en contra o parcialmente a favor, y sobre qué puntos específicos. Redacción judicial formal. Máximo 400 caracteres.",
     "checkpoints_detectados": ["lista_de_ids_presentes"]
 }}
 
@@ -131,9 +137,10 @@ Los checkpoints posibles son (incluir en la lista SOLO los que aparezcan efectiv
 REGLAS OBLIGATORIAS:
 - Devolver SOLO el JSON, sin texto previo ni posterior, sin bloques markdown ni triple backtick
 - Si un dato no puede determinarse con certeza, usar cadena vacía ""
-- Los textos de minuta_actor, minuta_anses y resumen_conflicto deben ser redacción judicial formal en castellano argentino
+- Los textos de las minutas deben ser redacción judicial formal en castellano argentino, en una sola línea sin saltos de línea
 - Solo incluir en checkpoints_detectados los temas que aparezcan EFECTIVAMENTE en los documentos analizados
 - Los IDs de checkpoints deben ser exactamente como se listan arriba (minúsculas, guiones bajos)
+- Si el dictamen de fiscalía tiene contenido, incluir "dictamen_fiscal" en checkpoints_detectados
 """
 
 
@@ -144,7 +151,7 @@ def analizar_documentos_sentencia(
     archivo_contestacion,
     archivo_fiscalia=None,
 ) -> AnalisisIA:
-    """Analiza los 3 PDFs con GPT-4o y devuelve un AnalisisIA con minutas y checkpoints."""
+    """Analiza los 3 PDFs con Claude y devuelve un AnalisisIA con minutas y checkpoints."""
     texto_demanda = _truncar_texto(_extraer_texto_de_archivo(archivo_demanda))
     texto_contestacion = _truncar_texto(_extraer_texto_de_archivo(archivo_contestacion))
 
@@ -169,7 +176,7 @@ def analizar_documentos_sentencia(
     texto_limpio = _limpiar_respuesta_json(respuesta)
 
     print("\n" + "=" * 60)
-    print("[IA SENTENCIAS] Respuesta de OpenAI:")
+    print("[IA SENTENCIAS] Respuesta de Claude:")
     print("=" * 60)
     print(texto_limpio[:1500])
     print("=" * 60 + "\n")

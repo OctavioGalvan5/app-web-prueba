@@ -135,12 +135,12 @@ header h1 { font-family: 'Cormorant Garamond', serif; color: white; font-size: 1
           <input type="file" name="pdf_contestacion" id="pdf_contestacion" class="file-input" accept=".pdf">
         </div>
 
-        <!-- Fiscalía (opcional) -->
+        <!-- Fiscalía (obligatorio) -->
         <div class="upload-grid-full">
-          <div class="upload-zone optional" id="zone-fiscalia" onclick="document.getElementById('pdf_fiscalia').click()">
+          <div class="upload-zone" id="zone-fiscalia" onclick="document.getElementById('pdf_fiscalia').click()">
             <i class="fas fa-balance-scale upload-zone-icon" id="icon-fiscalia"></i>
-            <div class="upload-zone-label">Dictamen de Fiscalía <span class="optional-badge">Opcional</span></div>
-            <div class="upload-zone-sublabel">Si no lo tenés, el resumen se generará con los documentos disponibles</div>
+            <div class="upload-zone-label">Dictamen de Fiscalía <span class="required-star">*</span></div>
+            <div class="upload-zone-sublabel">Vista al fiscal — necesario para completar el RESULTA</div>
             <div class="file-selected" id="selected-fiscalia">
               <i class="fas fa-check-circle" style="color:var(--verde);"></i>
               <span class="file-selected-name" id="name-fiscalia"></span>
@@ -217,16 +217,16 @@ function quitarArchivo(nombre, e) {
 }
 
 function checkSubmit() {
-  const ok = archivos.demanda && archivos.contestacion;
+  const ok = archivos.demanda && archivos.contestacion && archivos.fiscalia;
   document.getElementById('submitBtn').disabled = !ok;
 }
 
 ['demanda', 'contestacion', 'fiscalia'].forEach(setupZone);
 
 document.getElementById('uploadForm').addEventListener('submit', function(e) {
-  if (!archivos.demanda || !archivos.contestacion) {
+  if (!archivos.demanda || !archivos.contestacion || !archivos.fiscalia) {
     e.preventDefault();
-    alert('Debés subir al menos la demanda y la contestación de ANSES.');
+    alert('Debés subir los tres documentos: demanda, contestación de ANSES y dictamen de fiscalía.');
     return;
   }
   const btn = document.getElementById('submitBtn');

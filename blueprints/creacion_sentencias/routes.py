@@ -32,6 +32,10 @@ def creador_sentencias():
             flash("Debés subir la contestación de ANSES (PDF).", "warning")
             return redirect(url_for('creacion_sentencias.creador_sentencias'))
 
+        if not archivo_fiscalia or not archivo_fiscalia.filename:
+            flash("Debés subir el dictamen de fiscalía (PDF).", "warning")
+            return redirect(url_for('creacion_sentencias.creador_sentencias'))
+
         try:
             analisis = analizar_documentos_sentencia(
                 archivo_demanda, archivo_contestacion, archivo_fiscalia

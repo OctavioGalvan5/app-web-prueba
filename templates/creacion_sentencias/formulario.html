@@ -4,236 +4,555 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Revisar Sentencia — T&E</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
 :root {
-  --ciruela: #8b2463;
-  --ciruela-light: rgba(139,36,99,0.08);
-  --ciruela-dark: #6b1a4a;
-  --azul: #8b2463;
-  --azul-med: #ae2d7c;
-  --gris: #4a5568;
-  --gris-light: #f7f8fa;
-  --borde: #e4e7ec;
-  --verde: #2d7a4f;
-  --verde-light: rgba(45,122,79,0.08);
-  --amarillo: #d97706;
-  --amarillo-light: rgba(217,119,6,0.1);
-  --rojo: #c0392b;
+  --c: #8b2463;
+  --c-dk: #6b1a4a;
+  --c-lt: rgba(139,36,99,0.07);
+  --c-ring: rgba(139,36,99,0.18);
+  --verde: #1a7a4a;
+  --verde-lt: rgba(26,122,74,0.08);
+  --amber: #b45309;
+  --amber-lt: rgba(180,83,9,0.08);
+  --gris: #5a6478;
+  --gris-lt: #f3f4f6;
+  --borde: #e2e5ec;
+  --txt: #1a2133;
+  --blanco: #ffffff;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Source Sans 3', sans-serif; background: var(--gris-light); color: #2d3748; min-height: 100vh; }
-.container { max-width: 860px; margin: 0 auto; padding: 36px 20px 80px; }
-.page-title { font-family: 'Cormorant Garamond', serif; color: var(--azul); font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
-.page-subtitle { color: var(--gris); font-size: 0.95rem; margin-bottom: 28px; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Source Sans 3', sans-serif; background: #eef0f4; color: var(--txt); min-height: 100vh; }
 
-.card { background: white; border-radius: 8px; border: 1px solid var(--borde); padding: 28px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-.card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--azul); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--borde); display: flex; align-items: center; gap: 10px; }
-.card-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--ciruela); border-radius: 2px; flex-shrink: 0; }
+/* ── LAYOUT ── */
+.app-wrap { max-width: 1280px; margin: 0 auto; padding: 0 20px 40px; }
+.page-header { padding: 28px 0 22px; }
+.page-title { font-family: 'Cormorant Garamond', serif; color: var(--c); font-size: 1.7rem; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.page-subtitle { color: var(--gris); font-size: 0.88rem; }
 
-/* Form fields */
-.form-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; margin-bottom: 4px; }
-.form-group { margin-bottom: 14px; }
-.form-label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--gris); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
-.form-input { width: 100%; padding: 9px 12px; border: 1px solid var(--borde); border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 0.9rem; color: #2d3748; background: white; transition: border-color 0.2s; }
-.form-input:focus { outline: none; border-color: var(--ciruela); box-shadow: 0 0 0 2px var(--ciruela-light); }
-.form-textarea { width: 100%; padding: 12px; border: 1px solid var(--borde); border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 0.9rem; color: #2d3748; resize: vertical; min-height: 140px; line-height: 1.6; transition: border-color 0.2s; }
-.form-textarea:focus { outline: none; border-color: var(--ciruela); box-shadow: 0 0 0 2px var(--ciruela-light); }
-.form-hint { font-size: 0.78rem; color: #999; margin-top: 4px; }
+.ia-banner {
+  background: var(--amber-lt); border: 1px solid rgba(180,83,9,0.22);
+  border-radius: 8px; padding: 11px 16px; margin-bottom: 20px;
+  font-size: 0.85rem; color: #7c3a0a; font-weight: 500;
+  display: flex; align-items: center; gap: 10px;
+}
 
-/* Checkpoints */
-.checkpoints-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.checkpoint-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 7px; border: 1.5px solid var(--borde); background: white; cursor: pointer; transition: all 0.15s; position: relative; }
-.checkpoint-item:hover { border-color: var(--ciruela); background: var(--ciruela-light); }
-.checkpoint-item.detected { border-color: var(--verde); background: var(--verde-light); }
-.checkpoint-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--ciruela); cursor: pointer; flex-shrink: 0; }
-.checkpoint-label { font-size: 0.88rem; font-weight: 600; color: #2d3748; flex: 1; cursor: pointer; }
-.badge-ia { display: inline-block; background: var(--verde); color: white; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 3px; padding: 2px 5px; margin-left: 6px; vertical-align: middle; }
+.two-col { display: grid; grid-template-columns: 1fr 400px; gap: 20px; align-items: start; }
 
-/* Info banner */
-.ia-banner { background: var(--amarillo-light); border: 1px solid rgba(217,119,6,0.3); border-radius: 7px; padding: 12px 16px; margin-bottom: 20px; font-size: 0.85rem; color: #92400e; display: flex; align-items: center; gap: 10px; }
+/* ── CARDS FORM ── */
+.card { background: var(--blanco); border-radius: 10px; border: 1px solid var(--borde); padding: 22px 24px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+.card-title { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; color: var(--c); margin-bottom: 18px; padding-bottom: 11px; border-bottom: 1px solid var(--borde); display: flex; align-items: center; gap: 8px; }
+.card-title i { font-size: 0.85rem; opacity: 0.75; }
 
-/* Select all / none */
-.checkpoint-actions { display: flex; gap: 10px; margin-bottom: 14px; }
-.link-btn { background: none; border: none; color: var(--ciruela); font-size: 0.82rem; font-weight: 600; cursor: pointer; text-decoration: underline; font-family: 'Source Sans 3', sans-serif; padding: 0; }
-.link-btn:hover { color: var(--ciruela-dark); }
-.detected-count { font-size: 0.82rem; color: var(--gris); margin-left: auto; }
+.g3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px; }
+.g3e { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.mb14 { margin-bottom: 14px; }
 
-/* Submit */
-.submit-card { background: white; border-radius: 8px; border: 1px solid var(--borde); padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 4px rgba(0,0,0,0.06); position: sticky; bottom: 20px; }
-.submit-info { font-size: 0.85rem; color: var(--gris); }
-.submit-info strong { color: #2d3748; }
-.btn { padding: 11px 26px; border: none; border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; letter-spacing: 0.03em; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-.btn-ciruela { background: var(--ciruela); color: white; }
-.btn-ciruela:hover { background: var(--ciruela-dark); }
-.btn-outline { background: transparent; color: var(--ciruela); border: 1.5px solid var(--ciruela); }
-.btn-outline:hover { background: var(--ciruela-light); }
+.fg { display: flex; flex-direction: column; gap: 4px; }
+.flabel { font-size: 0.72rem; font-weight: 700; color: var(--gris); text-transform: uppercase; letter-spacing: 0.07em; }
+.finput {
+  width: 100%; padding: 9px 12px;
+  border: 1.5px solid var(--borde); border-radius: 7px;
+  font-family: 'Source Sans 3', sans-serif; font-size: 0.9rem; color: var(--txt);
+  background: var(--blanco); transition: border-color .15s, box-shadow .15s;
+}
+.finput:focus { outline: none; border-color: var(--c); box-shadow: 0 0 0 3px var(--c-ring); }
+.finput::placeholder { color: #c0c8d8; }
+.fhint { font-size: 0.72rem; color: #9faab8; }
 
-@media (max-width: 640px) {
-  .container { padding: 16px 12px 80px; }
-  .card { padding: 18px; }
-  .form-row { grid-template-columns: 1fr; }
-  .checkpoints-grid { grid-template-columns: 1fr; }
-  .submit-card { flex-direction: column; gap: 14px; text-align: center; }
+.ftextarea {
+  width: 100%; padding: 11px 12px;
+  border: 1.5px solid var(--borde); border-radius: 7px;
+  font-family: 'Source Sans 3', sans-serif; font-size: 0.88rem; color: var(--txt);
+  resize: vertical; min-height: 130px; line-height: 1.65;
+  transition: border-color .15s, box-shadow .15s; background: var(--blanco);
+}
+.ftextarea:focus { outline: none; border-color: var(--c); box-shadow: 0 0 0 3px var(--c-ring); }
+.ftextarea::placeholder { color: #c0c8d8; }
+
+/* ── CHECKPOINTS ── */
+.cp-actions { display: flex; align-items: center; gap: 8px; margin-bottom: 13px; }
+.link-btn { background: none; border: none; color: var(--c); font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Source Sans 3', sans-serif; padding: 4px 8px; border-radius: 4px; transition: background .14s; }
+.link-btn:hover { background: var(--c-lt); }
+.det-count { font-size: 0.78rem; color: var(--gris); margin-left: auto; display: flex; align-items: center; gap: 5px; }
+
+.cpgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cp-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 13px; border-radius: 8px;
+  border: 1.5px solid var(--borde); background: var(--blanco);
+  cursor: pointer; transition: border-color .14s, background .14s; user-select: none;
+}
+.cp-item:hover { border-color: var(--c); background: var(--c-lt); }
+.cp-item.detected { border-color: #2a9a60; background: var(--verde-lt); }
+.cp-item.selected { border-color: var(--c); background: var(--c-lt); }
+.cp-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--c); cursor: pointer; flex-shrink: 0; }
+.cp-label { font-size: 0.82rem; font-weight: 600; color: var(--txt); flex: 1; line-height: 1.25; }
+.badge-ia { background: var(--verde); color: #fff; font-size: 0.57rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border-radius: 3px; padding: 2px 5px; flex-shrink: 0; }
+
+/* ── PREVIEW PANEL ── */
+.preview-sticky { position: sticky; top: 20px; }
+
+.preview-card {
+  background: var(--blanco); border-radius: 10px; border: 1px solid var(--borde);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08); overflow: hidden;
+}
+.preview-top {
+  background: var(--c); padding: 14px 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.preview-top-title { font-family: 'Cormorant Garamond', serif; color: white; font-size: 1rem; font-weight: 700; }
+.preview-top-sub { color: rgba(255,255,255,0.7); font-size: 0.75rem; margin-top: 1px; }
+.preview-live-badge {
+  margin-left: auto; background: rgba(255,255,255,0.18); color: white;
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  border-radius: 4px; padding: 3px 7px; display: flex; align-items: center; gap: 4px;
+}
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: pulse-dot 1.5s infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* Document preview body */
+.preview-doc {
+  padding: 16px 18px 4px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--txt);
+  max-height: 500px;
+  overflow-y: auto;
+}
+.preview-doc::-webkit-scrollbar { width: 4px; }
+.preview-doc::-webkit-scrollbar-track { background: transparent; }
+.preview-doc::-webkit-scrollbar-thumb { background: var(--borde); border-radius: 4px; }
+
+.pv-header { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--borde); }
+.pv-juzgado { font-size: 0.68rem; text-transform: uppercase; letter-spacing: .06em; color: var(--gris); margin-bottom: 5px; }
+.pv-expte { font-size: 0.78rem; color: var(--gris); margin-bottom: 2px; }
+.pv-caratula { font-family: 'Cormorant Garamond', serif; font-size: 0.88rem; font-weight: 600; color: var(--c); line-height: 1.3; }
+
+.pv-bloque { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--borde); }
+.pv-bloque:last-child { border-bottom: none; padding-bottom: 4px; }
+.pv-bloque-titulo {
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--c); margin-bottom: 7px;
+  display: flex; align-items: center; gap: 7px;
+}
+.pv-bloque-titulo::after { content:''; flex:1; height:1px; background: var(--c-lt); }
+
+.pv-row {
+  display: flex; align-items: baseline; gap: 7px;
+  padding: 4px 6px; border-radius: 5px; margin-bottom: 2px;
+  transition: background .12s;
+}
+.pv-row.always { opacity: 0.55; }
+.pv-row.cond.on { opacity: 1; }
+.pv-row.cond.off { opacity: 0.3; }
+.pv-num { font-size: 0.7rem; font-weight: 700; color: var(--c); flex-shrink: 0; min-width: 28px; }
+.pv-desc { font-size: 0.78rem; flex: 1; line-height: 1.4; }
+.pv-actor { color: var(--c); font-weight: 700; }
+.pv-tag {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  border-radius: 3px; padding: 2px 5px; flex-shrink: 0;
+}
+.pv-tag.on-tag { background: var(--verde-lt); color: var(--verde); }
+.pv-tag.off-tag { background: #f3f4f6; color: #b0b8c8; }
+
+/* Generate button + status */
+.gen-area { padding: 16px 18px 18px; border-top: 1px solid var(--borde); }
+.btn-gen {
+  width: 100%; padding: 13px;
+  background: var(--c); color: white; border: none; border-radius: 8px;
+  font-family: 'Source Sans 3', sans-serif; font-weight: 700; font-size: 0.95rem;
+  cursor: pointer; transition: background .18s, transform .1s;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  letter-spacing: .02em;
+}
+.btn-gen:hover:not(:disabled) { background: var(--c-dk); }
+.btn-gen:active:not(:disabled) { transform: scale(0.98); }
+.btn-gen:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.gen-status { margin-top: 12px; border-radius: 7px; overflow: hidden; }
+.gen-loading { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #f8f6fc; border: 1px solid rgba(139,36,99,0.15); border-radius: 7px; font-size: 0.83rem; color: var(--c); font-weight: 500; }
+.gen-success { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--verde-lt); border: 1px solid rgba(26,122,74,0.2); border-radius: 7px; }
+.gen-success i { color: var(--verde); font-size: 1.1rem; flex-shrink: 0; }
+.gen-success strong { font-size: 0.86rem; color: var(--verde); display: block; }
+.gen-success span { font-size: 0.78rem; color: var(--gris); }
+.gen-error { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #fff5f5; border: 1px solid #fca5a5; border-radius: 7px; font-size: 0.83rem; color: #b91c1c; font-weight: 500; }
+.gen-error i { flex-shrink: 0; }
+
+.btn-back { display: inline-flex; align-items: center; gap: 7px; color: var(--gris); font-size: 0.82rem; font-weight: 600; text-decoration: none; margin-top: 10px; padding: 6px 0; transition: color .14s; }
+.btn-back:hover { color: var(--c); }
+
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: 1fr; }
+  .preview-sticky { position: static; }
+  .g3, .g3e { grid-template-columns: 1fr 1fr; }
+  .cpgrid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .g3, .g3e, .g2 { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 {% include 'navs/nav.html' %}
 
-<div class="container">
-  <p class="page-title"><i class="fas fa-gavel" style="color:var(--ciruela);margin-right:10px;font-size:1.3rem;"></i>Revisar y generar sentencia</p>
-  <p class="page-subtitle">La IA analizó el expediente. Revisá las minutas, confirmá los checkpoints y generá el documento.</p>
+<div class="app-wrap">
+  <div class="page-header">
+    <p class="page-title"><i class="fas fa-gavel"></i> Revisar y generar sentencia</p>
+    <p class="page-subtitle">Revisá los datos extraídos por la IA, ajustá las minutas y confirmá los puntos antes de generar el documento.</p>
+  </div>
 
   {% set detectados_count = analisis.checkpoints_detectados | length %}
   {% if detectados_count > 0 %}
   <div class="ia-banner">
-    <i class="fas fa-robot" style="font-size:1.1rem;flex-shrink:0;"></i>
-    La IA detectó <strong>{{ detectados_count }} punto{{ 's' if detectados_count != 1 else '' }}</strong> en disputa y los marcó automáticamente. Revisá y ajustá según corresponda.
+    <i class="fas fa-robot" style="font-size:1rem;flex-shrink:0;"></i>
+    La IA detectó <strong>&nbsp;{{ detectados_count }} punto{{ 's' if detectados_count != 1 else '' }}&nbsp;</strong> en disputa y los marcó automáticamente. Revisá y ajustá antes de generar.
   </div>
   {% endif %}
 
-  <form action="/creador_sentencias/resultado" method="post" id="sentenciaForm">
+  <div class="two-col">
 
-    <!-- DATOS DEL CASO -->
-    <div class="card">
-      <div class="card-title">Datos del expediente</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Carátula</label>
-          <input type="text" name="nombre_caratula" class="form-input" value="{{ analisis.nombre_caratula }}" placeholder="APELLIDO, Nombre c/ ANSES">
+    <!-- ══ COLUMNA IZQUIERDA: FORMULARIO ══ -->
+    <div>
+      <form id="sentenciaForm">
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-folder-open"></i> Datos del expediente</div>
+          <div class="g3">
+            <div class="fg">
+              <label class="flabel">Carátula</label>
+              <input type="text" name="nombre_caratula" class="finput" value="{{ analisis.nombre_caratula }}" placeholder="APELLIDO, Nombre c/ ANSES s/REAJUSTES" oninput="updatePreview()">
+            </div>
+            <div class="fg">
+              <label class="flabel">Nº Expediente</label>
+              <input type="text" name="numero_expte" class="finput" value="{{ analisis.numero_expte }}" placeholder="FSA 7216/2021" oninput="updatePreview()">
+            </div>
+            <div class="fg">
+              <label class="flabel">Año</label>
+              <input type="text" name="anio_expte" class="finput" value="{{ analisis.anio_expte }}" placeholder="2021">
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Nº Expediente</label>
-          <input type="text" name="numero_expte" class="form-input" value="{{ analisis.numero_expte }}" placeholder="12345">
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-user"></i> Datos del beneficiario</div>
+          <div class="g3 mb14">
+            <div class="fg">
+              <label class="flabel">Nombre del actor / actora</label>
+              <input type="text" name="nombre_actora" class="finput" value="{{ analisis.nombre_actora }}" placeholder="APELLIDO, Nombre" oninput="updatePreview()">
+            </div>
+            <div class="fg">
+              <label class="flabel">DNI</label>
+              <input type="text" name="dni_actora" class="finput" value="{{ analisis.dni_actora }}" placeholder="12.139.718" oninput="updatePreview()">
+            </div>
+            <div class="fg">
+              <label class="flabel">Nº Beneficio</label>
+              <input type="text" name="numero_beneficio" class="finput" value="{{ analisis.numero_beneficio }}" placeholder="14-0-9084463-0-1">
+            </div>
+          </div>
+          <div class="g3e">
+            <div class="fg">
+              <label class="flabel">Fecha adquisición</label>
+              <input type="text" name="fecha_adquisicion" class="finput" value="{{ analisis.fecha_adquisicion }}" placeholder="13/06/2018">
+            </div>
+            <div class="fg">
+              <label class="flabel">Alta del beneficio</label>
+              <input type="text" name="fecha_alta" class="finput" value="{{ analisis.fecha_alta }}" placeholder="08/2018">
+            </div>
+            <div class="fg">
+              <label class="flabel">Retroactivo desde</label>
+              <input type="text" name="fecha_desde_retroactivo" class="finput" value="{{ analisis.fecha_desde_retroactivo }}" placeholder="15/08/2019" oninput="updatePreview()">
+              <span class="fhint">2 años antes del reclamo administrativo</span>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Año</label>
-          <input type="text" name="anio_expte" class="form-input" value="{{ analisis.anio_expte }}" placeholder="2023">
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-file-alt"></i> Minutas del expediente</div>
+          <div class="g2">
+            <div class="fg">
+              <label class="flabel">Minuta del actor — puntos reclamados</label>
+              <textarea name="minuta_actor" class="ftextarea" placeholder="La IA generará aquí un resumen de los puntos reclamados por el actor...">{{ analisis.minuta_actor }}</textarea>
+              <span class="fhint">Podés editar antes de generar.</span>
+            </div>
+            <div class="fg">
+              <label class="flabel">Minuta de ANSES — responde / no responde</label>
+              <textarea name="minuta_anses" class="ftextarea" placeholder="La IA indicará qué puntos contesta ANSES y cuáles no...">{{ analisis.minuta_anses }}</textarea>
+              <span class="fhint">Podés editar antes de generar.</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- MINUTA DEL ACTOR -->
-    <div class="card">
-      <div class="card-title">Minuta del actor — puntos reclamados</div>
-      <div class="form-group">
-        <textarea name="minuta_actor" class="form-textarea" style="min-height:180px;" placeholder="La IA generará aquí un resumen de los puntos reclamados por el actor...">{{ analisis.minuta_actor }}</textarea>
-        <p class="form-hint">Podés editar este texto antes de generar la sentencia.</p>
-      </div>
-    </div>
-
-    <!-- MINUTA DE ANSES -->
-    <div class="card">
-      <div class="card-title">Minuta de ANSES — lo que responde y lo que no</div>
-      <div class="form-group">
-        <textarea name="minuta_anses" class="form-textarea" style="min-height:180px;" placeholder="La IA generará aquí un resumen de la contestación de ANSES, indicando qué puntos responde y cuáles no...">{{ analisis.minuta_anses }}</textarea>
-        <p class="form-hint">Podés editar este texto antes de generar la sentencia.</p>
-      </div>
-    </div>
-
-    <!-- RESUMEN DEL CONFLICTO -->
-    <div class="card">
-      <div class="card-title">Resumen del conflicto{% if not analisis.resumen_conflicto %} <span style="font-size:0.75rem;font-weight:400;color:var(--gris);margin-left:4px;">(sin dictamen de fiscalía)</span>{% endif %}</div>
-      <div class="form-group">
-        <textarea name="resumen_conflicto" class="form-textarea" style="min-height:130px;" placeholder="La IA generará aquí un párrafo de síntesis del conflicto...">{{ analisis.resumen_conflicto }}</textarea>
-        <p class="form-hint">Podés editar este texto antes de generar la sentencia.</p>
-      </div>
-    </div>
-
-    <!-- CHECKPOINTS -->
-    <div class="card">
-      <div class="card-title">Puntos a incluir en la sentencia</div>
-
-      <div class="checkpoint-actions">
-        <button type="button" class="link-btn" onclick="marcarTodos()">Marcar todos</button>
-        <button type="button" class="link-btn" onclick="desmarcarTodos()">Desmarcar todos</button>
-        {% if detectados_count > 0 %}
-        <span class="detected-count"><i class="fas fa-robot" style="margin-right:4px;"></i>{{ detectados_count }} detectado{{ 's' if detectados_count != 1 else '' }} por IA</span>
-        {% endif %}
-      </div>
-
-      <div class="checkpoints-grid">
-        {% for cp_id, cp_label in checkpoints %}
-        {% set is_detected = cp_id in analisis.checkpoints_detectados %}
-        <label class="checkpoint-item {% if is_detected %}detected{% endif %}" for="cp_{{ cp_id }}">
-          <input type="checkbox"
-                 name="checkpoint_{{ cp_id }}"
-                 id="cp_{{ cp_id }}"
-                 value="on"
-                 {% if is_detected %}checked{% endif %}
-                 onchange="actualizarEstilo(this)">
-          <span class="checkpoint-label">
-            {{ cp_label }}
-            {% if is_detected %}
-            <span class="badge-ia">IA</span>
+        <div class="card">
+          <div class="card-title">
+            <i class="fas fa-balance-scale"></i> Posición del Fiscal Federal
+            {% if not analisis.resumen_conflicto %}
+            <span style="font-size:.73rem;font-weight:400;color:var(--gris);margin-left:4px;">(sin dictamen)</span>
             {% endif %}
-          </span>
-        </label>
-        {% endfor %}
+          </div>
+          <div class="fg">
+            <textarea name="resumen_conflicto" class="ftextarea" style="min-height:100px;" placeholder="Síntesis del dictamen fiscal...">{{ analisis.resumen_conflicto }}</textarea>
+            <span class="fhint">Solo referencia — el párrafo de la sentencia es fijo y se activa con el checkpoint "Dictamen de Fiscalía".</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-check-square"></i> Puntos a incluir en la sentencia</div>
+          <div class="cp-actions">
+            <button type="button" class="link-btn" onclick="marcarTodos()">Marcar todos</button>
+            <button type="button" class="link-btn" onclick="desmarcarTodos()">Desmarcar todos</button>
+            {% if detectados_count > 0 %}
+            <span class="det-count"><i class="fas fa-robot"></i> {{ detectados_count }} detectado{{ 's' if detectados_count != 1 else '' }} por IA</span>
+            {% endif %}
+          </div>
+          <div class="cpgrid">
+            {% for cp_id, cp_label in checkpoints %}
+            {% set is_detected = cp_id in analisis.checkpoints_detectados %}
+            <label class="cp-item {% if is_detected %}detected selected{% endif %}" for="cp_{{ cp_id }}">
+              <input type="checkbox" name="checkpoint_{{ cp_id }}" id="cp_{{ cp_id }}" value="on"
+                     {% if is_detected %}checked{% endif %}
+                     onchange="onCpChange(this)">
+              <span class="cp-label">{{ cp_label }}</span>
+              {% if is_detected %}<span class="badge-ia">IA</span>{% endif %}
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- ══ COLUMNA DERECHA: PREVIEW ══ -->
+    <div class="preview-sticky">
+      <div class="preview-card">
+
+        <div class="preview-top">
+          <div>
+            <div class="preview-top-title">Vista previa del documento</div>
+            <div class="preview-top-sub">Se actualiza mientras editás</div>
+          </div>
+          <span class="preview-live-badge"><span class="live-dot"></span> En vivo</span>
+        </div>
+
+        <div class="preview-doc" id="previewDoc">
+
+          <!-- Encabezado -->
+          <div class="pv-header">
+            <div class="pv-juzgado">Poder Judicial de la Nación · Juzgado Federal de Salta 2</div>
+            <div class="pv-expte">Expte. Nº <strong id="pv-expte">(Expediente)</strong></div>
+            <div class="pv-caratula" id="pv-caratula">(Carátula)</div>
+          </div>
+
+          <!-- RESULTA -->
+          <div class="pv-bloque">
+            <div class="pv-bloque-titulo">RESULTA</div>
+            <div class="pv-row always">
+              <span class="pv-num">I.</span>
+              <span class="pv-desc">Demanda — puntos reclamados por el actor</span>
+            </div>
+            <div class="pv-row always">
+              <span class="pv-num">II.</span>
+              <span class="pv-desc">Contestación de ANSES</span>
+            </div>
+            <div class="pv-row cond" id="pv-r-fiscal">
+              <span class="pv-num">III.</span>
+              <span class="pv-desc">Vista al Sr. Fiscal Federal</span>
+              <span class="pv-tag" id="tag-fiscal"></span>
+            </div>
+          </div>
+
+          <!-- CONSIDERANDO -->
+          <div class="pv-bloque">
+            <div class="pv-bloque-titulo">CONSIDERANDO</div>
+            <div class="pv-row always"><span class="pv-num">I.</span><span class="pv-desc">Principio protectorio (Fallos 313:79)</span></div>
+            <div class="pv-row cond" id="pv-c-error"><span class="pv-num">II.</span><span class="pv-desc">Error material en remuneraciones</span><span class="pv-tag" id="tag-error_material"></span></div>
+            <div class="pv-row cond" id="pv-c-reaj"><span class="pv-num">III.</span><span class="pv-desc">Actualización de remuneraciones — ISBIC / Elliff / Blanco</span><span class="pv-tag" id="tag-reajuste_haberes"></span></div>
+            <div class="pv-row cond" id="pv-c-mov"><span class="pv-num">IV.</span><span class="pv-desc">Movilidad de haberes — leyes 27.426 / 27.541 / 27.609 / DNU 274/2024</span><span class="pv-tag" id="tag-movilidad"></span></div>
+            <div class="pv-row cond" id="pv-c-pbu"><span class="pv-num">V.</span><span class="pv-desc">PBU — confiscatoriedad, método A/B/C (Quiroga / Aguado / Soule)</span><span class="pv-tag" id="tag-pbu"></span></div>
+            <div class="pv-row always"><span class="pv-num">VI.</span><span class="pv-desc">Tasa de sustitución — rechazada (Benoist)</span></div>
+            <div class="pv-row cond" id="pv-c-inc"><span class="pv-num">VII–VIII.</span><span class="pv-desc">Inconstitucionalidad arts. 24 y 26 ley 24.241</span><span class="pv-tag" id="tag-inconstitucionalidad"></span></div>
+            <div class="pv-row always"><span class="pv-num">IX.</span><span class="pv-desc">Arts. 9 y 25 ley 24.241 — base imponible / Gualtieri</span></div>
+            <div class="pv-row always"><span class="pv-num">X.</span><span class="pv-desc">Resolución SSS 6/09 — inaplicable</span></div>
+            <div class="pv-row cond" id="pv-c-tope"><span class="pv-num">XI.</span><span class="pv-desc">Tope movilidad art. 9 ley 24.463 / Badaro</span><span class="pv-tag" id="tag-movilidad2"></span></div>
+            <div class="pv-row always"><span class="pv-num">XII.</span><span class="pv-desc">Art. 7 ley 23.928 — rechazado</span></div>
+            <div class="pv-row always"><span class="pv-num">XIII.</span><span class="pv-desc">Costas — principio objetivo de la derrota (Morales)</span></div>
+            <div class="pv-row always"><span class="pv-num">XIV–XVI.</span><span class="pv-desc">Inconstitucionalidades / Tasa de interés Spitale / Honorarios ley 27.423</span></div>
+            <div class="pv-row always"><span class="pv-num">XVII.</span><span class="pv-desc">Prescripción — retroactivo desde <strong id="pv-retro">(fecha)</strong></span></div>
+            <div class="pv-row always"><span class="pv-num">XVIII.</span><span class="pv-desc">Plazo 120 días hábiles (art. 22 ley 24.463)</span></div>
+            <div class="pv-row cond" id="pv-c-gan"><span class="pv-num">XIX.</span><span class="pv-desc">Impuesto a las Ganancias — García c/ AFIP / Percivaldi</span><span class="pv-tag" id="tag-ganancias"></span></div>
+          </div>
+
+          <!-- FALLO -->
+          <div class="pv-bloque">
+            <div class="pv-bloque-titulo">FALLO</div>
+            <div class="pv-row always">
+              <span class="pv-num">I.</span>
+              <span class="pv-desc">HACIENDO LUGAR PARCIALMENTE a la demanda de <strong class="pv-actor" id="pv-nombre">(actor)</strong> DNI <span id="pv-dni">(DNI)</span></span>
+            </div>
+            <div class="pv-row always">
+              <span class="pv-num">II.</span>
+              <span class="pv-desc">ORDENANDO retroactivos desde <strong id="pv-retro2">(fecha retroactivo)</strong></span>
+            </div>
+            <div class="pv-row always"><span class="pv-num">III.</span><span class="pv-desc">DIFIRIENDO recálculo de prestaciones a liquidación</span></div>
+            <div class="pv-row always"><span class="pv-num">IV.</span><span class="pv-desc">RECHAZANDO la tasa de sustitución</span></div>
+            <div class="pv-row always"><span class="pv-num">V–X.</span><span class="pv-desc">Criterios de topes / Movilidad / Honorarios / Costas / Notifíquese</span></div>
+          </div>
+
+        </div>
+
+        <div class="gen-area">
+          <button class="btn-gen" id="btnGenerar" onclick="generarDocumento()">
+            <i class="fas fa-file-word"></i> Generar Sentencia
+          </button>
+          <div class="gen-status" id="genStatus"></div>
+          <a href="/creador_sentencias" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a subir documentos</a>
+        </div>
+
       </div>
     </div>
 
-    <!-- SUBMIT -->
-    <div class="submit-card">
-      <div class="submit-info">
-        <strong id="count-selected">{{ detectados_count }}</strong> punto{{ 's' if detectados_count != 1 else '' }} seleccionado{{ 's' if detectados_count != 1 else '' }}
-        <br><span style="font-size:0.78rem;">Se generará el documento Word con los párrafos correspondientes</span>
-      </div>
-      <div style="display:flex;gap:12px;align-items:center;">
-        <a href="/creador_sentencias" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Volver</a>
-        <button type="submit" class="btn btn-ciruela" style="padding:12px 32px;font-size:0.95rem;">
-          <i class="fas fa-file-word"></i> Generar Sentencia
-        </button>
-      </div>
-    </div>
-
-  </form>
+  </div><!-- /.two-col -->
 </div>
 
 {% include 'footers/footer.html' %}
 
 <script>
-function actualizarEstilo(checkbox) {
-  const item = checkbox.closest('.checkpoint-item');
-  if (checkbox.checked) {
-    item.style.borderColor = 'var(--verde)';
-    item.style.background = 'var(--verde-light)';
-  } else {
-    // Si fue detectado por IA, mantener color verde base al desmarcar
-    const detected = item.classList.contains('detected');
-    item.style.borderColor = detected ? '#ccc' : '';
-    item.style.background = '';
-  }
-  actualizarContador();
+// Mapa: cp_id → ids de filas condicionales que activa
+const CP_ROWS = {
+  dictamen_fiscal:    ['pv-r-fiscal',  'tag-fiscal'],
+  error_material:     ['pv-c-error',   'tag-error_material'],
+  reajuste_haberes:   ['pv-c-reaj',    'tag-reajuste_haberes'],
+  pc:                 ['pv-c-reaj',    'tag-reajuste_haberes'],  // comparte fila con reajuste
+  movilidad:          ['pv-c-mov',     'tag-movilidad', 'pv-c-tope', 'tag-movilidad2'],
+  pbu:                ['pv-c-pbu',     'tag-pbu'],
+  inconstitucionalidad: ['pv-c-inc',   'tag-inconstitucionalidad'],
+  ganancias:          ['pv-c-gan',     'tag-ganancias'],
+};
+
+function v(id) { return document.getElementById(id); }
+function fv(name) {
+  const el = document.querySelector(`[name="${name}"]`);
+  return el ? el.value.trim() : '';
 }
 
-function actualizarContador() {
-  const total = document.querySelectorAll('.checkpoints-grid input[type="checkbox"]:checked').length;
-  const el = document.getElementById('count-selected');
-  el.textContent = total;
-  el.nextSibling.textContent = ` punto${total !== 1 ? 's' : ''} seleccionado${total !== 1 ? 's' : ''}`;
+function updatePreview() {
+  v('pv-expte').textContent   = fv('numero_expte') || '(Expediente)';
+  v('pv-caratula').textContent = fv('nombre_caratula') || '(Carátula)';
+  v('pv-nombre').textContent  = fv('nombre_actora') || '(nombre del actor)';
+  v('pv-dni').textContent     = fv('dni_actora') || '(DNI)';
+  const retro = fv('fecha_desde_retroactivo') || '(fecha)';
+  ['pv-retro','pv-retro2'].forEach(id => { if(v(id)) v(id).textContent = retro; });
+  updateCpRows();
+}
+
+function updateCpRows() {
+  // Resetear todas las filas condicionales
+  document.querySelectorAll('.pv-row.cond').forEach(row => {
+    row.classList.remove('on','off');
+    row.classList.add('off');
+  });
+  document.querySelectorAll('.pv-tag').forEach(tag => {
+    tag.textContent = '';
+    tag.className = 'pv-tag';
+  });
+
+  // Activar según checkboxes
+  const active = new Set();
+  document.querySelectorAll('.cpgrid input:checked').forEach(cb => {
+    const cpId = cb.name.replace('checkpoint_', '');
+    active.add(cpId);
+  });
+
+  active.forEach(cpId => {
+    const targets = CP_ROWS[cpId];
+    if (!targets) return;
+    // targets: [rowId, tagId, rowId2, tagId2, ...]
+    for (let i = 0; i < targets.length; i += 2) {
+      const row = v(targets[i]);
+      const tag = v(targets[i+1]);
+      if (row) { row.classList.remove('off'); row.classList.add('on'); }
+      if (tag) { tag.textContent = 'incluido'; tag.className = 'pv-tag on-tag'; }
+    }
+  });
+
+  // Poner "excluido" en las que siguen off y tienen tag
+  document.querySelectorAll('.pv-row.cond.off .pv-tag').forEach(tag => {
+    tag.textContent = 'excluido';
+    tag.className = 'pv-tag off-tag';
+  });
+
+  // dummy para compatibilidad con updateCpList
+}
+
+// ── CHECKPOINTS ──
+function onCpChange(cb) {
+  const item = cb.closest('.cp-item');
+  item.classList.toggle('selected', cb.checked);
+  if (!cb.checked) item.classList.remove('detected');
+  updateCpRows();
 }
 
 function marcarTodos() {
-  document.querySelectorAll('.checkpoints-grid input[type="checkbox"]').forEach(cb => {
-    cb.checked = true;
-    actualizarEstilo(cb);
-  });
+  document.querySelectorAll('.cpgrid input').forEach(cb => { cb.checked = true; onCpChange(cb); });
 }
-
 function desmarcarTodos() {
-  document.querySelectorAll('.checkpoints-grid input[type="checkbox"]').forEach(cb => {
-    cb.checked = false;
-    actualizarEstilo(cb);
-  });
+  document.querySelectorAll('.cpgrid input').forEach(cb => { cb.checked = false; onCpChange(cb); });
 }
 
-// Init: pintar los detectados que vienen pre-checked
-document.querySelectorAll('.checkpoints-grid input[type="checkbox"]:checked').forEach(cb => {
-  actualizarEstilo(cb);
-});
+// ── GENERACIÓN CON FEEDBACK ──
+async function generarDocumento() {
+  const btn = v('btnGenerar');
+  const status = v('genStatus');
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando documento...';
+  status.innerHTML = `<div class="gen-loading"><i class="fas fa-spinner fa-spin"></i> Procesando plantilla Word...</div>`;
+
+  try {
+    const formData = new FormData(v('sentenciaForm'));
+    const res = await fetch('/creador_sentencias/resultado', { method: 'POST', body: formData });
+
+    if (!res.ok) {
+      throw new Error(`Error ${res.status}`);
+    }
+
+    // Obtener nombre del archivo del header
+    const disp = res.headers.get('Content-Disposition') || '';
+    let filename = 'Sentencia.docx';
+    const match = disp.match(/filename[^;=\n]*=([^;\n]*)/);
+    if (match) filename = decodeURIComponent(match[1].replace(/['"]/g, '').trim());
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+    status.innerHTML = `
+      <div class="gen-success">
+        <i class="fas fa-check-circle"></i>
+        <div>
+          <strong>Documento generado correctamente</strong>
+          <span>${filename}</span>
+        </div>
+      </div>`;
+    btn.innerHTML = '<i class="fas fa-redo"></i> Generar de nuevo';
+    btn.disabled = false;
+
+  } catch (err) {
+    status.innerHTML = `<div class="gen-error"><i class="fas fa-exclamation-circle"></i> Error al generar el documento. Revisá los datos e intentá de nuevo.</div>`;
+    btn.innerHTML = '<i class="fas fa-file-word"></i> Generar Sentencia';
+    btn.disabled = false;
+  }
+}
+
+// Init
+updatePreview();
 </script>
 </body>
 </html>
